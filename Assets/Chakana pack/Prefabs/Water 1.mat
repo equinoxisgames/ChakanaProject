@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Water 1
+  m_Shader: {fileID: 4800000, guid: e886a16a9b070044382af4ae00cba832, type: 3}
+  m_ValidKeywords:
+  - Water2D_ColorGradient
+  - Water2D_FakePerspective
+  - Water2D_Reflection
+  - Water2D_ReflectionFadeLinear
+  - Water2D_Refraction
+  - Water2D_SmoothLines
+  - Water2D_Surface
+  - Water2D_SurfaceColorGradient
+  - Water2D_SurfaceNoise
+  - Water2D_SurfaceTexture
+  - Water2D_SurfaceTextureScroll
+  - Water2D_SurfaceTextureStretch
+  - Water2D_WaterNoise
+  - Water2D_WaterTexture
+  - Water2D_WaterTextureScroll
+  - Water2D_WaterTextureStretchAutoY
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: 3d0d93d1032dfe340ab5e4d223e690d0, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionTexturePartiallySubmergedObjects:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RefractionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RefractionTexturePartiallySubmergedObjects:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfaceTexture:
+        m_Texture: {fileID: 2800000, guid: a183c24195da9374e8ca3da2ddce16a1, type: 3}
+        m_Scale: {x: 0.5, y: 0.5}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTexture:
+        m_Texture: {fileID: 2800000, guid: 0cd27bc0b380b844db188c177cd556a0, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DstBlend: 10
+    - _Game2DWaterKit_MaterialType: 0
+    - _Mode: 2000
+    - _ReflectionNoiseSpeed: 0.075
+    - _ReflectionNoiseStrength: 0.02
+    - _ReflectionVisibility: 0.45
+    - _RefractionAmountOfBending: 0
+    - _RefractionNoiseSpeed: 0.075
+    - _RefractionNoiseStrength: 0.0172
+    - _SpriteMaskInteraction: 8
+    - _SpriteMaskInteractionRef: 1
+    - _SrcBlend: 5
+    - _SubmergeLevel: 0.8774659
+    - _SubmergeLevelEdgeLineThickness: 0.1
+    - _SurfaceColorGradientOffset: 0
+    - _SurfaceLevel: 0.689
+    - _SurfaceLevelEdgeLineThickness: 0.1
+    - _SurfaceNoiseSpeed: 0.01
+    - _SurfaceNoiseStrength: 0.15
+    - _SurfaceTextureOpacity: 0.55
+    - _SurfaceTextureScrollingSpeedX: 1
+    - _SurfaceTextureScrollingSpeedY: 0
+    - _SurfaceTextureSheetColumns: 1
+    - _SurfaceTextureSheetFramesCount: 1
+    - _SurfaceTextureSheetFramesPerSecond: 0
+    - _SurfaceTextureSheetInverseColumns: 1
+    - _SurfaceTextureSheetInverseRows: 1
+    - _SurfaceTextureSheetRows: 1
+    - _TopEdgeLineThickness: 0.1
+    - _Water2D_IsApplyTintColorOnTopOfTextureEnabled: 1
+    - _Water2D_IsColorGradientEnabled: 1
+    - _Water2D_IsEmissionColorEnabled: 0
+    - _Water2D_IsFakePerspectiveEnabled: 1
+    - _Water2D_IsReflectionEnabled: 1
+    - _Water2D_IsRefractionEnabled: 1
+    - _Water2D_IsSmoothLinesEnabled: 1
+    - _Water2D_IsSubmergeLevelEdgeLineEnabled: 0
+    - _Water2D_IsSurfaceColorGradientEnabled: 1
+    - _Water2D_IsSurfaceEnabled: 1
+    - _Water2D_IsSurfaceHasAbsoluteThicknessEnabled: 0
+    - _Water2D_IsSurfaceLevelEdgeLineEnabled: 0
+    - _Water2D_IsSurfaceNoiseEnabled: 1
+    - _Water2D_IsTopEdgeLineEnabled: 0
+    - _Water2D_IsWaterNoiseEnabled: 1
+    - _Water2D_IsWaterSurfaceTextureSheetEnabled: 0
+    - _Water2D_IsWaterSurfaceTextureSheetWithLerpEnabled: 0
+    - _Water2D_IsWaterTextureSheetEnabled: 0
+    - _Water2D_IsWaterTextureSheetWithLerpEnabled: 0
+    - _WaterColorGradientOffset: 0.437
+    - _WaterEmissionColorIntensity: 1
+    - _WaterNoiseSpeed: 0.035
+    - _WaterNoiseStrength: 0.142
+    - _WaterTextureOpacity: 0.162
+    - _WaterTextureScrollingSpeedX: 0.85
+    - _WaterTextureScrollingSpeedY: 0
+    - _WaterTextureSheetColumns: 1
+    - _WaterTextureSheetFramesCount: 1
+    - _WaterTextureSheetFramesPerSecond: 0
+    - _WaterTextureSheetInverseColumns: 1
+    - _WaterTextureSheetInverseRows: 1
+    - _WaterTextureSheetRows: 1
+    - _ZWrite: 0
+    m_Colors:
+    - _ReflectionFadingParameters: {r: 1, g: 0, b: 0, a: 0}
+    - _ReflectionNoiseScaleOffset: {r: 5, g: 14, b: 0, a: 0}
+    - _ReflectionNoiseTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _RefractionNoiseScaleOffset: {r: 5, g: 5, b: 0, a: 0}
+    - _RefractionNoiseTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _SubmergeLevelEdgeLineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SurfaceColor: {r: 1, g: 1, b: 1, a: 0.25}
+    - _SurfaceColorGradientEnd: {r: 0.09803922, g: 0.9607843, b: 1, a: 0.2627451}
+    - _SurfaceColorGradientStart: {r: 0, g: 0.7019608, b: 1, a: 0.3764706}
+    - _SurfaceLevelEdgeLineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SurfaceNoiseScaleOffset: {r: 16, g: 16, b: 0, a: 0}
+    - _SurfaceNoiseTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _SurfaceTextureTilingParameters: {r: 1, g: 0, b: 0, a: 0}
+    - _TopEdgeLineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WaterColor: {r: 0.11, g: 0.64, b: 0.92, a: 0.25}
+    - _WaterColorGradientEnd: {r: 0.10361574, g: 0.09803921, b: 0, a: 1}
+    - _WaterColorGradientStart: {r: 0.09803922, g: 0.9607843, b: 1, a: 0.2627451}
+    - _WaterEmissionColor: {r: 1, g: 1, b: 1, a: 0}
+    - _WaterNoiseScaleOffset: {r: 25, g: 25, b: 0, a: 0}
+    - _WaterNoiseTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _WaterTextureTilingParameters: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
