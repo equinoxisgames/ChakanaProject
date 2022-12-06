@@ -674,6 +674,34 @@ public class MovementTest : MonoBehaviour
             }
 
         }
+        if (escena == "08-Room 8")
+        {
+            if (transitionLayerExit == "Transition")
+            {
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 45.333f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
+                PlayerPrefs.SetInt(firstRunPrefsName, 0);
+                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
+                SceneManager.LoadScene(6);
+            }
+            else if (transitionLayerExit == "Transition1")
+            {
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 45.333f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
+                PlayerPrefs.SetInt(firstRunPrefsName, 0);
+                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
+                SceneManager.LoadScene(6);
+            }
+            else if (transitionLayerExit == "Transition2")
+            {
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 45.333f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
+                PlayerPrefs.SetInt(firstRunPrefsName, 0);
+                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
+                SceneManager.LoadScene(6);
+            }
+        }
+
 
     }
 
