@@ -686,38 +686,40 @@ public class MovementTest : MonoBehaviour
             }
             else if (transitionLayerExit == "Transition1")
             {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 106.726f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.160f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
                 SceneManager.LoadScene(8);
             }
             else if (transitionLayerExit == "Transition2")
             {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 106.726f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 119.625f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8);
+                SceneManager.LoadScene(12);
             }
         }
         if (escena == "09-Room 9")
         {
             if (transitionLayerExit == "Transition")
             {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 114.528f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
                 PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.635f);
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
                 SceneManager.LoadScene(9);
+
+                
+            }
+            else if (transitionLayerExit == "Transition1")
+            {
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, 114.528f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
+                PlayerPrefs.SetInt(firstRunPrefsName, 0);
+                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
+                SceneManager.LoadScene(7);
 
             }
 
@@ -726,8 +728,8 @@ public class MovementTest : MonoBehaviour
         {
             if (transitionLayerExit == "Transition")
             {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 73.487f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
                 SceneManager.LoadScene(8);
@@ -779,6 +781,14 @@ public class MovementTest : MonoBehaviour
                 SceneManager.LoadScene(9);
             }
          }
+        if (escena == "13-Room 13")
+        {
+            PlayerPrefs.SetFloat(nextPositionXPrefsName, 151.409f);
+            PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
+            PlayerPrefs.SetInt(firstRunPrefsName, 0);
+            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
+            SceneManager.LoadScene(7);
+        }
 
     }
 
