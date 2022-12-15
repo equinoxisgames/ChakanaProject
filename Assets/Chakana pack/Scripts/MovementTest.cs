@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class MovementTest : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class MovementTest : MonoBehaviour
     //Five Gameobjects childed to it. One just above the collider, one just below the collider, one a distance above, one a distance below,
     //and one a distance in front.
     //If this is confusing just read the other comments and create them as they go.
+
+    [Header("CineMachine")]
+    [SerializeField] CinemachineVirtualCamera myVirtualCamera;
+    CinemachineComponentBase myComponentBase;
+    float myCameraDistance;
+    [SerializeField] float myCameraSensivity = 10f; 
 
     public PlayerStateList pState;
 
@@ -151,6 +158,9 @@ public class MovementTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        
+        
         //AudioWalking.Play();
         GetInputs();
         //WalkingControl();
@@ -262,6 +272,38 @@ public class MovementTest : MonoBehaviour
            
 
             rb.velocity = new Vector2(MoveDirection * walkSpeed, rb.velocity.y);
+
+            //Cinemachine Zoom
+            if (escena == "14-Boss Room")
+            {
+                //Cinemachine Zoom
+                if (myComponentBase == null)
+                {
+                    myComponentBase = myVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
+                }
+
+                if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 15f && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
+                {
+                    myCameraDistance = MoveDirection * 0.006f;
+
+                    if (myComponentBase is CinemachineFramingTransposer)
+                    {
+                        (myComponentBase as CinemachineFramingTransposer).m_CameraDistance -= myCameraDistance;
+                        //(myComponentBase as CinemachineFramingTransposer).m_ScreenY -= myCameraDistance;
+                        
+                    }
+
+                    Debug.Log("CameraDistance: " + (myComponentBase as CinemachineFramingTransposer).m_CameraDistance);
+                }
+                else
+                    (myComponentBase as CinemachineFramingTransposer).m_CameraDistance = 8;
+
+
+
+            }
+
+
+
             //AudioWalking.Pause();
             //AudioWalking.Play();
             //AudioWalking.Play();
