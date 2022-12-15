@@ -774,11 +774,11 @@ public class MovementTest : MonoBehaviour
 
             else if (transitionLayerExit == "Transition1")
             {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.211f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -102.327f);
+                PlayerPrefs.SetFloat(nextPositionXPrefsName, -64.304f);
+                PlayerPrefs.SetFloat(nextPositionYPrefsName, -103.677f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(9);
+                SceneManager.LoadScene(13);
             }
          }
         if (escena == "13-Room 13")
@@ -789,7 +789,14 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
             SceneManager.LoadScene(7);
         }
-
+        if (escena == "14-Boss Room")
+        {
+            PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.340f);
+            PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
+            PlayerPrefs.SetInt(firstRunPrefsName, 0);
+            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
+            SceneManager.LoadScene(11);
+        }
     }
 
     public bool Roofed()
