@@ -22,7 +22,7 @@ public class MovementTest : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera myVirtualCamera;
     CinemachineComponentBase myComponentBase;
     float myCameraDistance;
-    [SerializeField] float myCameraSensivity = 10f; 
+    [SerializeField] float myCameraSensivity = 0.006f; 
 
     public PlayerStateList pState;
 
@@ -282,9 +282,12 @@ public class MovementTest : MonoBehaviour
                     myComponentBase = myVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
                 }
 
-                if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 15f && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
+                Debug.Log("CameraDistance: " + (myComponentBase as CinemachineFramingTransposer).m_CameraDistance);
+
+                if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 20f 
+                    && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
                 {
-                    myCameraDistance = MoveDirection * 0.006f;
+                    myCameraDistance = MoveDirection * 0.008f;
 
                     if (myComponentBase is CinemachineFramingTransposer)
                     {
@@ -292,8 +295,6 @@ public class MovementTest : MonoBehaviour
                         //(myComponentBase as CinemachineFramingTransposer).m_ScreenY -= myCameraDistance;
                         
                     }
-
-                    Debug.Log("CameraDistance: " + (myComponentBase as CinemachineFramingTransposer).m_CameraDistance);
                 }
                 else
                     (myComponentBase as CinemachineFramingTransposer).m_CameraDistance = 8;
