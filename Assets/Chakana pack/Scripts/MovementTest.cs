@@ -8,16 +8,7 @@ using Cinemachine;
 public class MovementTest : MonoBehaviour
 {
 
-    //Hollow knight movement script for u/bigjew222
-    //Contains jumping, attacking, moving, and recoil mechanics.
-    //everything regarding the animator has been commented out so you can use it if you need to.
-
-    //GAMEOBJECT SETUP
-    //A gameobject with a rigidBody2D, with rotation locked, and a Box collider.
-    //Five Gameobjects childed to it. One just above the collider, one just below the collider, one a distance above, one a distance below,
-    //and one a distance in front.
-    //If this is confusing just read the other comments and create them as they go.
-
+   
     [Header("CineMachine")]
     [SerializeField] CinemachineVirtualCamera myVirtualCamera;
     CinemachineComponentBase myComponentBase;
@@ -40,11 +31,11 @@ public class MovementTest : MonoBehaviour
 
     [Header("Attacking")]
     [SerializeField] float timeBetweenAttack = 0.4f;
-    [SerializeField] Transform attackTransform; // this should be a transform childed to the player but to the right of them, where they attack from.
+    [SerializeField] Transform attackTransform; 
     [SerializeField] float attackRadius = 1;
-    [SerializeField] Transform downAttackTransform;//This should be a transform childed below the player, for the down attack.
+    [SerializeField] Transform downAttackTransform;
     [SerializeField] float downAttackRadius = 1;
-    [SerializeField] Transform upAttackTransform;//Same as above but for the up attack.
+    [SerializeField] Transform upAttackTransform;
     [SerializeField] float upAttackRadius = 1;
     [SerializeField] LayerMask attackableLayer;
     [Space(5)]
@@ -57,9 +48,9 @@ public class MovementTest : MonoBehaviour
     [Space(5)]
 
     [Header("Ground Checking")]
-    [SerializeField] Transform groundTransform; //This is supposed to be a transform childed to the player just under their collider.
-    [SerializeField] float groundCheckY = 0.2f; //How far on the Y axis the groundcheck Raycast goes.
-    [SerializeField] float groundCheckX = 1;//Same as above but for X.
+    [SerializeField] Transform groundTransform; 
+    [SerializeField] float groundCheckY = 0.2f; 
+    [SerializeField] float groundCheckX = 1;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] LayerMask transitionLayer;
     [SerializeField] LayerMask transitionLayer1;
@@ -68,9 +59,9 @@ public class MovementTest : MonoBehaviour
     [Space(5)]
 
     [Header("Roof Checking")]
-    [SerializeField] Transform roofTransform; //This is supposed to be a transform childed to the player just above their collider.
+    [SerializeField] Transform roofTransform; 
     [SerializeField] float roofCheckY = 0.2f;
-    [SerializeField] float roofCheckX = 1; // You probably want this to be the same as groundCheckX
+    [SerializeField] float roofCheckX = 1; 
     [Space(5)]
 
 
@@ -112,7 +103,7 @@ public class MovementTest : MonoBehaviour
     [Header("Movement")]
     public bool doubleJump = false;
 
-    //save data
+    
 
     string nextPositionXPrefsName = "nextPositionX";
     string nextPositionYPrefsName = "nextPositionY";
@@ -121,7 +112,7 @@ public class MovementTest : MonoBehaviour
 
     string escena;
 
-    // Use this for initialization
+   
     void Start()
     {
         //AudioWalking.Play();
@@ -155,7 +146,7 @@ public class MovementTest : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         
@@ -249,8 +240,7 @@ public class MovementTest : MonoBehaviour
             }
         }
 
-        //This limits how fast the player can fall
-        //Since platformers generally have increased gravity, you don't want them to fall so fast they clip trough all the floors.
+        
         if (rb.velocity.y < -Mathf.Abs(fallSpeed))
         {
             //Debug.Log("rb.velocity.y < -Mathf.Abs(fallSpeed)");
@@ -350,11 +340,11 @@ public class MovementTest : MonoBehaviour
                 }
                 for (int i = 0; i < objectsToHit.Length; i++)
                 {
-                    //Here is where you would do whatever attacking does in your script.
-                    //In my case its passing the Hit method to an Enemy script attached to the other object(s).
+                   
+                    
                 }
             }
-            //Attack Up
+           
             else if (yAxis > 0)
             {
                 //anim.SetTrigger("2");
@@ -369,7 +359,7 @@ public class MovementTest : MonoBehaviour
                     //In my case its passing the Hit method to an Enemy script attached to the other object(s).
                 }
             }
-            //Attack Down
+           
             else if (yAxis < 0 && !Grounded())
             {
                 //anim.SetTrigger("3");
@@ -381,7 +371,7 @@ public class MovementTest : MonoBehaviour
                 for (int i = 0; i < objectsToHit.Length; i++)
                 {
 
-                    //Here I commented out the actual script I use, in case you wanted to see it.
+                    
 
 
                     /*Instantiate(slashEffect1, objectsToHit[i].transform);
@@ -448,7 +438,7 @@ public class MovementTest : MonoBehaviour
 
     void StopJumpQuick()
     {
-        //Stops The player jump immediately, causing them to start falling as soon as the button is released.
+        
         stepsJumped = 0;
         pState.jumping = false;
         //TEST 01/10/2022
@@ -463,7 +453,7 @@ public class MovementTest : MonoBehaviour
 
     void StopJumpSlow()
     {
-        //stops the jump but lets the player hang in the air for awhile.
+        
         //TEST 01/10/2022
         //rb.velocity += Vector2.up * Physics2D.gravity.y * (70f - 1) * Time.deltaTime;
         stepsJumped = 0;
@@ -486,8 +476,7 @@ public class MovementTest : MonoBehaviour
 
     public bool Grounded()
     {
-        //isGrounded = Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer);
-        //this does three small raycasts at the specified positions to see if the player is grounded.
+        
         //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
         if(Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer))
         {
@@ -506,7 +495,7 @@ public class MovementTest : MonoBehaviour
     public bool EventTransition()
     {
         //isGrounded = Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer);
-        //this does three small raycasts at the specified positions to see if the player is grounded.
+        
         //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
         {
@@ -581,7 +570,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(1+1);
             }
                 
             else if (transitionLayerExit == "Transition1")
@@ -590,7 +579,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(5);
+                SceneManager.LoadScene(5+1);
             }
                 
             
@@ -605,7 +594,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -613,7 +602,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene(2+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -621,7 +610,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.468f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3);
+                SceneManager.LoadScene(3+1);
             }
             else if (transitionLayerExit == "Transition3")
             {
@@ -629,7 +618,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3);
+                SceneManager.LoadScene(3+1);
             }
         }
         if (escena == "03-Room 3")
@@ -638,7 +627,7 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(1+1);
         }
         if (escena == "04-Level 2")
         {
@@ -648,7 +637,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -656,7 +645,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.422f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(1+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -664,7 +653,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -8.851f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(4);
+                SceneManager.LoadScene(4+1);
             }
         }
         if (escena == "05-Room GA1")
@@ -673,7 +662,7 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(3+1);
         }
         if (escena == "06- Room 6")
         {
@@ -683,7 +672,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -691,7 +680,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 38.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6);
+                SceneManager.LoadScene(6+1);
             }
                 
             
@@ -704,7 +693,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(5);
+                SceneManager.LoadScene(5+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -712,7 +701,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.417f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7);
+                SceneManager.LoadScene(7+1);
 
             }
 
@@ -725,7 +714,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6);
+                SceneManager.LoadScene(6+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -733,7 +722,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8);
+                SceneManager.LoadScene(8+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -741,7 +730,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(12);
+                SceneManager.LoadScene(12+1);
             }
         }
         if (escena == "09-Room 9")
@@ -752,7 +741,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9);
+                SceneManager.LoadScene(9+1);
 
                 
             }
@@ -762,7 +751,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7);
+                SceneManager.LoadScene(7+1);
 
             }
 
@@ -775,7 +764,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8);
+                SceneManager.LoadScene(8+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -783,7 +772,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(10);
+                SceneManager.LoadScene(10+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -791,7 +780,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(11);
+                SceneManager.LoadScene(11+1);
             }
         }
         if (escena == "12-Room 12")
@@ -800,7 +789,7 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -82.824f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(9);
+            SceneManager.LoadScene(9+1);
         }
         if (escena == "13- SaveRoom")
         {
@@ -812,7 +801,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -102.327f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9);
+                SceneManager.LoadScene(9+1);
             }
 
             else if (transitionLayerExit == "Transition1")
@@ -821,7 +810,7 @@ public class MovementTest : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -103.677f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(13);
+                SceneManager.LoadScene(13+1);
             }
          }
         if (escena == "13-Room 13")
@@ -830,7 +819,7 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(7);
+            SceneManager.LoadScene(7+1);
         }
         if (escena == "14-Boss Room")
         {
@@ -838,14 +827,13 @@ public class MovementTest : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(11);
+            SceneManager.LoadScene(11+1);
         }
     }
 
     public bool Roofed()
     {
-        //This does the same thing as grounded but checks if the players head is hitting the roof instead.
-        //Used for canceling the jump.
+        
         if (Physics2D.Raycast(roofTransform.position, Vector2.up, roofCheckY, groundLayer) || Physics2D.Raycast(roofTransform.position + new Vector3(roofCheckX, 0), Vector2.up, roofCheckY, groundLayer) || Physics2D.Raycast(roofTransform.position + new Vector3(roofCheckX, 0), Vector2.up, roofCheckY, groundLayer))
         {
             return true;
@@ -858,11 +846,11 @@ public class MovementTest : MonoBehaviour
 
     void GetInputs()
     {
-        //WASD/Joystick
+        
         yAxis = Input.GetAxis("Vertical");
         xAxis = Input.GetAxis("Horizontal");
 
-        //This is essentially just sensitivity.
+        
         if (yAxis > 0.25)
         {
             yAxis = 1;
@@ -892,7 +880,7 @@ public class MovementTest : MonoBehaviour
         anim.SetBool("Grounded", Grounded());
         anim.SetFloat("YVelocity", rb.velocity.y);
 
-        //Jumping
+        
         //if (Input.GetButtonDown("Jump") && Grounded()) DNA 11/01/2022 SE AUMENTA VARIABLE DOUBLE JUMP 
             if (Input.GetButtonDown("Jump") && Grounded() || doubleJump==true)
         {
