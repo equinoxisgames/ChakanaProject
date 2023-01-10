@@ -880,7 +880,7 @@ public class MovementTest : MonoBehaviour
         anim.SetBool("Grounded", Grounded());
         anim.SetFloat("YVelocity", rb.velocity.y);
 
-        
+         
         //if (Input.GetButtonDown("Jump") && Grounded()) DNA 11/01/2022 SE AUMENTA VARIABLE DOUBLE JUMP 
             if (Input.GetButtonDown("Jump") && Grounded() || doubleJump==true)
         {
@@ -970,7 +970,7 @@ public class MovementTest : MonoBehaviour
     void PlayAmbientFluteAudio()
     {
         
-        AmbientFlute.Play();
+        
 
     }
     void PlayAudioStep1()
