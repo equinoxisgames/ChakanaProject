@@ -288,9 +288,6 @@ public class MovementTest : MonoBehaviour
                 }
                 else
                     (myComponentBase as CinemachineFramingTransposer).m_CameraDistance = 8;
-
-
-
             }
 
 
