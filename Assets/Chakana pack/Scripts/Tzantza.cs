@@ -15,7 +15,7 @@ public class Tzantza : MonoBehaviour
     private bool applyForce;
 
     public float movementSpeed = 3;
-    public float detectionRadius = 15;
+    public float detectionRadius = 3;
     public LayerMask playerLayer;
 
     public Vector2 tzantzaHeadPossition;
@@ -54,12 +54,24 @@ public class Tzantza : MonoBehaviour
         if (distance <= detectionRadius)
         {
             rb.velocity = direction.normalized * movementSpeed;
-            //TzantzaFlip(direction.normalized.x);
+            TzantzaFlip(direction.normalized.x);
         }
         else {
             rb.velocity = direction.normalized * -1;
         }
     }
 
+    private void TzantzaFlip(float xDirection)
+    {
+        if (xDirection<0 && transform.localScale.x >0)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
+        }else if (xDirection > 0 && transform.localScale.x < 0)
+        {
+
+            transform.localScale = new Vector3( Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+
+    }
 }
