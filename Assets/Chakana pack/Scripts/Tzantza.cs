@@ -48,8 +48,9 @@ public class Tzantza : MonoBehaviour
         Vector2 direction = hoyustusPlayerCotroller.transform.position - transform.position;
         float distance = Vector2.Distance(transform.position, hoyustusPlayerCotroller.transform.position);
 
-        Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
+        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
 
+        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
 
         if (distance <= detectionRadius)
         {
@@ -57,12 +58,19 @@ public class Tzantza : MonoBehaviour
             TzantzaFlip(direction.normalized.x);
         }
         else {
-            rb.velocity = direction.normalized * -1;
+            rb.velocity = direction.normalized * -0.5f;
+
+            if (distance <= detectionRadius +1)
+                transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            //TzantzaFlipBack(direction.normalized.x);
         }
+        
     }
 
     private void TzantzaFlip(float xDirection)
     {
+        //Debug.Log("TzantzaFlip xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x);
+
         if (xDirection<0 && transform.localScale.x >0)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
@@ -71,6 +79,32 @@ public class Tzantza : MonoBehaviour
         {
 
             transform.localScale = new Vector3( Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+
+    }
+    private void TzantzaFlipBack(float xDirection)
+    {
+
+        
+
+        // if (xDirection < 0 && transform.localScale.x > 0)
+        if (xDirection > 0 &&  transform.localScale.x < 0)
+        {
+
+            Debug.Log("Entra if 1 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: " + hoyustusPlayerCotroller.transform.localScale.x);
+
+            transform.localScale = new Vector3((-1*hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
+
+        }
+        //else if (xDirection > 0 && transform.localScale.x < 0)
+        else if (xDirection < 0 && transform.localScale.x > 0)
+        {
+
+            Debug.Log("Entra if 2 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: "+ hoyustusPlayerCotroller.transform.localScale.x);
+
+            transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            
+
         }
 
     }
