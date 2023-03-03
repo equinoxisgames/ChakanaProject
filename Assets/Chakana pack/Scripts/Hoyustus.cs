@@ -96,6 +96,9 @@ public class Hoyustus : MonoBehaviour
     [SerializeField] AudioSource AudioStep7;
     [SerializeField] AudioSource AudioStep8;
 
+    [SerializeField] AudioSource GameplayIntro;
+    [SerializeField] AudioSource GameplayLoop;
+
     [SerializeField] CharacterController Controller;
 
     [Header("Particles")]
@@ -126,9 +129,14 @@ public class Hoyustus : MonoBehaviour
         anim = GetComponent<Animator>();
 
         grabity = rb.gravityScale;
-        PlayAmbientFluteAudio();
 
         escena = SceneManager.GetActiveScene().name;
+
+        if (escena == "00- StartRoom 1" || escena == "05 - Room GA1" || escena == "05 - Room GA1")
+        {
+            StartCoroutine(PlayGamePlayLoop());
+        }
+        
         //Debug.Log("Escena: " + escena);
 
         //Lee datos de memoria
@@ -965,12 +973,19 @@ public class Hoyustus : MonoBehaviour
         AudioFall.Play();
 
     }
-    void PlayAmbientFluteAudio()
-    {
-        
-        
 
+    
+
+    
+
+    IEnumerator PlayGamePlayLoop()
+    {
+        yield return new WaitForSeconds(59.2f);
+        GameplayIntro.Stop();
+        GameplayLoop.Play();
     }
+
+
     void PlayAudioStep1()
     {
         AudioStep1.Play();
