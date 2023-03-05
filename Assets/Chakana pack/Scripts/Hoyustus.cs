@@ -134,7 +134,7 @@ public class Hoyustus : MonoBehaviour
 
         if (escena == "00- StartRoom 1" || escena == "05 - Room GA1" || escena == "05 - Room GA1")
         {
-            StartCoroutine(PlayGamePlayLoop());
+            //StartCoroutine(PlayGamePlayLoop());
         }
         
         //Debug.Log("Escena: " + escena);
@@ -200,6 +200,7 @@ public class Hoyustus : MonoBehaviour
         }
         ImproveJump();
         Jump();
+        Walk(xAxis);
         //WalkingControl();
 
 
@@ -259,7 +260,9 @@ public class Hoyustus : MonoBehaviour
 
     void Walk(float MoveDirection)
     {
-        anim.SetBool("Walking", pState.walking); 
+        //anim.SetBool("Walking", pState.walking); 
+        anim.SetBool("Walking", true);
+        Debug.Log("Walking, true");
 
         //Rigidbody2D rigidbody2D = rb;
         //float x = MoveDirection * walkSpeed;
