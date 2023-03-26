@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Michsky.UI.Dark
 {
+
     public class PressKeyEvent : MonoBehaviour
     {
         // Settings
@@ -11,6 +13,7 @@ namespace Michsky.UI.Dark
 
         // Events
         public UnityEvent onPressEvent;
+        string escena;
 
         void Start()
         {
@@ -19,8 +22,13 @@ namespace Michsky.UI.Dark
 
         void Update()
         {
-            if (hotkey.triggered)
+            //escena = SceneManager.GetActiveScene().name;
+
+            //if (escena == "00- Main Menu 0")
+            //{
+                if (hotkey.triggered)
                 onPressEvent.Invoke();
+            //}
         }
     }
 }
