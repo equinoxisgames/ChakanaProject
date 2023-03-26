@@ -21,7 +21,8 @@ public class MainMenu : MonoBehaviour
             escena = SceneManager.GetActiveScene().name;
 
             if (escena != "00- Main Menu 0")
-            { 
+            {
+                
 
                 if (!pauseMenu.gameObject.activeSelf && !confirmQuitMenu.gameObject.activeSelf)
                 {
@@ -48,6 +49,46 @@ public class MainMenu : MonoBehaviour
         }
 
 
+
+
+    }
+
+    public void Escape()
+    {
+        
+            escena = SceneManager.GetActiveScene().name;
+
+            if (escena != "00- Main Menu 0")
+            {
+
+
+                if (!pauseMenu.gameObject.activeSelf && !confirmQuitMenu.gameObject.activeSelf)
+                {
+
+                Debug.Log("Entra al IF PauseMenu Deshabilitado y ConfirmQuitMenu Deshabilitado");
+                    //pauseMenu.gameObject.SetActive(true);
+                    btContinue.Select();
+                    hoyustusGameObject.gameObject.SetActive(true);
+
+                }
+                else
+                {
+                    if (pauseMenu.gameObject.activeSelf)
+                    {
+                    Debug.Log("Entra al IF Else PauseMenu Habilitado");
+                        pauseMenu.gameObject.SetActive(false);
+                        hoyustusGameObject.gameObject.SetActive(true);
+                    }
+                    if (confirmQuitMenu.gameObject.activeSelf)
+                    {
+                    Debug.Log("Entra al IF Else ConfirmQuitMenu Habilitado");
+                        confirmQuitMenu.gameObject.SetActive(false);
+                        hoyustusGameObject.gameObject.SetActive(true);
+                    }
+                }
+            }
+
+        
 
 
     }

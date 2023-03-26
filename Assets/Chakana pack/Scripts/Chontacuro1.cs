@@ -62,7 +62,7 @@ public class Chontacuro1 : MonoBehaviour
         //Move();
 
         detectionRadius = 10;
-        movementSpeed = 7;
+        movementSpeed = 5f;
 
         Vector2 direction = hoyustusPlayerCotroller.transform.position - transform.position;
         float distance = Vector2.Distance(transform.position, hoyustusPlayerCotroller.transform.position);
