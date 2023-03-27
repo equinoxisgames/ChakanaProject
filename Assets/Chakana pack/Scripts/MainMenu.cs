@@ -75,7 +75,7 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Entra Escape al IF PauseMenu Deshabilitado y ConfirmQuitMenu Deshabilitado");
                     //pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
-                    hoyustusGameObject.gameObject.SetActive(true);
+                    hoyustusGameObject.gameObject.SetActive(false);
 
                 }
                 else
