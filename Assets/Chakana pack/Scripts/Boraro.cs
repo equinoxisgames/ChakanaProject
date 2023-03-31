@@ -28,7 +28,7 @@ public class Boraro : MonoBehaviour
 
     private void Awake()
     {
-        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        //cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
         sp = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
