@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
 
     public RectTransform pauseMenu;
     public RectTransform confirmQuitMenu;
+    //public RectTransform exitMenu;
     public Transform hoyustusGameObject;
     public Button btContinue;
     string escena;
@@ -21,6 +22,8 @@ public class MainMenu : MonoBehaviour
             escena = SceneManager.GetActiveScene().name;
 
             Debug.Log("Entra Update");
+
+            //exitMenu.gameObject.SetActive(false);
 
             if (escena != "00- Main Menu 0")
             {
