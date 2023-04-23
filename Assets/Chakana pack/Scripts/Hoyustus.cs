@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 using Unity.VisualScripting;
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class Hoyustus : CharactersBehaviour
 {
@@ -163,6 +164,14 @@ public class Hoyustus : CharactersBehaviour
     [Space(5)]*/
 
 
+    [Header("Dash")]
+    [SerializeField] private bool dashAvailable = true;
+    [SerializeField] private GameObject bodyHoyustus;
+    [SerializeField] private GameObject dashBody;
+    [SerializeField] private CapsuleCollider2D body;
+    [Space(5)]
+
+
     [Header("Habilidades")]
     [SerializeField] float cargaHabilidadCondor;
     [SerializeField] float cargaHabilidadSerpiente;
@@ -173,7 +182,7 @@ public class Hoyustus : CharactersBehaviour
     {
         //CARGAR DATA
         LoadData();
-        Debug.Log(gold);
+        //Debug.Log(gold);
 
     }
 
@@ -195,6 +204,14 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
+        //INICIALIZACION DE body Y bodyDash
+        //bodyHoyustus = this.transform.GetChild(0).gameObject;
+        dashBody = this.transform.GetChild(0).gameObject;
+        body = this.gameObject.GetComponent<CapsuleCollider2D>();
+        //dashBody.SetActive(false);
+
+
+
         ataqueMax = 5;
         ataque = ataqueMax;
         //AudioWalking.Play();
@@ -257,7 +274,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (playable) {
             //Walk();
-
+            Dash();
             Jump(0.1f, 0.1f);
         }
         //Recoil();
@@ -276,7 +293,7 @@ public class Hoyustus : CharactersBehaviour
         Debug.Log("final habilidad condor");
         playable = true;
         invulnerable = false;
-        rb.gravityScale = 1f;
+        rb.gravityScale = 2;
 
     }
 
@@ -340,7 +357,22 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     //FUNCION DE INVULNERABILIDAD A TODO DANIO
     //***************************************************************************************************
-    //TRAS APROBACION
+    private void EstablecerInvulnerabilidades() {
+        invulnerable = true;
+        Physics2D.IgnoreLayerCollision(3, 11, true);
+        Physics2D.IgnoreLayerCollision(11, 12, true);
+    }
+
+
+    //***************************************************************************************************
+    //FUNCION DE INVULNERABILIDAD A TODO DANIO
+    //***************************************************************************************************
+    private void QuitarInvulnerabilidades(){
+        invulnerable = false;
+        Physics2D.IgnoreLayerCollision(3, 11, false);
+        Physics2D.IgnoreLayerCollision(11, 12, false);
+
+    }
 
 
 
@@ -494,8 +526,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForSeconds(0.2f);
         playable = true;
         yield return new WaitForSeconds(tiempoInvulnerabilidad);
-        invulnerable = false;
-        Physics2D.IgnoreLayerCollision(3, 11, false);
+        QuitarInvulnerabilidades();
         //this.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
@@ -509,7 +540,7 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
         rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
         invulnerable = true;
-        Physics2D.IgnoreLayerCollision(3, 11, true);
+        EstablecerInvulnerabilidades();
     }
 
 
@@ -638,7 +669,7 @@ public class Hoyustus : CharactersBehaviour
                 //MODIFICANDO VELOCIDADES
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
-                rb.AddForce(new Vector2(0, 0.3f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
@@ -671,7 +702,7 @@ public class Hoyustus : CharactersBehaviour
                 //MODIFICANDO VELOCIDADES
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
-                rb.AddForce(new Vector2(0, 0.25f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 Debug.Log("Impulso 2");
                 cargaHabilidadCondor += 0.005f;
@@ -700,8 +731,32 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     //DASH
     //***************************************************************************************************
-    private void Dash() { 
-    
+    private void Dash() {
+        if (dashAvailable && Input.GetKeyDown(KeyCode.X)) {
+            dashAvailable = false;
+            playable = false;
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0f;
+            StartCoroutine(dashCooldown());
+        }
+    }
+
+    private IEnumerator dashCooldown() {
+        EstablecerInvulnerabilidades();        
+        body.enabled = false;
+        //bodyHoyustus.SetActive(false);
+        dashBody.SetActive(true);
+        rb.AddForce(new Vector2(-transform.localScale.x * 18, 0), ForceMode2D.Impulse);
+        //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
+        yield return new WaitForSeconds(0.5f);
+        dashBody.SetActive(false);
+        body.enabled = true;
+        //bodyHoyustus.SetActive(true);
+        playable = true;
+        rb.gravityScale = 2;
+        QuitarInvulnerabilidades();
+        yield return new WaitForSeconds(0.5f);
+        dashAvailable = true;
     }
 
 
