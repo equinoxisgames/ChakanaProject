@@ -635,7 +635,10 @@ public class Hoyustus : CharactersBehaviour
             else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
+                //MODIFICANDO VELOCIDADES
+                //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
+                //AGREGANDO FUERZAS
+                rb.AddForce(new Vector2(0, 0.3f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
@@ -665,7 +668,10 @@ public class Hoyustus : CharactersBehaviour
             else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir - 0.2f)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
+                //MODIFICANDO VELOCIDADES
+                //rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
+                //AGREGANDO FUERZAS
+                rb.AddForce(new Vector2(0, 0.25f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 Debug.Log("Impulso 2");
                 cargaHabilidadCondor += 0.005f;
