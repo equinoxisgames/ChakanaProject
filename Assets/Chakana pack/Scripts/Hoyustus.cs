@@ -175,6 +175,11 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float cargaHabilidadSerpiente;
     [SerializeField] float cargaHabilidadLanza;
 
+
+    public void isTocandoPared(int value) {
+        tocandoPared = value;
+    }
+
     private void Awake()
     {
         //CARGAR DATA
@@ -201,7 +206,7 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
-
+        aumentoDanioParalizacion = 1f;
         //INICIALIZACION DE body Y bodyDash
         //bodyHoyustus = this.transform.GetChild(0).gameObject;
         dashBody = this.transform.GetChild(0).gameObject;
@@ -304,7 +309,9 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
         cargaHabilidadSerpiente = 0f;
         GameObject objetoPrefab = Resources.Load<GameObject>("BolaVeneno");
-        GameObject nuevoObjeto = Instantiate(objetoPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+        GameObject bolaVeneno = Instantiate(objetoPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
+        yield return new WaitForEndOfFrame();
+        bolaVeneno.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x);
        // nuevoObjeto.GetComponent
         //invulnerable = true;
         //rb.velocity = Vector2.zero;
@@ -412,10 +419,10 @@ public class Hoyustus : CharactersBehaviour
     {
         base.OnTriggerEnter2D(collider);
 
-        if (collider.gameObject.layer == 6)
+        /*if (collider.gameObject.layer == 6)
         {
             tocandoPared = 0;
-        }
+        }*/
         if (collider.gameObject.tag == "Viento")
         {
             if (estadoViento)
@@ -475,10 +482,10 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.layer == 6)
-        {
-            tocandoPared = 1;
-        }
+        //if (collider.gameObject.layer == 6)
+        //{
+          //  tocandoPared = 1;
+        //}
     }
 
 
@@ -609,7 +616,7 @@ public class Hoyustus : CharactersBehaviour
         //Se debe crear un nuevo layer pared
         //TOCANDO PARED PERMITIRA QUE SE DETENGA EL PLAYER SI TRATA DE CAMINAR Y SE TOCA UNA PARED
         //LA AFECTACION DEL VIENTO REDUCIRA SU VELOCIDAD AL ESTAR EN EL AIRE
-        rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento), rb.velocity.y);
+        rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
     }
 
 
@@ -626,7 +633,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = false;
                 currentStepsImpulso = 0;
                 rb.AddForce(new Vector2(0, 8f), ForceMode2D.Impulse);
-                Debug.Log("Salto");
+                //Debug.Log("Salto");
                 isJumping = true;
                 cargaHabilidadCondor += 0.05f;
             }
@@ -638,7 +645,7 @@ public class Hoyustus : CharactersBehaviour
                 //AGREGANDO FUERZAS
                 rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
-                Debug.Log("Impulso");
+                //Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
             }
 
@@ -647,7 +654,7 @@ public class Hoyustus : CharactersBehaviour
                 isJumping = false;
                 firstJump = false;
                 secondJump = true;
-                Debug.Log("Alto");
+                //Debug.Log("Alto");
                 return;
             }
         }
@@ -658,7 +665,7 @@ public class Hoyustus : CharactersBehaviour
                 currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 rb.AddForce(new Vector2(0, 9f), ForceMode2D.Impulse);
-                Debug.Log("Salto 2");
+                //Debug.Log("Salto 2");
                 isJumping = true;
                 secondJump = true;
                 cargaHabilidadCondor += 0.05f;
@@ -671,7 +678,7 @@ public class Hoyustus : CharactersBehaviour
                 //AGREGANDO FUERZAS
                 rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
-                Debug.Log("Impulso 2");
+                //Debug.Log("Impulso 2");
                 cargaHabilidadCondor += 0.005f;
             }
 
@@ -679,7 +686,7 @@ public class Hoyustus : CharactersBehaviour
             {
                 isJumping = false;
                 secondJump = false;
-                Debug.Log("Alto 2");
+                //Debug.Log("Alto 2");
                 return;
             }
         }

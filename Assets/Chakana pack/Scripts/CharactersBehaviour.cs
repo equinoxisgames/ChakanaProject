@@ -20,7 +20,7 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float afectacionFuego = 5;
     [SerializeField] protected float afectacionVeneno = 0.05f;
     [SerializeField] protected int aumentoFuegoPotenciado = 1;
-    [SerializeField] protected float aumentoDanioParalizacion = 0f;
+    [SerializeField] protected float aumentoDanioParalizacion = 1f;
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
     protected int layerObject;
@@ -105,7 +105,7 @@ public class CharactersBehaviour : MonoBehaviour
             }
 
             StartCoroutine(cooldownRecibirDanio(direccion));
-            recibirDanioExplosion(collider.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
+            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
             StartCoroutine(cooldownInvulnerabilidadExplosiones());           
         }
     }
@@ -168,16 +168,9 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //RECIBIR DANIO ATAQUE ENEMIGO
     //***************************************************************************************************
-    public void recibirDanioAtaque(float ataque) {
-        vida -= (ataque * aumentoDanioParalizacion);
-    }
-
-
-    //***************************************************************************************************
-    //RECIBIR DANIO EXPLOSION
-    //***************************************************************************************************
-    public void recibirDanioExplosion(float danio) {
-        vida -= danio;
+    public void recibirDanio(float danio) {
+        Debug.Log(danio * aumentoDanioParalizacion);
+        vida -= (danio * aumentoDanioParalizacion);
     }
 
 
