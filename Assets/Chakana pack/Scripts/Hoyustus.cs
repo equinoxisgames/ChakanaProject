@@ -301,10 +301,11 @@ public class Hoyustus : CharactersBehaviour
     //Habilidad Serpiente V.Alpha
     private IEnumerator habilidadSerpiente()
     {
-        cargaHabilidadSerpiente = 0f;
         playable = false;
+        cargaHabilidadSerpiente = 0f;
         GameObject objetoPrefab = Resources.Load<GameObject>("BolaVeneno");
         GameObject nuevoObjeto = Instantiate(objetoPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+       // nuevoObjeto.GetComponent
         //invulnerable = true;
         //rb.velocity = Vector2.zero;
         //rb.gravityScale = 0f;
@@ -313,6 +314,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForEndOfFrame();
         //yield return new WaitForSeconds(2f);
         Debug.Log("final habilidad serpiente");
+        playable = true;
         //playable = true;
         //invulnerable = false;
         //rb.gravityScale = 2;
@@ -698,8 +700,8 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash() {
         if (dashAvailable && Input.GetKeyDown(KeyCode.X)) {
-            dashAvailable = false;
             playable = false;
+            dashAvailable = false;
             rb.velocity = Vector2.zero;
             rb.gravityScale = 0f;
             StartCoroutine(dashCooldown());
