@@ -21,17 +21,102 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float afectacionVeneno = 0.05f;
     [SerializeField] protected int aumentoFuegoPotenciado = 1;
     [SerializeField] protected float aumentoDanioParalizacion = 0f;
+    [SerializeField] protected bool invulnerable = false;
+    [SerializeField] protected bool playable = true;
+    protected int layerObject;
+    protected Rigidbody2D rb;
+
+
+
+    //***************************************************************************************************
+    //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
+    //***************************************************************************************************
+    protected IEnumerator cooldownRecibirDanio(int direccion)
+    {
+        //La disminucion de la vida se deberia hacer en funcion del ataque del enemigo u objeto con el que el character se encuentre
+        Recoil(direccion);
+        if (vida <= 0)
+        {
+            //StartCoroutine(Muerte());
+            yield break;
+        }
+        //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
+        yield return new WaitForSeconds(0.5f);
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(0.2f);
+        playable = true;
+        yield return new WaitForSeconds(2f);
+        QuitarInvulnerabilidades(layerObject);
+        //this.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+
+    //***************************************************************************************************
+    //LOGICA DE RECOIL
+    //***************************************************************************************************
+    protected void Recoil(int direccion)
+    {
+        playable = false;
+        rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
+        invulnerable = true;
+        EstablecerInvulnerabilidades(layerObject);
+    }
+
+
+    //***************************************************************************************************
+    //FUNCION DE INVULNERABILIDAD A TODO DANIO
+    //***************************************************************************************************
+    protected void EstablecerInvulnerabilidades(int layerObject)
+    {
+        invulnerable = true;
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 12, true);
+    }
+
+
+    //***************************************************************************************************
+    //FUNCION DE INVULNERABILIDAD A TODO DANIO
+    //***************************************************************************************************
+    protected void QuitarInvulnerabilidades(int layerObject)
+    {
+        invulnerable = false;
+        Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+
+    }
 
 
     //***************************************************************************************************
     //DETECCION COLISIONES
     //***************************************************************************************************
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Explosion")
+        if (collider.gameObject.tag == "Explosion")
         {
-            recibirDanioExplosion(collision.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
+            //direccion nos dara la orientacion de recoil al sufrir danio
+            int direccion = 1;
+            if (collider.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
+
+            StartCoroutine(cooldownRecibirDanio(direccion));
+            recibirDanioExplosion(collider.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
+            StartCoroutine(cooldownInvulnerabilidadExplosiones());           
         }
+    }
+
+
+    //***************************************************************************************************
+    //CORRUTINA DE DETECCION DE EXPLOSIONES
+    //***************************************************************************************************
+    protected IEnumerator cooldownInvulnerabilidadExplosiones() {
+        yield return new WaitForSeconds(2f);
+        QuitarInvulnerabilidades(layerObject);
     }
 
 
