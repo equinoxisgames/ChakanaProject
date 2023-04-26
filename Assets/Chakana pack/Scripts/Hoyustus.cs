@@ -170,6 +170,12 @@ public class Hoyustus : CharactersBehaviour
     [Space(5)]
 
 
+    [Header("Ataque")]
+    [SerializeField] private bool ataqueAvailable = true;
+    [SerializeField] private GameObject lanza;
+    [Space(5)]
+
+
     [Header("Habilidades")]
     [SerializeField] float cargaHabilidadCondor;
     [SerializeField] float cargaHabilidadSerpiente;
@@ -207,6 +213,8 @@ public class Hoyustus : CharactersBehaviour
     void Start()
     {
         aumentoDanioParalizacion = 1f;
+        lanza = transform.GetChild(this.transform.childCount - 1).gameObject;
+        lanza.SetActive(false);
         //INICIALIZACION DE body Y bodyDash
         //bodyHoyustus = this.transform.GetChild(0).gameObject;
         dashBody = this.transform.GetChild(0).gameObject;
@@ -279,6 +287,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (playable) {
             //Walk();
+            ataqueLanza();
             Dash();
             Jump(0.1f, 0.1f);
         }
@@ -294,6 +303,10 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
         Debug.Log("inicio habilidad condor");
+        GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
+       // objetoPrefab.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 2, 12);
+        //yield return new WaitForEndOfFrame();
+        Instantiate(objetoPrefab.GetComponent<ExplosionBehaviour>(), transform.position + Vector3.up * 1f, Quaternion.identity);
         yield return new WaitForSeconds(2f);
         Debug.Log("final habilidad condor");
         playable = true;
@@ -327,6 +340,7 @@ public class Hoyustus : CharactersBehaviour
         //rb.gravityScale = 2;
 
     }
+
 
     void FixedUpdate()
     {
@@ -581,7 +595,8 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
             Debug.Log("explosion");
-            GameObject objetoPrefab = Resources.Load<GameObject>("ExplosionVenenoFuego");
+            GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
+            //NO SE MODIFICAN VALORES PUES LOS VALORES POR DEFAULT EN ExplosionBehaviour CORRESPONDEN A LOS DE ESTA COMBINACION ELEMENTAL
             GameObject nuevoObjeto = Instantiate(objetoPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
@@ -703,6 +718,69 @@ public class Hoyustus : CharactersBehaviour
 
 
     //***************************************************************************************************
+    //Ataque Lanza
+    //***************************************************************************************************
+    private void ataqueLanza() {
+        if (ataqueAvailable && Input.GetKeyDown(KeyCode.C))
+        {
+            //VOLVERLAS VARIABLES GLOBALES
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+
+            if (v == 0) {
+                //Aniadir el pequenio impulso de movimiento
+                lanza.SetActive(true);
+            }
+            else if (v != 0 && h == 0) {
+                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
+                if (v < 0)
+                {
+                    Debug.Log("Ataque para abajo");
+                }
+                else {
+                    Debug.Log("Ataque para arriba");
+                }
+            }
+            else if(v != 0 && h != 0){
+                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
+                if (Math.Abs(v) > Math.Abs(h))
+                {
+                    if (v < 0)
+                    {
+                        Debug.Log("Ataque para abajo");
+                    }
+                    else {
+                        Debug.Log("Ataque para arriba");
+                    }
+                }
+                else {
+                    //Aniadir el pequenio impulso de movimiento
+                    lanza.SetActive(true);
+                }
+            }
+
+            ataqueAvailable = false;
+            //lanza.SetActive(true);
+            cargaHabilidadLanza += 0.5f;
+            StartCoroutine(lanzaCooldown());
+        }
+    }
+
+
+    //***************************************************************************************************
+    //CooldownAtaque
+    //***************************************************************************************************
+    private IEnumerator lanzaCooldown()
+    {
+        yield return new WaitForSeconds(0.2f);
+        lanza.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        ataqueAvailable = true;
+
+    }
+
+
+    //***************************************************************************************************
     //DASH
     //***************************************************************************************************
     private void Dash() {
@@ -714,6 +792,7 @@ public class Hoyustus : CharactersBehaviour
             StartCoroutine(dashCooldown());
         }
     }
+
 
     //***************************************************************************************************
     //COOLDOWN DASH

@@ -5,6 +5,13 @@ using UnityEngine;
 public class DetectorParedes : MonoBehaviour
 {
 
+    private void Start()
+    {
+        Physics2D.IgnoreLayerCollision(13, 3, true);
+        Physics2D.IgnoreLayerCollision(13, 12, true);
+    }
+
+
     //***************************************************************************************************
     //DETECCION DE COLISIONES
     //***************************************************************************************************

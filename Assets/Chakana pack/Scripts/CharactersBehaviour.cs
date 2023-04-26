@@ -169,7 +169,6 @@ public class CharactersBehaviour : MonoBehaviour
     //RECIBIR DANIO ATAQUE ENEMIGO
     //***************************************************************************************************
     public void recibirDanio(float danio) {
-        Debug.Log(danio * aumentoDanioParalizacion);
         vida -= (danio * aumentoDanioParalizacion);
     }
 
