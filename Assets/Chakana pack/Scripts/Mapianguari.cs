@@ -39,7 +39,7 @@ public class Mapianguari : MonoBehaviour
         }
     }
 
-
+    //EVALUAR SI ESTO ES O NO NECESARIO PUES LA LOGICA DE DANIO SE DARIA DESDE LANZA HOYUSTUS
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.layer == 14)

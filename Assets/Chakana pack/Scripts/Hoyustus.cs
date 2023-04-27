@@ -172,7 +172,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Ataque")]
     [SerializeField] private bool ataqueAvailable = true;
-    [SerializeField] private GameObject lanza;
+    [SerializeField] private GameObject[] lanzas;
     [Space(5)]
 
 
@@ -215,8 +215,15 @@ public class Hoyustus : CharactersBehaviour
         layerObject = this.gameObject.layer;
 
         aumentoDanioParalizacion = 1f;
-        lanza = transform.GetChild(this.transform.childCount - 1).gameObject;
-        lanza.SetActive(false);
+        lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
+            
+           
+        for (int i = 0; i < lanzas.Length; i++)
+        {
+            lanzas[i] = transform.GetChild(this.transform.childCount - 1).GetChild(i).gameObject;
+        }
+
+        //lanza.SetActive(false);
         //INICIALIZACION DE body Y bodyDash
         //bodyHoyustus = this.transform.GetChild(0).gameObject;
         dashBody = this.transform.GetChild(0).gameObject;
@@ -278,11 +285,6 @@ public class Hoyustus : CharactersBehaviour
         //WalkingControl();
         //Flip();
         //Walk(xAxis);
-
-        Debug.Log(layerObject);
-        if (Physics2D.GetIgnoreLayerCollision(3, 11)) {
-            Debug.Log("Ignorado");
-        }
 
         if (cargaHabilidadCondor > 5 && Input.GetButton("Jump") && Input.GetKey(KeyCode.J)) {
             StartCoroutine("habilidadCondor");
@@ -730,46 +732,46 @@ public class Hoyustus : CharactersBehaviour
     private void ataqueLanza() {
         if (ataqueAvailable && Input.GetKeyDown(KeyCode.C))
         {
+            int index = 0;
             //VOLVERLAS VARIABLES GLOBALES
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
 
             if (v == 0) {
                 //Aniadir el pequenio impulso de movimiento
-                lanza.SetActive(true);
             }
             else if (v != 0 && h == 0) {
                 //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
-                if (v < 0)
+                if (v > 0)
                 {
-                    Debug.Log("Ataque para abajo");
+                    index = 1;
                 }
-                else {
-                    Debug.Log("Ataque para arriba");
+                else if (v <= 0 && !Grounded())
+                {
+                    index = 2;
                 }
             }
             else if(v != 0 && h != 0){
                 //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
                 if (Math.Abs(v) > Math.Abs(h))
                 {
-                    if (v < 0)
+                    if (v > 0)
                     {
-                        Debug.Log("Ataque para abajo");
+                        index = 1;
                     }
-                    else {
-                        Debug.Log("Ataque para arriba");
+                    else if(v <= 0 && !Grounded()){
+                        index = 2;
                     }
                 }
                 else {
                     //Aniadir el pequenio impulso de movimiento
-                    lanza.SetActive(true);
+                    //lanza.SetActive(true);
                 }
             }
 
             ataqueAvailable = false;
-            //lanza.SetActive(true);
             cargaHabilidadLanza += 0.5f;
-            StartCoroutine(lanzaCooldown());
+            StartCoroutine(lanzaCooldown(index));
         }
     }
 
@@ -777,10 +779,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     //CooldownAtaque
     //***************************************************************************************************
-    private IEnumerator lanzaCooldown()
+    private IEnumerator lanzaCooldown(int index)
     {
+        lanzas[index].SetActive(true);
         yield return new WaitForSeconds(0.2f);
-        lanza.SetActive(false);
+        lanzas[index].SetActive(false);
         yield return new WaitForSeconds(0.5f);
         ataqueAvailable = true;
 
