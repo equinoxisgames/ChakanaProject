@@ -212,6 +212,8 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
+        layerObject = this.gameObject.layer;
+
         aumentoDanioParalizacion = 1f;
         lanza = transform.GetChild(this.transform.childCount - 1).gameObject;
         lanza.SetActive(false);
@@ -264,8 +266,7 @@ public class Hoyustus : CharactersBehaviour
             if (pState.flipFlag == 1) transform.localScale = new Vector2(-1, transform.localScale.y);
         }*/
 
-        Debug.Log(maxStepsImpulso);
-        layerObject = this.gameObject.layer;
+        //Debug.Log(maxStepsImpulso);
     }
 
 
@@ -277,6 +278,12 @@ public class Hoyustus : CharactersBehaviour
         //WalkingControl();
         //Flip();
         //Walk(xAxis);
+
+        Debug.Log(layerObject);
+        if (Physics2D.GetIgnoreLayerCollision(3, 11)) {
+            Debug.Log("Ignorado");
+        }
+
         if (cargaHabilidadCondor > 5 && Input.GetButton("Jump") && Input.GetKey(KeyCode.J)) {
             StartCoroutine("habilidadCondor");
         }

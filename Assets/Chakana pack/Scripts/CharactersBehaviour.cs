@@ -68,7 +68,6 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected void EstablecerInvulnerabilidades(int layerObject)
     {
-        invulnerable = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 12, true);
     }
