@@ -34,8 +34,9 @@ public class ExplosionBehaviour : MonoBehaviour
     }
 
 
-    public void modificarValores(int limitRadio, float danioExplosion, float indiceExplosion, int layer){
+    public void modificarValores(int limitRadio, float danioExplosion, float indiceExplosion, int layer, string tag){
         this.transform.gameObject.layer = layer;
+        this.transform.gameObject.tag = tag;
         habilitada = true;
         this.indiceExplosion = indiceExplosion;
         this.danioExplosion = danioExplosion;

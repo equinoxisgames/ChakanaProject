@@ -90,7 +90,8 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Explosion")
+        //LAYER EXPLOSION
+        if (collider.gameObject.layer == 12)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;

@@ -316,17 +316,19 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator habilidadCondor() {
         cargaHabilidadCondor = 0f;
         playable = false;
+        EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        Debug.Log("inicio habilidad condor");
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 10, 11);
+        //Debug.Log("inicio habilidad condor");
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 10, 11, "Viento");
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
         yield return new WaitForSeconds(2f);
-        Debug.Log("final habilidad condor");
+        //Debug.Log("final habilidad condor");
         playable = true;
         invulnerable = false;
         rb.gravityScale = 2;
+        QuitarInvulnerabilidades(layerObject);
 
     }
 
@@ -612,7 +614,7 @@ public class Hoyustus : CharactersBehaviour
             Debug.Log("explosion");
             //GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
             //NO SE MODIFICAN VALORES PUES LOS VALORES POR DEFAULT EN ExplosionBehaviour CORRESPONDEN A LOS DE ESTA COMBINACION ELEMENTAL
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12);
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Explosion");
             Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
