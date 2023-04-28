@@ -180,7 +180,11 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float cargaHabilidadCondor;
     [SerializeField] float cargaHabilidadSerpiente;
     [SerializeField] float cargaHabilidadLanza;
+    [Space(5)]
 
+
+    [Header("PREFABS")]
+    [SerializeField] private GameObject explosion;
 
     public void isTocandoPared(int value) {
         tocandoPared = value;
@@ -241,7 +245,7 @@ public class Hoyustus : CharactersBehaviour
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
         //escalaGravedad = rb.gravityScale;
-        menuMuerte = GameObject.Find("MenuMuerte").GetComponent<Canvas>();
+        //menuMuerte = GameObject.Find("MenuMuerte").GetComponent<Canvas>();
 
         if (menuMuerte != null) {
             menuMuerte.enabled = false;
@@ -274,6 +278,10 @@ public class Hoyustus : CharactersBehaviour
         }*/
 
         //Debug.Log(maxStepsImpulso);
+
+
+        //CARGA PREFABS
+        explosion = Resources.Load<GameObject>("Explosion");
     }
 
 
@@ -312,10 +320,8 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
         Debug.Log("inicio habilidad condor");
-        GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
-       // objetoPrefab.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 2, 12);
-        //yield return new WaitForEndOfFrame();
-        Instantiate(objetoPrefab.GetComponent<ExplosionBehaviour>(), transform.position + Vector3.up * 1f, Quaternion.identity);
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 10, 11);
+        Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
         yield return new WaitForSeconds(2f);
         Debug.Log("final habilidad condor");
         playable = true;
@@ -604,9 +610,10 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
             Debug.Log("explosion");
-            GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
+            //GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
             //NO SE MODIFICAN VALORES PUES LOS VALORES POR DEFAULT EN ExplosionBehaviour CORRESPONDEN A LOS DE ESTA COMBINACION ELEMENTAL
-            GameObject nuevoObjeto = Instantiate(objetoPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12);
+            Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
         }

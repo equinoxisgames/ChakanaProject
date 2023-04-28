@@ -104,7 +104,7 @@ public class CharactersBehaviour : MonoBehaviour
             }
 
             StartCoroutine(cooldownRecibirDanio(direccion));
-            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
+            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownInvulnerabilidadExplosiones());           
         }
     }
