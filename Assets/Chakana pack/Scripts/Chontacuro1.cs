@@ -141,12 +141,12 @@ public class Chontacuro1 : MonoBehaviour
 
        
 
-        Debug.Log("Pasos: "+pasos);
+    //Debug.Log("Pasos: "+pasos);
 
         //transform.position = Vector2.MoveTowards(transform.position, objetivo, 5f * Time.deltaTime);
         if (pasos >= 0 && pasos <= 100)
         {
-            Debug.Log("If pasos <= 10 -->" + pasos);
+        //Debug.Log("If pasos <= 10 -->" + pasos);
             
             transform.position = new Vector3(gameObject.transform.position.x + 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
             pasos = pasos + 1;
@@ -156,7 +156,7 @@ public class Chontacuro1 : MonoBehaviour
         {
             
 
-            Debug.Log("Else If pasos > 10 -->" + pasos);
+        //Debug.Log("Else If pasos > 10 -->" + pasos);
             transform.position = new Vector3(gameObject.transform.position.x - 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
             pasos = pasos + 1;
             transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
