@@ -216,6 +216,11 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
+
+        //Deshabilitar 
+        Physics2D.IgnoreLayerCollision(11, 14, true);
+        Physics2D.IgnoreLayerCollision(13, 14, true);
+        Physics2D.IgnoreLayerCollision(13, 15, true);
         layerObject = this.gameObject.layer;
 
         aumentoDanioParalizacion = 1f;
@@ -316,20 +321,15 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator habilidadCondor() {
         cargaHabilidadCondor = 0f;
         playable = false;
-        EstablecerInvulnerabilidades(layerObject);
-        invulnerable = true;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
         //Debug.Log("inicio habilidad condor");
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(9, 1, 10, 11, "Viento");
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 11, "Viento");
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.2f);
         //Debug.Log("final habilidad condor");
         playable = true;
-        invulnerable = false;
         rb.gravityScale = 2;
-        QuitarInvulnerabilidades(layerObject);
-
     }
 
 
@@ -439,6 +439,7 @@ public class Hoyustus : CharactersBehaviour
             //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
             vida -= 20;
             StartCoroutine(cooldownRecibirDanio(direccion));
+            //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
     }
 

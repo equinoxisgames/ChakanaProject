@@ -5,11 +5,11 @@ using UnityEngine;
 public class CharactersBehaviour : MonoBehaviour
 {
 
-    protected int gold;
-    protected float vida;
-    protected float defensa;
-    protected float ataque;
-    protected float ataqueMax;
+    [SerializeField] protected int gold;
+    [SerializeField] protected float vida;
+    [SerializeField] protected float defensa;
+    [SerializeField] protected float ataque;
+    [SerializeField] protected float ataqueMax;
 
     [Header("Estados Elementales")]
     [SerializeField] protected bool estadoViento;
@@ -70,6 +70,7 @@ public class CharactersBehaviour : MonoBehaviour
     {
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 12, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, true);
     }
 
 
@@ -81,6 +82,7 @@ public class CharactersBehaviour : MonoBehaviour
         invulnerable = false;
         Physics2D.IgnoreLayerCollision(3, layerObject, false);
         Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
 
     }
 
