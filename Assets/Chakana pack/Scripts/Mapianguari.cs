@@ -264,6 +264,8 @@ public class Mapianguari : CharactersBehaviour
         //EL TIEMPO DEPENDERA DE LA ANIMACION
         yield return new WaitForSeconds(0.3f);
         ataqueCuerpo.enabled = false;
+        //AGREGAR EL DASH 
+        //rb.velocity = new Vector2(15f, 0f);
         atacando = false;
         yield return new WaitForSeconds(1.5f);
         ataqueDisponible = true;

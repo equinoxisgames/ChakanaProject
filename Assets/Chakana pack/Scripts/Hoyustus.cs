@@ -174,6 +174,12 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
 
+
+
+    private float limitSaltoUno = 5f;
+    private float limitSaltoDos = 4f;
+    private float posYAntesSalto = 0f;
+
     public void isTocandoPared(int value) {
         tocandoPared = value;
     }
@@ -205,6 +211,9 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
+
+        //ESTABLECER FRAME RATE
+        Application.targetFrameRate = 90;
 
         //IGNORACION DE COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
         Physics2D.IgnoreLayerCollision(11, 14, true);
@@ -465,7 +474,23 @@ public class Hoyustus : CharactersBehaviour
             //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
             //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
             //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
-            vida -= 20;
+
+            try {
+
+                if (collider.gameObject.transform.parent.name == "-----ENEMIES")
+                {
+                    recibirDanio(collider.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                }
+                else{
+                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                }
+
+
+            }
+            catch (Exception e){
+      
+            }
+            //vida -= 20;
             StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
@@ -699,8 +724,9 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Salto");
                 isJumping = true;
                 cargaHabilidadCondor += 0.05f;
+                posYAntesSalto = transform.position.y;
             }
-            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir)
+            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir )//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
                 //MODIFICANDO VELOCIDADES
@@ -712,7 +738,7 @@ public class Hoyustus : CharactersBehaviour
                 cargaHabilidadCondor += 0.005f;
             }
 
-            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir)
+            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir)// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 isJumping = false;
                 firstJump = false;
@@ -733,7 +759,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 cargaHabilidadCondor += 0.05f;
             }
-            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir - 0.2f)
+            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir - 0.2f)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
                 //MODIFICANDO VELOCIDADES
@@ -745,7 +771,7 @@ public class Hoyustus : CharactersBehaviour
                 cargaHabilidadCondor += 0.005f;
             }
 
-            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir - 0.2f)
+            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir - 0.2f)// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 isJumping = false;
                 secondJump = false;

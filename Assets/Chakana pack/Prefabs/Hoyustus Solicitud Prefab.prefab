@@ -908,6 +908,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 358357f5e5a840343a06968b52804c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gold: 0
+  vida: 0
+  defensa: 0
+  ataque: 0
+  ataqueMax: 0
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -1001,10 +1006,12 @@ MonoBehaviour:
   dashBody: {fileID: 0}
   body: {fileID: 0}
   ataqueAvailable: 1
-  lanza: {fileID: 0}
+  lanzas: []
   cargaHabilidadCondor: 0
   cargaHabilidadSerpiente: 90
   cargaHabilidadLanza: 0
+  explosion: {fileID: 0}
+  bolaVeneno: {fileID: 0}
 --- !u!1 &2394723655531926819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1298,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.25}
+  m_Offset: {x: 0, y: -0.2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
