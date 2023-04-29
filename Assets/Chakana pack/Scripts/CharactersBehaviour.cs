@@ -33,17 +33,19 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator cooldownRecibirDanio(int direccion)
     {
-        //La disminucion de la vida se deberia hacer en funcion del ataque del enemigo u objeto con el que el character se encuentre
+
         Recoil(direccion);
         if (vida <= 0)
         {
-            //StartCoroutine(Muerte());
             yield break;
         }
+
         //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.5f);
+        //SE DETIENE EL RECOIL
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.2f);
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
         yield return new WaitForSeconds(2f);
         QuitarInvulnerabilidades(layerObject);
@@ -56,8 +58,9 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected void Recoil(int direccion)
     {
-        playable = false;
-        if(rb.gravityScale == 0)
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        if(rb.gravityScale == 0) 
             rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
         else
             rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
@@ -175,6 +178,8 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     public void recibirDanio(float danio) {
         vida -= (danio * aumentoDanioParalizacion);
+
+        //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (!playable && aumentoDanioParalizacion == 1.5f)
         {
             playable = true;
@@ -185,7 +190,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     public IEnumerator setParalisis()
     {
-        Debug.Log("Quieto hoyustus");
+        Debug.Log("Quieto " + this.gameObject.name);
         rb.velocity = Vector3.zero;
         playable = false;
         aumentoDanioParalizacion = 1.5f;

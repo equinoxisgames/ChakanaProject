@@ -15,16 +15,20 @@ public class Mapianguari : CharactersBehaviour
     public bool ataqueDisponible;
     private BoxCollider2D ataqueCuerpo, campoVision;
     private CapsuleCollider2D cuerpo;
-    private float movementVelocityFirstStage = 4;
-    private float movementVelocitySecondStage = 8;
+    private float movementVelocity = 4;
+    //private float movementVelocitySecondStage = 8;
+    private float maxVida;
 
     [SerializeField] private GameObject bolaVeneno;
 
 
     void Start()
     {
-        Physics2D.IgnoreLayerCollision(13, 15, true);
+        //Physics2D.IgnoreLayerCollision(13, 15, true);
+
+        //INICIALIZACION VARIABLES
         vida = 200;
+        maxVida = vida;
         ataqueMax = 20;
         ataque = ataqueMax;
         rb = this.gameObject.GetComponent<Rigidbody2D>();
@@ -45,19 +49,26 @@ public class Mapianguari : CharactersBehaviour
 
         //CARGA DE PREFABS
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
-        Debug.Log(bolaVeneno);
     }
 
 
     private void FixedUpdate()
     {
+        if (vida <= maxVida / 2) {
+            movementVelocity *= 2;
+        }
         if (vida <= 0) {
             StartCoroutine(Muerte());
         }
     }
 
-    //CORRUTINA DE MUERTE HOYUSTUS
+
+    //***************************************************************************************************
+    //CORRUTINA DE MUERTE
+    //***************************************************************************************************
     private IEnumerator Muerte() {
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
         //TIEMPO ANIMACION DEL Boss
@@ -66,18 +77,21 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
-    //CAMBIO PARA LA PERSECUSION DEL PLAYER
     void Update()
     {
+        //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
-            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocityFirstStage * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocity * Time.deltaTime);
         }
     }
 
+    //***************************************************************************************************
+    //DETECCION DE TRIGGERS
+    //***************************************************************************************************
     private new void OnTriggerEnter2D(Collider2D collider)
     {
 
-        //LAYER EXPLOSION Y ARMA DEL PLAYER
+        //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
         if (collider.gameObject.layer == 12 || collider.gameObject.layer == 14)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
@@ -103,6 +117,7 @@ public class Mapianguari : CharactersBehaviour
             }
         }
 
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")
         {
             if (estadoViento)
@@ -120,6 +135,7 @@ public class Mapianguari : CharactersBehaviour
             counterEstados = 1;
             StartCoroutine("afectacionEstadoViento");
         }
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
         else if (collider.gameObject.tag == "Fuego")
         {
             if (estadoFuego)
@@ -207,7 +223,12 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //CORRUTINA DE ATAQUE DE ATURDIMIENTO
+    //***************************************************************************************************
     private IEnumerator ataqueAturdimiento() {
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         atacando = true;
         ataqueDisponible = false;
         //GameObject Hoyustus = GameObject.
@@ -215,23 +236,27 @@ public class Mapianguari : CharactersBehaviour
         Debug.Log("Preparando ataque inmovilizador");
         yield return new WaitForSeconds(1.5f);
 
+        //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
         if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
 
             StartCoroutine(GameObject.FindObjectOfType<Hoyustus>().setParalisis());
             Debug.Log("Te inmovilizo");
             yield return new WaitForSeconds(0.5f);
-            //GameObject.FindObjectOfType<Hoyustus>().set
         }
 
-        //yield return new WaitForEndOfFrame();
+        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
         ataqueDisponible = true;
         atacando = false;
     }
 
+    //***************************************************************************************************
+    //CORRUTINA DE ATAQUE CUERPO A CUERPO
+    //***************************************************************************************************
     private IEnumerator ataqueCuerpoCuerpo(){
 
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         ataqueDisponible = false;
         ataqueCuerpo.enabled = true;
         atacando = true;
@@ -245,18 +270,24 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //CORRUTINA DE ATAQUE A DISTANCIA
+    //***************************************************************************************************
     private IEnumerator ataqueDistancia() {
+        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         atacando = true;
         ataqueDisponible = false;
         Debug.Log("Listo para atacar a distancia");
         //CORREGIR POR EL TIEMPO DE LA ANIMACION
+        yield return new WaitForSeconds(1f);
         for (int i = 0; i < 10; i++) {
             GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
             yield return new WaitForEndOfFrame();
             bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 24, 20);
             yield return new WaitForSeconds(0.1f);
         }
-        yield return new WaitForSeconds(1f);
+
+        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         atacando = false;
         ataqueDisponible = true;
         tiempoDentroRango = 0f;
@@ -266,6 +297,7 @@ public class Mapianguari : CharactersBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
         if (collision.gameObject.layer == 6) {
             minX = collision.transform.GetChild(0).gameObject.transform.position.x;
             maxX = collision.transform.GetChild(1).gameObject.transform.position.x;

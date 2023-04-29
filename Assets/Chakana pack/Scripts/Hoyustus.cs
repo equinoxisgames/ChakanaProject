@@ -149,19 +149,6 @@ public class Hoyustus : CharactersBehaviour
     [Space(5)]
 
 
-    /*[Header("Estados Elementales")]
-    [SerializeField] bool estadoViento;
-    [SerializeField] bool estadoFuego;
-    [SerializeField] bool estadoVeneno;
-    [SerializeField] int counterEstados;
-    [SerializeField] float afectacionViento;
-    [SerializeField] float afectacionFuego = 5;
-    [SerializeField] float afectacionVeneno = 0.05f;
-    [SerializeField] int aumentoFuegoPotenciado = 1;
-    [SerializeField] float aumentoDanioParalizacion = 0f;
-    [Space(5)]*/
-
-
     [Header("Dash")]
     [SerializeField] private bool dashAvailable = true;
     [SerializeField] private GameObject bodyHoyustus;
@@ -199,6 +186,7 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+
     private void LoadData()
     {
         PlayerData playerData = SaveManager.LoadPlayerData();
@@ -218,38 +206,43 @@ public class Hoyustus : CharactersBehaviour
     void Start()
     {
 
-        //Deshabilitar 
+        //IGNORACION DE COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
         Physics2D.IgnoreLayerCollision(11, 14, true);
         Physics2D.IgnoreLayerCollision(13, 14, true);
         Physics2D.IgnoreLayerCollision(13, 15, true);
-        layerObject = this.gameObject.layer;
 
+        //INICIALIZACION VARIABLES 
+        layerObject = this.gameObject.layer;
         aumentoDanioParalizacion = 1f;
         lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
-            
-           
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
+        anim = this.gameObject.GetComponent<Animator>();
+        grabity = rb.gravityScale;
+        escena = SceneManager.GetActiveScene().name;
+        ataqueMax = 5;
+        ataque = ataqueMax;
+
+        //INICIALIZACION DE LOS GAMEOBJECTS DE LAS LANZAS
         for (int i = 0; i < lanzas.Length; i++)
         {
             lanzas[i] = transform.GetChild(this.transform.childCount - 1).GetChild(i).gameObject;
         }
 
-        //lanza.SetActive(false);
+
         //INICIALIZACION DE body Y bodyDash
         //bodyHoyustus = this.transform.GetChild(0).gameObject;
         dashBody = this.transform.GetChild(0).gameObject;
         body = this.gameObject.GetComponent<CapsuleCollider2D>();
         //dashBody.SetActive(false);
 
-        ataqueMax = 5;
-        ataque = ataqueMax;
+
         //AudioWalking.Play();
         if (pState == null)
         {
             pState = GetComponent<PlayerStateList>();
         }
 
-        rb = this.gameObject.GetComponent<Rigidbody2D>();
-        anim = this.gameObject.GetComponent<Animator>();
+
         //escalaGravedad = rb.gravityScale;
         //menuMuerte = GameObject.Find("MenuMuerte").GetComponent<Canvas>();
 
@@ -257,9 +250,6 @@ public class Hoyustus : CharactersBehaviour
             menuMuerte.enabled = false;
         }
 
-        grabity = rb.gravityScale;
-
-        escena = SceneManager.GetActiveScene().name;
 
         if (escena == "00- StartRoom 1" || escena == "05 - Room GA1" || escena == "05 - Room GA1")
         {
@@ -286,7 +276,7 @@ public class Hoyustus : CharactersBehaviour
         //Debug.Log(maxStepsImpulso);
 
 
-        //CARGA PREFABS
+        //CARGA DE PREFABS
         explosion = Resources.Load<GameObject>("Explosion");
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
     }
@@ -318,17 +308,25 @@ public class Hoyustus : CharactersBehaviour
         //Attack();
     }
 
-    //Habilidad Condor V.Alpha
+    //***************************************************************************************************
+    //HABILIDAD CONDOR
+    //***************************************************************************************************
     private IEnumerator habilidadCondor() {
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         cargaHabilidadCondor = 0f;
         playable = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        //Debug.Log("inicio habilidad condor");
+
+        //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 11, "Viento");
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
+
+        //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
         yield return new WaitForSeconds(1.2f);
-        //Debug.Log("final habilidad condor");
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
         rb.gravityScale = 2;
     }
@@ -337,24 +335,19 @@ public class Hoyustus : CharactersBehaviour
     //Habilidad Serpiente V.Alpha
     private IEnumerator habilidadSerpiente()
     {
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
         cargaHabilidadSerpiente = 0f;
+
+        //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
-       // nuevoObjeto.GetComponent
-        //invulnerable = true;
-        //rb.velocity = Vector2.zero;
-        //rb.gravityScale = 0f;
-        Debug.Log("inicio habilidad serpiente");
-        //LANZAMIENTO BOLA DE VENENO
         yield return new WaitForEndOfFrame();
-        //yield return new WaitForSeconds(2f);
-        Debug.Log("final habilidad serpiente");
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
-        //playable = true;
-        //invulnerable = false;
-        //rb.gravityScale = 2;
+
     }
 
 
@@ -363,7 +356,6 @@ public class Hoyustus : CharactersBehaviour
         if (playable)
         {
             Walk();
-            //Jump(0.1f, 0.1f);
         }
         if (rb.velocity.y < 0) {
             Falling();
@@ -420,7 +412,8 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
+        
+        //COLISIONES PARA OBJETOS TAGUEADOS COMO ENEMY
         if (collision.gameObject.tag == "Enemy")
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
@@ -450,11 +443,13 @@ public class Hoyustus : CharactersBehaviour
     {
         base.OnTriggerEnter2D(collider);
 
+
         /*if (collider.gameObject.layer == 6)
         {
             tocandoPared = 0;
         }*/
 
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
         if (collider.gameObject.tag == "Enemy")
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
@@ -474,12 +469,16 @@ public class Hoyustus : CharactersBehaviour
             StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         else if (collider.gameObject.tag == "Viento")
         {
+            //REINICIO ESTADO VIENTO
             if (estadoViento)
             {
                 StopCoroutine("afectacionEstadoViento");
             }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
@@ -487,40 +486,52 @@ public class Hoyustus : CharactersBehaviour
                 return;
 
             }
+
+            //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
             estadoViento = true;
             counterEstados = 1;
             StartCoroutine("afectacionEstadoViento");
         }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
         else if (collider.gameObject.tag == "Fuego")
         {
+            //REINICIO ESTADO FUEGO
             if (estadoFuego)
             {
                 StopCoroutine("afectacionEstadoFuego");
             }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
                 StartCoroutine("combinacionesElementales");
                 return;
-
             }
+
+            //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
             estadoFuego = true;
             counterEstados = 10;
             StartCoroutine("afectacionEstadoFuego");
         }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
         else if (collider.gameObject.tag == "Veneno")
         {
+            //REINICIO ESTADO VENENO
             if (estadoVeneno)
             {
                 StopCoroutine("afectacionEstadoVeneno");
             }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
             else if (counterEstados > 0)
             {
                 counterEstados += 100;
                 StartCoroutine("combinacionesElementales");
                 return;
-
             }
+
+            //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
             estadoVeneno = true;
             counterEstados = 100;
             StartCoroutine("afectacionEstadoVeneno");
@@ -574,9 +585,12 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator Muerte()
     {
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         playable = false;
         //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
         yield return new WaitForSeconds(0.5f);
+
         rb.velocity = Vector2.zero;
         this.gameObject.tag = "Untagged";
         this.gameObject.layer = 0;
@@ -630,9 +644,6 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            Debug.Log("explosion");
-            //GameObject objetoPrefab = Resources.Load<GameObject>("Explosion");
-            //NO SE MODIFICAN VALORES PUES LOS VALORES POR DEFAULT EN ExplosionBehaviour CORRESPONDEN A LOS DE ESTA COMBINACION ELEMENTAL
             explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Explosion");
             Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
@@ -760,7 +771,7 @@ public class Hoyustus : CharactersBehaviour
     private void ataqueLanza() {
         if (ataqueAvailable && Input.GetKeyDown(KeyCode.C))
         {
-            int index = 0;
+            int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
             //VOLVERLAS VARIABLES GLOBALES
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
