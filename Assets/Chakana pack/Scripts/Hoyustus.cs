@@ -185,6 +185,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("PREFABS")]
     [SerializeField] private GameObject explosion;
+    [SerializeField] private GameObject bolaVeneno;
 
     public void isTocandoPared(int value) {
         tocandoPared = value;
@@ -287,6 +288,7 @@ public class Hoyustus : CharactersBehaviour
 
         //CARGA PREFABS
         explosion = Resources.Load<GameObject>("Explosion");
+        bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
     }
 
 
@@ -337,10 +339,9 @@ public class Hoyustus : CharactersBehaviour
     {
         playable = false;
         cargaHabilidadSerpiente = 0f;
-        GameObject objetoPrefab = Resources.Load<GameObject>("BolaVeneno");
-        GameObject bolaVeneno = Instantiate(objetoPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
+        GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
-        bolaVeneno.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
        // nuevoObjeto.GetComponent
         //invulnerable = true;
         //rb.velocity = Vector2.zero;

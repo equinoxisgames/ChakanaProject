@@ -15,6 +15,10 @@ public class Mapianguari : CharactersBehaviour
     public bool ataqueDisponible;
     private BoxCollider2D ataqueCuerpo, campoVision;
     private CapsuleCollider2D cuerpo;
+    private float movementVelocityFirstStage = 4;
+    private float movementVelocitySecondStage = 8;
+
+    [SerializeField] private GameObject bolaVeneno;
 
 
     void Start()
@@ -32,11 +36,16 @@ public class Mapianguari : CharactersBehaviour
         ataqueCuerpo = transform.GetChild(1).GetComponent<BoxCollider2D>();
 
         ataqueCuerpo.enabled = false;
+        layerObject = transform.gameObject.layer;
 
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
         Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
         Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").transform.GetChild(0).GetComponent<BoxCollider2D>());
 
+
+        //CARGA DE PREFABS
+        bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
+        Debug.Log(bolaVeneno);
     }
 
 
@@ -61,7 +70,7 @@ public class Mapianguari : CharactersBehaviour
     void Update()
     {
         if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
-            transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(xObjetivo, transform.position.y, transform.position.z), 4 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocityFirstStage * Time.deltaTime);
         }
     }
 
@@ -182,7 +191,7 @@ public class Mapianguari : CharactersBehaviour
                 StartCoroutine(ataqueAturdimiento());
             }
             else if (ataqueDisponible && distanciaPlayer > 12 && tiempoFueraRango >= 10){
-                Debug.Log("Listo para atacar a distancia");
+                StartCoroutine(ataqueDistancia());
             }
         }
     }
@@ -214,7 +223,7 @@ public class Mapianguari : CharactersBehaviour
             //GameObject.FindObjectOfType<Hoyustus>().set
         }
 
-        yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
         ataqueDisponible = true;
@@ -236,8 +245,22 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
-    private void ataqueDistancia() {
+    private IEnumerator ataqueDistancia() {
         atacando = true;
+        ataqueDisponible = false;
+        Debug.Log("Listo para atacar a distancia");
+        //CORREGIR POR EL TIEMPO DE LA ANIMACION
+        for (int i = 0; i < 10; i++) {
+            GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
+            yield return new WaitForEndOfFrame();
+            bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 24, 20);
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(1f);
+        atacando = false;
+        ataqueDisponible = true;
+        tiempoDentroRango = 0f;
+        tiempoFueraRango = 0f;
     }
 
 
