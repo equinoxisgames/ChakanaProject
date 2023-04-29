@@ -454,7 +454,27 @@ public class Hoyustus : CharactersBehaviour
         {
             tocandoPared = 0;
         }*/
-        if (collider.gameObject.tag == "Viento")
+
+        if (collider.gameObject.tag == "Enemy")
+        {
+            //direccion nos dara la orientacion de recoil al sufrir danio
+            int direccion = 1;
+            if (collider.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
+            //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
+            //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
+            //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
+            vida -= 20;
+            StartCoroutine(cooldownRecibirDanio(direccion));
+            //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+        }
+        else if (collider.gameObject.tag == "Viento")
         {
             if (estadoViento)
             {

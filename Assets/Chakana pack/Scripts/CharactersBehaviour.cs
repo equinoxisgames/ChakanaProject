@@ -57,7 +57,10 @@ public class CharactersBehaviour : MonoBehaviour
     protected void Recoil(int direccion)
     {
         playable = false;
-        rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
+        if(rb.gravityScale == 0)
+            rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
+        else
+            rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
         EstablecerInvulnerabilidades(layerObject);
     }
 
