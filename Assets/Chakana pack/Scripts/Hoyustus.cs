@@ -292,7 +292,6 @@ public class Hoyustus : CharactersBehaviour
 
     void Update()
     {
-
         //AudioWalking.Play();
         //GetInputs();
         //WalkingControl();
@@ -355,7 +354,6 @@ public class Hoyustus : CharactersBehaviour
         //playable = true;
         //invulnerable = false;
         //rb.gravityScale = 2;
-
     }
 
 
@@ -600,11 +598,10 @@ public class Hoyustus : CharactersBehaviour
             counterEstados = 0;
             estadoVeneno = false;
             estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
+            //playable = false;
+            //aumentoDanioParalizacion = 1.5f;
+            StartCoroutine(setParalisis());
+            
         }
         else if (counterEstados == 110)
         {
@@ -835,7 +832,6 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForSeconds(0.5f);
         dashAvailable = true;
     }
-
 
 
     private void ImproveJump()

@@ -58,7 +58,6 @@ public class CharactersBehaviour : MonoBehaviour
     {
         playable = false;
         rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
-        invulnerable = true;
         EstablecerInvulnerabilidades(layerObject);
     }
 
@@ -68,6 +67,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected void EstablecerInvulnerabilidades(int layerObject)
     {
+        invulnerable = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 12, true);
         Physics2D.IgnoreLayerCollision(layerObject, 15, true);
@@ -106,8 +106,8 @@ public class CharactersBehaviour : MonoBehaviour
                 direccion = 1;
             }
 
-            StartCoroutine(cooldownRecibirDanio(direccion));
             recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
+            StartCoroutine(cooldownRecibirDanio(direccion));
             StartCoroutine(cooldownInvulnerabilidadExplosiones());           
         }
     }
@@ -172,6 +172,23 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     public void recibirDanio(float danio) {
         vida -= (danio * aumentoDanioParalizacion);
+        if (!playable && aumentoDanioParalizacion == 1.5f)
+        {
+            playable = true;
+            aumentoDanioParalizacion = 1.0f;
+        }
+    }
+
+
+    public IEnumerator setParalisis()
+    {
+        Debug.Log("Quieto hoyustus");
+        rb.velocity = Vector3.zero;
+        playable = false;
+        aumentoDanioParalizacion = 1.5f;
+        yield return new WaitForSeconds(2f);
+        playable = true;
+        aumentoDanioParalizacion = 1f;
     }
 
 
@@ -195,4 +212,5 @@ public class CharactersBehaviour : MonoBehaviour
     {
         return gold;
     }
+
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -173,15 +174,14 @@ public class Mapianguari : CharactersBehaviour
                 tiempoFueraRango += Time.deltaTime;
             }
 
-            if (distanciaPlayer <= 12 && tiempoDentroRango < 5)
+            if (ataqueDisponible && distanciaPlayer <= 12 && tiempoDentroRango < 5)
             {
-                if(ataqueDisponible)
-                    StartCoroutine(ataqueCuerpoCuerpo());               
+                StartCoroutine(ataqueCuerpoCuerpo());               
             }
-            else if (distanciaPlayer <= 12 && tiempoDentroRango > 5) {
-                Debug.Log("Ataque de aturdimiento");
+            else if (ataqueDisponible && distanciaPlayer <= 12 && tiempoDentroRango > 5) {
+                StartCoroutine(ataqueAturdimiento());
             }
-            else if (distanciaPlayer > 12 && tiempoFueraRango >= 10){
+            else if (ataqueDisponible && distanciaPlayer > 12 && tiempoFueraRango >= 10){
                 Debug.Log("Listo para atacar a distancia");
             }
         }
@@ -198,8 +198,27 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
-    private void ataqueAturdimiento() { 
-        //ATAQUE
+    private IEnumerator ataqueAturdimiento() {
+        atacando = true;
+        ataqueDisponible = false;
+        //GameObject Hoyustus = GameObject.
+        //TIEMPO PARA LA ANIMACION
+        Debug.Log("Preparando ataque inmovilizador");
+        yield return new WaitForSeconds(1.5f);
+
+        if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
+
+            StartCoroutine(GameObject.FindObjectOfType<Hoyustus>().setParalisis());
+            Debug.Log("Te inmovilizo");
+            yield return new WaitForSeconds(0.5f);
+            //GameObject.FindObjectOfType<Hoyustus>().set
+        }
+
+        yield return new WaitForEndOfFrame();
+        tiempoDentroRango = 0;
+        tiempoFueraRango = 0;
+        ataqueDisponible = true;
+        atacando = false;
     }
 
     private IEnumerator ataqueCuerpoCuerpo(){
