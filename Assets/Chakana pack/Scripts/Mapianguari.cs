@@ -28,6 +28,7 @@ public class Mapianguari : CharactersBehaviour
         //Physics2D.IgnoreLayerCollision(13, 15, true);
 
         //INICIALIZACION VARIABLES
+        explosionInvulnerable = "ExplosionEnemy";
         vida = 200;
         maxVida = vida;
         ataqueMax = 20;
@@ -252,7 +253,7 @@ public class Mapianguari : CharactersBehaviour
         //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
         if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
 
-            StartCoroutine(GameObject.FindObjectOfType<Hoyustus>().setParalisis());
+            StartCoroutine(aturdirPlayer());
             Debug.Log("Te inmovilizo");
             yield return new WaitForSeconds(0.5f);
         }
@@ -263,6 +264,14 @@ public class Mapianguari : CharactersBehaviour
         ataqueDisponible = true;
         atacando = false;
     }
+
+
+    private IEnumerator aturdirPlayer() {
+        GameObject.FindObjectOfType<Hoyustus>().setParalisis();
+        yield return new WaitForSeconds(3f);
+        GameObject.FindObjectOfType<Hoyustus>().quitarParalisis();
+    }
+
 
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE CUERPO A CUERPO

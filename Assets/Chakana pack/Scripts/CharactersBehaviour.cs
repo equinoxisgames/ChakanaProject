@@ -23,8 +23,10 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float aumentoDanioParalizacion = 1f;
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
+    [SerializeField] protected string explosionInvulnerable;
     protected int layerObject;
     protected Rigidbody2D rb;
+    protected bool paralizadoPorAtaque = false;
 
 
 
@@ -99,7 +101,7 @@ public class CharactersBehaviour : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
         //LAYER EXPLOSION
-        if (collider.gameObject.layer == 12)
+        if (collider.gameObject.layer == 12 && collider.gameObject.tag != explosionInvulnerable)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -114,13 +116,13 @@ public class CharactersBehaviour : MonoBehaviour
 
             recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownRecibirDanio(direccion));
-            StartCoroutine(cooldownInvulnerabilidadExplosiones());           
+            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
     }
 
 
     //***************************************************************************************************
-    //CORRUTINA DE DETECCION DE EXPLOSIONES
+    //CORRUTINA DE COOLDOWN INVULNERABILIDADES POR EXPLOSIONES
     //***************************************************************************************************
     protected IEnumerator cooldownInvulnerabilidadExplosiones() {
         yield return new WaitForSeconds(2f);
@@ -180,23 +182,29 @@ public class CharactersBehaviour : MonoBehaviour
         vida -= (danio * aumentoDanioParalizacion);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
-        if (!playable && aumentoDanioParalizacion == 1.5f)
+        if (paralizadoPorAtaque)
         {
             playable = true;
             aumentoDanioParalizacion = 1.0f;
+            paralizadoPorAtaque = true;
         }
     }
 
 
-    public IEnumerator setParalisis()
+    public void setParalisis()
     {
         Debug.Log("Quieto " + this.gameObject.name);
         rb.velocity = Vector3.zero;
         playable = false;
         aumentoDanioParalizacion = 1.5f;
-        yield return new WaitForSeconds(2f);
+        paralizadoPorAtaque = true;
+    }
+
+    public void quitarParalisis()
+    {
         playable = true;
         aumentoDanioParalizacion = 1f;
+        paralizadoPorAtaque = false;
     }
 
 

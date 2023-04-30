@@ -221,6 +221,7 @@ public class Hoyustus : CharactersBehaviour
         Physics2D.IgnoreLayerCollision(13, 15, true);
 
         //INICIALIZACION VARIABLES 
+        explosionInvulnerable = "ExplosionPlayer";
         layerObject = this.gameObject.layer;
         aumentoDanioParalizacion = 1f;
         lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
@@ -360,6 +361,15 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
+    public void setPlayable(bool state) {
+        playable = state;
+    }
+
+
+    public void setAumentoDanioParalizacion(float value) {
+        aumentoDanioParalizacion = value;
+    }
+
     void FixedUpdate()
     {
         if (playable)
@@ -438,7 +448,22 @@ public class Hoyustus : CharactersBehaviour
             //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
             //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
             //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
-            vida -= 20;
+            //DETECCION DE DEL CUERPO DEL ENEMIGO
+            try
+            {
+
+                if (collision.gameObject.transform.parent.name == "-----ENEMIES")
+                {
+                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion));
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            //vida -= 20;
             StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
@@ -474,24 +499,20 @@ public class Hoyustus : CharactersBehaviour
             //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
             //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
             //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
-
+            //DETECCION DE HIJOS DEL ENEMIGO
             try {
 
-                if (collider.gameObject.transform.parent.name == "-----ENEMIES")
+                if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
-                    recibirDanio(collider.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
-                }
-                else{
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion));
                 }
-
 
             }
             catch (Exception e){
       
             }
             //vida -= 20;
-            StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
 
@@ -658,10 +679,13 @@ public class Hoyustus : CharactersBehaviour
             counterEstados = 0;
             estadoVeneno = false;
             estadoViento = false;
-            //playable = false;
-            //aumentoDanioParalizacion = 1.5f;
-            StartCoroutine(setParalisis());
-            
+            playable = false;
+            aumentoDanioParalizacion = 1.5f;
+            yield return new WaitForSeconds(2f);
+            playable = true;
+            aumentoDanioParalizacion = 1f;
+            //StartCoroutine(setParalisis());
+
         }
         else if (counterEstados == 110)
         {
@@ -669,7 +693,7 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Explosion");
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "ExplosionEnemy");
             Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
