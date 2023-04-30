@@ -18,6 +18,7 @@ public class Mapianguari : CharactersBehaviour
     private float movementVelocity = 4;
     //private float movementVelocitySecondStage = 8;
     private float maxVida;
+    private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
 
@@ -55,7 +56,8 @@ public class Mapianguari : CharactersBehaviour
     private void FixedUpdate()
     {
         if (vida <= maxVida / 2) {
-            movementVelocity *= 2;
+            movementVelocity = 8;
+            segundaEtapa = true;
         }
         if (vida <= 0) {
             StartCoroutine(Muerte());
@@ -112,8 +114,14 @@ public class Mapianguari : CharactersBehaviour
             }
             else {
                 Debug.Log("golpeado por arma");
-                //CAMBIAR A UN SCRIPT PARA ARMA GENERALIZADO
-                recibirDanio(collider.gameObject.GetComponent<LanzaHoyustus>().getDanioArma());
+                //EN EL CASO DE TRATARSE DE LA LANZA DE HOYUSTUS
+                if (collider.transform.parent != null)
+                {
+                    recibirDanio(collider.transform.parent.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                }
+                else { 
+                    // DE LO CONTRARIO SE RECIBIRIA EL DANIO DE EL ARCO. NO DISPONIBLE EN LA BETA
+                }
             }
         }
 
@@ -236,6 +244,11 @@ public class Mapianguari : CharactersBehaviour
         Debug.Log("Preparando ataque inmovilizador");
         yield return new WaitForSeconds(1.5f);
 
+        //GENERACION DEL CHARCO DE VENENO
+        if (segundaEtapa) { 
+        
+        }
+
         //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
         if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
 
@@ -264,8 +277,17 @@ public class Mapianguari : CharactersBehaviour
         //EL TIEMPO DEPENDERA DE LA ANIMACION
         yield return new WaitForSeconds(0.3f);
         ataqueCuerpo.enabled = false;
-        //AGREGAR EL DASH 
-        //rb.velocity = new Vector2(15f, 0f);
+
+        //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
+        if (segundaEtapa) {
+            Debug.Log("EMBESTIDA");
+            //transform.position = transform.position + Vector3.up * 0.1f;
+            rb.gravityScale = 0;
+            rb.velocity = new Vector2(6f * -transform.localScale.x, 0f);
+            yield return new WaitForSeconds(0.5f);
+            rb.gravityScale = 5;
+            rb.velocity = Vector2.zero;
+        }
         atacando = false;
         yield return new WaitForSeconds(1.5f);
         ataqueDisponible = true;
