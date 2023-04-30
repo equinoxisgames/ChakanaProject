@@ -330,7 +330,7 @@ public class Hoyustus : CharactersBehaviour
         rb.gravityScale = 0f;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 11, "Viento");
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 14, "Viento");
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
 
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION

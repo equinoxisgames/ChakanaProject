@@ -84,7 +84,7 @@ public class Mapianguari : CharactersBehaviour
     {
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
-            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocity * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
         }
     }
 
