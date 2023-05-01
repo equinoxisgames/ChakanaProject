@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class Mapianguari : CharactersBehaviour
 {
@@ -21,6 +22,7 @@ public class Mapianguari : CharactersBehaviour
     private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
+    [SerializeField] private GameObject explosion;
 
 
     void Start()
@@ -51,6 +53,7 @@ public class Mapianguari : CharactersBehaviour
 
         //CARGA DE PREFABS
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
+        explosion = Resources.Load<GameObject>("Explosion");
     }
 
 
@@ -120,8 +123,12 @@ public class Mapianguari : CharactersBehaviour
                 {
                     recibirDanio(collider.transform.parent.parent.GetComponent<CharactersBehaviour>().getAtaque());
                 }
-                else { 
-                    // DE LO CONTRARIO SE RECIBIRIA EL DANIO DE EL ARCO. NO DISPONIBLE EN LA BETA
+                else {
+                    //Reg
+                    // DE LO CONTRARIO SE RECIBIRIA EL DANIO DE EL ARCO (NO DISPONIBLE EN LA BETA) O DE LA EXPLOSION DE LA HABILIDAD CONDOR
+                    if (collider.transform.name == "Explosion(Clone)") {
+                        recibirDanio(collider.transform.GetComponent<ExplosionBehaviour>().getDanioExplosion());
+                    }
                 }
             }
         }

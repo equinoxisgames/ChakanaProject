@@ -180,6 +180,8 @@ public class Hoyustus : CharactersBehaviour
     private float limitSaltoDos = 4f;
     private float posYAntesSalto = 0f;
 
+    private bool realizandoHabilidadLanza = false;
+
     public void isTocandoPared(int value) {
         tocandoPared = value;
     }
@@ -307,6 +309,10 @@ public class Hoyustus : CharactersBehaviour
         {
             StartCoroutine("habilidadSerpiente");
         }
+        if (cargaHabilidadLanza > 2 && Input.GetButton("Jump") && Input.GetKey(KeyCode.C))
+        {
+            StartCoroutine("habilidadLanza");
+        }
 
         if (playable) {
             //Walk();
@@ -358,6 +364,37 @@ public class Hoyustus : CharactersBehaviour
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
 
+    }
+
+
+    private IEnumerator habilidadLanza() {
+        EstablecerInvulnerabilidades(layerObject);
+        realizandoHabilidadLanza = true;
+        cargaHabilidadLanza = 0f;
+        playable = false;
+        body.enabled = false;
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0f;
+        lanzas[0].tag = "Fuego";
+        ataque = 15;
+        lanzas[0].SetActive(true);
+        IEnumerator pan(){
+            rb.AddForce(new Vector2(-transform.localScale.x * 20, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(1);
+            rb.velocity = Vector2.zero;
+            realizandoHabilidadLanza = false;
+        }
+        StartCoroutine(pan());
+        yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        QuitarInvulnerabilidades(layerObject);
+        body.enabled = true;
+        realizandoHabilidadLanza = false;
+        playable = true;
+        rb.gravityScale = 2f;
+        ataque = 5;
+        lanzas[0].SetActive(false);
+        lanzas[0].tag = "Untagged";
+        lanzas[0].layer = 14;
     }
 
 

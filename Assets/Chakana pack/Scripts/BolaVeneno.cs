@@ -47,7 +47,7 @@ public class BolaVeneno : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Player" || collision.gameObject.layer == 6) {
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6) {
             if (this.gameObject.layer == 11){
                 //PLAYER
             }
