@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement; 
 using Cinemachine;
 
@@ -107,7 +108,10 @@ public class Hoyustus : MonoBehaviour
     [Header("Movement")]
     public bool doubleJump = false;
 
-    
+    [Header("LoadPanel")]
+    [SerializeField] Slider loadBar;
+    [SerializeField] GameObject loadPanel;
+
 
     string nextPositionXPrefsName = "nextPositionX";
     string nextPositionYPrefsName = "nextPositionY";
@@ -116,7 +120,8 @@ public class Hoyustus : MonoBehaviour
 
     string escena;
 
-   
+    private bool corutinaIniciada = false;
+
     void Start()
     {
         //AudioWalking.Play();
@@ -262,7 +267,7 @@ public class Hoyustus : MonoBehaviour
     {
         //anim.SetBool("Walking", pState.walking); 
         anim.SetBool("Walking", true);
-        Debug.Log("Walking, true");
+        //Debug.Log("Walking, true");
 
         //Rigidbody2D rigidbody2D = rb;
         //float x = MoveDirection * walkSpeed;
@@ -746,13 +751,28 @@ public class Hoyustus : MonoBehaviour
         {
             if (transitionLayerExit == "Transition")
             {
+
+
+                loadPanel.SetActive(true);
+
                 PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.635f);
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9+1);
 
+
+                if (!corutinaIniciada)
+                {
+                    StartCoroutine(LoadAsyncScene(9 + 1));
+                    corutinaIniciada = true;
+                }
                 
+                //SceneManager.LoadScene(9 + 1);
+                //SceneManager.LoadScene(9 + 1);
+
+
+
+
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -838,6 +858,38 @@ public class Hoyustus : MonoBehaviour
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
             SceneManager.LoadScene(11+1);
         }
+    }
+
+    IEnumerator LoadAsyncScene(int sceneIndex)
+    {
+
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        //SceneManager.LoadScene(9 + 1);
+
+        //while(!asyncOperation.isDone)
+        //{
+        //    Debug.Log("Progres: "+asyncOperation.progress);
+        //    loadBar.value = asyncOperation.progress+0.05f;
+        //    yield return null;
+        //}
+
+        for (int i=0; i<20;i++)
+        {
+            //Debug.Log("Progres: "+asyncOperation.progress);
+            //loadBar.value = asyncOperation.progress+0.05f;
+            if (i < 15)
+            {
+                loadBar.value = i * 0.01f;
+                yield return new WaitForSeconds(0.05f);
+            }
+            else
+            {
+                loadBar.value = i * 0.09f + 0.16f;
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+
+        //yield break;
     }
 
     public bool Roofed()

@@ -35,13 +35,13 @@ public class LoopScenes : MonoBehaviour
         escena = SceneManager.GetActiveScene().name;
         if (escena != "14-Boss Room" && escena != "00- Main Menu 0")
         {
-            Debug.Log("Awake() Aplica DontDestroyOnLoad(this.gameObject) al objeto; escena: " + escena);
+            //Debug.Log("Awake() Aplica DontDestroyOnLoad(this.gameObject) al objeto; escena: " + escena);
 
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Debug.Log("Awake() Aplica Destroy(this.gameObject) al objeto; escena: " + escena);
+            // Debug.Log("Awake() Aplica Destroy(this.gameObject) al objeto; escena: " + escena);
             Destroy(this.gameObject);
         }
         
@@ -77,12 +77,12 @@ public class LoopScenes : MonoBehaviour
 
         if (escena != "14-Boss Room" && escena != "00- Main Menu 0")
         {
-            Debug.Log("Update() Aplica DontDestroyOnLoad(this.gameObject) al objeto; escena: " + escena);
+            //Debug.Log("Update() Aplica DontDestroyOnLoad(this.gameObject) al objeto; escena: " + escena);
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Debug.Log("Update() Aplica Destroy(this.gameObject) al objeto; escena: " + escena);
+            //Debug.Log("Update() Aplica Destroy(this.gameObject) al objeto; escena: " + escena);
             Destroy(this.gameObject);
         }
 

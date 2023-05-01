@@ -13,7 +13,14 @@ public class MainMenu : MonoBehaviour
     //public RectTransform exitMenu;
     public Transform hoyustusGameObject;
     public Button btContinue;
+   
     string escena;
+
+    private void Start()
+    {
+        btContinue.Select();
+       
+    }
 
     void Update()
     {
@@ -21,18 +28,18 @@ public class MainMenu : MonoBehaviour
         {
             escena = SceneManager.GetActiveScene().name;
 
-            Debug.Log("Entra Update");
+            //Debug.Log("Entra Update");
 
             //exitMenu.gameObject.SetActive(false);
 
             if (escena != "00- Main Menu 0")
             {
 
-                Debug.Log("Entra Update y escena es diferente de Main Menu");
+                //Debug.Log("Entra Update y escena es diferente de Main Menu");
 
                 if (!pauseMenu.gameObject.activeSelf && !confirmQuitMenu.gameObject.activeSelf)
                 {
-                    Debug.Log("Entra Update y escena es diferente de Main Menu y Pause Menu esta deshabilitado y Confirm Menu esta deshabilitado");
+                    //Debug.Log("Entra Update y escena es diferente de Main Menu y Pause Menu esta deshabilitado y Confirm Menu esta deshabilitado");
 
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
@@ -41,7 +48,7 @@ public class MainMenu : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Entra Update y escena es diferente de Main Menu y Pause Menu esta habilitado O Confirm Menu habilitado");
+                    //Debug.Log("Entra Update y escena es diferente de Main Menu y Pause Menu esta habilitado O Confirm Menu habilitado");
 
                     if (pauseMenu.gameObject.activeSelf)
                         {
@@ -123,6 +130,12 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void ActivePlayer(bool active)
+    {
+        hoyustusGameObject.gameObject.SetActive(active);
+
     }
 
 }

@@ -50,12 +50,17 @@ namespace Michsky.UI.Dark
             {
                 gamepadConnected = false;
                 SwitchToKeyboard();
+
+                Debug.Log("if (Gamepad.current == null)");
+
             }
 
             else
             {
                 gamepadConnected = true;
                 SwitchToGamepad();
+
+                Debug.Log("else de if (Gamepad.current == null)");
             }
         }
 
@@ -140,7 +145,8 @@ namespace Michsky.UI.Dark
                 LayoutRebuilder.ForceRebuildLayoutImmediate(keyboardObjects[i].GetComponentInParent<RectTransform>());
             }
 
-            customNav.mode = Navigation.Mode.None;
+            //customNav.mode = Navigation.Mode.None;
+            customNav.mode = Navigation.Mode.Automatic;
 
             for (int i = 0; i < buttons.Count; i++)
                 if (buttons[i] != null)
