@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.SceneManagement; 
 using Cinemachine;
@@ -34,22 +33,22 @@ public class Hoyustus : CharactersBehaviour
     [Space(5)]
 
     [Header("Attacking")]
-    [SerializeField] float timeBetweenAttack = 0.4f;
+    /*[SerializeField] float timeBetweenAttack = 0.4f;
     [SerializeField] Transform attackTransform;
     [SerializeField] float attackRadius = 1;
     [SerializeField] Transform downAttackTransform;
     [SerializeField] float downAttackRadius = 1;
     [SerializeField] Transform upAttackTransform;
-    [SerializeField] float upAttackRadius = 1;
+    [SerializeField] float upAttackRadius = 1;*/
     [SerializeField] LayerMask attackableLayer;
     [Space(5)]
 
-    [Header("Recoil")]
+    /*[Header("Recoil")]
     [SerializeField] int recoilXSteps = 4;
     [SerializeField] int recoilYSteps = 10;
     [SerializeField] float recoilXSpeed = 45;
     [SerializeField] float recoilYSpeed = 45;
-    [Space(5)]
+    [Space(5)]*/
 
     [Header("Ground Checking")]
     [SerializeField] Transform groundTransform;
@@ -129,7 +128,7 @@ public class Hoyustus : CharactersBehaviour
     [Header("Variables Player")]
     [SerializeField] private float maxVida = 100;
     [SerializeField] private float tiempoInvulnerabilidad = 2f;
-    [SerializeField] private const int maxStepsImpulso = 13;
+    //[SerializeField] private const int maxStepsImpulso = 13;
     [SerializeField] private float timeAir = 1.2f;
     [SerializeField] private float currentTimeAir = 0f;
     [SerializeField] private int currentStepsImpulso = 0;
@@ -182,7 +181,13 @@ public class Hoyustus : CharactersBehaviour
     private float limitSaltoDos = 4f;
     private float posYAntesSalto = 0f;
 
+
+    [SerializeField] private float botonCuracion = 0f;
+    [SerializeField] private bool aplastarBotonCuracion = false;
+
     private bool realizandoHabilidadLanza = false;
+
+    [SerializeField] private bool curando = false;
 
     public void isTocandoPared(int value) {
         tocandoPared = value;
@@ -305,16 +310,42 @@ public class Hoyustus : CharactersBehaviour
         //Walk(xAxis);
         tocarPared();
         //HABILIDADES ELEMENTALES
-        if (Input.GetButton("Activador_Habilidades")) {
-            if (Input.GetButton("Jump") && cargaHabilidadCondor > 5)
+
+        if (botonCuracion >= 0.2f) {
+            botonCuracion = 0f;
+            aplastarBotonCuracion = false;
+        }
+
+        if (aplastarBotonCuracion)
+        {
+            botonCuracion += Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Activador_Habilidades")) {
+
+            aplastarBotonCuracion = true;
+            //ACTIVACION DE LA CURACION
+            if (cargaCuracion >= 100 && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.2f)
+            {
+                curando = true;
+                cargaCuracion = 0;
+                playable = false;
+                aplastarBotonCuracion = false;
+                botonCuracion = 0f;
+                StartCoroutine("Curacion");
+                return;
+            }
+
+
+            if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor > 5)
             {
                 StartCoroutine("habilidadCondor");
             }
-            if (Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
+            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
             {
                 StartCoroutine("habilidadSerpiente");
             }
-            if (Input.GetButton("Atacar") && cargaHabilidadLanza > 2 )
+            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza > 2 )
             {
                 StartCoroutine("habilidadLanza");
             }
@@ -334,12 +365,14 @@ public class Hoyustus : CharactersBehaviour
 
 
     //***************************************************************************************************
-    //HABILIDAD CONDOR
+    //CURACION DEL PLAYER
     //***************************************************************************************************
     private IEnumerator Curacion() {
-
+        //CAMBIO A LA ANIMACION
         yield return new WaitForSeconds(1f);
+        playable = true;
         vida += 35;
+        curando = false;
         Debug.Log("Curado");
     }
 
@@ -1003,7 +1036,7 @@ public class Hoyustus : CharactersBehaviour
         dashAvailable = true;
     }
 
-
+    /*
     private void ImproveJump()
     {
         if (rb.velocity.y < 0)
@@ -1189,7 +1222,7 @@ public class Hoyustus : CharactersBehaviour
                     if (objectsToHit[i].tag == "Enemy")
                     {
                         Mana += ManaGain;
-                    }*/
+                    }
                 }
             }
 
@@ -1228,7 +1261,7 @@ public class Hoyustus : CharactersBehaviour
         {
             rb.gravityScale = grabity;
         }
-    }*/
+    }
 
     void Flip()
     {
@@ -1279,6 +1312,8 @@ public class Hoyustus : CharactersBehaviour
         stepsYRecoiled = 0;
         pState.recoilingY = false;
     }
+
+    */
 
 
     public bool EventTransition()
@@ -1634,7 +1669,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    void GetInputs()
+    /*void GetInputs()
     {
         
         yAxis = Input.GetAxis("Vertical");
@@ -1745,7 +1780,7 @@ public class Hoyustus : CharactersBehaviour
             AudioWalking.Stop();
         }
 
-    }
+    }*/
 
     void PlayJumpAudio()
     {
@@ -1758,9 +1793,7 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
-    
 
-    
 
     IEnumerator PlayGamePlayLoop()
     {
@@ -1810,9 +1843,9 @@ public class Hoyustus : CharactersBehaviour
 void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackTransform.position, attackRadius);
-        Gizmos.DrawWireSphere(downAttackTransform.position, downAttackRadius);
-        Gizmos.DrawWireSphere(upAttackTransform.position, upAttackRadius);
+        //Gizmos.DrawWireSphere(attackTransform.position, attackRadius);
+        //Gizmos.DrawWireSphere(downAttackTransform.position, downAttackRadius);
+        //Gizmos.DrawWireSphere(upAttackTransform.position, upAttackRadius);
         //Gizmos.DrawWireCube(groundTransform.position, new Vector2(groundCheckX, groundCheckY));
 
         Gizmos.DrawLine(groundTransform.position, groundTransform.position + new Vector3(0, -groundCheckY));
