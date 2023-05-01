@@ -309,6 +309,37 @@ Transform:
   m_Father: {fileID: 2019431230397855677}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &830025296954954944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9010123227811289174}
+  m_Layer: 11
+  m_Name: GroundPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9010123227811289174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830025296954954944}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.7, y: 1.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3475676534869305462}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &939210213021546052
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,6 +837,7 @@ Transform:
   - {fileID: 4919071871887169176}
   - {fileID: 3950939294038264903}
   - {fileID: 4318478727250807183}
+  - {fileID: 9010123227811289174}
   - {fileID: 3246166418984944529}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -924,6 +956,7 @@ MonoBehaviour:
   aumentoDanioParalizacion: 0
   invulnerable: 0
   playable: 1
+  explosionInvulnerable: 
   myVirtualCamera: {fileID: 0}
   myCameraSensivity: 10
   pState: {fileID: 0}
@@ -1010,8 +1043,10 @@ MonoBehaviour:
   cargaHabilidadCondor: 0
   cargaHabilidadSerpiente: 90
   cargaHabilidadLanza: 0
+  cargaCuracion: 0
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
+  groundPoint: {fileID: 9010123227811289174}
 --- !u!1 &2394723655531926819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2469,7 +2504,7 @@ Transform:
   - {fileID: 3867065420259851989}
   - {fileID: 5698958873637541474}
   m_Father: {fileID: 3475676534869305462}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6910519112528087172
 MonoBehaviour:

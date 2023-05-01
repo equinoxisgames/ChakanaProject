@@ -11,7 +11,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 public class Hoyustus : CharactersBehaviour
 {
 
-
     [Header("CineMachine")]
     [SerializeField] CinemachineVirtualCamera myVirtualCamera;
     CinemachineComponentBase myComponentBase;
@@ -167,12 +166,15 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float cargaHabilidadCondor;
     [SerializeField] float cargaHabilidadSerpiente;
     [SerializeField] float cargaHabilidadLanza;
+    [SerializeField] float cargaCuracion;
     [Space(5)]
 
 
     [Header("PREFABS")]
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
+    //MODIFICAR TRAS PRUEBAS
+    [SerializeField] private Transform groundPoint;
 
 
 
@@ -301,17 +303,23 @@ public class Hoyustus : CharactersBehaviour
         //WalkingControl();
         //Flip();
         //Walk(xAxis);
+        tocarPared();
+        //HABILIDADES ELEMENTALES
+        if (Input.GetButton("Activador_Habilidades")) {
+            if (Input.GetButton("Jump") && cargaHabilidadCondor > 5)
+            {
+                StartCoroutine("habilidadCondor");
+            }
+            if (Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
+            {
+                StartCoroutine("habilidadSerpiente");
+            }
+            if (Input.GetButton("Atacar") && cargaHabilidadLanza > 2 )
+            {
+                StartCoroutine("habilidadLanza");
+            }
 
-        if (cargaHabilidadCondor > 5 && Input.GetButton("Jump") && Input.GetKey(KeyCode.J)) {
-            StartCoroutine("habilidadCondor");
-        }
-        if (cargaHabilidadSerpiente > 2 && Input.GetButton("Jump") && Input.GetKey(KeyCode.X))
-        {
-            StartCoroutine("habilidadSerpiente");
-        }
-        if (cargaHabilidadLanza > 2 && Input.GetButton("Jump") && Input.GetKey(KeyCode.C))
-        {
-            StartCoroutine("habilidadLanza");
+            return;
         }
 
         if (playable) {
@@ -324,6 +332,18 @@ public class Hoyustus : CharactersBehaviour
         //Attack();
     }
 
+
+    //***************************************************************************************************
+    //HABILIDAD CONDOR
+    //***************************************************************************************************
+    private IEnumerator Curacion() {
+
+        yield return new WaitForSeconds(1f);
+        vida += 35;
+        Debug.Log("Curado");
+    }
+
+
     //***************************************************************************************************
     //HABILIDAD CONDOR
     //***************************************************************************************************
@@ -334,6 +354,7 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
+        cargaCuracion += 10;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 14, "Viento");
@@ -353,7 +374,9 @@ public class Hoyustus : CharactersBehaviour
     {
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
+        dashAvailable = false;
         cargaHabilidadSerpiente = 0f;
+        cargaCuracion += 10;
 
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
@@ -362,6 +385,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForEndOfFrame();
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
+        dashAvailable= true;
         playable = true;
 
     }
@@ -369,29 +393,40 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza() {
         EstablecerInvulnerabilidades(layerObject);
+        cargaCuracion += 10;
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         realizandoHabilidadLanza = true;
         cargaHabilidadLanza = 0f;
         playable = false;
         body.enabled = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
+
+        //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
         ataque = 15;
         lanzas[0].SetActive(true);
-        IEnumerator pan(){
+
+
+        IEnumerator movimientoHabilidadLanza(){
             rb.AddForce(new Vector2(-transform.localScale.x * 20, 0), ForceMode2D.Impulse);
             yield return new WaitForSeconds(1);
             rb.velocity = Vector2.zero;
             realizandoHabilidadLanza = false;
         }
-        StartCoroutine(pan());
+        StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
         body.enabled = true;
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
         ataque = 5;
+
+        //DESACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].SetActive(false);
         lanzas[0].tag = "Untagged";
         lanzas[0].layer = 14;
@@ -406,6 +441,7 @@ public class Hoyustus : CharactersBehaviour
     public void setAumentoDanioParalizacion(float value) {
         aumentoDanioParalizacion = value;
     }
+    
 
     void FixedUpdate()
     {
@@ -663,6 +699,20 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
+    private void tocarPared() {
+
+        if (Physics2D.OverlapCircle(groundPoint.position, groundCheckRadius, groundLayer))
+        {
+            tocandoPared = 0;
+        }
+        else
+        {
+            tocandoPared = 1;
+        }
+
+    }
+
+
     //***************************************************************************************************
     //CORRUTINA DE MUERTE
     //***************************************************************************************************
@@ -856,7 +906,8 @@ public class Hoyustus : CharactersBehaviour
     //Ataque Lanza
     //***************************************************************************************************
     private void ataqueLanza() {
-        if (ataqueAvailable && Input.GetKeyDown(KeyCode.C))
+
+        if (ataqueAvailable && Input.GetButton("Atacar"))
         {
             int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
             //VOLVERLAS VARIABLES GLOBALES
@@ -920,7 +971,7 @@ public class Hoyustus : CharactersBehaviour
     //DASH
     //***************************************************************************************************
     private void Dash() {
-        if (dashAvailable && Input.GetKeyDown(KeyCode.X)) {
+        if (dashAvailable && Input.GetButton("Dash")) {
             playable = false;
             dashAvailable = false;
             rb.velocity = Vector2.zero;
