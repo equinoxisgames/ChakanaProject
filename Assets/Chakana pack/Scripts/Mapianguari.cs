@@ -109,9 +109,26 @@ public class Mapianguari : CharactersBehaviour
     //***************************************************************************************************
     private new void OnTriggerEnter2D(Collider2D collider)
     {
+        base.OnTriggerEnter2D(collider);
+        if (collider.gameObject.layer == 14) {
+            int direccion = 1;
+            if (collider.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
 
+            StartCoroutine(cooldownRecibirDanio(direccion));
+            if (collider.transform.parent != null)
+            {
+                recibirDanio(collider.transform.parent.parent.GetComponent<CharactersBehaviour>().getAtaque());
+            }
+        }
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
-        if (collider.gameObject.layer == 12 || collider.gameObject.layer == 14)
+        /*if (collider.gameObject.layer == 12 || collider.gameObject.layer == 14)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -144,7 +161,7 @@ public class Mapianguari : CharactersBehaviour
                     }
                 }
             }
-        }
+        }*/
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")

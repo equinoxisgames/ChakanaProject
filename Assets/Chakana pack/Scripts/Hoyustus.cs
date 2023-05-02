@@ -391,7 +391,7 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 10;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 14, "Viento");
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Viento", explosionInvulnerable);
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
 
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
@@ -815,7 +815,7 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "ExplosionEnemy");
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionEnemy");
             Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;

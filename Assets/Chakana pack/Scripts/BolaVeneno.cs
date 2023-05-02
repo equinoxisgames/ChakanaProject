@@ -53,7 +53,7 @@ public class BolaVeneno : MonoBehaviour
     {
         aniadirFuerza(direccion, layer, velocityX, velocityY);
         this.explosion = explosion;
-        this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 5, 6, 12, "Veneno");
+        this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 5, 6, 12, "Veneno", "ExplosionEnemy");
     }
 
 

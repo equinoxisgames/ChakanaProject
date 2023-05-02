@@ -9,6 +9,7 @@ public class ExplosionBehaviour : MonoBehaviour
     [SerializeField] private float indiceExplosion = 6;
     [SerializeField] private float danioExplosion = 45;
     [SerializeField] private bool habilitada;
+    [SerializeField] private string tipoExplosion;
 
 
     private void Start()
@@ -34,7 +35,8 @@ public class ExplosionBehaviour : MonoBehaviour
     }
 
 
-    public void modificarValores(int limitRadio, float danioExplosion, float indiceExplosion, int layer, string tag){
+    public void modificarValores(int limitRadio, float danioExplosion, float indiceExplosion, int layer, string tag, string tipoExplosion){
+        this.tipoExplosion = tipoExplosion;
         this.transform.gameObject.layer = layer;
         this.transform.gameObject.tag = tag;
         habilitada = true;
@@ -49,6 +51,10 @@ public class ExplosionBehaviour : MonoBehaviour
 
     public float getDanioExplosion() {
         return danioExplosion;
+    }
+
+    public string getTipoExplosion() { 
+        return tipoExplosion;
     }
 
 }
