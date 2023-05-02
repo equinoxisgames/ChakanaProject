@@ -43,13 +43,16 @@ public class MainMenu : MonoBehaviour
 
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
+                    Time.timeScale = 0f;
                     hoyustusGameObject.gameObject.SetActive(false);
+
                     
+
                 }
                 else
                 {
                     //Debug.Log("Entra Update y escena es diferente de Main Menu y Pause Menu esta habilitado O Confirm Menu habilitado");
-
+                    Time.timeScale = 1f;
                     if (pauseMenu.gameObject.activeSelf)
                         {
                         pauseMenu.gameObject.SetActive(false);
@@ -85,12 +88,16 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Entra Escape al IF PauseMenu Deshabilitado y ConfirmQuitMenu Deshabilitado");
                     //pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
-                    hoyustusGameObject.gameObject.SetActive(false);
+                Time.timeScale = 0f;
+                hoyustusGameObject.gameObject.SetActive(false);
 
-                }
+                //Time.timeScale = 0f;
+
+            }
                 else
                 {
-                    if (pauseMenu.gameObject.activeSelf)
+                Time.timeScale = 1f;
+                if (pauseMenu.gameObject.activeSelf)
                     {
                     Debug.Log("Entra al IF Else PauseMenu Habilitado");
                         pauseMenu.gameObject.SetActive(false);
@@ -134,8 +141,12 @@ public class MainMenu : MonoBehaviour
 
     public void ActivePlayer(bool active)
     {
-        hoyustusGameObject.gameObject.SetActive(active);
 
+        hoyustusGameObject.gameObject.SetActive(active);
+        if(active)
+        Time.timeScale = 1f;
+        else
+            Time.timeScale = 0f;
     }
 
 }

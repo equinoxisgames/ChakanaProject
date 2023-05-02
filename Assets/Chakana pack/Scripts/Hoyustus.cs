@@ -589,11 +589,23 @@ public class Hoyustus : MonoBehaviour
                 
             else if (transitionLayerExit == "Transition1")
             {
+                
+
+
+                loadPanel.SetActive(true);
+
                 PlayerPrefs.SetFloat(nextPositionXPrefsName, 29.576f);
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(5+1);
+                //SceneManager.LoadScene(5 + 1);
+
+
+                if (!corutinaIniciada)
+                {
+                    StartCoroutine(LoadAsyncScene(5 + 1));
+                    corutinaIniciada = true;
+                }
             }
                 
             
@@ -663,11 +675,23 @@ public class Hoyustus : MonoBehaviour
             }
             else if (transitionLayerExit == "Transition2")
             {
+
+                loadPanel.SetActive(true);
+
                 PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.845f);
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -8.851f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(4+1);
+                //SceneManager.LoadScene(4 + 1);
+
+
+                if (!corutinaIniciada)
+                {
+                    StartCoroutine(LoadAsyncScene(4 + 1));
+                    corutinaIniciada = true;
+                }
+
+                
             }
         }
         if (escena == "05-Room GA1")
@@ -835,11 +859,21 @@ public class Hoyustus : MonoBehaviour
 
             else if (transitionLayerExit == "Transition1")
             {
+                
+                loadPanel.SetActive(true);
+
                 PlayerPrefs.SetFloat(nextPositionXPrefsName, -64.304f);
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -103.677f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(13+1);
+
+
+                if (!corutinaIniciada)
+                {
+                    StartCoroutine(LoadAsyncScene(13+1));
+                    corutinaIniciada = true;
+                }
+
             }
          }
         if (escena == "13-Room 13")

@@ -78,7 +78,7 @@ public class Chontacuro1 : MonoBehaviour
             anim.SetBool("Chontacuro1Walk", true);
         }
         else {
-            rb.velocity = direction.normalized * -0f;
+            //rb.velocity = direction.normalized * -0f;
 
         
 
