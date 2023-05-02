@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
                     Time.timeScale = 0f;
-                    hoyustusGameObject.gameObject.SetActive(false);
+                    //hoyustusGameObject.gameObject.SetActive(false);
 
                     
 
@@ -56,12 +56,12 @@ public class MainMenu : MonoBehaviour
                     if (pauseMenu.gameObject.activeSelf)
                         {
                         pauseMenu.gameObject.SetActive(false);
-                        hoyustusGameObject.gameObject.SetActive(true);
+                        //hoyustusGameObject.gameObject.SetActive(true);
                     }
                     if (confirmQuitMenu.gameObject.activeSelf)
                     {
                         confirmQuitMenu.gameObject.SetActive(false);
-                        hoyustusGameObject.gameObject.SetActive(true);
+                        //hoyustusGameObject.gameObject.SetActive(true);
                     }
                 }
             }
@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour
                     //pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
                 Time.timeScale = 0f;
-                hoyustusGameObject.gameObject.SetActive(false);
+                //hoyustusGameObject.gameObject.SetActive(false);
 
                 //Time.timeScale = 0f;
 
@@ -101,13 +101,13 @@ public class MainMenu : MonoBehaviour
                     {
                     Debug.Log("Entra al IF Else PauseMenu Habilitado");
                         pauseMenu.gameObject.SetActive(false);
-                        hoyustusGameObject.gameObject.SetActive(true);
+                        //hoyustusGameObject.gameObject.SetActive(true);
                     }
                     if (confirmQuitMenu.gameObject.activeSelf)
                     {
                     Debug.Log("Entra al IF Else ConfirmQuitMenu Habilitado");
                         confirmQuitMenu.gameObject.SetActive(false);
-                        hoyustusGameObject.gameObject.SetActive(true);
+                        //hoyustusGameObject.gameObject.SetActive(true);
                     }
                 }
             }
@@ -119,7 +119,7 @@ public class MainMenu : MonoBehaviour
 
     public void Continue()
     {
-        hoyustusGameObject.gameObject.SetActive(true);
+        //hoyustusGameObject.gameObject.SetActive(true);
         //btYes.Select();
         //btContinue.Select();
        
@@ -142,7 +142,7 @@ public class MainMenu : MonoBehaviour
     public void ActivePlayer(bool active)
     {
 
-        hoyustusGameObject.gameObject.SetActive(active);
+        //hoyustusGameObject.gameObject.SetActive(active);
         if(active)
         Time.timeScale = 1f;
         else
