@@ -226,6 +226,7 @@ public class Hoyustus : CharactersBehaviour
 
         //IGNORACION DE COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
         Physics2D.IgnoreLayerCollision(11, 14, true);
+        Physics2D.IgnoreLayerCollision(13, 12, true);
         Physics2D.IgnoreLayerCollision(13, 14, true);
         Physics2D.IgnoreLayerCollision(13, 15, true);
 
@@ -413,6 +414,7 @@ public class Hoyustus : CharactersBehaviour
 
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
+        bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
         yield return new WaitForEndOfFrame();

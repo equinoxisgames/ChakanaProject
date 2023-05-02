@@ -24,10 +24,18 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private GameObject bolaVeneno;
     [SerializeField] private GameObject explosion;
 
+    [SerializeField] private GameObject plataformaUno;
+    [SerializeField] private GameObject plataformaDos;
+    [SerializeField] private GameObject plataformaTres;
+    [SerializeField] public int nuevaPlataforma;
+    [SerializeField] public int plataformaActual;
 
     void Start()
     {
         //Physics2D.IgnoreLayerCollision(13, 15, true);
+
+        plataformaActual = 0;
+        nuevaPlataforma = 0;
 
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
@@ -85,6 +93,11 @@ public class Mapianguari : CharactersBehaviour
 
     void Update()
     {
+
+        if (nuevaPlataforma != plataformaActual) {
+            plataformaActual = nuevaPlataforma;
+            transform.position = new Vector3(transform.position.x, 5 + plataformaActual * 20, 0);
+        }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
             transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
@@ -320,12 +333,22 @@ public class Mapianguari : CharactersBehaviour
         Debug.Log("Listo para atacar a distancia");
         //CORREGIR POR EL TIEMPO DE LA ANIMACION
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 10; i++) {
-            GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
-            yield return new WaitForEndOfFrame();
-            bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 24, 20);
-            yield return new WaitForSeconds(0.1f);
+        if (!segundaEtapa)
+        {
+            float auxDisparo = -10f;
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
+                yield return new WaitForEndOfFrame();
+                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
+                auxDisparo++; 
+                yield return new WaitForSeconds(0.05f);
+            }
         }
+        else { 
+        
+        }
+
 
         //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         atacando = false;

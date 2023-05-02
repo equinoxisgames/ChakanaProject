@@ -6,7 +6,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public class BolaVeneno : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private float tiempoEliminacion = 8f;
+    private float tiempoEliminacion = 5f;
+    private GameObject explosion;
 
     void Start()
     {
@@ -20,9 +21,11 @@ public class BolaVeneno : MonoBehaviour
         tiempoEliminacion -= Time.deltaTime;
         if (tiempoEliminacion <= 0) {
             //HACER LA DIFERENCIACION CON EL LAYER SI TIENE UNA CAPA PLAYER O ENEMY
+            //PLAYER
             if (this.gameObject.layer == 11) {
-                //PLAYER
+                Destroy(this.gameObject);
             }
+            //ENEMY
             else if (this.gameObject.layer == 3) {
                 //EXPLOSION
                 //GENERAR CHARCO
@@ -45,17 +48,32 @@ public class BolaVeneno : MonoBehaviour
         rb.AddForce(new Vector3(velocityX * -direccion, velocityY, 0f), ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY, GameObject explosion)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6) {
-            if (this.gameObject.layer == 11){
-                //PLAYER
-            }
-            else if (this.gameObject.layer == 3)
+        aniadirFuerza(direccion, layer, velocityX, velocityY);
+        this.explosion = explosion;
+        this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 5, 6, 12, "Veneno");
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (this.gameObject.layer == 11)
+        {
+            //PLAYER
+            if (collider.gameObject.tag == "Enemy" || collider.gameObject.layer == 6)
             {
-                //EXPLOSION
                 //GENERAR CHARCO
-                Destroy(this.gameObject);
+            }
+        }
+        else if (this.gameObject.layer == 3)
+        {
+            //ENEMY
+            if (collider.gameObject.tag == "Player" || collider.gameObject.layer == 6) 
+            {
+                Instantiate(explosion, transform.position, Quaternion.identity);
+                //GENERAR CHARCO
             }
         }
     }

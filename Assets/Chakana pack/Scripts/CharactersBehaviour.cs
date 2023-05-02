@@ -101,7 +101,7 @@ public class CharactersBehaviour : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
         //LAYER EXPLOSION
-        if (collider.gameObject.layer == 12 && collider.gameObject.tag != explosionInvulnerable)
+        if ((collider.gameObject.layer == 12 && collider.gameObject.tag != explosionInvulnerable))
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
