@@ -59,6 +59,11 @@ public class Chontacuro1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
+    }
+    private void FixedUpdate()
+    {
         //Move();
 
         detectionRadius = 10;
@@ -77,23 +82,19 @@ public class Chontacuro1 : MonoBehaviour
             Chontacuro1Flip(direction.normalized.x);
             anim.SetBool("Chontacuro1Walk", true);
         }
-        else {
+        else
+        {
             //rb.velocity = direction.normalized * -0f;
 
-        
+
 
             //if (distance <= detectionRadius +1)
-              //  transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            //  transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
             Move();
             //Chontacuro1FlipBack(direction.normalized.x);
             //Chontacuro1Flip(direction.normalized.x);
             anim.SetBool("Chontacuro1Walk", false);
         }
-
-    }
-    private void FixedUpdate()
-    {
-        //Move();
     }
     private void Chontacuro1Flip(float xDirection)
     {

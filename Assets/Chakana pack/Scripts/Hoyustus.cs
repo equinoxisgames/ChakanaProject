@@ -838,11 +838,22 @@ public class Hoyustus : MonoBehaviour
         }
         if (escena == "12-Room 12")
         {
+            loadPanel.SetActive(true);
+
             PlayerPrefs.SetFloat(nextPositionXPrefsName, -0.653f);
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -82.824f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(9+1);
+            //SceneManager.LoadScene(9 + 1);
+
+
+            if (!corutinaIniciada)
+            {
+                StartCoroutine(LoadAsyncScene(9 + 1));
+                corutinaIniciada = true;
+            }
+
+            
         }
         if (escena == "13- SaveRoom")
         {
