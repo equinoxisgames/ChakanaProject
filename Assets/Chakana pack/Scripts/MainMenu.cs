@@ -9,11 +9,15 @@ public class MainMenu : MonoBehaviour
 {
 
     public RectTransform pauseMenu;
+    public RectTransform exitMenu;
     public RectTransform confirmQuitMenu;
     //public RectTransform exitMenu;
     public Transform hoyustusGameObject;
     public Button btContinue;
-   
+    public Button btExitGame;
+    public Button btLoadSlot;
+
+
     string escena;
 
     private void Start()
@@ -23,12 +27,28 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    public void ActivateSlot1()
+    {
+
+        btLoadSlot.Select();
+    }
+    public void ActivateStart()
+    {
+
+        btContinue.Select();
+    }
+    public void ActivateExitGame()
+    {
+        btExitGame.Select();
+
+    }
     void Update()
     {
         if (Input.GetButtonDown("Cancel"))
         {
+           
             escena = SceneManager.GetActiveScene().name;
-
+            
             //Debug.Log("Entra Update");
 
             //exitMenu.gameObject.SetActive(false);
@@ -64,8 +84,12 @@ public class MainMenu : MonoBehaviour
                         confirmQuitMenu.gameObject.SetActive(false);
                         //hoyustusGameObject.gameObject.SetActive(true);
                     }
+                    
                 }
             }
+            
+            btContinue.Select();
+
 
         }
 
@@ -77,7 +101,7 @@ public class MainMenu : MonoBehaviour
     public void Escape()
     {
         
-            escena = SceneManager.GetActiveScene().name;
+        escena = SceneManager.GetActiveScene().name;
 
             if (escena != "00- Main Menu 0")
             {
@@ -111,9 +135,14 @@ public class MainMenu : MonoBehaviour
                         //hoyustusGameObject.gameObject.SetActive(true);
                     }
                 }
-            }
+            
+        }
 
         
+         btContinue.Select();
+
+
+
 
 
     }
