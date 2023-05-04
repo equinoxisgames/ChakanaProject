@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
+//[RequireComponent(typeof(ParticleSystem))]
 public class BolaVeneno : MonoBehaviour
 {
     private Rigidbody2D rb;
     private float tiempoEliminacion = 5f;
     private GameObject explosion;
+    private GameObject particulas;
+    private bool activado = true;
 
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
+        particulas = transform.GetChild(0).gameObject;
+        particulas.SetActive(false);
         rb.Sleep();
 
     }
@@ -28,7 +33,6 @@ public class BolaVeneno : MonoBehaviour
             //ENEMY
             else if (this.gameObject.layer == 3) {
                 //EXPLOSION
-                //GENERAR CHARCO
                 Destroy(this.gameObject);
             }
         }
@@ -57,24 +61,47 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
+    private IEnumerator GenerarCharco() {
+        rb.velocity= Vector3.zero;
+        rb.isKinematic = true;
+        particulas.SetActive(true);
+        GetComponent<SpriteRenderer>().enabled = false;
+        //GetComponent<CircleCollider2D>().enabled = false;
+        yield return new WaitForSeconds(5f);
+        Destroy(gameObject);
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (this.gameObject.layer == 11)
+        //ENEMY
+        if (collider.gameObject.tag == "Player" || collider.gameObject.layer == 6)
         {
-            //PLAYER
-            if (collider.gameObject.tag == "Enemy" || collider.gameObject.layer == 6)
-            {
-                //GENERAR CHARCO
-            }
+            Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
-        else if (this.gameObject.layer == 3)
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //PLAYER
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6)
         {
-            //ENEMY
-            if (collider.gameObject.tag == "Player" || collider.gameObject.layer == 6) 
-            {
-                Instantiate(explosion, transform.position, Quaternion.identity);
-                //GENERAR CHARCO
-            }
+            //GENERAR CHARCO
+            Debug.Log("Generar Charco");
+            Destroy(gameObject);
+            //StartCoroutine(GenerarCharco());
+        }
+
+    }
+
+
+    private void OnParticleCollision(GameObject other)
+    {
+        Debug.Log("Pan");
+        if (other.layer == 6) {
+            Debug.Log("F");
         }
     }
 }

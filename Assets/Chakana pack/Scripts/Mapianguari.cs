@@ -29,10 +29,17 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private GameObject plataformaTres;
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
+    private GameObject charcoVeneno;
 
     void Start()
     {
         //Physics2D.IgnoreLayerCollision(13, 15, true);
+        charcoVeneno = new GameObject();
+        charcoVeneno.SetActive(false);
+        charcoVeneno.tag = "Veneno";
+        charcoVeneno.AddComponent<BoxCollider2D>();
+        charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
+        charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
 
         plataformaActual = 0;
         nuevaPlataforma = 0;
@@ -283,8 +290,9 @@ public class Mapianguari : CharactersBehaviour
         yield return new WaitForSeconds(1.5f);
 
         //GENERACION DEL CHARCO DE VENENO
-        if (segundaEtapa) { 
-        
+        if (segundaEtapa) {
+            GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 5f, Quaternion.identity);
+            StartCoroutine(destruirCharco(charcoGenerado));
         }
 
         //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
@@ -293,6 +301,7 @@ public class Mapianguari : CharactersBehaviour
             StartCoroutine(aturdirPlayer());
             Debug.Log("Te inmovilizo");
             yield return new WaitForSeconds(0.5f);
+            tiempoDentroRango = 0;
         }
 
         //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
@@ -305,8 +314,16 @@ public class Mapianguari : CharactersBehaviour
 
     private IEnumerator aturdirPlayer() {
         GameObject.FindObjectOfType<Hoyustus>().setParalisis();
+        tiempoDentroRango = 0;
         yield return new WaitForSeconds(3f);
         GameObject.FindObjectOfType<Hoyustus>().quitarParalisis();
+    }
+
+
+    private IEnumerator destruirCharco(GameObject charco) {
+        charco.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        Destroy(charco);
     }
 
 
