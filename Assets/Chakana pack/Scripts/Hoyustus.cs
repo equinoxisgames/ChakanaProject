@@ -541,7 +541,7 @@ public class Hoyustus : CharactersBehaviour
     {
         
         //COLISIONES PARA OBJETOS TAGUEADOS COMO ENEMY
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.layer == 3)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -592,7 +592,7 @@ public class Hoyustus : CharactersBehaviour
         }*/
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
-        if (collider.gameObject.tag == "Enemy")
+        if (collider.gameObject.layer == 3)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -625,7 +625,7 @@ public class Hoyustus : CharactersBehaviour
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        else if (collider.gameObject.tag == "Viento")
+        if (collider.gameObject.tag == "Viento")
         {
             //REINICIO ESTADO VIENTO
             if (estadoViento)
