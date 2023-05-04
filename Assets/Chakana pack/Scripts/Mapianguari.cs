@@ -5,6 +5,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System;
+using static System.Random;
 
 public class Mapianguari : CharactersBehaviour
 {
@@ -266,6 +268,7 @@ public class Mapianguari : CharactersBehaviour
         }
     }
 
+
     private void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player") {
@@ -380,8 +383,20 @@ public class Mapianguari : CharactersBehaviour
                 yield return new WaitForSeconds(0.05f);
             }
         }
-        else { 
-        
+        else {
+            for (int i = 0; i < 10; i++)
+            {
+                System.Random aux = new System.Random();
+                int direccion = aux.Next(0,2);
+                Debug.Log(direccion);
+                if (direccion == 0) {
+                    direccion = -1;
+                }
+                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
+                yield return new WaitForEndOfFrame();
+                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
+                yield return new WaitForSeconds(0.05f);
+            }
         }
 
 
