@@ -982,7 +982,7 @@ public class Hoyustus : CharactersBehaviour
             }
 
             ataqueAvailable = false;
-            cargaHabilidadLanza += 0.5f;
+            //cargaHabilidadLanza += 0.5f;
             StartCoroutine(lanzaCooldown(index));
         }
     }
@@ -1036,6 +1036,11 @@ public class Hoyustus : CharactersBehaviour
         QuitarInvulnerabilidades(layerObject);
         yield return new WaitForSeconds(0.5f);
         dashAvailable = true;
+    }
+
+
+    public void cargaLanza() {
+        cargaHabilidadLanza += 0.5f;
     }
 
     /*

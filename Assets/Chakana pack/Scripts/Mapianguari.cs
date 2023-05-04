@@ -131,7 +131,8 @@ public class Mapianguari : CharactersBehaviour
             StartCoroutine(cooldownRecibirDanio(direccion));
             if (collider.transform.parent != null)
             {
-                recibirDanio(collider.transform.parent.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
