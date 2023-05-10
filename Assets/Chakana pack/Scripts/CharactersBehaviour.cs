@@ -5,11 +5,11 @@ using UnityEngine;
 public class CharactersBehaviour : MonoBehaviour
 {
 
-    protected int gold;
-    protected float vida;
-    protected float defensa;
-    protected float ataque;
-    protected float ataqueMax;
+    [SerializeField] protected int gold;
+    [SerializeField] protected float vida;
+    [SerializeField] protected float defensa;
+    [SerializeField] protected float ataque;
+    [SerializeField] protected float ataqueMax;
 
     [Header("Estados Elementales")]
     [SerializeField] protected bool estadoViento;
@@ -23,8 +23,10 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float aumentoDanioParalizacion = 1f;
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
+    [SerializeField] protected string explosionInvulnerable;
     protected int layerObject;
     protected Rigidbody2D rb;
+    protected bool paralizadoPorAtaque = false;
 
 
 
@@ -33,17 +35,19 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator cooldownRecibirDanio(int direccion)
     {
-        //La disminucion de la vida se deberia hacer en funcion del ataque del enemigo u objeto con el que el character se encuentre
+
         Recoil(direccion);
         if (vida <= 0)
         {
-            //StartCoroutine(Muerte());
             yield break;
         }
+
         //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.5f);
+        //SE DETIENE EL RECOIL
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.2f);
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
         yield return new WaitForSeconds(2f);
         QuitarInvulnerabilidades(layerObject);
@@ -56,9 +60,12 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected void Recoil(int direccion)
     {
-        playable = false;
-        rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
-        invulnerable = true;
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        if(rb.gravityScale == 0) 
+            rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
+        else
+            rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
         EstablecerInvulnerabilidades(layerObject);
     }
 
@@ -68,8 +75,10 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected void EstablecerInvulnerabilidades(int layerObject)
     {
+        invulnerable = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 12, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, true);
     }
 
 
@@ -81,6 +90,7 @@ public class CharactersBehaviour : MonoBehaviour
         invulnerable = false;
         Physics2D.IgnoreLayerCollision(3, layerObject, false);
         Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
 
     }
 
@@ -90,7 +100,8 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Explosion")
+        //LAYER EXPLOSION
+        if ((collider.gameObject.layer == 12 && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -103,15 +114,15 @@ public class CharactersBehaviour : MonoBehaviour
                 direccion = 1;
             }
 
+            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownRecibirDanio(direccion));
-            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().danioExplosion);
-            StartCoroutine(cooldownInvulnerabilidadExplosiones());           
+            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
     }
 
 
     //***************************************************************************************************
-    //CORRUTINA DE DETECCION DE EXPLOSIONES
+    //CORRUTINA DE COOLDOWN INVULNERABILIDADES POR EXPLOSIONES
     //***************************************************************************************************
     protected IEnumerator cooldownInvulnerabilidadExplosiones() {
         yield return new WaitForSeconds(2f);
@@ -169,6 +180,31 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     public void recibirDanio(float danio) {
         vida -= (danio * aumentoDanioParalizacion);
+
+        //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
+        if (paralizadoPorAtaque)
+        {
+            playable = true;
+            aumentoDanioParalizacion = 1.0f;
+            paralizadoPorAtaque = true;
+        }
+    }
+
+
+    public void setParalisis()
+    {
+        Debug.Log("Quieto " + this.gameObject.name);
+        rb.velocity = Vector3.zero;
+        playable = false;
+        aumentoDanioParalizacion = 1.5f;
+        paralizadoPorAtaque = true;
+    }
+
+    public void quitarParalisis()
+    {
+        playable = true;
+        aumentoDanioParalizacion = 1f;
+        paralizadoPorAtaque = false;
     }
 
 
@@ -192,4 +228,5 @@ public class CharactersBehaviour : MonoBehaviour
     {
         return gold;
     }
+
 }
