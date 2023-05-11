@@ -9,9 +9,17 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField] GameObject invokeFX;
     [SerializeField] GameObject treasure;
 
-    bool isOn, isMove, isOnBattle, isWin, isCollision;
+    bool isOn, isMove, isOnBattle;
     private Vector3 destination1, destination2;
     private Vector3 originalPos1, originalPos2;
+
+    private void Awake()
+    {
+        if (PlayerPrefs.HasKey("combat"))
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -22,18 +30,6 @@ public class EnemyGenerator : MonoBehaviour
         destination2 = door2.position;
         originalPos2 = door2.position;
         destination2.y -= 4;
-    }
-
-    private void Update()
-    {
-        if(isCollision && isWin && Input.GetKeyDown(KeyCode.E))
-        {
-            isWin = false;
-
-            Destroy(treasure);
-
-            GetComponent<EnemyGenerator>().enabled = false;
-        }
     }
 
     private void LateUpdate()
@@ -61,8 +57,6 @@ public class EnemyGenerator : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            isCollision = true;
-
             if (!isOn)
             {
                 isOnBattle = true;
@@ -72,14 +66,6 @@ public class EnemyGenerator : MonoBehaviour
 
                 isOn = true;
             }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            isCollision = false;
         }
     }
 
@@ -97,8 +83,8 @@ public class EnemyGenerator : MonoBehaviour
 
         isOnBattle = false;
         isMove = true;
-        isWin = true;
 
         treasure.SetActive(true);
+        PlayerPrefs.SetInt("combat", 1);
     }
 }
