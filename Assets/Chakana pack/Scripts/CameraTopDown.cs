@@ -6,16 +6,11 @@ public class CameraTopDown : MonoBehaviour
 {
     private float vertical, horizontal;
     private float timer;
-    private Vector3 destination;
+    private Vector3 destination, originalPos;
     private bool isMove;
 
-    [SerializeField] private GameObject cinemaC;
+    [SerializeField] private GameObject cinemaC, cinemaC2;
     [SerializeField] private float velocity;
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -33,18 +28,23 @@ public class CameraTopDown : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
 
-                if (timer >= 1.2f)
+                if (timer >= 1f)
                 {
-                    if (cinemaC.activeSelf) cinemaC.SetActive(false);
+                    if (!cinemaC2.activeSelf)
+                    {
+                        cinemaC2.SetActive(true);
+                        cinemaC2.transform.position = cinemaC.transform.position;
+                    }
 
                     if (!isMove)
                     {
-                        destination = transform.position;
-                        destination.y += 7;
+                        originalPos = cinemaC2.transform.position;
+                        destination = cinemaC2.transform.position;
+                        destination.y += 8;
                         isMove = true;
                     }
 
-                    transform.position = Vector3.MoveTowards(transform.position, destination, velocity * Time.deltaTime);
+                    cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
                 }
 
             }
@@ -52,31 +52,36 @@ public class CameraTopDown : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
 
-                if(timer >= 1.2f)
+                if(timer >= 1f)
                 {
-                    if (cinemaC.activeSelf) cinemaC.SetActive(false);
+                    if (!cinemaC2.activeSelf)
+                    {
+                        cinemaC2.SetActive(true);
+                        cinemaC2.transform.position = cinemaC.transform.position;
+                    }
 
                     if (!isMove)
                     {
-                        destination = transform.position;
-                        destination.y -= 7;
+                        originalPos = cinemaC2.transform.position;
+                        destination = cinemaC2.transform.position;
+                        destination.y -= 8;
                         isMove = true;
                     }
 
-                    transform.position = Vector3.MoveTowards(transform.position, destination, velocity * Time.deltaTime);
+                    cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
                 }
             }
             else
             {
                 if (timer != 0) timer = 0;
-                if (!cinemaC.activeSelf) cinemaC.SetActive(true);
+                if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
                 isMove = false;
             }
         }
         else
         {
             if (timer != 0) timer = 0;
-            if (!cinemaC.activeSelf) cinemaC.SetActive(true);
+            if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
             isMove = false;
         }
     }
