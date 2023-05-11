@@ -106,6 +106,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Particles")]
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
+    [SerializeField] ParticleSystem hurtParticleSystem = null;
 
     [Header("Movement")]
     public bool doubleJump = false;
@@ -311,6 +312,10 @@ public class Hoyustus : CharactersBehaviour
         //Walk(xAxis);
         tocarPared();
         //HABILIDADES ELEMENTALES
+
+        if (hurtParticleSystem.isPlaying) {
+            Debug.Log("Particulas de heridos");
+        }
 
         if (botonCuracion >= 0.2f) {
             botonCuracion = 0f;
@@ -531,6 +536,10 @@ public class Hoyustus : CharactersBehaviour
         anim.SetFloat("Vida", vida);
         anim.SetFloat("Ataque", ataque);
         anim.SetInteger("Gold", gold);
+        //anim.SetBool("Atacando", atacando);
+        //anim.SetBool("Curando", curando);
+        //anim.SetBool("CA", codigoAtaque);
+
     }
 
 
@@ -562,6 +571,8 @@ public class Hoyustus : CharactersBehaviour
 
                 if (collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
+                    hurtParticleSystem.Play();
+                    //HurtParticlesPlayer();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -612,6 +623,7 @@ public class Hoyustus : CharactersBehaviour
 
                 if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
+                    StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -1847,7 +1859,23 @@ public class Hoyustus : CharactersBehaviour
         ParticleTestParticleTest.Play();
     }
 
-void OnDrawGizmos()
+    IEnumerator HurtParticlesPlayer()
+    {
+        //hurtParticleSystem.loop = false;
+        var ps = transform.GetChild(transform.childCount - 3).GetChild(0).GetComponent<ParticleSystem>();
+        var psMain = ps.main;
+        psMain.loop = false;
+        hurtParticleSystem.Play();
+        //hurtParticleSystem.Clear();
+        hurtParticleSystem.Play();
+        yield return new WaitForSeconds(3f);
+        //psMain.loop = true;
+        hurtParticleSystem.Clear();
+        hurtParticleSystem.Play();
+        //hurtParticleSystem.Clear();
+    }
+
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         //Gizmos.DrawWireSphere(attackTransform.position, attackRadius);
