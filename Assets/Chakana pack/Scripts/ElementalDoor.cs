@@ -40,7 +40,7 @@ public class ElementalDoor : MonoBehaviour
     {
         if (isMove)
         {
-            transform.position = Vector3.MoveTowards(transform.position, destination, 5 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, destination, 3 * Time.deltaTime);
 
             if (transform.position == destination) isMove = false;
         }
