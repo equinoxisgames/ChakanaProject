@@ -61,13 +61,25 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
-    private IEnumerator GenerarCharco() {
+    private IEnumerator GenerarCharco(Vector3 position) {
+        GetComponent<SpriteRenderer>().enabled = false;
         rb.velocity= Vector3.zero;
         rb.isKinematic = true;
-        particulas.SetActive(true);
-        GetComponent<SpriteRenderer>().enabled = false;
+        this.GetComponent<CircleCollider2D>().enabled = false;
+        //particulas.SetActive(true);
         //GetComponent<CircleCollider2D>().enabled = false;
+        GameObject charco = new GameObject();
+        charco.transform.position = position;
+        charco.SetActive(false);
+        charco.tag = "Veneno";
+        charco.layer = 11;
+        charco.AddComponent<BoxCollider2D>();
+        charco.GetComponent<BoxCollider2D>().isTrigger = true;
+        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
+        charco.SetActive(true);
+        charco.transform.parent = this.transform;
         yield return new WaitForSeconds(5f);
+        //Destroy(charco.gameObject);
         Destroy(gameObject);
     }
 
@@ -88,13 +100,26 @@ public class BolaVeneno : MonoBehaviour
         //PLAYER
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6)
         {
+            tiempoEliminacion = 5;
             //GENERAR CHARCO
             Debug.Log("Generar Charco");
-            Destroy(gameObject);
-            //StartCoroutine(GenerarCharco());
+            //Destroy(gameObject);
+            StartCoroutine(GenerarCharco(transform.position));
         }
 
     }
+
+
+    /*private void charco() {
+        GameObject charco = new GameObject();
+        charco.SetActive(false);
+        charco.tag = "Veneno";
+        charco.AddComponent<BoxCollider2D>();
+        charco.GetComponent<BoxCollider2D>().isTrigger = true;
+        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
+        GameObject charcoGenerado = Instantiate(charco, transform.position + Vector3.down * 5f, Quaternion.identity);
+        //StartCoroutine(destruirCharco(charcoGenerado));
+    }*/
 
 
     private void OnParticleCollision(GameObject other)
