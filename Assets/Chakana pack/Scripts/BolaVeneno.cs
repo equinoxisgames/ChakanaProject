@@ -77,7 +77,7 @@ public class BolaVeneno : MonoBehaviour
         charco.GetComponent<BoxCollider2D>().isTrigger = true;
         charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
         charco.SetActive(true);
-        charco.transform.parent = this.transform;
+        charco.transform.parent = this.gameObject.transform;
         yield return new WaitForSeconds(5f);
         //Destroy(charco.gameObject);
         Destroy(gameObject);
@@ -104,7 +104,7 @@ public class BolaVeneno : MonoBehaviour
             //GENERAR CHARCO
             Debug.Log("Generar Charco");
             //Destroy(gameObject);
-            StartCoroutine(GenerarCharco(transform.position));
+            StartCoroutine(GenerarCharco(transform.localPosition));
         }
 
     }

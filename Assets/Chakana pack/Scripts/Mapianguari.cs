@@ -32,11 +32,12 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
     private GameObject charcoVeneno;
+    [SerializeField] private bool usandoAtaqueEspecial = false;
 
 
     private float xCharco = 10f;
     private float yCharco = 1.0f;
-    private float escala = 2.5f;
+    private float escala = 3f;
     private float distanciaAtaque = 6f;
     void Start()
     {
@@ -108,12 +109,26 @@ public class Mapianguari : CharactersBehaviour
     void Update()
     {
 
-        if (nuevaPlataforma != plataformaActual) {
-            plataformaActual = nuevaPlataforma;
-            transform.position = new Vector3(transform.position.x, -99.8f + plataformaActual * 8.3f, 0);
+        if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
+            if (segundaEtapa)
+            {
+                System.Random aux = new System.Random();
+                int direccion = aux.Next(0, 2);
+                Debug.Log(direccion);
+                if (direccion == 1)
+                {
+                    //ATAQUE ESPECIAL
+                    StartCoroutine(ataqueEspecial());
+
+                }
+            }
+            else {
+                plataformaActual = nuevaPlataforma;
+                transform.position = new Vector3(transform.position.x, -99.8f + plataformaActual * 8.3f, 0);
+            }           
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
-        if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
+        if (!usandoAtaqueEspecial && xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
             transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(xObjetivo, transform.position.y, transform.position.z)/*Vector3.right * xObjetivo*/, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
         }
     }
@@ -236,7 +251,7 @@ public class Mapianguari : CharactersBehaviour
 
    private void OnTriggerStay2D(Collider2D collider){
 
-        if (collider.gameObject.tag == "Player") {
+        if (!usandoAtaqueEspecial && collider.gameObject.tag == "Player") {
             xObjetivo = collider.transform.position.x;
 
 
@@ -352,11 +367,10 @@ public class Mapianguari : CharactersBehaviour
 
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
         if (segundaEtapa) {
-            Debug.Log("EMBESTIDA");
             //transform.position = transform.position + Vector3.up * 0.1f;
             rb.gravityScale = 0;
-            rb.velocity = new Vector2(6f * -transform.localScale.x, 0f);
-            yield return new WaitForSeconds(0.5f);
+            rb.velocity = new Vector2(7f * -transform.localScale.x, 0f);
+            yield return new WaitForSeconds(0.35f);
             rb.gravityScale = 5;
             rb.velocity = Vector2.zero;
         }
@@ -412,6 +426,83 @@ public class Mapianguari : CharactersBehaviour
         tiempoFueraRango = 0f;
     }
 
+
+    private IEnumerator ataqueEspecial() {
+        usandoAtaqueEspecial = true;
+
+        //DESAPARICION BOSS
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+        campoVision.enabled = false;
+        transform.position = transform.position + Vector3.right * 100;
+
+        //LANZAMIENTO BOLAS DE VENENO
+        for (int i = 1; i <= 8; i++) {
+            yield return new WaitForSeconds(1f);
+            Debug.Log($"Lanzamiento de bola de veneno {i}");
+        }
+        yield return new WaitForSeconds(0.3f);
+
+        //EMBESTIDAS
+        transform.localScale = new Vector3(-escala, escala, 1);
+        for (int i = 1; i <= 3; i++) {
+            //DESPLAZAMIENTO A LA PLATAFORMA
+            switch (nuevaPlataforma) {
+                case 0:
+                    transform.position = new Vector3(-14, -99.8f, 0);
+                    break;
+                case 1:
+                    transform.position = new Vector3(-14, -91.5f, 0);
+                    break;
+                case 2:
+                    transform.position = new Vector3(-33, -83.2f, 0);
+                    break;
+                case 3:
+                    transform.position = new Vector3(-14, -74.9f, 0);
+                    break;
+            }
+            this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+
+            //MOVIMIENTO DE EXTREMO A EXTREMO
+            this.rb.velocity = new Vector2(-20f, 0f);
+            ataqueCuerpo.enabled = true;
+            yield return new WaitForSeconds(1.4f);
+            ataqueCuerpo.enabled = false;
+
+            //DESAPARICION TRAS EMBESTIDA
+            this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+            rb.velocity = Vector2.zero;
+            transform.position = transform.position + Vector3.right * 100;
+            yield return new WaitForSeconds(1f);
+        }
+        yield return new WaitForSeconds(0.1f);
+        //APARICION Y STUN
+        switch (nuevaPlataforma)
+        {
+            case 0:
+                transform.position = new Vector3(-14 - 8, -99.8f, 0);
+                break;
+            case 1:
+                transform.position = new Vector3(-14 - 8, -91.5f, 0);
+                break;
+            case 2:
+                transform.position = new Vector3(-33 - 8, -83.2f, 0);
+                break;
+            case 3:
+                transform.position = new Vector3(-14 - 8, -74.9f, 0);
+                break;
+        }
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+        yield return new WaitForSeconds(5f);
+        campoVision.enabled = true;
+        plataformaActual = nuevaPlataforma;
+        usandoAtaqueEspecial = false;
+        tiempoDentroRango = 0;
+        tiempoFueraRango = 0;
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
