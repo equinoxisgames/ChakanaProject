@@ -15,7 +15,7 @@ public class PlataformaMapinguari : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player") {
+        if (collision.gameObject.tag == "Player" && collision.gameObject.transform.position.y > transform.position.y) {
             boss.nuevaPlataforma = plataforma;
         }
     }

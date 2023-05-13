@@ -313,9 +313,9 @@ public class Hoyustus : CharactersBehaviour
         tocarPared();
         //HABILIDADES ELEMENTALES
 
-        if (hurtParticleSystem.isPlaying) {
-            Debug.Log("Particulas de heridos");
-        }
+        //if (hurtParticleSystem.isPlaying) {
+          //  Debug.Log("Particulas de heridos");
+        //}
 
         if (botonCuracion >= 0.2f) {
             botonCuracion = 0f;

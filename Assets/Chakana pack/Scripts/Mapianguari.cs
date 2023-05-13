@@ -33,6 +33,11 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] public int plataformaActual;
     private GameObject charcoVeneno;
 
+
+    private float xCharco = 10f;
+    private float yCharco = 1.0f;
+    private float escala = 2.5f;
+    private float distanciaAtaque = 6f;
     void Start()
     {
         //Physics2D.IgnoreLayerCollision(13, 15, true);
@@ -41,10 +46,10 @@ public class Mapianguari : CharactersBehaviour
         charcoVeneno.tag = "Veneno";
         charcoVeneno.AddComponent<BoxCollider2D>();
         charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
-        charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
+        charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
 
-        plataformaActual = 0;
-        nuevaPlataforma = 0;
+        plataformaActual = 1;
+        nuevaPlataforma = 1;
 
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
@@ -105,11 +110,11 @@ public class Mapianguari : CharactersBehaviour
 
         if (nuevaPlataforma != plataformaActual) {
             plataformaActual = nuevaPlataforma;
-            transform.position = new Vector3(transform.position.x, 5 + plataformaActual * 20, 0);
+            transform.position = new Vector3(transform.position.x, -99.8f + plataformaActual * 8.3f, 0);
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
-            transform.position = Vector3.MoveTowards(this.transform.position, Vector3.right * xObjetivo, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(xObjetivo, transform.position.y, transform.position.z)/*Vector3.right * xObjetivo*/, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
         }
     }
 
@@ -237,10 +242,10 @@ public class Mapianguari : CharactersBehaviour
 
             //Cambio Orientacion
             if (xObjetivo < transform.position.x) {
-                transform.localScale = new Vector3(-5, 5, 1);
+                transform.localScale = new Vector3(-escala, escala, 1);
             }
             else if (xObjetivo > transform.position.x) {
-                transform.localScale = new Vector3(5, 5, 1);
+                transform.localScale = new Vector3(escala, escala, 1);
             }
 
             float distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
@@ -255,14 +260,14 @@ public class Mapianguari : CharactersBehaviour
                 tiempoFueraRango += Time.deltaTime;
             }
 
-            if (ataqueDisponible && distanciaPlayer <= 12 && tiempoDentroRango < 5)
+            if (ataqueDisponible && distanciaPlayer <= distanciaAtaque && tiempoDentroRango < 5)
             {
                 StartCoroutine(ataqueCuerpoCuerpo());               
             }
-            else if (ataqueDisponible && distanciaPlayer <= 12 && tiempoDentroRango > 5) {
+            else if (ataqueDisponible && distanciaPlayer <= distanciaAtaque && tiempoDentroRango > 5) {
                 StartCoroutine(ataqueAturdimiento());
             }
-            else if (ataqueDisponible && distanciaPlayer > 12 && tiempoFueraRango >= 10){
+            else if (ataqueDisponible && distanciaPlayer > distanciaAtaque && tiempoFueraRango >= 10){
                 StartCoroutine(ataqueDistancia());
             }
         }
