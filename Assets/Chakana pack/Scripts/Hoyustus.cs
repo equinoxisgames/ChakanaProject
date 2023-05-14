@@ -122,12 +122,13 @@ public class Hoyustus : CharactersBehaviour
 
 
     private Canvas menuMuerte;
+    private BoxCollider2D dashBodyTESTING;
 
 
     //Variables relacionadas al recibir danio y la muerte del personaje.
     //public float vida = 100;
     [Header("Variables Player")]
-    [SerializeField] private float maxVida = 100;
+    [SerializeField] private float maxVida = 1000;
     [SerializeField] private float tiempoInvulnerabilidad = 2f;
     //[SerializeField] private const int maxStepsImpulso = 13;
     [SerializeField] private float timeAir = 1.2f;
@@ -190,6 +191,8 @@ public class Hoyustus : CharactersBehaviour
 
     [SerializeField] private bool curando = false;
 
+    private bool isDashing = false;
+
     public void isTocandoPared(int value) {
         tocandoPared = value;
     }
@@ -215,7 +218,7 @@ public class Hoyustus : CharactersBehaviour
         else {
             ataque = ataqueMax;
         }
-        vida = 100;
+        vida = 1000;
     }
 
 
@@ -242,6 +245,7 @@ public class Hoyustus : CharactersBehaviour
         escena = SceneManager.GetActiveScene().name;
         ataqueMax = 5;
         ataque = ataqueMax;
+        dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
 
         //INICIALIZACION DE LOS GAMEOBJECTS DE LAS LANZAS
         for (int i = 0; i < lanzas.Length; i++)
@@ -349,6 +353,7 @@ public class Hoyustus : CharactersBehaviour
             }
             if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
             {
+                dashAvailable = false;
                 StartCoroutine("habilidadSerpiente");
             }
             if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza > 2 )
@@ -536,6 +541,7 @@ public class Hoyustus : CharactersBehaviour
         anim.SetFloat("Vida", vida);
         anim.SetFloat("Ataque", ataque);
         anim.SetInteger("Gold", gold);
+        anim.SetBool("Dashing", isDashing);
         //anim.SetBool("Atacando", atacando);
         //anim.SetBool("Curando", curando);
         //anim.SetBool("CA", codigoAtaque);
@@ -1032,15 +1038,20 @@ public class Hoyustus : CharactersBehaviour
     //COOLDOWN DASH
     //***************************************************************************************************
     private IEnumerator dashCooldown() {
-        EstablecerInvulnerabilidades(layerObject);        
+        EstablecerInvulnerabilidades(layerObject);
+        isDashing = true;
         body.enabled = false;
         //bodyHoyustus.SetActive(false);
-        dashBody.SetActive(true);
+        //dashBody.transform.position = transform.position + Vector3.up; *********************************
+        //dashBody.SetActive(true); **********************************************************************
+        dashBodyTESTING.enabled = true;
         cargaHabilidadSerpiente += 0.2f;
         rb.AddForce(new Vector2(-transform.localScale.x * 18, 0), ForceMode2D.Impulse);
         //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
         yield return new WaitForSeconds(0.5f);
-        dashBody.SetActive(false);
+        isDashing = false;
+        //dashBody.SetActive(false);**********************************************************************
+        dashBodyTESTING.enabled = false;
         body.enabled = true;
         //bodyHoyustus.SetActive(true);
         playable = true;

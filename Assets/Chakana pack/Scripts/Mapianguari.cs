@@ -19,6 +19,8 @@ public class Mapianguari : CharactersBehaviour
     private BoxCollider2D ataqueCuerpo, campoVision;
     private CapsuleCollider2D cuerpo;
     private float movementVelocity = 4;
+    private float valorAtaqueBasico = 20;
+    private float valorAtaqueEspecial = 30;
     //private float movementVelocitySecondStage = 8;
     private float maxVida;
     private bool segundaEtapa = false;
@@ -59,7 +61,7 @@ public class Mapianguari : CharactersBehaviour
         explosionInvulnerable = "ExplosionEnemy";
         vida = 200;
         maxVida = vida;
-        ataqueMax = 20;
+        ataqueMax = valorAtaqueBasico;
         ataque = ataqueMax;
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         counterEstados = 0;
@@ -112,7 +114,6 @@ public class Mapianguari : CharactersBehaviour
     void Update()
     {
         timerAtaqueEspecial += Time.deltaTime;
-        Debug.Log(timerAtaqueEspecial);
 
         if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
             if (segundaEtapa && timerAtaqueEspecial > 5)
@@ -129,7 +130,6 @@ public class Mapianguari : CharactersBehaviour
             else if(cambioPlataformaDisponible){
                 cambioPlataformaDisponible = false;
                 StartCoroutine(cambioPlataforma());
-                //CORRUTINA DE TELETRANSPORTACION
                 //plataformaActual = nuevaPlataforma;
                 //transform.position = new Vector3(transform.position.x, -99.8f + plataformaActual * 8.3f, 0);
             }           
@@ -441,6 +441,8 @@ public class Mapianguari : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator ataqueEspecial() {
         usandoAtaqueEspecial = true;
+        ataque = valorAtaqueEspecial;
+        ataqueMax = ataque;
 
         //DESAPARICION BOSS
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -519,13 +521,16 @@ public class Mapianguari : CharactersBehaviour
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         //STUN
         yield return new WaitForSeconds(5f);
+        tiempoDentroRango = 0;
+        tiempoFueraRango = 0;
+        ataque = valorAtaqueBasico;
+        ataqueMax = ataque;
         //RETORNO A VALORES DE JUEGO NORMAL
         campoVision.enabled = true;
         //plataformaActual = nuevaPlataforma;
         usandoAtaqueEspecial = false;
-        tiempoDentroRango = 0;
-        tiempoFueraRango = 0;
         timerAtaqueEspecial = 0f;
+
     }
 
 
