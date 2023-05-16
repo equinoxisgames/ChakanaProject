@@ -55,6 +55,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float groundCheckY = 0.2f;
     [SerializeField] float groundCheckX = 1;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask wallLayer;
+    [SerializeField] LayerMask platformLayer;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] LayerMask transitionLayer;
     [SerializeField] LayerMask transitionLayer1;
@@ -175,7 +177,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
     //MODIFICAR TRAS PRUEBAS
-    [SerializeField] private Transform groundPoint;
+    [SerializeField] private Transform wallPoint;
 
 
 
@@ -191,7 +193,9 @@ public class Hoyustus : CharactersBehaviour
 
     [SerializeField] private bool curando = false;
 
-    private bool isDashing = false;
+    [SerializeField] private bool isDashing = false;
+    [SerializeField] private bool atacando = false;
+    [SerializeField] private int codigoAtaque = 0;
 
     public void isTocandoPared(int value) {
         tocandoPared = value;
@@ -425,6 +429,7 @@ public class Hoyustus : CharactersBehaviour
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
+        bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
         yield return new WaitForEndOfFrame();
@@ -441,6 +446,8 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 10;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
+        atacando = true;
+        codigoAtaque = 3;
         realizandoHabilidadLanza = true;
         cargaHabilidadLanza = 0f;
         playable = false;
@@ -462,6 +469,8 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        atacando = false;
+        codigoAtaque = 0;
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
@@ -542,9 +551,9 @@ public class Hoyustus : CharactersBehaviour
         anim.SetFloat("Ataque", ataque);
         anim.SetInteger("Gold", gold);
         anim.SetBool("Dashing", isDashing);
-        //anim.SetBool("Atacando", atacando);
+        anim.SetBool("Atacando", atacando);
         //anim.SetBool("Curando", curando);
-        //anim.SetBool("CA", codigoAtaque);
+        anim.SetInteger("CA", codigoAtaque);
 
     }
 
@@ -730,8 +739,9 @@ public class Hoyustus : CharactersBehaviour
     {
 
         //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
-        {
+        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || //|| Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
+            Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer)){
+
             anim.SetBool("Grounded", true);
             isJumping = false;
             firstJump = true;
@@ -754,7 +764,8 @@ public class Hoyustus : CharactersBehaviour
 
     private void tocarPared() {
 
-        if (Physics2D.OverlapCircle(groundPoint.position, groundCheckRadius, groundLayer))
+        //tocandoPared = (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer)) ? 0 : 1;
+        if (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer))
         {
             tocandoPared = 0;
         }
@@ -969,16 +980,19 @@ public class Hoyustus : CharactersBehaviour
 
             if (v == 0) {
                 //Aniadir el pequenio impulso de movimiento
+                codigoAtaque = 4;
             }
             else if (v != 0 && h == 0) {
                 //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
                 if (v > 0)
                 {
                     index = 1;
+                    codigoAtaque = 5;
                 }
                 else if (v <= 0 && !Grounded())
                 {
                     index = 2;
+                    codigoAtaque = 6;
                 }
             }
             else if(v != 0 && h != 0){
@@ -988,14 +1002,17 @@ public class Hoyustus : CharactersBehaviour
                     if (v > 0)
                     {
                         index = 1;
+                        codigoAtaque = 5;
                     }
                     else if(v <= 0 && !Grounded()){
                         index = 2;
+                        codigoAtaque = 6;
                     }
                 }
                 else {
                     //Aniadir el pequenio impulso de movimiento
                     //lanza.SetActive(true);
+                    codigoAtaque = 4;
                 }
             }
 
@@ -1011,8 +1028,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator lanzaCooldown(int index)
     {
+        atacando = true;
         lanzas[index].SetActive(true);
         yield return new WaitForSeconds(0.2f);
+        atacando = false;
+        codigoAtaque = 0;
         lanzas[index].SetActive(false);
         yield return new WaitForSeconds(0.5f);
         ataqueAvailable = true;

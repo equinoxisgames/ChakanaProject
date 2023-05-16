@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 using System;
 using static System.Random;
+using static Unity.Burst.Intrinsics.X86;
 
 public class Mapianguari : CharactersBehaviour
 {
@@ -18,7 +19,7 @@ public class Mapianguari : CharactersBehaviour
     public bool ataqueDisponible;
     private BoxCollider2D ataqueCuerpo, campoVision;
     private CapsuleCollider2D cuerpo;
-    private float movementVelocity = 4;
+    private float movementVelocity = 6;
     private float valorAtaqueBasico = 20;
     private float valorAtaqueEspecial = 30;
     //private float movementVelocitySecondStage = 8;
@@ -43,7 +44,9 @@ public class Mapianguari : CharactersBehaviour
     private float xCharco = 10f;
     private float yCharco = 1.0f;
     private float escala = 3f;
-    private float distanciaAtaque = 6f;
+    private float distanciaAtaqueBasico = 6f;
+    private float distanciaAtaqueAturdimiento = 12f;
+    private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
     {
         //Physics2D.IgnoreLayerCollision(13, 15, true);
@@ -88,8 +91,10 @@ public class Mapianguari : CharactersBehaviour
     private void FixedUpdate()
     {
         if (vida <= maxVida / 2) {
-            movementVelocity = 8;
+            movementVelocity = 12;
             segundaEtapa = true;
+            reduccionTiempoAtaqueDistancia = 5;
+            distanciaAtaqueAturdimiento = 15;
         }
         if (vida <= 0) {
             StartCoroutine(Muerte());
@@ -274,7 +279,7 @@ public class Mapianguari : CharactersBehaviour
 
             float distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
 
-            if (distanciaPlayer <= 12)
+            if (distanciaPlayer <= distanciaAtaqueAturdimiento)
             {
                 tiempoFueraRango = 0;
                 tiempoDentroRango += Time.deltaTime;
@@ -284,14 +289,14 @@ public class Mapianguari : CharactersBehaviour
                 tiempoFueraRango += Time.deltaTime;
             }
 
-            if (ataqueDisponible && distanciaPlayer <= distanciaAtaque && tiempoDentroRango < 5)
+            if (ataqueDisponible && distanciaPlayer <= distanciaAtaqueBasico && tiempoDentroRango < 5)
             {
                 StartCoroutine(ataqueCuerpoCuerpo());               
             }
-            else if (ataqueDisponible && distanciaPlayer <= distanciaAtaque && tiempoDentroRango > 5) {
+            else if (ataqueDisponible && distanciaPlayer <= distanciaAtaqueAturdimiento && tiempoDentroRango > 5) {
                 StartCoroutine(ataqueAturdimiento());
             }
-            else if (ataqueDisponible && distanciaPlayer > distanciaAtaque && tiempoFueraRango >= 10){
+            else if (ataqueDisponible && distanciaPlayer > distanciaAtaqueAturdimiento && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia){
                 StartCoroutine(ataqueDistancia());
             }
         }
@@ -375,7 +380,7 @@ public class Mapianguari : CharactersBehaviour
         ataqueCuerpo.enabled = false;
 
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
-        if (segundaEtapa) {
+        if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
             //transform.position = transform.position + Vector3.up * 0.1f;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(7f * -transform.localScale.x, 0f);
@@ -384,7 +389,7 @@ public class Mapianguari : CharactersBehaviour
             rb.velocity = Vector2.zero;
         }
         atacando = false;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.8f);
         ataqueDisponible = true;
     }
 
@@ -405,6 +410,7 @@ public class Mapianguari : CharactersBehaviour
             for (int i = 0; i < 10; i++)
             {
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
+                bolaVenenoGenerada.AddComponent<BolaVeneno>();
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
                 auxDisparo++; 
@@ -421,6 +427,7 @@ public class Mapianguari : CharactersBehaviour
                     direccion = -1;
                 }
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
+                bolaVenenoGenerada.AddComponent<BolaVeneno>();
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
                 yield return new WaitForSeconds(0.05f);
@@ -452,6 +459,14 @@ public class Mapianguari : CharactersBehaviour
 
         //LANZAMIENTO BOLAS DE VENENO
         for (int i = 1; i <= 8; i++) {
+            //POSICIONES ALEATORIAS
+
+            //y -99 -72 x -58 -12
+            System.Random aux = new System.Random();
+            GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-58, -13), aux.Next(-99, -73), 0), Quaternion.identity);
+            bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
+            yield return new WaitForEndOfFrame();
+            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().instanciarValores(explosion, this.gameObject.layer);
             yield return new WaitForSeconds(1f);
             Debug.Log($"Lanzamiento de bola de veneno {i}");
         }
@@ -463,29 +478,29 @@ public class Mapianguari : CharactersBehaviour
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
                 case 0:
-                    transform.position = new Vector3(-14, -99.8f, 0);
+                    transform.position = new Vector3(-16, -99.8f, 0);
                     break;
                 case 1:
-                    transform.position = new Vector3(-14, -91.5f, 0);
+                    transform.position = new Vector3(-16, -91.5f, 0);
                     break;
                 case 2:
-                    transform.position = new Vector3(-33, -83.2f, 0);
+                    transform.position = new Vector3(-35, -83.2f, 0);
                     break;
                 case 3:
-                    transform.position = new Vector3(-14, -74.9f, 0);
+                    transform.position = new Vector3(-16, -74.9f, 0);
                     break;
             }
             this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-20f, 0f);
+            this.rb.velocity = new Vector2(-28f, 0f);
             ataqueCuerpo.enabled = true;
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
-                extraDashTime += 0.5f;
+                extraDashTime += 0.4f;
             }
-            yield return new WaitForSeconds(1.3f + extraDashTime);
+            yield return new WaitForSeconds(1f + extraDashTime);
             ataqueCuerpo.enabled = false;
 
             //DESAPARICION TRAS EMBESTIDA
@@ -495,7 +510,7 @@ public class Mapianguari : CharactersBehaviour
                 this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
                 transform.position = transform.position + Vector3.right * 100;
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.7f);
             }
         }
         /*yield return new WaitForSeconds(0.1f);
@@ -520,9 +535,9 @@ public class Mapianguari : CharactersBehaviour
 
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         //STUN
-        yield return new WaitForSeconds(5f);
-        tiempoDentroRango = 0;
-        tiempoFueraRango = 0;
+        yield return new WaitForSeconds(2.8f);
+        //tiempoDentroRango = 0;
+        //tiempoFueraRango = 0;
         ataque = valorAtaqueBasico;
         ataqueMax = ataque;
         //RETORNO A VALORES DE JUEGO NORMAL
@@ -541,19 +556,29 @@ public class Mapianguari : CharactersBehaviour
         //SE ESCONDE
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
-        yield return new WaitForSeconds(0.2f);
+        ataqueDisponible = false;
+        usandoAtaqueEspecial = true;
+        yield return new WaitForSeconds(0.5f);
+        //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
         System.Random aux = new System.Random();
         int posicionTeletransporteX = aux.Next((int)minX, (int)maxX) + 1;
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
+        yield return new WaitForSeconds(0.5f); 
+        //REAPARECE "SALE DE LOS ARBOLES"
+        //SE REACTIVA SU MOVIMIENTO
+        tiempoDentroRango = 0;
+        tiempoFueraRango = 0;
+        ataqueDisponible = true;
+        usandoAtaqueEspecial = false;
         cambioPlataformaDisponible = true;
-
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
-        if (collision.gameObject.layer == 6 && collision.gameObject.name.StartsWith("Plataforma")) {
+        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && collision.gameObject.name.StartsWith("Plataforma")) {
             minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
             maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
             plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;

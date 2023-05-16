@@ -1,24 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 //[RequireComponent(typeof(ParticleSystem))]
 public class BolaVeneno : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private float tiempoEliminacion = 5f;
-    private GameObject explosion;
-    private GameObject particulas;
+    protected Rigidbody2D rb;
+    protected float tiempoEliminacion = 5f;
+    protected GameObject explosion;
     private bool activado = true;
+    private GameObject charco;
 
     void Start()
     {
-        rb = this.gameObject.GetComponent<Rigidbody2D>();
-        particulas = transform.GetChild(0).gameObject;
-        particulas.SetActive(false);
+        rb = this.gameObject.GetComponent<Rigidbody2D>();;
         rb.Sleep();
-
+        charco = new GameObject();
+        charco.SetActive(false);
+        //charco.transform.parent = this.gameObject.transform;
+        charco.tag = "Veneno";
+        charco.layer = 11;
+        charco.AddComponent<BoxCollider2D>();
+        charco.GetComponent<BoxCollider2D>().isTrigger = true;
+        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
     }
 
     private void Update()
@@ -28,12 +34,16 @@ public class BolaVeneno : MonoBehaviour
             //HACER LA DIFERENCIACION CON EL LAYER SI TIENE UNA CAPA PLAYER O ENEMY
             //PLAYER
             if (this.gameObject.layer == 11) {
+                Destroy(charco);
                 Destroy(this.gameObject);
+                //Destroy(this.gameObject);
             }
             //ENEMY
             else if (this.gameObject.layer == 3) {
                 //EXPLOSION
+                Destroy(charco);
                 Destroy(this.gameObject);
+                //Destroy(this.gameObject);
             }
         }
     }
@@ -45,6 +55,7 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
+    //METODO OBSOLETO
     public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY)
     {
         transform.gameObject.layer = layer;
@@ -55,7 +66,9 @@ public class BolaVeneno : MonoBehaviour
 
     public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY, GameObject explosion)
     {
-        aniadirFuerza(direccion, layer, velocityX, velocityY);
+        transform.gameObject.layer = layer;
+        rb.WakeUp();
+        rb.AddForce(new Vector3(velocityX * -direccion, velocityY, 0f), ForceMode2D.Impulse);
         this.explosion = explosion;
         this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 15, 6, 12, "Veneno", "ExplosionEnemy");
     }
@@ -68,29 +81,23 @@ public class BolaVeneno : MonoBehaviour
         this.GetComponent<CircleCollider2D>().enabled = false;
         //particulas.SetActive(true);
         //GetComponent<CircleCollider2D>().enabled = false;
-        GameObject charco = new GameObject();
         charco.transform.position = position;
-        charco.SetActive(false);
-        charco.tag = "Veneno";
-        charco.layer = 11;
-        charco.AddComponent<BoxCollider2D>();
-        charco.GetComponent<BoxCollider2D>().isTrigger = true;
-        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
         charco.SetActive(true);
-        charco.transform.parent = this.gameObject.transform;
         yield return new WaitForSeconds(5f);
         //Destroy(charco.gameObject);
-        Destroy(gameObject);
+        Destroy(charco);
+        Destroy(this.gameObject);
     }
 
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         //ENEMY
-        if (collider.gameObject.tag == "Player" || collider.gameObject.layer == 6)
+        if (collider.gameObject.tag == "Player" || collider.gameObject.layer == 6 || collider.gameObject.layer == 16 || collider.gameObject.layer == 17)
         {
             Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            Destroy(charco);
+            Destroy(this.gameObject);
         }
     }
 
@@ -98,7 +105,8 @@ public class BolaVeneno : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //PLAYER
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6)
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.layer == 6 || 
+            (collision.gameObject.layer == 17 && collision.transform.position.y < transform.position.y))
         {
             tiempoEliminacion = 5;
             //GENERAR CHARCO
@@ -110,23 +118,7 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
-    /*private void charco() {
-        GameObject charco = new GameObject();
-        charco.SetActive(false);
-        charco.tag = "Veneno";
-        charco.AddComponent<BoxCollider2D>();
-        charco.GetComponent<BoxCollider2D>().isTrigger = true;
-        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
-        GameObject charcoGenerado = Instantiate(charco, transform.position + Vector3.down * 5f, Quaternion.identity);
-        //StartCoroutine(destruirCharco(charcoGenerado));
-    }*/
-
-
-    private void OnParticleCollision(GameObject other)
-    {
-        Debug.Log("Pan");
-        if (other.layer == 6) {
-            Debug.Log("F");
-        }
+    public void setExplosion(GameObject explosion) {
+        this.explosion = explosion;
     }
 }
