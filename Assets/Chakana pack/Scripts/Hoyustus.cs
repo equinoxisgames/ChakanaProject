@@ -55,6 +55,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float groundCheckY = 0.2f;
     [SerializeField] float groundCheckX = 1;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask wallLayer;
+    [SerializeField] LayerMask platformLayer;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] LayerMask transitionLayer;
     [SerializeField] LayerMask transitionLayer1;
@@ -106,6 +108,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Particles")]
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
+    [SerializeField] ParticleSystem hurtParticleSystem = null;
 
     [Header("Movement")]
     public bool doubleJump = false;
@@ -121,12 +124,13 @@ public class Hoyustus : CharactersBehaviour
 
 
     private Canvas menuMuerte;
+    private BoxCollider2D dashBodyTESTING;
 
 
     //Variables relacionadas al recibir danio y la muerte del personaje.
     //public float vida = 100;
     [Header("Variables Player")]
-    [SerializeField] private float maxVida = 100;
+    [SerializeField] private float maxVida = 1000;
     [SerializeField] private float tiempoInvulnerabilidad = 2f;
     //[SerializeField] private const int maxStepsImpulso = 13;
     [SerializeField] private float timeAir = 1.2f;
@@ -173,7 +177,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
     //MODIFICAR TRAS PRUEBAS
-    [SerializeField] private Transform groundPoint;
+    [SerializeField] private Transform wallPoint;
 
 
 
@@ -188,6 +192,10 @@ public class Hoyustus : CharactersBehaviour
     private bool realizandoHabilidadLanza = false;
 
     [SerializeField] private bool curando = false;
+
+    [SerializeField] private bool isDashing = false;
+    [SerializeField] private bool atacando = false;
+    [SerializeField] private int codigoAtaque = 0;
 
     public void isTocandoPared(int value) {
         tocandoPared = value;
@@ -214,7 +222,7 @@ public class Hoyustus : CharactersBehaviour
         else {
             ataque = ataqueMax;
         }
-        vida = 100;
+        vida = 1000;
     }
 
 
@@ -241,6 +249,7 @@ public class Hoyustus : CharactersBehaviour
         escena = SceneManager.GetActiveScene().name;
         ataqueMax = 5;
         ataque = ataqueMax;
+        dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
 
         //INICIALIZACION DE LOS GAMEOBJECTS DE LAS LANZAS
         for (int i = 0; i < lanzas.Length; i++)
@@ -312,6 +321,10 @@ public class Hoyustus : CharactersBehaviour
         tocarPared();
         //HABILIDADES ELEMENTALES
 
+        //if (hurtParticleSystem.isPlaying) {
+          //  Debug.Log("Particulas de heridos");
+        //}
+
         if (botonCuracion >= 0.2f) {
             botonCuracion = 0f;
             aplastarBotonCuracion = false;
@@ -344,6 +357,7 @@ public class Hoyustus : CharactersBehaviour
             }
             if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
             {
+                dashAvailable = false;
                 StartCoroutine("habilidadSerpiente");
             }
             if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza > 2 )
@@ -415,6 +429,7 @@ public class Hoyustus : CharactersBehaviour
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
+        bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
         yield return new WaitForEndOfFrame();
@@ -431,6 +446,8 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 10;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
+        atacando = true;
+        codigoAtaque = 3;
         realizandoHabilidadLanza = true;
         cargaHabilidadLanza = 0f;
         playable = false;
@@ -452,6 +469,8 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        atacando = false;
+        codigoAtaque = 0;
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
@@ -531,6 +550,11 @@ public class Hoyustus : CharactersBehaviour
         anim.SetFloat("Vida", vida);
         anim.SetFloat("Ataque", ataque);
         anim.SetInteger("Gold", gold);
+        anim.SetBool("Dashing", isDashing);
+        anim.SetBool("Atacando", atacando);
+        //anim.SetBool("Curando", curando);
+        anim.SetInteger("CA", codigoAtaque);
+
     }
 
 
@@ -562,6 +586,8 @@ public class Hoyustus : CharactersBehaviour
 
                 if (collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
+                    hurtParticleSystem.Play();
+                    //HurtParticlesPlayer();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -612,6 +638,7 @@ public class Hoyustus : CharactersBehaviour
 
                 if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
+                    StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -712,8 +739,9 @@ public class Hoyustus : CharactersBehaviour
     {
 
         //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
-        {
+        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || //|| Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
+            Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer)){
+
             anim.SetBool("Grounded", true);
             isJumping = false;
             firstJump = true;
@@ -736,7 +764,8 @@ public class Hoyustus : CharactersBehaviour
 
     private void tocarPared() {
 
-        if (Physics2D.OverlapCircle(groundPoint.position, groundCheckRadius, groundLayer))
+        //tocandoPared = (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer)) ? 0 : 1;
+        if (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer))
         {
             tocandoPared = 0;
         }
@@ -951,16 +980,19 @@ public class Hoyustus : CharactersBehaviour
 
             if (v == 0) {
                 //Aniadir el pequenio impulso de movimiento
+                codigoAtaque = 4;
             }
             else if (v != 0 && h == 0) {
                 //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
                 if (v > 0)
                 {
                     index = 1;
+                    codigoAtaque = 5;
                 }
                 else if (v <= 0 && !Grounded())
                 {
                     index = 2;
+                    codigoAtaque = 6;
                 }
             }
             else if(v != 0 && h != 0){
@@ -970,14 +1002,17 @@ public class Hoyustus : CharactersBehaviour
                     if (v > 0)
                     {
                         index = 1;
+                        codigoAtaque = 5;
                     }
                     else if(v <= 0 && !Grounded()){
                         index = 2;
+                        codigoAtaque = 6;
                     }
                 }
                 else {
                     //Aniadir el pequenio impulso de movimiento
                     //lanza.SetActive(true);
+                    codigoAtaque = 4;
                 }
             }
 
@@ -993,8 +1028,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator lanzaCooldown(int index)
     {
+        atacando = true;
         lanzas[index].SetActive(true);
         yield return new WaitForSeconds(0.2f);
+        atacando = false;
+        codigoAtaque = 0;
         lanzas[index].SetActive(false);
         yield return new WaitForSeconds(0.5f);
         ataqueAvailable = true;
@@ -1020,15 +1058,20 @@ public class Hoyustus : CharactersBehaviour
     //COOLDOWN DASH
     //***************************************************************************************************
     private IEnumerator dashCooldown() {
-        EstablecerInvulnerabilidades(layerObject);        
+        EstablecerInvulnerabilidades(layerObject);
+        isDashing = true;
         body.enabled = false;
         //bodyHoyustus.SetActive(false);
-        dashBody.SetActive(true);
+        //dashBody.transform.position = transform.position + Vector3.up; *********************************
+        //dashBody.SetActive(true); **********************************************************************
+        dashBodyTESTING.enabled = true;
         cargaHabilidadSerpiente += 0.2f;
         rb.AddForce(new Vector2(-transform.localScale.x * 18, 0), ForceMode2D.Impulse);
         //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
         yield return new WaitForSeconds(0.5f);
-        dashBody.SetActive(false);
+        isDashing = false;
+        //dashBody.SetActive(false);**********************************************************************
+        dashBodyTESTING.enabled = false;
         body.enabled = true;
         //bodyHoyustus.SetActive(true);
         playable = true;
@@ -1847,7 +1890,23 @@ public class Hoyustus : CharactersBehaviour
         ParticleTestParticleTest.Play();
     }
 
-void OnDrawGizmos()
+    IEnumerator HurtParticlesPlayer()
+    {
+        //hurtParticleSystem.loop = false;
+        var ps = transform.GetChild(transform.childCount - 3).GetChild(0).GetComponent<ParticleSystem>();
+        var psMain = ps.main;
+        psMain.loop = false;
+        hurtParticleSystem.Play();
+        //hurtParticleSystem.Clear();
+        hurtParticleSystem.Play();
+        yield return new WaitForSeconds(3f);
+        //psMain.loop = true;
+        hurtParticleSystem.Clear();
+        hurtParticleSystem.Play();
+        //hurtParticleSystem.Clear();
+    }
+
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         //Gizmos.DrawWireSphere(attackTransform.position, attackRadius);
