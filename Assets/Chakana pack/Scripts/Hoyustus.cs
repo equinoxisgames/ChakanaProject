@@ -250,6 +250,7 @@ public class Hoyustus : CharactersBehaviour
         ataqueMax = 5;
         ataque = ataqueMax;
         dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
+        dashBodyTESTING.enabled = false;
 
         //INICIALIZACION DE LOS GAMEOBJECTS DE LAS LANZAS
         for (int i = 0; i < lanzas.Length; i++)
@@ -765,14 +766,16 @@ public class Hoyustus : CharactersBehaviour
     private void tocarPared() {
 
         //tocandoPared = (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer)) ? 0 : 1;
-        if (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer))
+        //if (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer))
+        /*if (Physics2D.OverlapBox(wallPoint.position, Vector2.right * transform.localScale.x, 0, wallLayer))
         {
             tocandoPared = 0;
         }
         else
         {
             tocandoPared = 1;
-        }
+        }*/
+        tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * transform.localScale.x, 0, wallLayer)) ? 0 : 1;
 
     }
 
@@ -1086,6 +1089,25 @@ public class Hoyustus : CharactersBehaviour
         cargaHabilidadLanza += 0.5f;
     }
 
+
+    /*protected new void Recoil(int direccion)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+        if (Grounded()) {
+            if (rb.gravityScale == 0)
+                rb.AddForce(new Vector2(direccion * 4.5f, 1), ForceMode2D.Impulse);
+            else
+                rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
+        }
+        else
+        {
+            if (rb.gravityScale == 0)
+                rb.AddForce(new Vector2(direccion * 3, 1), ForceMode2D.Impulse);
+            else
+                rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
+        }
+        EstablecerInvulnerabilidades(layerObject);
+    }*/
     /*
     private void ImproveJump()
     {
@@ -1913,6 +1935,7 @@ public class Hoyustus : CharactersBehaviour
         //Gizmos.DrawWireSphere(downAttackTransform.position, downAttackRadius);
         //Gizmos.DrawWireSphere(upAttackTransform.position, upAttackRadius);
         //Gizmos.DrawWireCube(groundTransform.position, new Vector2(groundCheckX, groundCheckY));
+        //Gizmos.DrawCube(transform.position + Vector3.up, new Vector3);
 
         Gizmos.DrawLine(groundTransform.position, groundTransform.position + new Vector3(0, -groundCheckY));
         Gizmos.DrawLine(groundTransform.position + new Vector3(-groundCheckX, 0), groundTransform.position + new Vector3(-groundCheckX, -groundCheckY));
