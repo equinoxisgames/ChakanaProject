@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-//[RequireComponent(typeof(ParticleSystem))]
+
 public class BolaVeneno : MonoBehaviour
 {
     protected Rigidbody2D rb;
@@ -17,9 +16,10 @@ public class BolaVeneno : MonoBehaviour
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();;
         rb.Sleep();
+
+        //CONFIGURACION DEL OBJETO CHARCO
         charco = new GameObject();
         charco.SetActive(false);
-        //charco.transform.parent = this.gameObject.transform;
         charco.tag = "Veneno";
         charco.layer = 11;
         charco.AddComponent<BoxCollider2D>();
@@ -52,15 +52,6 @@ public class BolaVeneno : MonoBehaviour
         transform.gameObject.layer = layer;
         rb.WakeUp();
         rb.AddForce(new Vector3(12f * -direccion, 18f, 0f), ForceMode2D.Impulse);
-    }
-
-
-    //METODO OBSOLETO
-    public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY)
-    {
-        transform.gameObject.layer = layer;
-        rb.WakeUp();
-        rb.AddForce(new Vector3(velocityX * -direccion, velocityY, 0f), ForceMode2D.Impulse);
     }
 
 

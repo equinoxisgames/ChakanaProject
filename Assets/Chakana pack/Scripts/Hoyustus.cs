@@ -322,9 +322,6 @@ public class Hoyustus : CharactersBehaviour
         tocarPared();
         //HABILIDADES ELEMENTALES
 
-        //if (hurtParticleSystem.isPlaying) {
-          //  Debug.Log("Particulas de heridos");
-        //}
 
         if (botonCuracion >= 0.2f) {
             botonCuracion = 0f;
@@ -418,7 +415,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    //Habilidad Serpiente V.Alpha
+
     private IEnumerator habilidadSerpiente()
     {
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
@@ -578,17 +575,14 @@ public class Hoyustus : CharactersBehaviour
             {
                 direccion = 1;
             }
-            //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
-            //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
-            //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
-            //DETECCION DE DEL CUERPO DEL ENEMIGO
+
+
             try
             {
-
+                //DETECCION DE DEL CUERPO DEL ENEMIGO
                 if (collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
-                    hurtParticleSystem.Play();
-                    //HurtParticlesPlayer();
+                    //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -612,12 +606,6 @@ public class Hoyustus : CharactersBehaviour
     {
         base.OnTriggerEnter2D(collider);
 
-
-        /*if (collider.gameObject.layer == 6)
-        {
-            tocandoPared = 0;
-        }*/
-
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
         if (collider.gameObject.layer == 3)
         {
@@ -632,10 +620,10 @@ public class Hoyustus : CharactersBehaviour
                 direccion = 1;
             }
             //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
-            //DETECCION DE HIJOS DEL ENEMIGO
+
             try {
 
-
+                //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
                 if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
                     //StartCoroutine(HurtParticlesPlayer());

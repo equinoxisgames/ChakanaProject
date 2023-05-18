@@ -509,23 +509,23 @@ public class Mapianguari : CharactersBehaviour
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
                 case 0:
-                    transform.position = new Vector3(-17, -99.8f, 0);
+                    transform.position = new Vector3(-14, -99.8f, 0);
                     break;
                 case 1:
-                    transform.position = new Vector3(-17, -91.5f, 0);
+                    transform.position = new Vector3(-14, -91.5f, 0);
                     break;
                 case 2:
-                    transform.position = new Vector3(-36, -83.2f, 0);
+                    transform.position = new Vector3(-30, -83.2f, 0);
                     break;
                 case 3:
-                    transform.position = new Vector3(-17, -74.9f, 0);
+                    transform.position = new Vector3(-14, -74.9f, 0);
                     break;
             }
             this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-28f, 0f);
+            this.rb.velocity = new Vector2(-26.5f, 0f);
             ataqueCuerpo.enabled = true;
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
