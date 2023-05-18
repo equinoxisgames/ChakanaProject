@@ -193,7 +193,6 @@ public class CharactersBehaviour : MonoBehaviour
 
     public void setParalisis()
     {
-        Debug.Log("Quieto " + this.gameObject.name);
         rb.velocity = Vector3.zero;
         playable = false;
         aumentoDanioParalizacion = 1.5f;

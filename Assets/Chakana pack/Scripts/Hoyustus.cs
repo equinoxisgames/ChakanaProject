@@ -632,14 +632,13 @@ public class Hoyustus : CharactersBehaviour
                 direccion = 1;
             }
             //Dentro de cada collision de los enemigos lo que se deberia hacer es reducir la vida y lanzar la corrutina por lo que esta deberia ser public
-            //collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque();
-            //REDUCCION ATAQUE EN BASE DEL DANIO ENEMIGO
             //DETECCION DE HIJOS DEL ENEMIGO
             try {
 
+
                 if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
-                    StartCoroutine(HurtParticlesPlayer());
+                    //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
                 }
@@ -648,8 +647,6 @@ public class Hoyustus : CharactersBehaviour
             catch (Exception e){
       
             }
-            //vida -= 20;
-            //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
@@ -726,10 +723,6 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void OnTriggerExit2D(Collider2D collider)
     {
-        //if (collider.gameObject.layer == 6)
-        //{
-          //  tocandoPared = 1;
-        //}
     }
 
 
@@ -764,17 +757,6 @@ public class Hoyustus : CharactersBehaviour
 
 
     private void tocarPared() {
-
-        //tocandoPared = (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer)) ? 0 : 1;
-        //if (Physics2D.OverlapCircle(wallPoint.position, groundCheckRadius, wallLayer))
-        /*if (Physics2D.OverlapBox(wallPoint.position, Vector2.right * transform.localScale.x, 0, wallLayer))
-        {
-            tocandoPared = 0;
-        }
-        else
-        {
-            tocandoPared = 1;
-        }*/
         tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * transform.localScale.x, 0, wallLayer)) ? 0 : 1;
 
     }
@@ -878,8 +860,7 @@ public class Hoyustus : CharactersBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
         isWalking = true;
-        //Multiplicar por tocandoPared
-        //Se debe crear un nuevo layer pared
+
         //TOCANDO PARED PERMITIRA QUE SE DETENGA EL PLAYER SI TRATA DE CAMINAR Y SE TOCA UNA PARED
         //LA AFECTACION DEL VIENTO REDUCIRA SU VELOCIDAD AL ESTAR EN EL AIRE
         rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
@@ -1912,7 +1893,7 @@ public class Hoyustus : CharactersBehaviour
         ParticleTestParticleTest.Play();
     }
 
-    IEnumerator HurtParticlesPlayer()
+    /*IEnumerator HurtParticlesPlayer()
     {
         //hurtParticleSystem.loop = false;
         var ps = transform.GetChild(transform.childCount - 3).GetChild(0).GetComponent<ParticleSystem>();
@@ -1926,7 +1907,7 @@ public class Hoyustus : CharactersBehaviour
         hurtParticleSystem.Clear();
         hurtParticleSystem.Play();
         //hurtParticleSystem.Clear();
-    }
+    }*/
 
     void OnDrawGizmos()
     {
