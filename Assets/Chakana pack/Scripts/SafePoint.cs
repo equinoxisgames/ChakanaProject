@@ -6,6 +6,8 @@ public class SafePoint : MonoBehaviour
 {
 
     [SerializeField] GameObject fire;
+    [SerializeField] Transform pivot;
+    [SerializeField] GameObject particles;
     [SerializeField] GameObject txt;
     bool isIn, isOn;
     void Start()
@@ -14,25 +16,27 @@ public class SafePoint : MonoBehaviour
         {
             fire.SetActive(true);
         }
+
+        isOn = true;
     }
 
     void Update()
     {
-        if(isIn && Input.GetKeyDown(KeyCode.E))
+        if(isIn && Input.GetKeyDown(KeyCode.E) && isOn)
         {
             fire.SetActive(true);
-            txt.SetActive(false);
+            Destroy(Instantiate(particles, pivot), 2.5f);
 
-            isOn = true;
+            PlayerPrefs.SetInt("SP01", 1);
 
-            PlayerPrefs.SetInt("SP01", 0);
-            print(PlayerPrefs.GetInt("SP01"));
+            isOn = false;
+            StartCoroutine(Timer());
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag == "Player" && !isOn)
+        if(collision.transform.tag == "Player")
         {
             isIn = true;
             txt.SetActive(true);
@@ -41,10 +45,16 @@ public class SafePoint : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player" && !isOn)
+        if (collision.transform.tag == "Player")
         {
             isIn = false;
             txt.SetActive(false);
         }
+    }
+
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(3f);
+        isOn = true;
     }
 }
