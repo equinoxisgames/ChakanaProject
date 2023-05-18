@@ -239,6 +239,7 @@ public class Hoyustus : CharactersBehaviour
         Physics2D.IgnoreLayerCollision(13, 15, true);
 
         //INICIALIZACION VARIABLES 
+        invulnerable = false;
         explosionInvulnerable = "ExplosionPlayer";
         layerObject = this.gameObject.layer;
         aumentoDanioParalizacion = 1f;
@@ -441,6 +442,7 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza() {
         EstablecerInvulnerabilidades(layerObject);
+        invulnerable = true;
         cargaCuracion += 10;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
@@ -472,6 +474,7 @@ public class Hoyustus : CharactersBehaviour
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
+        invulnerable = false;
         body.enabled = true;
         realizandoHabilidadLanza = false;
         playable = true;
@@ -580,7 +583,7 @@ public class Hoyustus : CharactersBehaviour
             try
             {
                 //DETECCION DE DEL CUERPO DEL ENEMIGO
-                if (collision.gameObject.transform.parent.name == "-----ENEMIES")
+                if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
@@ -624,7 +627,7 @@ public class Hoyustus : CharactersBehaviour
             try {
 
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
-                if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
+                if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
@@ -1008,7 +1011,6 @@ public class Hoyustus : CharactersBehaviour
         lanzas[index].SetActive(false);
         yield return new WaitForSeconds(0.5f);
         ataqueAvailable = true;
-
     }
 
 
@@ -1017,6 +1019,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash() {
         if (dashAvailable && Input.GetButton("Dash")) {
+            invulnerable = true;
             playable = false;
             dashAvailable = false;
             rb.velocity = Vector2.zero;
@@ -1049,6 +1052,7 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         rb.gravityScale = 2;
         QuitarInvulnerabilidades(layerObject);
+        invulnerable = false;
         yield return new WaitForSeconds(0.5f);
         dashAvailable = true;
     }
