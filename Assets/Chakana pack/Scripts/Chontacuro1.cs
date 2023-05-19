@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class Chontacuro1 : MonoBehaviour
+public class Chontacuro1 : CharactersBehaviour
 {
     //variables
 
     private CinemachineVirtualCamera cm;
     private SpriteRenderer sp;
-    private Rigidbody2D rb;
+    //private Rigidbody2D rb;
 
     private Hoyustus hoyustusPlayerCotroller;
     private bool applyForce;
@@ -34,7 +34,6 @@ public class Chontacuro1 : MonoBehaviour
 
     private void Awake()
     {
-        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
         sp = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
@@ -47,13 +46,17 @@ public class Chontacuro1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
         gameObject.name = Chontacuro1Name;
-
+        hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
         speed = 4f;
         limit1 = new Vector3(-60f, 0f, 0f);
         limit2 = new Vector3(60f, 0f, 0f);
         objetivo = limit1;
-        
+        layerObject = transform.gameObject.layer;
+
+        vida = 50;
+
     }
 
     // Update is called once per frame
@@ -136,37 +139,59 @@ public class Chontacuro1 : MonoBehaviour
         }
 
     }
-    private void Move()
-    {
-
-       
-
-    //Debug.Log("Pasos: "+pasos);
-
-        //transform.position = Vector2.MoveTowards(transform.position, objetivo, 5f * Time.deltaTime);
-        if (pasos >= 0 && pasos <= 100)
+        private void Move()
         {
-        //Debug.Log("If pasos <= 10 -->" + pasos);
-            
-            transform.position = new Vector3(gameObject.transform.position.x + 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
-            pasos = pasos + 1;
-            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
-        }
-        else
-        {
-            
+            //Debug.Log("Pasos: "+pasos);
 
-        //Debug.Log("Else If pasos > 10 -->" + pasos);
-            transform.position = new Vector3(gameObject.transform.position.x - 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
-            pasos = pasos + 1;
-            transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
-
-            if (pasos == 200)
+            //transform.position = Vector2.MoveTowards(transform.position, objetivo, 5f * Time.deltaTime);
+            if (pasos >= 0 && pasos <= 100)
             {
-                pasos = 0;
+            //Debug.Log("If pasos <= 10 -->" + pasos);
+            
+                transform.position = new Vector3(gameObject.transform.position.x + 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
+                pasos = pasos + 1;
                 transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
             }
+            else
+            {
+            
+
+            //Debug.Log("Else If pasos > 10 -->" + pasos);
+                transform.position = new Vector3(gameObject.transform.position.x - 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
+                pasos = pasos + 1;
+                transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+
+                if (pasos == 200)
+                {
+                    pasos = 0;
+                    transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+                }
                 
+            }
+        }
+
+        private new void OnTriggerEnter2D(Collider2D collider)
+        {
+            base.OnTriggerEnter2D(collider);
+            if (collider.gameObject.layer == 14)
+            {
+                int direccion = 1;
+                if (collider.transform.position.x > gameObject.transform.position.x)
+                {
+                    direccion = -1;
+                }
+                else
+                {
+                    direccion = 1;
+                }
+
+                StartCoroutine(cooldownRecibirDanio(direccion));
+                if (collider.transform.parent != null)
+                {
+                    collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+                    recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                }
+            }
         }
 
 
@@ -187,5 +212,4 @@ public class Chontacuro1 : MonoBehaviour
 
         //    objetivo = limit1;
         //}
-    }
 }
