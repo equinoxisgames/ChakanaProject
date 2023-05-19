@@ -246,6 +246,9 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //COMBINACIONES ELEMENTALES
+    //***************************************************************************************************
     private void combinacionesElementales()
     {
         if (counterEstados == 11)
@@ -265,11 +268,12 @@ public class Mapianguari : CharactersBehaviour
 
     private void OnTriggerStay2D(Collider2D collider){
 
+        //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
         if (!usandoAtaqueEspecial && collider.gameObject.tag == "Player") {
             xObjetivo = collider.transform.position.x;
 
 
-            //Cambio Orientacion
+            //CAMBIO DE ORIENTACION
             if (xObjetivo < transform.position.x) {
                 transform.localScale = new Vector3(-escala, escala, 1);
             }
@@ -279,11 +283,13 @@ public class Mapianguari : CharactersBehaviour
 
             float distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
 
+            //HOYUSTUS DENTRO DEL RANGO DE ATAQUE DEL BOSS
             if (distanciaPlayer <= distanciaAtaqueAturdimiento)
             {
                 tiempoFueraRango = 0;
                 tiempoDentroRango += Time.deltaTime;
             }
+            //HOYUSTUS FUERA DEL RANGO DE ATAQUE DEL BOSS
             else {
                 tiempoDentroRango = 0;
                 tiempoFueraRango += Time.deltaTime;
@@ -350,6 +356,9 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //CORRUTINA EN LA QUE SE PARALIZA Y SE QUITA LA PARALISIS DE HOYUSTUS
+    //***************************************************************************************************
     private IEnumerator aturdirPlayer() {
         GameObject.FindObjectOfType<Hoyustus>().setParalisis();
         tiempoDentroRango = 0;
@@ -358,6 +367,9 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //CORRUTINA DE DESTRUCCION DE CHARCO DE VENENO
+    //***************************************************************************************************
     private IEnumerator destruirCharco(GameObject charco) {
         charco.SetActive(true);
         yield return new WaitForSeconds(4f);
@@ -463,7 +475,26 @@ public class Mapianguari : CharactersBehaviour
 
             //y -99 -72 x -58 -12
             System.Random aux = new System.Random();
-            GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-58, -13), aux.Next(-99, -73), 0), Quaternion.identity);
+            GameObject bolaVenenoGenerada = null;
+
+            //EL VALOR CORRESPONDE A LA PLATAFORMA EN LA QUE SE GENERARA
+            switch (aux.Next(0, 4))
+            {
+                case 0:
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-36, -7), aux.Next(-99, -96), 0), Quaternion.identity);
+                    break;
+                case 1:
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-91, -88), 0), Quaternion.identity);
+                    break;
+                case 2:
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-59, -31), aux.Next(-83, -80), 0), Quaternion.identity);
+                    break;
+                case 3:
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-75, -72), 0), Quaternion.identity);
+                    break;
+            }
+
+            //GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-58, -13), aux.Next(-99, -73), 0), Quaternion.identity);
             bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
             yield return new WaitForEndOfFrame();
             bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().instanciarValores(explosion, this.gameObject.layer);
@@ -478,23 +509,23 @@ public class Mapianguari : CharactersBehaviour
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
                 case 0:
-                    transform.position = new Vector3(-16, -99.8f, 0);
+                    transform.position = new Vector3(-14, -99.8f, 0);
                     break;
                 case 1:
-                    transform.position = new Vector3(-16, -91.5f, 0);
+                    transform.position = new Vector3(-14, -91.5f, 0);
                     break;
                 case 2:
-                    transform.position = new Vector3(-35, -83.2f, 0);
+                    transform.position = new Vector3(-30, -83.2f, 0);
                     break;
                 case 3:
-                    transform.position = new Vector3(-16, -74.9f, 0);
+                    transform.position = new Vector3(-14, -74.9f, 0);
                     break;
             }
             this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-28f, 0f);
+            this.rb.velocity = new Vector2(-26.5f, 0f);
             ataqueCuerpo.enabled = true;
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
@@ -575,6 +606,9 @@ public class Mapianguari : CharactersBehaviour
     }
 
 
+    //***************************************************************************************************
+    //DETECCION DE COLISIONES
+    //***************************************************************************************************
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
