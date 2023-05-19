@@ -6809,6 +6809,35 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: be1eb89806b1534488090ab4971eab50, type: 3}
   m_PrefabInstance: {fileID: 1176958178}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &631715953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631715946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2902255eda1ca27479603143a4ee9823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gold: 0
+  vida: 50
+  defensa: 0
+  ataque: 0
+  ataqueMax: 0
+  estadoViento: 0
+  estadoFuego: 0
+  estadoVeneno: 0
+  counterEstados: 0
+  afectacionViento: 0
+  afectacionFuego: 5
+  afectacionVeneno: 0.05
+  aumentoFuegoPotenciado: 1
+  aumentoDanioParalizacion: 1
+  invulnerable: 0
+  playable: 1
+  explosionInvulnerable: 
 --- !u!1 &659289890
 GameObject:
   m_ObjectHideFlags: 0
@@ -8472,6 +8501,7 @@ MonoBehaviour:
   GameplayLoop: {fileID: 0}
   Controller: {fileID: 0}
   ParticleTestParticleTest: {fileID: 187547737}
+  hurtParticleSystem: {fileID: 0}
   doubleJump: 0
   maxVida: 100
   tiempoInvulnerabilidad: 2
@@ -8958,7 +8988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8653719598885068355, guid: be1eb89806b1534488090ab4971eab50, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8653719598885068355, guid: be1eb89806b1534488090ab4971eab50, type: 3}
       propertyPath: m_TagString
@@ -9273,6 +9303,11 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!198 &1366082082 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5030971772702337263, guid: a9af36137c0e6d34f80adddb7d955da7, type: 3}
+  m_PrefabInstance: {fileID: 1218935754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1397396107
 GameObject:
   m_ObjectHideFlags: 0
@@ -10584,6 +10619,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 13374236545273570, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: AudioFall
       value: 
@@ -10628,6 +10667,10 @@ PrefabInstance:
       propertyPath: AudioWalking
       value: 
       objectReference: {fileID: 1603279521}
+    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: hurtParticleSystem
+      value: 
+      objectReference: {fileID: 1366082082}
     - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: cargaHabilidadLanza
       value: 90
@@ -10686,10 +10729,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3475676534869305462, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8815254794330490651, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
