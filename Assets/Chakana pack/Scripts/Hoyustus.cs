@@ -21,7 +21,7 @@ public class Hoyustus : CharactersBehaviour
     [Header("X Axis Movement")]
     [SerializeField] float walkSpeedGround = 9f;
     [SerializeField] float resistenciaAire = 0.3f;
-    [SerializeField] float walkSpeed = 9f;
+    [SerializeField] float walkSpeed = 12f;
 
     [Space(5)]
 
@@ -241,7 +241,7 @@ public class Hoyustus : CharactersBehaviour
     {
 
         //ESTABLECER FRAME RATE
-        Application.targetFrameRate = 90;
+        Application.targetFrameRate = 70;
 
         //IGNORACION DE COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
         Physics2D.IgnoreLayerCollision(11, 14, true);
@@ -559,8 +559,10 @@ public class Hoyustus : CharactersBehaviour
                 posYAntesSalto = transform.position.y;
                 CSTEPS += 1;
                 limitY = transform.position.y + 7;
+                Debug.Log(limitY);
+
             }
-            else if (Input.GetButton("Jump") && isJumping && transform.position.y <= limitY/*&& currentTimeAir <= timeAir*/)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir*/)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
                 //MODIFICANDO VELOCIDADES
@@ -574,7 +576,6 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS += 1;
             }
 
-
             if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY)// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 secondJump = true;
@@ -586,10 +587,12 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Alto");
                 return;
             }
+
         }
         //DOBLE SALTO
-        if (!firstJump && secondJump && CSTEPS < SSTEPS - 20)
+        if (!firstJump && secondJump && CSTEPS < SSTEPS - 5)
         {
+
             if (Input.GetButtonDown("Jump"))
             {
                 CSTEPS = 1;
@@ -602,7 +605,7 @@ public class Hoyustus : CharactersBehaviour
                 limitY = transform.position.y + 7;
                 cargaHabilidadCondor += 0.05f;
             }
-            else if (Input.GetButton("Jump") && isJumping && transform.position.y <= limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
                 //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
                 //MODIFICANDO VELOCIDADES
@@ -616,7 +619,8 @@ public class Hoyustus : CharactersBehaviour
                 cargaHabilidadCondor += 0.005f;
             }
 
-            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 20)// || transform.position.y - posYAntesSalto > limitSaltoUno)
+
+            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 5)// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 CSTEPS = 0;
                 isJumping = false;
@@ -625,6 +629,7 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Alto 2");
                 return;
             }
+
         }
 
     }
@@ -981,17 +986,17 @@ public class Hoyustus : CharactersBehaviour
     {
         float h = Input.GetAxis("Horizontal");
 
-        if (h >= -0.15 && h <= 0.15)
+        if (h >= -0.10 && h <= 0.10)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
             isWalking = false;
             return;
         }
-        else if (h < -0.15)
+        else if (h < -0.10)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        else if (h > 0.15)
+        else if (h > 0.10)
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
