@@ -369,6 +369,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (playable) {
             //Walk();
+            Falling();
             ataqueLanza();
             Dash();
             Jump(0.1f, 0.1f);
@@ -504,9 +505,14 @@ public class Hoyustus : CharactersBehaviour
         {
             Walk();
         }
-        if (rb.velocity.y < 0) {
-            Falling();
+        /*if (rb.velocity.y < 0)
+        {
+            //Falling();
+            rb.gravityScale = 4;
         }
+        else {
+            rb.gravityScale = 2;
+        }*/
 
         if (vida <= 0)
         {
@@ -728,7 +734,7 @@ public class Hoyustus : CharactersBehaviour
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer)){
 
             anim.SetBool("Grounded", true);
-            isJumping = false;
+            //isJumping = false;
             firstJump = true;
             secondJump = false;
             walkSpeed = walkSpeedGround;
@@ -738,7 +744,7 @@ public class Hoyustus : CharactersBehaviour
         else
         {
             anim.SetBool("Grounded", false);
-            isJumping = true;
+            //isJumping = true;
             walkSpeed = walkSpeedGround * (1 - resistenciaAire);
             return false;
 
@@ -866,8 +872,10 @@ public class Hoyustus : CharactersBehaviour
         //Salto simple
         if (firstJump && !secondJump)
         {
+
             if (Input.GetButtonDown("Jump") && Grounded())
             {
+                isJumping = true;
                 secondJump = false;
                 currentStepsImpulso = 0;
                 rb.AddForce(new Vector2(0, 8f), ForceMode2D.Impulse);
@@ -882,11 +890,13 @@ public class Hoyustus : CharactersBehaviour
                 //MODIFICANDO VELOCIDADES
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
+                isJumping = true;
                 rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 //Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
             }
+
 
             if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir)// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
@@ -917,6 +927,7 @@ public class Hoyustus : CharactersBehaviour
                 //AGREGANDO FUERZAS
                 rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
+                isJumping = true;
                 //Debug.Log("Impulso 2");
                 cargaHabilidadCondor += 0.005f;
             }
@@ -937,7 +948,23 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     void Falling()
     {
-        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 3f;
+        //if (!isJumping && !Grounded())
+        //{
+            if (rb.velocity.y < 0)
+            {
+            //Falling();
+            //rb.gravityScale = 6;
+            rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 6f;
+        }
+            /*else {
+                rb.gravityScale = 2;
+            }*/
+            //rb.gravityScale = 4;
+        //}
+        //else {
+          //  rb.gravityScale = 2;
+        //}
+        //rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 3f;
     }
 
 
