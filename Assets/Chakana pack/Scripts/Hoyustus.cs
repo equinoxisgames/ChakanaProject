@@ -1303,9 +1303,19 @@ public class Hoyustus : CharactersBehaviour
         //dashBody.SetActive(true); **********************************************************************
         //dashBodyTESTING.enabled = true; **************************************
         cargaHabilidadSerpiente += 0.2f;
-        rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
+        //rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
         //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
+
+        IEnumerator movimientoDash()
+        {
+            rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.2f);
+            //rb.velocity = Vector2.zero;
+            isDashing = false;
+        }
+        StartCoroutine(movimientoDash());
+        yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
         isDashing = false;
         //dashBody.SetActive(false);**********************************************************************
         //dashBodyTESTING.enabled = false; *********************************************
