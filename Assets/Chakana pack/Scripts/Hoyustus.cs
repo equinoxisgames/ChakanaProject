@@ -487,7 +487,7 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS++;
                 //currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
-                rb.AddForce(new Vector2(0, 18f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
                 Debug.Log("Salto 2");
                 isJumping = true;
                 secondJump = true;
@@ -571,7 +571,7 @@ public class Hoyustus : CharactersBehaviour
     {
         if (playable)
         {
-            //jumpPrueba();
+            jumpPrueba();
         }
     }
 
@@ -593,7 +593,7 @@ public class Hoyustus : CharactersBehaviour
             else {
                 saltoEspecialSalto();
             }*/
-            jumpPrueba();
+            //jumpPrueba();
             Walk();
         }
         /*if (rb.velocity.y < 0)
@@ -1297,19 +1297,19 @@ public class Hoyustus : CharactersBehaviour
     {
         EstablecerInvulnerabilidades(layerObject);
         isDashing = true;
-        body.enabled = false;
+        //body.enabled = false; **********************************************
         //bodyHoyustus.SetActive(false);
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
         //dashBody.SetActive(true); **********************************************************************
-        dashBodyTESTING.enabled = true;
+        //dashBodyTESTING.enabled = true; **************************************
         cargaHabilidadSerpiente += 0.2f;
         rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
         //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
         yield return new WaitForSeconds(0.2f);
         isDashing = false;
         //dashBody.SetActive(false);**********************************************************************
-        dashBodyTESTING.enabled = false;
-        body.enabled = true;
+        //dashBodyTESTING.enabled = false; *********************************************
+        //body.enabled = true; *******************************************************
         //bodyHoyustus.SetActive(true);
         playable = true;
         rb.gravityScale = 2;
