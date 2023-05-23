@@ -979,7 +979,9 @@ public class Hoyustus : CharactersBehaviour
 
     private void tocarPared()
     {
-        tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * transform.localScale.x, 0, wallLayer)) ? 0 : 1;
+        //tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * 2f, 0, wallLayer)) ? 0 : 1;
+        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.85f +
+            Vector3.up, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up, wallLayer)) ? 0 : 1;
 
     }
 
@@ -2183,6 +2185,10 @@ public class Hoyustus : CharactersBehaviour
         //Gizmos.DrawWireSphere(upAttackTransform.position, upAttackRadius);
         //Gizmos.DrawWireCube(groundTransform.position, new Vector2(groundCheckX, groundCheckY));
         //Gizmos.DrawCube(transform.position + Vector3.up, new Vector3);
+
+        //Gizmos.DrawWireCube(wallPoint.position, Vector3.right * transform.localScale.x);
+        //Gizmos.DrawCube(transform.position + Vector3.right * transform.localScale.x + Vector3.down, new Vector2(0.05f, 2.5f));
+
 
         Gizmos.DrawLine(groundTransform.position, groundTransform.position + new Vector3(0, -groundCheckY));
         Gizmos.DrawLine(groundTransform.position + new Vector3(-groundCheckX, 0), groundTransform.position + new Vector3(-groundCheckX, -groundCheckY));
