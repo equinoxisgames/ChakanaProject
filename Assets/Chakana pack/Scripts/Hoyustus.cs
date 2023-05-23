@@ -1705,7 +1705,7 @@ public class Hoyustus : CharactersBehaviour
         //Debug.Log("Escena: " + escena);
         //Debug.Log("transitionLayerExit: " + transitionLayerExit);
 
-        if (escena == "00- StartRoom 1")
+        /*if (escena == "00- StartRoom 1")
         {
             //Debug.Log("transitionLayerExit " + transitionLayerExit);
 
@@ -1973,7 +1973,7 @@ public class Hoyustus : CharactersBehaviour
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
             SceneManager.LoadScene(11 + 1);
-        }
+        }*/
     }
 
     public bool Roofed()
