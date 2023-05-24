@@ -269,33 +269,39 @@ public class Mapianguari : CharactersBehaviour
     private void OnTriggerStay2D(Collider2D collider){
 
         //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
-        if (!usandoAtaqueEspecial && collider.gameObject.tag == "Player") {
+        if (!usandoAtaqueEspecial && collider.gameObject.tag == "Player")
+        {
             xObjetivo = collider.transform.position.x;
+            float distanciaPlayer = 0;
 
+            if (!atacando) { 
+                //CAMBIO DE ORIENTACION
+                if (xObjetivo < transform.position.x)
+                {
+                    transform.localScale = new Vector3(-escala, escala, 1);
+                }
+                else if (xObjetivo > transform.position.x)
+                {
+                    transform.localScale = new Vector3(escala, escala, 1);
+                }
 
-            //CAMBIO DE ORIENTACION
-            if (xObjetivo < transform.position.x) {
-                transform.localScale = new Vector3(-escala, escala, 1);
+                distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
+
+                //HOYUSTUS DENTRO DEL RANGO DE ATAQUE DEL BOSS
+                if (distanciaPlayer <= distanciaAtaqueAturdimiento)
+                {
+                    tiempoFueraRango = 0;
+                    tiempoDentroRango += Time.deltaTime;
+                }
+                //HOYUSTUS FUERA DEL RANGO DE ATAQUE DEL BOSS
+                else
+                {
+                    tiempoDentroRango = 0;
+                    tiempoFueraRango += Time.deltaTime;
+                }
             }
-            else if (xObjetivo > transform.position.x) {
-                transform.localScale = new Vector3(escala, escala, 1);
-            }
 
-            float distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
-
-            //HOYUSTUS DENTRO DEL RANGO DE ATAQUE DEL BOSS
-            if (distanciaPlayer <= distanciaAtaqueAturdimiento)
-            {
-                tiempoFueraRango = 0;
-                tiempoDentroRango += Time.deltaTime;
-            }
-            //HOYUSTUS FUERA DEL RANGO DE ATAQUE DEL BOSS
-            else {
-                tiempoDentroRango = 0;
-                tiempoFueraRango += Time.deltaTime;
-            }
-
-            if (ataqueDisponible && distanciaPlayer <= distanciaAtaqueBasico && tiempoDentroRango < 5)
+            if (ataqueDisponible && distanciaPlayer <= distanciaAtaqueBasico && tiempoDentroRango > 2 && tiempoDentroRango < 5)
             {
                 StartCoroutine(ataqueCuerpoCuerpo());               
             }
@@ -462,6 +468,7 @@ public class Mapianguari : CharactersBehaviour
         usandoAtaqueEspecial = true;
         ataque = valorAtaqueEspecial;
         ataqueMax = ataque;
+        atacando = true;
 
         //DESAPARICION BOSS
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -543,6 +550,7 @@ public class Mapianguari : CharactersBehaviour
                 transform.position = transform.position + Vector3.right * 100;
                 yield return new WaitForSeconds(0.7f);
             }
+            atacando = false;
         }
         /*yield return new WaitForSeconds(0.1f);
         //APARICION Y STUN
