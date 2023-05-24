@@ -980,8 +980,8 @@ public class Hoyustus : CharactersBehaviour
     private void tocarPared()
     {
         //tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * 2f, 0, wallLayer)) ? 0 : 1;
-        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.85f +
-            Vector3.up, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up, wallLayer)) ? 0 : 1;
+        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.5f +
+            Vector3.up * 1.25f, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
 
     }
 
