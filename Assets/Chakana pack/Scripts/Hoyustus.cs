@@ -736,6 +736,8 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
 
+        Physics2D.IgnoreLayerCollision(3, 11, true);
+
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
         ataque = 15;
@@ -751,6 +753,7 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        Physics2D.IgnoreLayerCollision(3, 11, true);
         atacando = false;
         codigoAtaque = 0;
 
@@ -808,6 +811,72 @@ public class Hoyustus : CharactersBehaviour
                 //DETECCION DE DEL CUERPO DEL ENEMIGO
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
+                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
+                    if (collision.gameObject.tag == "Viento")
+                    {
+                        //REINICIO ESTADO VIENTO
+                        if (estadoViento)
+                        {
+                            StopCoroutine("afectacionEstadoViento");
+                        }
+                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                        else if (counterEstados > 0)
+                        {
+                            counterEstados += 1;
+                            StartCoroutine("combinacionesElementales");
+                            return;
+
+                        }
+
+                        //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
+                        estadoViento = true;
+                        counterEstados = 1;
+                        StartCoroutine("afectacionEstadoViento");
+                    }
+
+                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
+                    else if (collision.gameObject.tag == "Fuego")
+                    {
+                        //REINICIO ESTADO FUEGO
+                        if (estadoFuego)
+                        {
+                            StopCoroutine("afectacionEstadoFuego");
+                        }
+                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                        else if (counterEstados > 0)
+                        {
+                            counterEstados += 10;
+                            StartCoroutine("combinacionesElementales");
+                            return;
+                        }
+
+                        //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
+                        estadoFuego = true;
+                        counterEstados = 10;
+                        StartCoroutine("afectacionEstadoFuego");
+                    }
+
+                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
+                    else if (collision.gameObject.tag == "Veneno")
+                    {
+                        //REINICIO ESTADO VENENO
+                        if (estadoVeneno)
+                        {
+                            StopCoroutine("afectacionEstadoVeneno");
+                        }
+                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                        else if (counterEstados > 0)
+                        {
+                            counterEstados += 100;
+                            StartCoroutine("combinacionesElementales");
+                            return;
+                        }
+
+                        //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
+                        estadoVeneno = true;
+                        counterEstados = 100;
+                        StartCoroutine("afectacionEstadoVeneno");
+                    }
                     //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion));
@@ -831,6 +900,7 @@ public class Hoyustus : CharactersBehaviour
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
+
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
         if (collider.gameObject.layer == 3)
@@ -980,8 +1050,8 @@ public class Hoyustus : CharactersBehaviour
     private void tocarPared()
     {
         //tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * 2f, 0, wallLayer)) ? 0 : 1;
-        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.85f +
-            Vector3.up, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up, wallLayer)) ? 0 : 1;
+        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.5f +
+            Vector3.up * 1.25f, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
 
     }
 
@@ -1182,7 +1252,7 @@ public class Hoyustus : CharactersBehaviour
         {
             //Falling();
             //rb.gravityScale = 6;
-            rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 6f;
+            rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 9f;
         }
         /*else {
             rb.gravityScale = 2;
