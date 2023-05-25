@@ -115,6 +115,7 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("00- StartRoom 1");
+        PlayerPrefs.DeleteAll();
     }
     public void OpenMainMenu()
     {
