@@ -128,7 +128,7 @@ public class Chontacuro1 : CharactersBehaviour
         //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
         if (collider.gameObject.tag == "Player")
         {
-            speed = 4.2f;
+            speed = 6.2f;
             siguiendo = true;
             objetivo = collider.transform.position;
 
@@ -142,7 +142,7 @@ public class Chontacuro1 : CharactersBehaviour
     {
         if (collider.gameObject.tag == "Player") {
             siguiendo = false;
-            speed = 3f;
+            speed = 4f;
             if (transform.position.x >= objetivo.x) {
                 objetivo = limit2;
             }
