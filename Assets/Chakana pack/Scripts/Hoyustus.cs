@@ -1182,7 +1182,7 @@ public class Hoyustus : CharactersBehaviour
         {
             //Falling();
             //rb.gravityScale = 6;
-            rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 6f;
+            rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 9f;
         }
         /*else {
             rb.gravityScale = 2;
