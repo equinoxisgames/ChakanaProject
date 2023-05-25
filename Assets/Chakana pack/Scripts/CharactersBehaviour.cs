@@ -65,7 +65,7 @@ public class CharactersBehaviour : MonoBehaviour
         if(rb.gravityScale == 0) 
             rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
         else
-            rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
         EstablecerInvulnerabilidades(layerObject);
     }
 

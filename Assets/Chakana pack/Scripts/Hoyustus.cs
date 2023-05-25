@@ -736,6 +736,8 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
 
+        Physics2D.IgnoreLayerCollision(3, 11, true);
+
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
         ataque = 15;
@@ -751,6 +753,7 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        Physics2D.IgnoreLayerCollision(3, 11, true);
         atacando = false;
         codigoAtaque = 0;
 
@@ -831,6 +834,7 @@ public class Hoyustus : CharactersBehaviour
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
+
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
         if (collider.gameObject.layer == 3)
