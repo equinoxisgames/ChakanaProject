@@ -5004,6 +5004,91 @@ MonoBehaviour:
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &3487917333722940008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8114245680163491980}
+  - component: {fileID: 6660955319078044688}
+  - component: {fileID: 1083374383756066564}
+  m_Layer: 3
+  m_Name: BloqueanteDash
+  m_TagString: Veneno
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8114245680163491980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487917333722940008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7165638828952281755}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &6660955319078044688
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487917333722940008}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!68 &1083374383756066564
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487917333722940008}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 1.13506, y: 1.2519517}
+  - {x: 0.013986096, y: 1.2426006}
+  - {x: 0.0030441433, y: 0.71083546}
+  - {x: -0.44787595, y: 0.80787426}
+  - {x: -0.932336, y: 0.7760706}
+  - {x: -1.7173961, y: 0.45057583}
+  - {x: -1.9082336, y: -0.2}
+  - {x: 0.7, y: -0.2}
+  - {x: 0.6418204, y: -0.118058875}
+  - {x: 1.1289113, y: 0.28566575}
+  - {x: 1.1249192, y: 1.2623847}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &3601578139666635953
 GameObject:
   m_ObjectHideFlags: 0
@@ -25264,6 +25349,7 @@ Transform:
   - {fileID: 1590453198929476941}
   - {fileID: 3860695121173351583}
   - {fileID: 7165638829690821465}
+  - {fileID: 8114245680163491980}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25373,10 +25459,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 0
+  vida: 15
   defensa: 0
-  ataque: 0
-  ataqueMax: 0
+  ataque: 5
+  ataqueMax: 5
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -25391,10 +25477,12 @@ MonoBehaviour:
   explosionInvulnerable: 
   movementSpeed: 3
   detectionRadius: 3
+  speed: 0
   siguiendo: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
   objetivo: {x: 0, y: 0, z: 0}
+  posY: 0
   anim: {fileID: 0}
 --- !u!68 &6461231520278799732
 EdgeCollider2D:
