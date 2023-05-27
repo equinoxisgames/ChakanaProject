@@ -59,8 +59,6 @@ public class Chontacuro1 : CharactersBehaviour
         objetivo = limit1;
         layerObject = transform.gameObject.layer;
         posY = transform.position.y;
-        vida = 50;
-
     }
 
     // Update is called once per frame
@@ -237,7 +235,7 @@ public class Chontacuro1 : CharactersBehaviour
 
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(objetivo.x, transform.position.y, 0), speed * Time.deltaTime);
 
-        rb.velocity = new Vector2(direccion * speed, rb.velocity.y);
+        rb.velocity = new Vector2(direccion * speed * (1 - afectacionViento), rb.velocity.y);
 
         if (!siguiendo) { 
             if (transform.position.x <= limit1.x)
