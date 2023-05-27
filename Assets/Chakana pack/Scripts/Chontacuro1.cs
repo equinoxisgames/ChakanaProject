@@ -28,6 +28,7 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] private bool siguiendo = false;
 
     [SerializeField] private Vector3 limit1, limit2, objetivo;
+    [SerializeField] private float posY;
 
     int pasos = 0;
 
@@ -57,7 +58,7 @@ public class Chontacuro1 : CharactersBehaviour
         limit2 = transform.GetChild(1).gameObject.transform.position;
         objetivo = limit1;
         layerObject = transform.gameObject.layer;
-
+        posY = transform.position.y;
         vida = 50;
 
     }
@@ -65,7 +66,11 @@ public class Chontacuro1 : CharactersBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
+
+        if (playable)
+        {
+            Move();
+        }
 
         if (rb.velocity.y < 0) {
             Falling();
@@ -74,6 +79,8 @@ public class Chontacuro1 : CharactersBehaviour
         if (vida <= 0) {
             Muerte();
         }
+
+        cambiarLimites();
 
         //detectionRadius = 10;
         //movementSpeed = 5f;
@@ -103,6 +110,16 @@ public class Chontacuro1 : CharactersBehaviour
             //Chontacuro1Flip(direction.normalized.x);
             anim.SetBool("Chontacuro1Walk", false);
         }*/
+
+    }
+
+
+    private void cambiarLimites()
+    {
+        if (transform.position.y <= posY - 3) {
+            limit1 = transform.GetChild(0).gameObject.transform.position;
+            limit2 = transform.GetChild(1).gameObject.transform.position;
+        }
 
     }
 
@@ -144,6 +161,22 @@ public class Chontacuro1 : CharactersBehaviour
             siguiendo = false;
             speed = 4f;
             if (transform.position.x >= objetivo.x) {
+                objetivo = limit2;
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 16)
+        {
+            if (objetivo == limit1) {
+                limit1 = transform.position + Vector3.right;
+                objetivo = limit1;
+            }
+            else
+            {
+                limit2 = transform.position - Vector3.right;
                 objetivo = limit2;
             }
         }
@@ -202,7 +235,9 @@ public class Chontacuro1 : CharactersBehaviour
         float direccion = ((transform.position.x < objetivo.x)) ? 1 : -1;
         transform.localScale = new Vector3(direccion, 1, 0);
 
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(objetivo.x, transform.position.y, 0), speed * Time.deltaTime);
+        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(objetivo.x, transform.position.y, 0), speed * Time.deltaTime);
+
+        rb.velocity = new Vector2(direccion * speed, rb.velocity.y);
 
         if (!siguiendo) { 
             if (transform.position.x <= limit1.x)
@@ -220,6 +255,7 @@ public class Chontacuro1 : CharactersBehaviour
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
+
         if (collider.gameObject.layer == 14 && playable)
         {
             int direccion = 1;
