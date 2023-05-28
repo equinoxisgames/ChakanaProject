@@ -339,6 +339,7 @@ public class Hoyustus : CharactersBehaviour
         tocarPared();
         //HABILIDADES ELEMENTALES
 
+        Debug.Log(CSTEPS);
 
         if (botonCuracion >= 0.2f)
         {
@@ -457,7 +458,7 @@ public class Hoyustus : CharactersBehaviour
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
                 isJumping = true;
-                rb.AddForce(new Vector2(0, 0.75f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 0.75f - CSTEPS/20), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 //Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
@@ -1175,7 +1176,7 @@ public class Hoyustus : CharactersBehaviour
                 isJumping = true;
                 secondJump = false;
                 currentStepsImpulso = 0;
-                rb.AddForce(new Vector2(0, 8f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 10f), ForceMode2D.Impulse);
                 //Debug.Log("Salto");
                 isJumping = true;
                 cargaHabilidadCondor += 0.05f;
@@ -1188,7 +1189,7 @@ public class Hoyustus : CharactersBehaviour
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
                 isJumping = true;
-                rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 0.45f - CSTEPS), ForceMode2D.Impulse);
                 currentTimeAir += Time.deltaTime;
                 //Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
