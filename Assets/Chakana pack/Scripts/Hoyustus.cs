@@ -196,7 +196,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool isDashing = false;
     [SerializeField] private bool atacando = false;
     [SerializeField] private int codigoAtaque = 0;
-    [SerializeField] private int SSTEPS = 60;
+    [SerializeField] private int SSTEPS = 80;
     [SerializeField] private int CSTEPS = 0;
 
     float limitY = 0f;
@@ -326,6 +326,9 @@ public class Hoyustus : CharactersBehaviour
         //CARGA DE PREFABS
         explosion = Resources.Load<GameObject>("Explosion");
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
+
+
+        SSTEPS = 80;
     }
 
 
@@ -1283,6 +1286,7 @@ public class Hoyustus : CharactersBehaviour
             if (v == 0)
             {
                 //Aniadir el pequenio impulso de movimiento
+                anim.Play("Lanza Lateral");
                 codigoAtaque = 4;
             }
             else if (v != 0 && h == 0)
@@ -1319,6 +1323,7 @@ public class Hoyustus : CharactersBehaviour
                 {
                     //Aniadir el pequenio impulso de movimiento
                     //lanza.SetActive(true);
+                    anim.Play("Lanza Lateral");
                     codigoAtaque = 4;
                 }
             }
