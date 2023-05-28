@@ -31,7 +31,8 @@ public class MainMenu : MonoBehaviour
 
     private bool joystickIzquierdoMovido = false;
     private bool botonGamePadPress = false;
-    private bool AnyKeyPress = false;
+    private bool anyKeyPress = false;
+    private bool altKeyPress = false;
 
     void Start()
     {
@@ -41,6 +42,7 @@ public class MainMenu : MonoBehaviour
         if (Input.GetJoystickNames().Length > 0 && !string.IsNullOrEmpty(Input.GetJoystickNames()[0]))
         {
             gamePadConectado = true;
+            joystickIzquierdoMovido = true;
             Debug.Log("Start Gamepad conectado");
         }else
             mouseMovido = true;
@@ -53,25 +55,38 @@ public class MainMenu : MonoBehaviour
 
         if (e.isKey)
         {
-            AnyKeyPress = true;
+            anyKeyPress = true;
             Debug.Log("Se ha presionado una tecla en el teclado: " + e.keyCode);
         }
     }
 
     void Update()
     {
-        if (AnyKeyPress && !joystickIzquierdoMovido)
+
+        
+
+        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
         {
-            mouseMovido = true;
-            joystickIzquierdoMovido = false;
-            Debug.Log("Se ha aplastado el teclado por tanto el mouse se ha movido.");
+            altKeyPress = true;
+            Debug.Log("Se ha presionado la tecla Alt en el teclado.");
         }
+        if (altKeyPress && !Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
+        {
+            Debug.Log("Se ha soltado la tecla Alt en el teclado.");
+            altKeyPress = false;
+        }
+
+        if(anyKeyPress)
+            mouseMovido = true;
+        else
+            mouseMovido = false;
 
         // Validar movimiento del mouse
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
         {
             mouseMovido = true;
             joystickIzquierdoMovido = false;
+            anyKeyPress = false;
             Debug.Log("El mouse se ha movido.");
         }
         // Validar movimiento del joystick izquierdo del gamepad
@@ -79,10 +94,19 @@ public class MainMenu : MonoBehaviour
         float joystickY = Input.GetAxis("Vertical");
         if (Mathf.Abs(joystickX) > joystickThreshold || Mathf.Abs(joystickY) > joystickThreshold)
         {
+            mouseMovido = false;
+            if (!anyKeyPress)
+            { 
             joystickIzquierdoMovido = true;
-            //mouseMovido = false;
-            //Debug.Log("Joystick izquierdo del gamepad se ha movido.");
+            
+            anyKeyPress = false;
+            Debug.Log("Joystick izquierdo del gamepad se ha movido. La variable mouseMovido es "+ mouseMovido);
+            }else
+                Debug.Log("Else Joystick izquierdo del gamepad se ha movido. mouseMovido es " + mouseMovido);
         }
+
+        //mouseMovido = true;
+
         Escape();
     }
     public void Escape()
@@ -118,27 +142,36 @@ public class MainMenu : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Escape) && mouseMovido)
                 {
+                    
+                    
+                        EscapeHomeMenu();
+
                     Debug.Log("Se ha presionado la tecla Escape en el teclado.");
-                    EscapeHomeMenu();
+
                 }
                 else
                 {
-                    Debug.Log("Se ha presionado el botón Escape (start) del gamepad");
+                    Debug.Log("Se ha presionado el botón Escape (start) del gamepad porque mouseMovido es "+ mouseMovido);
                 }
             }
         }
         else
         {
-            if (Input.GetButtonDown("Fire2") && joystickIzquierdoMovido)
+            if (Input.GetButtonDown("Fire2"))
             {
+                Debug.Log("FIRE2 O ALT: joystickIzquierdoMovido>"+ joystickIzquierdoMovido+ " altKeyPress>"+ altKeyPress);
+
                 if (escena != "00- Main Menu 0")
                 {
                     Debug.Log("escena != 00 - Main Menu 0");
                 }
                 else
                 {
-                    Debug.Log("Se ha presionado la tecla Escape en el gamepad.");
-                    EscapeHomeMenu();
+                    if (joystickIzquierdoMovido && !altKeyPress)
+                    {
+                        EscapeHomeMenu();
+                        
+                    }
                 }
             }
             else
@@ -157,7 +190,7 @@ public class MainMenu : MonoBehaviour
             homeMenu.gameObject.SetActive(false);
             boolHomeMenuActive = false;
             ActivateExitGame();
-            Debug.Log("DESACTIVAR HOME MENU");
+
             btExitGame.Select();
         }
         else
@@ -165,7 +198,7 @@ public class MainMenu : MonoBehaviour
             homeMenu.gameObject.SetActive(true);
             boolHomeMenuActive = true;
             ActivateHomeMenu();
-            Debug.Log("ACTIVAR HOME MENU");
+
         }
     }
     public void ActivateSlot1()
