@@ -196,12 +196,12 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool isDashing = false;
     [SerializeField] private bool atacando = false;
     [SerializeField] private int codigoAtaque = 0;
-    [SerializeField] private int SSTEPS = 80;
+    [SerializeField] private int SSTEPS = 45;
     [SerializeField] private int CSTEPS = 0;
 
     float limitY = 0f;
 
-    [SerializeField] private float correctorSalto = 18;
+    [SerializeField] private float correctorSalto = 19;
 
     private bool saltoEspecial = false;
 
@@ -330,7 +330,7 @@ public class Hoyustus : CharactersBehaviour
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
 
 
-        SSTEPS = 80;
+        SSTEPS = 50;
     }
 
 
@@ -463,7 +463,7 @@ public class Hoyustus : CharactersBehaviour
                 //AGREGANDO FUERZAS
                 isJumping = true;
                 //rb.velocity = new Vector2(rb.velocity.x, ((7 + 0.5f * 18f * ((35 - CSTEPS) * (35 - CSTEPS) )/20)/(35 - CSTEPS)/20));
-                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((35 - CSTEPS) * (35 - CSTEPS)) / 20) / (35 - CSTEPS) / 20)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 30) / (SSTEPS - CSTEPS) / 30)), ForceMode2D.Impulse);
                 ///rb.AddForce(new Vector2(0, 0.8f - (0.022f * CSTEPS)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 //Debug.Log("Impulso");
