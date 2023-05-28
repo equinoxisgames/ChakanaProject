@@ -178,6 +178,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private GameObject bolaVeneno;
     //MODIFICAR TRAS PRUEBAS
     [SerializeField] private Transform wallPoint;
+    [SerializeField] private Transform roofPoint;
 
 
 
@@ -436,7 +437,7 @@ public class Hoyustus : CharactersBehaviour
     private void jumpPrueba()
     {
 
-        if (firstJump && !secondJump && CSTEPS < SSTEPS)
+        if (firstJump && !secondJump && CSTEPS < SSTEPS && !isTouchingRoof())
         {
 
             if (Input.GetButtonDown("Jump") && Grounded())
@@ -471,7 +472,7 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS++;
             }
 
-            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY)// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 secondJump = true;
                 isJumping = false;
@@ -486,7 +487,7 @@ public class Hoyustus : CharactersBehaviour
 
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump && CSTEPS < SSTEPS - 5)
+        else if (!firstJump && secondJump && CSTEPS < SSTEPS - 5 && !isTouchingRoof())
         {
 
             if (Input.GetButtonDown("Jump") && CSTEPS == 0)
@@ -516,7 +517,7 @@ public class Hoyustus : CharactersBehaviour
             }
 
 
-            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 5)// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 5 || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 CSTEPS = 0;
                 isJumping = false;
@@ -1051,6 +1052,14 @@ public class Hoyustus : CharactersBehaviour
 
         }
 
+    }
+
+
+    private bool isTouchingRoof() {
+        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer)) {
+            return true;
+        }
+        return false;
     }
 
 
