@@ -6308,7 +6308,7 @@ GameObject:
   - component: {fileID: 468411302}
   - component: {fileID: 468411301}
   - component: {fileID: 468411300}
-  m_Layer: 6
+  m_Layer: 16
   m_Name: Plataforma (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6323,7 +6323,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468411298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -50.9, y: -7.4, z: 0}
+  m_LocalPosition: {x: -28.95, y: -0.35, z: 0}
   m_LocalScale: {x: 9, y: 7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8572,6 +8572,7 @@ MonoBehaviour:
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 0}
+  roofPoint: {fileID: 0}
   botonCuracion: 0
   aplastarBotonCuracion: 0
   curando: 0
@@ -8580,6 +8581,7 @@ MonoBehaviour:
   codigoAtaque: 0
   SSTEPS: 60
   CSTEPS: 0
+  correctorSalto: 19
 --- !u!95 &1097574632
 Animator:
   serializedVersion: 4

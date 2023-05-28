@@ -134,6 +134,22 @@ public class Chontacuro1 : CharactersBehaviour
     private void FixedUpdate()
     {
         //Move();
+        if (playable)
+        {
+            Move();
+        }
+
+        if (rb.velocity.y < 0)
+        {
+            Falling();
+        }
+
+        if (vida <= 0)
+        {
+            Muerte();
+        }
+
+        cambiarLimites();
     }
 
 

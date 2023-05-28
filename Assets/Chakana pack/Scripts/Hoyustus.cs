@@ -439,6 +439,18 @@ public class Hoyustus : CharactersBehaviour
 
         if (firstJump && !secondJump && CSTEPS < SSTEPS && !isTouchingRoof())
         {
+            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            {
+                secondJump = true;
+                isJumping = false;
+                firstJump = false;
+                CSTEPS = SSTEPS;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                currentTimeAir = 0;
+                //limitY += 7;
+                //Debug.Log("Alto");
+                return;
+            }
 
             if (Input.GetButtonDown("Jump") && Grounded())
             {
@@ -472,27 +484,14 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS++;
             }
 
-            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
-            {
-                secondJump = true;
-                isJumping = false;
-                firstJump = false;
-                CSTEPS = 0;
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                currentTimeAir = 0;
-                //limitY += 7;
-                //Debug.Log("Alto");
-                return;
-            }
-
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump && CSTEPS < SSTEPS - 5 && !isTouchingRoof())
+        else if (!firstJump && secondJump && CSTEPS <= SSTEPS && !isTouchingRoof())
         {
 
-            if (Input.GetButtonDown("Jump") && CSTEPS == 0)
+            if (Input.GetButtonDown("Jump") && CSTEPS == SSTEPS)
             {
-                CSTEPS++;
+                CSTEPS = 1;
                 //currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
                 rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
@@ -517,7 +516,7 @@ public class Hoyustus : CharactersBehaviour
             }
 
 
-            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 5 || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS > SSTEPS || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
                 CSTEPS = 0;
                 isJumping = false;
