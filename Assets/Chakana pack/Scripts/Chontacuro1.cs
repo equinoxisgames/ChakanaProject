@@ -30,10 +30,14 @@ public class Chontacuro1 : CharactersBehaviour
 
     [SerializeField] private Vector3 limit1, limit2, objetivo;
     [SerializeField] private float posY;
+    int deteccion = 1;
 
     int pasos = 0;
 
     [SerializeField] Animator anim;
+
+    [SerializeField] Transform groundDetector;
+    [SerializeField] LayerMask groundLayer;
 
     private void Awake()
     {
@@ -148,6 +152,7 @@ public class Chontacuro1 : CharactersBehaviour
     private void FixedUpdate()
     {
         //Move();
+        detectarPiso();
         if (playable)
         {
             Move();
@@ -183,11 +188,24 @@ public class Chontacuro1 : CharactersBehaviour
         }
     }
 
+    public void detectarPiso() {
+        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer)) {
+            if (direction == - 1) {
+                limit1 = transform.position + Vector3.right * 0.1f;
+            }
+            else if(direction == 1)
+            {
+                limit2 = transform.position - Vector3.right * 0.1f;
+            }
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player") {
             siguiendo = false;
             speed = 4f;
+            deteccion = 1;
             if (transform.position.x >= collider.transform.position.x) {
                 if (transform.position.x < limit1.x)
                 {
@@ -234,6 +252,11 @@ public class Chontacuro1 : CharactersBehaviour
                 limit2 = transform.position - Vector3.right;
                 objetivo = limit2;
                 direction = -1;
+            }
+
+            if(siguiendo)
+            {
+                deteccion = 0;
             }
         }
     }
@@ -293,7 +316,7 @@ public class Chontacuro1 : CharactersBehaviour
 
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(objetivo.x, transform.position.y, 0), speed * Time.deltaTime);
 
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento) * deteccion, rb.velocity.y);
 
         if (!siguiendo) { 
             if (transform.position.x <= limit1.x)

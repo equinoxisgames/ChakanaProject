@@ -344,8 +344,8 @@ public class Hoyustus : CharactersBehaviour
         //Walk(xAxis);
         tocarPared();
         //HABILIDADES ELEMENTALES
-        Debug.Log(CSTEPS);
-        Debug.Log(rb.velocity.y);
+        //Debug.Log(CSTEPS);
+        //Debug.Log(rb.velocity.y);
         if (botonCuracion >= 0.2f)
         {
             botonCuracion = 0f;
