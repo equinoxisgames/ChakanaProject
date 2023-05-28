@@ -444,7 +444,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 isJumping = false;
                 firstJump = false;
-                CSTEPS = SSTEPS;
+                CSTEPS = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 currentTimeAir = 0;
                 //limitY += 7;
@@ -489,7 +489,7 @@ public class Hoyustus : CharactersBehaviour
         else if (!firstJump && secondJump && CSTEPS <= SSTEPS && !isTouchingRoof())
         {
 
-            if (Input.GetButtonDown("Jump") && CSTEPS == SSTEPS)
+            if (Input.GetButtonDown("Jump") && CSTEPS == 0)
             {
                 CSTEPS = 1;
                 //currentStepsImpulso = 0;
