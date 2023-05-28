@@ -201,6 +201,8 @@ public class Hoyustus : CharactersBehaviour
 
     float limitY = 0f;
 
+    [SerializeField] private float correctorSalto = 18;
+
     private bool saltoEspecial = false;
 
     public void isTocandoPared(int value)
@@ -341,9 +343,8 @@ public class Hoyustus : CharactersBehaviour
         //Walk(xAxis);
         tocarPared();
         //HABILIDADES ELEMENTALES
-
         Debug.Log(CSTEPS);
-
+        Debug.Log(rb.velocity.y);
         if (botonCuracion >= 0.2f)
         {
             botonCuracion = 0f;
@@ -461,7 +462,9 @@ public class Hoyustus : CharactersBehaviour
                 //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
                 //AGREGANDO FUERZAS
                 isJumping = true;
-                rb.AddForce(new Vector2(0, 0.75f - CSTEPS/20), ForceMode2D.Impulse);
+                //rb.velocity = new Vector2(rb.velocity.x, ((7 + 0.5f * 18f * ((35 - CSTEPS) * (35 - CSTEPS) )/20)/(35 - CSTEPS)/20));
+                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((35 - CSTEPS) * (35 - CSTEPS)) / 20) / (35 - CSTEPS) / 20)), ForceMode2D.Impulse);
+                ///rb.AddForce(new Vector2(0, 0.8f - (0.022f * CSTEPS)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 //Debug.Log("Impulso");
                 cargaHabilidadCondor += 0.005f;
