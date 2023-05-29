@@ -5,17 +5,13 @@ using UnityEngine;
 public class Pinchos02 : MonoBehaviour
 {
     Vector3 pos;
+    [SerializeField] GameObject exVFX;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Hoyustus>().recibirDanio(10);
-            //StartCoroutine(DelayDmg(collision.gameObject.GetComponent<Hoyustus>()));
-
-            pos.z = collision.transform.position.z;
-
-            collision.transform.position = pos;
+            StartCoroutine(DelayDmg(collision.gameObject.GetComponent<Hoyustus>()));
         }
     }
 
@@ -24,15 +20,16 @@ public class Pinchos02 : MonoBehaviour
         pos = e;
     }
 
-    /*IEnumerator DelayDmg(Hoyustus player)
+    IEnumerator DelayDmg(Hoyustus player)
     {
         player.recibirDanio(10);
-        player.setPlayable(false);
-        player.GetComponent<Rigidbody2D>().isKinematic = true;
+        Instantiate(exVFX, transform.position, Quaternion.identity);
 
-        yield return new WaitForSeconds(1f);
+        player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12.5f, ForceMode2D.Impulse);
 
-        player.setPlayable(true);
-        player.GetComponent<Rigidbody2D>().isKinematic = false;
-    }*/
+        yield return new WaitForSeconds(0.44f);
+        pos.z = player.transform.position.z;
+
+        player.transform.position = pos;
+    }
 }

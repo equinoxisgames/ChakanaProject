@@ -28,7 +28,7 @@ public class CameraTopDown : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
 
-                if (timer >= 0.4f)
+                if (timer >= 0.2f)
                 {
                     if (!cinemaC2.activeSelf)
                     {
@@ -52,7 +52,7 @@ public class CameraTopDown : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
 
-                if(timer >= 0.4f)
+                if(timer >= 0.2f)
                 {
                     if (!cinemaC2.activeSelf)
                     {
