@@ -40,7 +40,6 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] bool hayPiso = true;
 
-
     private void Awake()
     {
         //sp = GetComponent<SpriteRenderer>();
@@ -53,6 +52,7 @@ public class Chontacuro1 : CharactersBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fuerzaRecoil = 1;
         //cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
         explosionInvulnerable = "ExplosionEnemy";
         //gameObject.name = Chontacuro1Name;
@@ -276,6 +276,14 @@ public class Chontacuro1 : CharactersBehaviour
         }
     }
 
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
+        EstablecerInvulnerabilidades(layerObject);
+    }
+
 
     private void Chontacuro1Flip(float xDirection)
     {
@@ -363,7 +371,7 @@ public class Chontacuro1 : CharactersBehaviour
                 direccion = 1;
             }
 
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();

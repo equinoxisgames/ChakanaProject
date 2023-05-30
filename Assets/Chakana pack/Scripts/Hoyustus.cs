@@ -668,6 +668,17 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        if(rb.gravityScale == 0) 
+            rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+        else
+            rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
+        EstablecerInvulnerabilidades(layerObject);
+    }
+
 
     //***************************************************************************************************
     //CURACION DEL PLAYER
@@ -892,7 +903,7 @@ public class Hoyustus : CharactersBehaviour
                     }
                     //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio(direccion));
+                    StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                 }
 
             }
@@ -901,7 +912,7 @@ public class Hoyustus : CharactersBehaviour
 
             }
             //vida -= 20;
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            //StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
     }
@@ -938,7 +949,7 @@ public class Hoyustus : CharactersBehaviour
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio(direccion));
+                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                 }
 
             }
