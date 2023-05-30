@@ -30,7 +30,7 @@ public class Chontacuro1 : CharactersBehaviour
 
     [SerializeField] private Vector3 limit1, limit2, objetivo;
     [SerializeField] private float posY;
-    int deteccion = 1;
+    [SerializeField] int deteccion = 1;
 
     int pasos = 0;
 
@@ -38,6 +38,7 @@ public class Chontacuro1 : CharactersBehaviour
 
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] bool hayPiso = true;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class Chontacuro1 : CharactersBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fuerzaRecoil = 1;
         //cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
         explosionInvulnerable = "ExplosionEnemy";
         //gameObject.name = Chontacuro1Name;
@@ -175,20 +177,26 @@ public class Chontacuro1 : CharactersBehaviour
     private void OnTriggerStay2D(Collider2D collider)
     {
 
-        //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
         if (collider.gameObject.tag == "Player")
         {
-            speed = 6.2f;
-            siguiendo = true;
-            objetivo = collider.transform.position;
-
             //CAMBIO DE ORIENTACION
             direction = ((transform.position.x < objetivo.x)) ? 1 : -1;
             transform.localScale = new Vector3(direction, 1, 0);
+
+
+            if (!detectarPiso())
+            {
+                speed = 0;
+            }
+            else {
+                speed = 6.2f;
+                siguiendo = true;
+                objetivo = collider.transform.position;
+            }
         }
     }
 
-    public void detectarPiso() {
+    public bool detectarPiso() {
         if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer)) {
             if (direction == - 1) {
                 limit1 = transform.position + Vector3.right * 0.1f;
@@ -197,7 +205,9 @@ public class Chontacuro1 : CharactersBehaviour
             {
                 limit2 = transform.position - Vector3.right * 0.1f;
             }
+            return false;
         }
+        return true;
     }
 
     private void OnTriggerExit2D(Collider2D collider)
@@ -247,19 +257,33 @@ public class Chontacuro1 : CharactersBehaviour
                 objetivo = limit1;
                 direction = 1;
             }
-            else
+            else if(objetivo == limit2) 
             {
                 limit2 = transform.position - Vector3.right;
                 objetivo = limit2;
                 direction = -1;
             }
 
-            if(siguiendo)
+
+            if (siguiendo)
             {
-                deteccion = 0;
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                speed = 0;
+            }
+            else {
+                speed = 4;
             }
         }
     }
+
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
+        EstablecerInvulnerabilidades(layerObject);
+    }
+
 
     private void Chontacuro1Flip(float xDirection)
     {
@@ -347,7 +371,7 @@ public class Chontacuro1 : CharactersBehaviour
                 direccion = 1;
             }
 
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();

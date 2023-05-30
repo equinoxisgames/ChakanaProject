@@ -27,16 +27,17 @@ public class CharactersBehaviour : MonoBehaviour
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
+    public float fuerzaRecoil;
 
 
 
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
-    protected IEnumerator cooldownRecibirDanio(int direccion)
+    protected IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
 
-        Recoil(direccion);
+        Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
         {
             yield break;
@@ -58,15 +59,15 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //LOGICA DE RECOIL
     //***************************************************************************************************
-    protected void Recoil(int direccion)
+    protected virtual void Recoil(int direccion, float fuerzaRecoil)
     {
-        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+        /*playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
 
         if(rb.gravityScale == 0) 
             rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
         else
             rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-        EstablecerInvulnerabilidades(layerObject);
+        EstablecerInvulnerabilidades(layerObject);*/
     }
 
 
@@ -115,7 +116,7 @@ public class CharactersBehaviour : MonoBehaviour
             }
 
             recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
     }
