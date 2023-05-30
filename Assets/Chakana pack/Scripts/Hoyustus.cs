@@ -441,6 +441,7 @@ public class Hoyustus : CharactersBehaviour
         {
             if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
+                anim.Play("Caer");
                 secondJump = true;
                 isJumping = false;
                 firstJump = false;
@@ -454,6 +455,7 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonDown("Jump") && Grounded())
             {
+                anim.Play("Saltar");
                 saltoEspecial = false;
                 isJumping = true;
                 secondJump = false;
@@ -491,6 +493,7 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonDown("Jump") && CSTEPS == 0)
             {
+                anim.Play("Doble Salto");
                 CSTEPS = 1;
                 //currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
@@ -518,6 +521,7 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS > SSTEPS || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
+                anim.Play("Caer");
                 CSTEPS = 0;
                 isJumping = false;
                 secondJump = false;
@@ -659,6 +663,8 @@ public class Hoyustus : CharactersBehaviour
         anim.SetBool("Atacando", atacando);
         //anim.SetBool("Curando", curando);
         anim.SetInteger("CA", codigoAtaque);
+        anim.SetBool("SecondJump", secondJump);
+        anim.SetBool("Jumping", isJumping);
 
     }
 
@@ -1385,6 +1391,7 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator dashCooldown()
     {
         EstablecerInvulnerabilidades(layerObject);
+        anim.Play("Dash");
         isDashing = true;
         //body.enabled = false; **********************************************
         //bodyHoyustus.SetActive(false);
