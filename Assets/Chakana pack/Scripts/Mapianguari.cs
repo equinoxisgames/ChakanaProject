@@ -49,6 +49,7 @@ public class Mapianguari : CharactersBehaviour
     private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
     {
+        fuerzaRecoil = 5;
         //Physics2D.IgnoreLayerCollision(13, 15, true);
         charcoVeneno = new GameObject();
         charcoVeneno.SetActive(false);
@@ -145,6 +146,16 @@ public class Mapianguari : CharactersBehaviour
         }
     }
 
+
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+
+        rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
+        EstablecerInvulnerabilidades(layerObject);
+    }
+
+
     //***************************************************************************************************
     //DETECCION DE TRIGGERS
     //***************************************************************************************************
@@ -162,7 +173,7 @@ public class Mapianguari : CharactersBehaviour
                 direccion = 1;
             }
 
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();

@@ -299,7 +299,7 @@ public class Enemies : CharactersBehaviour
                 direccion = 1;
             }
 
-            StartCoroutine(cooldownRecibirDanio(direccion));
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
