@@ -24,12 +24,13 @@ public class Pinchos02 : MonoBehaviour
     {
         player.recibirDanio(10);
         Instantiate(exVFX, transform.position, Quaternion.identity);
-
-        player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12.5f, ForceMode2D.Impulse);
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.44f);
-        pos.z = player.transform.position.z;
 
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        pos.z = player.transform.position.z;
         player.transform.position = pos;
     }
 }
