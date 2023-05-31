@@ -53,6 +53,7 @@ public class Chontacuro1 : CharactersBehaviour
     void Start()
     {
         fuerzaRecoil = 1;
+        inmuneDash = true;
         //cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
         explosionInvulnerable = "ExplosionEnemy";
         //gameObject.name = Chontacuro1Name;

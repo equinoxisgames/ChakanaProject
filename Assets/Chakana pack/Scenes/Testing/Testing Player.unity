@@ -6354,7 +6354,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468411298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.49, y: -1.18, z: 0}
+  m_LocalPosition: {x: -31, y: -18.5, z: 0}
   m_LocalScale: {x: 9, y: 7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6966,7 +6966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660793193}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.66, y: -1.25, z: 0}
+  m_LocalPosition: {x: -10.3, y: -14, z: 0}
   m_LocalScale: {x: 9, y: 7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8647,6 +8647,7 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: ExplosionPlayer
+  fuerzaRecoil: 0
   myVirtualCamera: {fileID: 0}
   myCameraSensivity: 10
   pState: {fileID: 0}
@@ -10542,10 +10543,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 13374236545273570, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: looping
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: AudioFall
       value: 
@@ -10594,21 +10591,9 @@ PrefabInstance:
       propertyPath: hurtParticleSystem
       value: 
       objectReference: {fileID: 1366082082}
-    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: cargaHabilidadLanza
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: cargaHabilidadCondor
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 2374536855388483605, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_Name
       value: Hoyustus Solicitud Prefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 2374536855388483605, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3475676534869305462, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_RootOrder
