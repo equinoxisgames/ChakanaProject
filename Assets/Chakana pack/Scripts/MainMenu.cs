@@ -79,7 +79,7 @@ public class MainMenu : MonoBehaviour
         if(anyKeyPress)
             mouseMovido = true;
         else
-            mouseMovido = false;
+            mouseMovido = false ;
 
         // Validar movimiento del mouse
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
@@ -143,7 +143,7 @@ public class MainMenu : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Escape) && mouseMovido)
                 {
                     
-                    
+                   
                         EscapeHomeMenu();
 
                     Debug.Log("Se ha presionado la tecla Escape en el teclado.");
@@ -151,6 +151,7 @@ public class MainMenu : MonoBehaviour
                 }
                 else
                 {
+                   
                     Debug.Log("Se ha presionado el botón Escape (start) del gamepad porque mouseMovido es "+ mouseMovido);
                 }
             }
