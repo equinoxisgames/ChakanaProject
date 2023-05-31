@@ -439,7 +439,7 @@ public class Hoyustus : CharactersBehaviour
     private void jumpPrueba()
     {
 
-        if (firstJump && !secondJump && !isTouchingRoof())
+        if (firstJump && !secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
             if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
@@ -447,7 +447,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 isJumping = false;
                 firstJump = false;
-                CSTEPS = 1;
+                CSTEPS = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 currentTimeAir = 0;
                 //limitY += 7;
@@ -490,13 +490,13 @@ public class Hoyustus : CharactersBehaviour
 
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump  && !isTouchingRoof())
+        else if (!firstJump && secondJump  && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
 
-            if (Input.GetButtonDown("Jump") && CSTEPS == 1)
+            if (Input.GetButtonDown("Jump") && CSTEPS == 0)
             {
                 anim.Play("Doble Salto");
-                CSTEPS = 2;
+                CSTEPS = 1;
                 //currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
                 rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
