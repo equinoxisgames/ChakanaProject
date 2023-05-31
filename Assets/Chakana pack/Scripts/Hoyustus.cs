@@ -250,6 +250,8 @@ public class Hoyustus : CharactersBehaviour
         //ESTABLECER FRAME RATE
         Application.targetFrameRate = 70;
 
+        limitY = transform.position.y + 2;
+
         //IGNORACION DE COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
         Physics2D.IgnoreLayerCollision(11, 14, true);
         Physics2D.IgnoreLayerCollision(13, 12, true);
@@ -437,7 +439,7 @@ public class Hoyustus : CharactersBehaviour
     private void jumpPrueba()
     {
 
-        if (firstJump && !secondJump && CSTEPS < SSTEPS && !isTouchingRoof())
+        if (firstJump && !secondJump && !isTouchingRoof())
         {
             if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
@@ -445,7 +447,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 isJumping = false;
                 firstJump = false;
-                CSTEPS = 0;
+                CSTEPS = 1;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 currentTimeAir = 0;
                 //limitY += 7;
@@ -488,13 +490,13 @@ public class Hoyustus : CharactersBehaviour
 
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump && CSTEPS <= SSTEPS && !isTouchingRoof())
+        else if (!firstJump && secondJump  && !isTouchingRoof())
         {
 
-            if (Input.GetButtonDown("Jump") && CSTEPS == 0)
+            if (Input.GetButtonDown("Jump") && CSTEPS == 1)
             {
                 anim.Play("Doble Salto");
-                CSTEPS = 1;
+                CSTEPS = 2;
                 //currentStepsImpulso = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
                 rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
