@@ -948,7 +948,7 @@ public class Hoyustus : CharactersBehaviour
             {
 
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
-                if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
+                if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
