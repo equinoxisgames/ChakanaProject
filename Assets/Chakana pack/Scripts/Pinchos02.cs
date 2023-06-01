@@ -5,18 +5,21 @@ using UnityEngine;
 public class Pinchos02 : MonoBehaviour
 {
     Vector3 pos;
+    bool isActive = false;
     [SerializeField] GameObject exVFX;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !isActive)
         {
+            isActive = true;
             StartCoroutine(DelayDmg(collision.gameObject.GetComponent<Hoyustus>()));
         }
     }
 
     public void NewPos(Vector3 e)
     {
+        if (isActive) return;
         pos = e;
     }
 
@@ -32,5 +35,6 @@ public class Pinchos02 : MonoBehaviour
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         pos.z = player.transform.position.z;
         player.transform.position = pos;
+        isActive = false;
     }
 }

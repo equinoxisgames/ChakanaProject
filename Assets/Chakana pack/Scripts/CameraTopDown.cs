@@ -24,11 +24,11 @@ public class CameraTopDown : MonoBehaviour
     {
         if(b <= 0.2 && b >= -0.2)
         {
-            if(a >= 0.9)
+            if(a >= 0.8)
             {
                 timer += 1 * Time.deltaTime;
 
-                if (timer >= 0.2f)
+                if (timer >= 0.12f)
                 {
                     if (!cinemaC2.activeSelf)
                     {
@@ -48,11 +48,11 @@ public class CameraTopDown : MonoBehaviour
                 }
 
             }
-            else if(a <= -0.9)
+            else if(a <= -0.8)
             {
                 timer += 1 * Time.deltaTime;
 
-                if(timer >= 0.2f)
+                if(timer >= 0.12f)
                 {
                     if (!cinemaC2.activeSelf)
                     {
