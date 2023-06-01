@@ -4121,7 +4121,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingOrder: 12
   m_Sprite: {fileID: 4715557249959380435, guid: 8e8aa6c0283fccc409591afc1b301b5e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -9168,7 +9168,7 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!117 &400077031
+--- !u!117 &398803801
 Texture3D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9750,6 +9750,7 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
+  fuerzaRecoil: 0
   myVirtualCamera: {fileID: 1948886022}
   myCameraSensivity: 10
   pState: {fileID: 0}
@@ -9836,6 +9837,7 @@ MonoBehaviour:
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 0}
+  roofPoint: {fileID: 0}
   botonCuracion: 0
   aplastarBotonCuracion: 0
   curando: 0
@@ -9844,6 +9846,7 @@ MonoBehaviour:
   codigoAtaque: 0
   SSTEPS: 60
   CSTEPS: 0
+  correctorSalto: 19
 --- !u!114 &478495895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10970,7 +10973,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541417988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: -0.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -59652,8 +59655,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1508310782}
   - component: {fileID: 1508310781}
-  - component: {fileID: 1508310784}
-  - component: {fileID: 1508310783}
   m_Layer: 0
   m_Name: Escudo Lanza
   m_TagString: Untagged
@@ -59728,47 +59729,6 @@ Transform:
   m_Father: {fileID: 287766755}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1508310783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508310780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ebc0143efeab8743a6693e57586e185, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vfxDestroy: {fileID: 1854953487438392, guid: a07e7b59818a578448d55a9cca88c5af, type: 3}
-  door: 0
-  gold: 0
---- !u!61 &1508310784
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508310780}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.03985977, y: -0.41188335}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.02, y: 4.75}
-    newSize: {x: 4.02, y: 4.75}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.515112, y: 2.6507244}
-  m_EdgeRadius: 0
 --- !u!1 &1520708674
 GameObject:
   m_ObjectHideFlags: 0
@@ -60326,7 +60286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547077797}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: -0.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -60821,8 +60781,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1609069145}
   - component: {fileID: 1609069144}
-  - component: {fileID: 1609069147}
-  - component: {fileID: 1609069146}
   m_Layer: 0
   m_Name: Escudos
   m_TagString: Untagged
@@ -60897,47 +60855,6 @@ Transform:
   m_Father: {fileID: 287766755}
   m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1609069146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609069143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ebc0143efeab8743a6693e57586e185, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vfxDestroy: {fileID: 1854953487438392, guid: a07e7b59818a578448d55a9cca88c5af, type: 3}
-  door: 0
-  gold: 0
---- !u!61 &1609069147
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609069143}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.026572943, y: -0.15943861}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.08, y: 2.63}
-    newSize: {x: 4.08, y: 2.63}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.2828069, y: 2.311123}
-  m_EdgeRadius: 0
 --- !u!1 &1616073896
 GameObject:
   m_ObjectHideFlags: 0
@@ -62988,7 +62905,7 @@ MonoBehaviour:
   photoFilterIntensity: 60
   lutFilter: 1
   lutTexture: {fileID: 2800000, guid: 901d7d965bd208c41b55193b7d25083e, type: 3}
-  lut3DTexture: {fileID: 400077031}
+  lut3DTexture: {fileID: 398803801}
   lutFilterIntensity: 70
   rampFilter: 0
   rampTexture: {fileID: 2800000, guid: fda8e787eac12f74a879527eb8ef63c1, type: 3}
