@@ -992,6 +992,7 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
+  fuerzaRecoil: 0
   myVirtualCamera: {fileID: 0}
   myCameraSensivity: 10
   pState: {fileID: 0}
@@ -1053,7 +1054,7 @@ MonoBehaviour:
   GameplayLoop: {fileID: 0}
   Controller: {fileID: 0}
   ParticleTestParticleTest: {fileID: 4228418058471364819}
-  hurtParticleSystem: {fileID: 13374236545273570}
+  hurtParticleSystem: {fileID: 0}
   doubleJump: 0
   maxVida: 100
   tiempoInvulnerabilidad: 2
@@ -1071,7 +1072,7 @@ MonoBehaviour:
   body: {fileID: 0}
   ataqueAvailable: 1
   lanzas: []
-  cargaHabilidadCondor: 90
+  cargaHabilidadCondor: 9
   cargaHabilidadSerpiente: 90
   cargaHabilidadLanza: 90
   cargaCuracion: 0
@@ -2295,7 +2296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6995881013384385507
 Transform:
   m_ObjectHideFlags: 0

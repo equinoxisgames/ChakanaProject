@@ -25,7 +25,7 @@ public class Chontacuro1 : CharactersBehaviour
     //public string Chontacuro1Name;
 
     [SerializeField] private float speed;
-    [SerializeField] private float direction;
+    [SerializeField] private float direction = 1;
     [SerializeField] private bool siguiendo = false;
 
     [SerializeField] private Vector3 limit1, limit2, objetivo;
@@ -53,6 +53,7 @@ public class Chontacuro1 : CharactersBehaviour
     void Start()
     {
         fuerzaRecoil = 1;
+        inmuneDash = true;
         //cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineVirtualCamera>();
         explosionInvulnerable = "ExplosionEnemy";
         //gameObject.name = Chontacuro1Name;
@@ -154,10 +155,14 @@ public class Chontacuro1 : CharactersBehaviour
     private void FixedUpdate()
     {
         //Move();
+        if (transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) {
+            Flip();
+        }
+
         detectarPiso();
         if (playable)
         {
-            Move();
+            Move();            
         }
 
         if (rb.velocity.y < 0)
@@ -180,9 +185,18 @@ public class Chontacuro1 : CharactersBehaviour
         if (collider.gameObject.tag == "Player")
         {
             //CAMBIO DE ORIENTACION
-            direction = ((transform.position.x < objetivo.x)) ? 1 : -1;
-            transform.localScale = new Vector3(direction, 1, 0);
+            //direction = ((transform.position.x < objetivo.x)) ? 1 : -1;
 
+
+            /*if (transform.position.x < objetivo.x + 0.60f)
+            {
+                direction = 1;
+            }
+            else if (transform.position.x > objetivo.x - 0.60f)
+            {
+                direction = -1;
+            }*/
+            //Flip();
 
             if (!detectarPiso())
             {
@@ -335,8 +349,9 @@ public class Chontacuro1 : CharactersBehaviour
         }*/
 
         //FLIP
-        direction = ((transform.position.x < objetivo.x)) ? 1 : -1;
-        transform.localScale = new Vector3(direction, 1, 0);
+        //direction = ((transform.position.x < objetivo.x)) ? 1 : -1;
+        //Flip();     
+        
 
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(objetivo.x, transform.position.y, 0), speed * Time.deltaTime);
 
@@ -352,6 +367,18 @@ public class Chontacuro1 : CharactersBehaviour
                 objetivo = limit1;
             }
         }
+    }
+
+    private void Flip() {
+        if (transform.position.x < objetivo.x)
+        {
+            direction = 1;
+        }
+        else if (transform.position.x > objetivo.x)
+        {
+            direction = -1;
+        }
+        transform.localScale = new Vector3(direction, 1, 0);
     }
 
 

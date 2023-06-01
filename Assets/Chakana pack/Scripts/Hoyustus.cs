@@ -838,7 +838,18 @@ public class Hoyustus : CharactersBehaviour
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-                    if (collision.gameObject.tag == "Viento")
+                    //hurtParticleSystem.Play();
+                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+                                if (collision.gameObject.tag == "Viento")
                     {
                         //REINICIO ESTADO VIENTO
                         if (estadoViento)
@@ -903,16 +914,6 @@ public class Hoyustus : CharactersBehaviour
                         counterEstados = 100;
                         StartCoroutine("afectacionEstadoVeneno");
                     }
-                    //hurtParticleSystem.Play();
-                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
-                }
-
-            }
-            catch (Exception e)
-            {
-
-            }
             //vida -= 20;
             //StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
@@ -929,7 +930,7 @@ public class Hoyustus : CharactersBehaviour
 
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
-        if (collider.gameObject.layer == 3)
+        if (collider.gameObject.layer == 3 || collider.gameObject.layer == 18)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;

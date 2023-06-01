@@ -4999,8 +4999,8 @@ MonoBehaviour:
   - {fileID: 7976252612313067822}
   - {fileID: 1590453198929476941}
   m_Bounds:
-    m_Center: {x: 0.14851165, y: -0.979614, z: 0}
-    m_Extent: {x: 0.6818166, y: 1.5568292, z: 0}
+    m_Center: {x: 0.1485101, y: -0.9796139, z: 0}
+    m_Extent: {x: 0.6818166, y: 1.5568293, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -5015,13 +5015,14 @@ GameObject:
   - component: {fileID: 8114245680163491980}
   - component: {fileID: 6660955319078044688}
   - component: {fileID: 1083374383756066564}
-  m_Layer: 3
+  - component: {fileID: 1183899792}
+  m_Layer: 18
   m_Name: BloqueanteDash
   m_TagString: Veneno
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8114245680163491980
 Transform:
   m_ObjectHideFlags: 0
@@ -5045,7 +5046,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3487917333722940008}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -5065,7 +5066,7 @@ EdgeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3487917333722940008}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -5089,6 +5090,39 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!60 &1183899792
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487917333722940008}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -1.0302298, y: 0.55611944}
+      - {x: -1.5870905, y: 0.29802543}
+      - {x: -1.6540387, y: -0.092526644}
+      - {x: 0.46816623, y: -0.097429425}
+      - {x: 0.87523603, y: 0.41092277}
+      - {x: 0.8370214, y: 1.0177112}
+      - {x: 0.32182917, y: 1.0304493}
+      - {x: 0.042243216, y: 0.5948852}
 --- !u!1 &3601578139666635953
 GameObject:
   m_ObjectHideFlags: 0
@@ -5194,8 +5228,8 @@ MonoBehaviour:
   - {fileID: 1648116119545144506}
   - {fileID: 8593292597990267120}
   m_Bounds:
-    m_Center: {x: -0.30417812, y: -1.6563829, z: 0}
-    m_Extent: {x: 1.1377876, y: 0.67905533, z: 0}
+    m_Center: {x: -0.30417967, y: -1.6563829, z: 0}
+    m_Extent: {x: 1.1377877, y: 0.67905533, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -25508,6 +25542,8 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
+  fuerzaRecoil: 0
+  inmuneDash: 0
   movementSpeed: 3
   detectionRadius: 3
   speed: 0
@@ -25517,11 +25553,13 @@ MonoBehaviour:
   limit2: {x: 0, y: 0, z: 0}
   objetivo: {x: 0, y: 0, z: 0}
   posY: 0
+  deteccion: 1
   anim: {fileID: 0}
   groundDetector: {fileID: 4086364227226373197}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  hayPiso: 1
 --- !u!68 &6461231520278799732
 EdgeCollider2D:
   m_ObjectHideFlags: 0
