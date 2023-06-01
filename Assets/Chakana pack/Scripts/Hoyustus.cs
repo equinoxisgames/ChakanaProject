@@ -197,7 +197,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool isDashing = false;
     [SerializeField] private bool atacando = false;
     [SerializeField] private int codigoAtaque = 0;
-    [SerializeField] private int SSTEPS = 45;
+    [SerializeField] private int SSTEPS = 60;
     [SerializeField] private int CSTEPS = 0;
 
     float limitY = 0f;
@@ -333,7 +333,7 @@ public class Hoyustus : CharactersBehaviour
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
 
 
-        SSTEPS = 50;
+        SSTEPS = 55;
     }
 
 
@@ -438,6 +438,24 @@ public class Hoyustus : CharactersBehaviour
 
     private void jumpPrueba()
     {
+        if (Input.GetButtonUp("Jump")) {
+            anim.Play("Caer");
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            isJumping = false;
+            CSTEPS = 0;
+
+            if (firstJump)
+            {
+                secondJump = true;
+                firstJump = false;
+                currentTimeAir = 0;
+                return;
+            }
+            else {                
+                secondJump = false;
+                return;
+            }
+        }
 
         if (firstJump && !secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
@@ -462,13 +480,13 @@ public class Hoyustus : CharactersBehaviour
                 isJumping = true;
                 secondJump = false;
                 //currentStepsImpulso = 0;
-                rb.AddForce(new Vector2(0, 9f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 6f), ForceMode2D.Impulse);
                 //Debug.Log("Salto");
                 isJumping = true;
                 cargaHabilidadCondor += 0.05f;
                 //posYAntesSalto = transform.position.y;
                 CSTEPS++;
-                limitY = transform.position.y + 7;
+                limitY = transform.position.y + 8.5f;
                 //Debug.Log(limitY);
 
             }
@@ -480,7 +498,7 @@ public class Hoyustus : CharactersBehaviour
                 //AGREGANDO FUERZAS
                 isJumping = true;
                 //rb.velocity = new Vector2(rb.velocity.x, ((7 + 0.5f * 18f * ((35 - CSTEPS) * (35 - CSTEPS) )/20)/(35 - CSTEPS)/20));
-                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 30) / (SSTEPS - CSTEPS) / 30)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 35) / (SSTEPS - CSTEPS) / 35)), ForceMode2D.Impulse);
                 ///rb.AddForce(new Vector2(0, 0.8f - (0.022f * CSTEPS)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 //Debug.Log("Impulso");
@@ -490,7 +508,7 @@ public class Hoyustus : CharactersBehaviour
 
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump  && !isTouchingRoof() && CSTEPS < SSTEPS)
+        else if (!firstJump && secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
 
             if (Input.GetButtonDown("Jump") && CSTEPS == 0)
@@ -503,7 +521,7 @@ public class Hoyustus : CharactersBehaviour
                 Debug.Log("Salto 2");
                 isJumping = true;
                 secondJump = true;
-                limitY = transform.position.y + 7;
+                limitY = transform.position.y + 8.5f;
                 cargaHabilidadCondor += 0.05f;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
@@ -547,7 +565,7 @@ public class Hoyustus : CharactersBehaviour
             Debug.Log("Salto 2");
             isJumping = true;
             secondJump = true;
-            limitY = transform.position.y + 7;
+            limitY = transform.position.y + 8.5f;
             cargaHabilidadCondor += 0.05f;
             saltoEspecial = true;
         }
