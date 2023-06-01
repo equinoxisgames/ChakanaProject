@@ -29,6 +29,8 @@ public class CharactersBehaviour : MonoBehaviour
     protected bool paralizadoPorAtaque = false;
     public float fuerzaRecoil;
 
+    [SerializeField] protected bool inmuneDash = false;
+
 
 
     //***************************************************************************************************
