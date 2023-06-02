@@ -211,16 +211,33 @@ public class Hoyustus : CharactersBehaviour
         tocandoPared = value;
     }
 
+    public float getCargaHabilidadCondor(){
+        return cargaHabilidadCondor;
+    }
+
+    public float getCargaHabilidadSerpiente(){
+        return cargaHabilidadSerpiente;
+    }
+
+    public float getCargaHabilidadLanza(){
+        return cargaHabilidadLanza;
+    }
+
+    public float getCargaCuracion(){
+        return cargaCuracion;
+    }
+
+
     private void Awake()
     {
         //CARGAR DATA
         LoadData();
         //Debug.Log(gold);
 
-        // Establecer el mínimo de FPS
+        // Establecer el mï¿½nimo de FPS
         //Application.targetFrameRate = 30; // Por ejemplo, 30 FPS
 
-        // Establecer el máximo de FPS
+        // Establecer el mï¿½ximo de FPS
         //QualitySettings.vSyncCount = 0; // Desactivar el VSync
         //Application.targetFrameRate = 90; // Por ejemplo, 60 FPS
 
@@ -610,7 +627,7 @@ public class Hoyustus : CharactersBehaviour
     {
         /*if (isJumping && currentTimeAir < timeAir)
         {
-            // Incrementar la fuerza del salto en función del tiempo que se mantiene presionado el botón
+            // Incrementar la fuerza del salto en funciï¿½n del tiempo que se mantiene presionado el botï¿½n
             rb.AddForce(new Vector2(0f, 5f * (timeAir - currentTimeAir)), ForceMode2D.Impulse);
             currentTimeAir += Time.fixedDeltaTime;
         }*/
@@ -663,7 +680,7 @@ public class Hoyustus : CharactersBehaviour
         */
         if (EventTransition())
         {
-            //Debug.Log("Disparar Transición");
+            //Debug.Log("Disparar Transiciï¿½n");
             LoadNextLevel();
         }
         //ImproveJump();
@@ -2178,21 +2195,21 @@ public class Hoyustus : CharactersBehaviour
 
     void WalkingControl()
     {
-        //Debug.Log("Entra a la sección de get button");
+        //Debug.Log("Entra a la secciï¿½n de get button");
 
         if (Input.GetButtonDown("Horizontal"))// && Grounded() )//&& pState.walking == true)
         {
-            //Debug.Log("Entra a la sección de get button Horizontal Input");
+            //Debug.Log("Entra a la secciï¿½n de get button Horizontal Input");
             if (Grounded())
             {
-                //Debug.Log("Entra a la sección de get button Horizontal Input Grounded");
+                //Debug.Log("Entra a la secciï¿½n de get button Horizontal Input Grounded");
 
                 AudioWalking.Play();
             }
             else
             {
 
-                //Debug.Log("Entra a la sección de get button Horizontal Input Not Grounded");
+                //Debug.Log("Entra a la secciï¿½n de get button Horizontal Input Not Grounded");
                 AudioWalking.Stop();
             }
 
@@ -2201,14 +2218,14 @@ public class Hoyustus : CharactersBehaviour
         {
             if (Grounded())
             {
-                //Debug.Log("Entra a la sección de get button Horizontal Input !Grounded Grounded");
+                //Debug.Log("Entra a la secciï¿½n de get button Horizontal Input !Grounded Grounded");
 
                 AudioWalking.Play();
             }
             else
             {
 
-                //Debug.Log("Entra a la sección de get button Horizontal Input !Grounded !Grounded");
+                //Debug.Log("Entra a la secciï¿½n de get button Horizontal Input !Grounded !Grounded");
                 AudioWalking.Stop();
             }
         }
