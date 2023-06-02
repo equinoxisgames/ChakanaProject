@@ -6,17 +6,6 @@ public class Pinchos01 : MonoBehaviour
 {
     [SerializeField] List<Pinchos02> pinchos = new List<Pinchos02>();
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Player")
