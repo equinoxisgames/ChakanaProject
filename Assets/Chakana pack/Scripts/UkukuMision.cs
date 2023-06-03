@@ -6,6 +6,7 @@ public class UkukuMision : MonoBehaviour
 {
     [SerializeField] private string num;
     [SerializeField] private GameObject txt;
+    [SerializeField] private bool isDestroyed;
 
     private bool isActive;
 
@@ -31,7 +32,7 @@ public class UkukuMision : MonoBehaviour
 
     void Update()
     {
-        if (isActive && Input.GetKeyDown(KeyCode.E))
+        if (isActive && Input.GetAxis("Interact") == 1)
         {
             int e = PlayerPrefs.GetInt("ukukuM");
             e += 1;
@@ -42,6 +43,8 @@ public class UkukuMision : MonoBehaviour
 
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
+
+            if (isDestroyed) Destroy(gameObject);
         }
     }
 
