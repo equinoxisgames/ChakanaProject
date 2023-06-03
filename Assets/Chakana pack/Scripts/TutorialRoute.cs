@@ -21,7 +21,7 @@ public class TutorialRoute : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TutoDetector();
+        TutoDetector();       
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -51,6 +51,18 @@ public class TutorialRoute : MonoBehaviour
                 Destroy(gameObject);
             }
             if (tutoNum == 3 && Input.GetAxis("Atacar") == 1)
+            {
+                canvasObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 4 && Input.GetAxis("Dash") == 1)
+            {
+                canvasObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 5 && Input.GetAxis("Horizontal") != 0)
             {
                 canvasObj.SetActive(false);
                 PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
