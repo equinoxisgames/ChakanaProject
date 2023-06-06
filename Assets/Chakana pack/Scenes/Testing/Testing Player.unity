@@ -5841,6 +5841,11 @@ Transform:
   m_Father: {fileID: 468411299}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &344791242 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+  m_PrefabInstance: {fileID: 7018684030405656768}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &371169748
 GameObject:
   m_ObjectHideFlags: 0
@@ -8648,6 +8653,7 @@ MonoBehaviour:
   playable: 1
   explosionInvulnerable: ExplosionPlayer
   fuerzaRecoil: 0
+  inmuneDash: 0
   myVirtualCamera: {fileID: 0}
   myCameraSensivity: 10
   pState: {fileID: 0}
@@ -9519,6 +9525,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1610995678}
+  - {fileID: 344791242}
   - {fileID: 1285630220}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -11002,6 +11009,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66b9c2b299f8cfe4a83608f5aa51bdde, type: 3}
+--- !u!1001 &7018684030405656768
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1463244124}
+    m_Modifications:
+    - target: {fileID: 1346643099677479403, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -16.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050251, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_Name
+      value: Tzantzas Redesign 2 - RO
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
 --- !u!1001 &7165638828371565291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11013,9 +11081,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chontacuro 2 Upscaled Chopped -RO (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7165638828952281729, guid: 437d947e62240154a94c862267bc0490, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7165638828952281755, guid: 437d947e62240154a94c862267bc0490, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7165638828952281755, guid: 437d947e62240154a94c862267bc0490, type: 3}
       propertyPath: m_LocalPosition.x
