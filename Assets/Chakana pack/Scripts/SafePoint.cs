@@ -22,7 +22,7 @@ public class SafePoint : MonoBehaviour
 
     void Update()
     {
-        if(isIn && Input.GetKeyDown(KeyCode.E) && isOn)
+        if(isIn && Input.GetAxis("Interact") == 1 && isOn)
         {
             fire.SetActive(true);
             Destroy(Instantiate(particles, pivot), 2.5f);

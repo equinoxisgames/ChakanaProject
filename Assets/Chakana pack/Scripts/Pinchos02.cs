@@ -5,34 +5,36 @@ using UnityEngine;
 public class Pinchos02 : MonoBehaviour
 {
     Vector3 pos;
+    bool isActive = false;
+    [SerializeField] GameObject exVFX;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !isActive)
         {
-            collision.gameObject.GetComponent<Hoyustus>().recibirDanio(10);
-            //StartCoroutine(DelayDmg(collision.gameObject.GetComponent<Hoyustus>()));
-
-            pos.z = collision.transform.position.z;
-
-            collision.transform.position = pos;
+            isActive = true;
+            StartCoroutine(DelayDmg(collision.gameObject.GetComponent<Hoyustus>()));
         }
     }
 
     public void NewPos(Vector3 e)
     {
+        if (isActive) return;
         pos = e;
     }
 
-    /*IEnumerator DelayDmg(Hoyustus player)
+    IEnumerator DelayDmg(Hoyustus player)
     {
         player.recibirDanio(10);
-        player.setPlayable(false);
-        player.GetComponent<Rigidbody2D>().isKinematic = true;
+        Instantiate(exVFX, transform.position, Quaternion.identity);
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.44f);
 
-        player.setPlayable(true);
-        player.GetComponent<Rigidbody2D>().isKinematic = false;
-    }*/
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        pos.z = player.transform.position.z;
+        player.transform.position = pos;
+        isActive = false;
+    }
 }

@@ -6,10 +6,11 @@ public class ObjDestroy : MonoBehaviour
 {
     [SerializeField] private GameObject vfxDestroy;
     [SerializeField] private bool door, gold;
+    [SerializeField] private int doorNum;
 
     void Start()
     {
-        if (PlayerPrefs.HasKey("puerta") && door)
+        if (PlayerPrefs.HasKey("puerta" + doorNum) && door)
         {
             Destroy(gameObject);
         }
@@ -21,7 +22,7 @@ public class ObjDestroy : MonoBehaviour
         {
             if (door)
             {
-                PlayerPrefs.SetInt("puerta", 1);
+                PlayerPrefs.SetInt("puerta" + doorNum, 1);
             }
 
             Instantiate(vfxDestroy, transform.position, Quaternion.identity);
