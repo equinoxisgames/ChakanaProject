@@ -199,6 +199,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private int codigoAtaque = 0;
     [SerializeField] private int SSTEPS = 60;
     [SerializeField] private int CSTEPS = 0;
+    private float maxHabilidad_Curacion = 100f;
 
     float limitY = 0f;
 
@@ -351,6 +352,7 @@ public class Hoyustus : CharactersBehaviour
 
 
         SSTEPS = 55;
+        maxVida = vida;
     }
 
 
@@ -381,7 +383,7 @@ public class Hoyustus : CharactersBehaviour
 
             aplastarBotonCuracion = true;
             //ACTIVACION DE LA CURACION
-            if (cargaCuracion >= 100 && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.2f)
+            if (cargaCuracion >= maxHabilidad_Curacion && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.2f)
             {
                 curando = true;
                 cargaCuracion = 0;
@@ -393,16 +395,16 @@ public class Hoyustus : CharactersBehaviour
             }
 
 
-            if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor > 5)
+            if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadCondor");
             }
-            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente > 2)
+            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
             {
                 dashAvailable = false;
                 StartCoroutine("habilidadSerpiente");
             }
-            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza > 2)
+            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadLanza");
             }
@@ -500,7 +502,8 @@ public class Hoyustus : CharactersBehaviour
                 rb.AddForce(new Vector2(0, 6f), ForceMode2D.Impulse);
                 //Debug.Log("Salto");
                 isJumping = true;
-                cargaHabilidadCondor += 0.05f;
+                //cargaHabilidadCondor += 0.05f;
+                cargaHabilidadCondor += 20;
                 //posYAntesSalto = transform.position.y;
                 CSTEPS++;
                 limitY = transform.position.y + 8.5f;
@@ -519,7 +522,7 @@ public class Hoyustus : CharactersBehaviour
                 ///rb.AddForce(new Vector2(0, 0.8f - (0.022f * CSTEPS)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 //Debug.Log("Impulso");
-                cargaHabilidadCondor += 0.005f;
+                //cargaHabilidadCondor += 0.005f;
                 CSTEPS++;
             }
 
@@ -539,7 +542,8 @@ public class Hoyustus : CharactersBehaviour
                 isJumping = true;
                 secondJump = true;
                 limitY = transform.position.y + 8.5f;
-                cargaHabilidadCondor += 0.05f;
+                //cargaHabilidadCondor += 0.05f;
+                cargaHabilidadCondor += 20;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
@@ -552,7 +556,8 @@ public class Hoyustus : CharactersBehaviour
                 currentTimeAir += Time.fixedDeltaTime;
                 isJumping = true;
                 //Debug.Log("Impulso 2");
-                cargaHabilidadCondor += 0.005f;
+                //cargaHabilidadCondor += 0.005f;
+                
             }
 
 
@@ -725,7 +730,7 @@ public class Hoyustus : CharactersBehaviour
         //CAMBIO A LA ANIMACION
         yield return new WaitForSeconds(1f);
         playable = true;
-        vida += 35;
+        vida += 45;
         curando = false;
         Debug.Log("Curado");
     }
@@ -742,7 +747,7 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        cargaCuracion += 10;
+        cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Viento", explosionInvulnerable);
@@ -764,7 +769,7 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
         dashAvailable = false;
         cargaHabilidadSerpiente = 0f;
-        cargaCuracion += 10;
+        cargaCuracion += 30;
 
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
@@ -785,7 +790,7 @@ public class Hoyustus : CharactersBehaviour
     {
         EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
-        cargaCuracion += 10;
+        cargaCuracion += 30;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         atacando = true;
@@ -1447,7 +1452,7 @@ public class Hoyustus : CharactersBehaviour
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
         //dashBody.SetActive(true); **********************************************************************
         //dashBodyTESTING.enabled = true; **************************************
-        cargaHabilidadSerpiente += 0.2f;
+        cargaHabilidadSerpiente += 15f;
         //rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
         //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
         //yield return new WaitForSeconds(0.2f);
@@ -1477,7 +1482,7 @@ public class Hoyustus : CharactersBehaviour
 
     public void cargaLanza()
     {
-        cargaHabilidadLanza += 0.5f;
+        cargaHabilidadLanza += 15f;
     }
 
 
@@ -2255,6 +2260,10 @@ public class Hoyustus : CharactersBehaviour
     {
         AudioFall.Play();
 
+    }
+
+    public float getMaxVida() { 
+        return maxVida;
     }
 
 
