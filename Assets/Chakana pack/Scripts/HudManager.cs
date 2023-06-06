@@ -38,12 +38,18 @@ public class HudManager : MonoBehaviour
         lifeBar.currentFillAmount = (life / lifeMax);
         lifeBar.targetFillAmount = (life / lifeMax);
         goldTxt.text = player.getGold().ToString();
+
+        string[] joystickNames = Input.GetJoystickNames();
+
+        if (joystickNames.Length > 0 && !string.IsNullOrEmpty(joystickNames[0]))
+        {
+            Debug.Log("Hay un mando conectado.");
+        }
     }
 
     void Update()
     {
         UpdateData();
-        print(Input.GetAxis("Horizontal"));
     }
 
     private void UpdateData()
