@@ -1199,7 +1199,7 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
             explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionEnemy");
-            Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+            Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
         }

@@ -11,10 +11,6 @@ public class Tzantza : CharactersBehaviour
     //private SpriteRenderer sp;
     //private Hoyustus hoyustusPlayerCotroller;
     //private bool applyForce;
-
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private bool siguiendo = false;
-    [SerializeField] private GameObject explosion;
     //public float detectionRadius = 3;
     //public LayerMask playerLayer;
 
@@ -24,6 +20,16 @@ public class Tzantza : CharactersBehaviour
 
     //public string tzantzaName;
 
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private bool siguiendo = false;
+    [SerializeField] private GameObject bolaFuego;
+    [SerializeField] private GameObject explosion;
+    [SerializeField] private Vector3 objetivo;
+    [SerializeField] private float rangoAtaque;
+    [SerializeField] private bool ataqueDisponible;
+    [SerializeField] private bool atacando;
+
+
     private void Awake()
     {
         //cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
@@ -32,7 +38,9 @@ public class Tzantza : CharactersBehaviour
 
     private void Muerte()
     {
-        Destroy(this.gameObject);
+        if (vida <= 0) {
+            Destroy(this.gameObject);
+        }      
     }
 
     // Start is called before the first frame update
@@ -42,15 +50,17 @@ public class Tzantza : CharactersBehaviour
         rb = GetComponent<Rigidbody2D>();
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
+        bolaFuego = Resources.Load<GameObject>("BolaVeneno");
         layerObject = transform.gameObject.layer;
-        siguiendo = false;
         //hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+        fuerzaRecoil = 2f;
+        ataqueDisponible = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Muerte();
         /*detectionRadius = 15;
         movementSpeed = 7;
 
@@ -75,12 +85,39 @@ public class Tzantza : CharactersBehaviour
         }*/
 
 
-        if (siguiendo) {
+        if (siguiendo && playable) {
             Move();
-            Debug.Log("QUE TE REVIENTO");
         }
         
     }
+
+
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+        rb.AddForce(new Vector2(direccion * 8, 0.5f), ForceMode2D.Impulse);
+        //EstablecerInvulnerabilidades(layerObject);
+    }
+
+
+    private IEnumerator Ataque() {
+        ataqueDisponible = false;
+        GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
+        bolaFuegoGenerada.SetActive(false);
+        bolaFuegoGenerada.name += "Enemy";
+        atacando = true;
+        playable = false;
+        rb.velocity = Vector2.zero;
+        yield return new WaitForEndOfFrame();
+        bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject);
+        bolaFuegoGenerada.SetActive(true);
+        yield return new WaitForSeconds(0.7f);
+        atacando = false;
+        playable = true;
+        yield return new WaitForSeconds(4.3f);
+        ataqueDisponible = true;
+    }
+
 
     private new void OnTriggerEnter2D(Collider2D collider)
     {
@@ -106,40 +143,58 @@ public class Tzantza : CharactersBehaviour
             }
         }
 
-        if (collider.gameObject.tag == "Viento")
-        {
-            if (estadoViento)
+
+        if (!collider.name.Contains("Enemy")) {
+            if (collider.gameObject.tag == "Viento")
             {
-                StopCoroutine("afectacionEstadoViento");
+                if (estadoViento)
+                {
+                    StopCoroutine("afectacionEstadoViento");
+                }
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 1;
+                    StartCoroutine("combinacionesElementales");
+                    return;
+
+                }
+
+                estadoViento = true;
+                counterEstados = 1;
+                StartCoroutine("afectacionEstadoViento");
             }
-            else if (counterEstados > 0)
+            else if (collider.gameObject.tag == "Fuego")
             {
-                counterEstados += 1;
-                //StartCoroutine("combinacionesElementales");
-                combinacionesElementales();
-                return;
+                if (estadoFuego)
+                {
+                    StopCoroutine("afectacionEstadoFuego");
+                }
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 10;
+                    StartCoroutine("combinacionesElementales");
+                    return;
+                }
+                estadoFuego = true;
+                counterEstados = 10;
+                StartCoroutine("afectacionEstadoFuego");
             }
-            estadoViento = true;
-            counterEstados = 1;
-            StartCoroutine("afectacionEstadoViento");
-        }
-        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
-        {
-            if (estadoFuego)
+            else if (collider.gameObject.tag == "Veneno")
             {
-                StopCoroutine("afectacionEstadoFuego");
+                if (estadoVeneno)
+                {
+                    StopCoroutine("afectacionEstadoVeneno");
+                }
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 100;
+                    StartCoroutine("combinacionesElementales");
+                    return;
+                }
+                estadoVeneno = true;
+                counterEstados = 100;
+                StartCoroutine("afectacionEstadoVeneno");
             }
-            else if (counterEstados > 0)
-            {
-                counterEstados += 10;
-                //StartCoroutine("combinacionesElementales");
-                combinacionesElementales();
-                return;
-            }
-            estadoFuego = true;
-            counterEstados = 10;
-            StartCoroutine("afectacionEstadoFuego");
         }
     }
 
@@ -148,21 +203,38 @@ public class Tzantza : CharactersBehaviour
     {
         if (collision.gameObject.CompareTag("Player")) {
             siguiendo = true;
+            objetivo = collision.transform.position;
+
+            if (Vector3.Distance(transform.position, collision.transform.position) <= rangoAtaque && ataqueDisponible) {
+                StartCoroutine(Ataque());
+            }
         }
     }
+
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             siguiendo = false;
+            rb.velocity = Vector2.zero;
         }
     }
 
 
     private void Move()
     {
-        
+        Vector2 direction = objetivo - transform.position;
+        float distance = Vector2.Distance(transform.position, objetivo);
+
+        if (objetivo.x < transform.position.x) {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (objetivo.x > transform.position.x) {
+            transform.localScale = Vector3.one;
+        }
+
+        rb.velocity = direction.normalized * movementSpeed * (1 - afectacionViento);
     }
 
     private IEnumerator combinacionesElementales()
@@ -201,8 +273,8 @@ public class Tzantza : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionEnemy");
-            Instantiate(explosion, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
+            Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
         }
