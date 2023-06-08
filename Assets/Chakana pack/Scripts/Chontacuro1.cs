@@ -293,9 +293,8 @@ public class Chontacuro1 : CharactersBehaviour
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-
         rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-        EstablecerInvulnerabilidades(layerObject);
+        //EstablecerInvulnerabilidades(layerObject);
     }
 
 

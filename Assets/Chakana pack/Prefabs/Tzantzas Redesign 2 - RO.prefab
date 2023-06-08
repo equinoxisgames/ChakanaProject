@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5087580767098319218}
   - component: {fileID: 4926768793003419460}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: CampoVision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 8
+  m_Radius: 12
 --- !u!1 &7018684028715774995
 GameObject:
   m_ObjectHideFlags: 0
@@ -11025,7 +11025,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7018684030615050251}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -28.5, y: 5.7, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11134,9 +11134,13 @@ MonoBehaviour:
   explosionInvulnerable: 
   fuerzaRecoil: 0
   inmuneDash: 0
-  movementSpeed: 2
+  movementSpeed: 5
   siguiendo: 0
+  bolaFuego: {fileID: 0}
   explosion: {fileID: 0}
+  objetivo: {x: 0, y: 0, z: 0}
+  rangoAtaque: 6
+  ataqueDisponible: 0
 --- !u!1 &7018684030751906704
 GameObject:
   m_ObjectHideFlags: 0
