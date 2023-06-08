@@ -62,7 +62,8 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-
+        mouseMovido = true;
+        //joystickIzquierdoMovido = true;
         
 
         if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
@@ -140,7 +141,7 @@ public class MainMenu : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.Escape) && mouseMovido)
+                if (Input.GetKeyDown(KeyCode.Escape) && mouseMovido && !joystickIzquierdoMovido)
                 {
                     
                    
@@ -168,11 +169,10 @@ public class MainMenu : MonoBehaviour
                 }
                 else
                 {
-                    if (joystickIzquierdoMovido && !altKeyPress)
-                    {
+                    if(!altKeyPress && joystickIzquierdoMovido)
                         EscapeHomeMenu();
                         
-                    }
+                   
                 }
             }
             else
