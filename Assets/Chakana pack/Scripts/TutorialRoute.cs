@@ -5,7 +5,6 @@ using UnityEngine;
 public class TutorialRoute : MonoBehaviour
 {
     [SerializeField] private GameObject tutoObj;
-    [SerializeField] private GameObject aditionalObj;
     [SerializeField] private int tutoNum;
 
     private bool isActive;
@@ -23,22 +22,10 @@ public class TutorialRoute : MonoBehaviour
         keyObj = tutoObj.transform.GetChild(0).gameObject;
         joyObj = tutoObj.transform.GetChild(1).gameObject;
 
-        string[] joystickNames = Input.GetJoystickNames();
-        print(joystickNames[0]);
-
-        if (joystickNames.Length > 0 && joystickNames[0] != "")
-        {
-            keyObj.SetActive(false);
-            joyObj.SetActive(true);
-        }
-        else
-        {
-            keyObj.SetActive(true);
-            joyObj.SetActive(false);
-        }
+        keyObj.SetActive(true);
+        joyObj.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         TutoDetector();
@@ -70,10 +57,27 @@ public class TutorialRoute : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            tutoObj.SetActive(true);
-            if (aditionalObj != null) aditionalObj.SetActive(true);
-            isActive = true;
+            if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10)
+            {
+                Time.timeScale = 0;
+            }
+
             player = collision.transform;
+            if (tutoNum <= 7)
+            {
+                tutoObj.transform.position = player.position;
+            }
+            tutoObj.SetActive(true);
+            isActive = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            tutoObj.SetActive(false);
+            isActive = false;
         }
     }
 
@@ -81,7 +85,10 @@ public class TutorialRoute : MonoBehaviour
     {
         if (isActive)
         {
-            tutoObj.transform.position = player.position;
+            if (tutoNum <= 7)
+            {
+                tutoObj.transform.position = player.position;
+            }
 
             if(tutoNum == 1 && Input.GetAxis("Jump") == 1)
             {
@@ -109,6 +116,39 @@ public class TutorialRoute : MonoBehaviour
             }
             if (tutoNum == 5 && Input.GetAxis("Horizontal") != 0)
             {
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 6 && Input.GetAxis("Interact") == 1)
+            {
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 7 && Input.GetAxis("Interact") == 1)
+            {
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 8 && Input.anyKeyDown)
+            {
+                Time.timeScale = 1;
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 9 && Input.anyKeyDown)
+            {
+                Time.timeScale = 1;
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 10 && Input.anyKeyDown)
+            {
+                Time.timeScale = 1;
                 tutoObj.SetActive(false);
                 PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
                 Destroy(gameObject);

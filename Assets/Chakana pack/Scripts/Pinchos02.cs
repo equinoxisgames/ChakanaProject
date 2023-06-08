@@ -25,7 +25,7 @@ public class Pinchos02 : MonoBehaviour
 
     IEnumerator DelayDmg(Hoyustus player)
     {
-        player.recibirDanio(10);
+        player.recibirDanio(50);
         Instantiate(exVFX, transform.position, Quaternion.identity);
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
