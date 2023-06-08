@@ -119,6 +119,8 @@ public class CharactersBehaviour : MonoBehaviour
 
             recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            triggerElementos_1_1_1(collider);
+            return;
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
     }
@@ -229,6 +231,148 @@ public class CharactersBehaviour : MonoBehaviour
     public int getGold()
     {
         return gold;
+    }
+
+
+    protected void collisionElementos_1_1_1(Collision2D collider) {
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
+        if (collider.gameObject.tag == "Viento")
+        {
+            //REINICIO ESTADO VIENTO
+            if (estadoViento)
+            {
+                StopCoroutine("afectacionEstadoViento");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 1;
+                StartCoroutine("combinacionesElementales");
+                return;
+
+            }
+
+            //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoViento = true;
+            counterEstados = 1;
+            StartCoroutine("afectacionEstadoViento");
+        }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
+        else if (collider.gameObject.tag == "Fuego")
+        {
+            //REINICIO ESTADO FUEGO
+            if (estadoFuego)
+            {
+                StopCoroutine("afectacionEstadoFuego");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 10;
+                StartCoroutine("combinacionesElementales");
+                return;
+            }
+
+            //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoFuego = true;
+            counterEstados = 10;
+            StartCoroutine("afectacionEstadoFuego");
+        }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
+        else if (collider.gameObject.tag == "Veneno")
+        {
+            //REINICIO ESTADO VENENO
+            if (estadoVeneno)
+            {
+                StopCoroutine("afectacionEstadoVeneno");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 100;
+                StartCoroutine("combinacionesElementales");
+                return;
+            }
+
+            //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoVeneno = true;
+            counterEstados = 100;
+            StartCoroutine("afectacionEstadoVeneno");
+        }
+
+    }
+
+    protected void triggerElementos_1_1_1(Collider2D collider)
+    {
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
+        if (collider.gameObject.tag == "Viento")
+        {
+            //REINICIO ESTADO VIENTO
+            if (estadoViento)
+            {
+                StopCoroutine("afectacionEstadoViento");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 1;
+                StartCoroutine("combinacionesElementales");
+                return;
+
+            }
+
+            //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoViento = true;
+            counterEstados = 1;
+            StartCoroutine("afectacionEstadoViento");
+        }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
+        else if (collider.gameObject.tag == "Fuego")
+        {
+            //REINICIO ESTADO FUEGO
+            if (estadoFuego)
+            {
+                StopCoroutine("afectacionEstadoFuego");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 10;
+                StartCoroutine("combinacionesElementales");
+                return;
+            }
+
+            //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoFuego = true;
+            counterEstados = 10;
+            StartCoroutine("afectacionEstadoFuego");
+        }
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
+        else if (collider.gameObject.tag == "Veneno")
+        {
+            //REINICIO ESTADO VENENO
+            if (estadoVeneno)
+            {
+                StopCoroutine("afectacionEstadoVeneno");
+            }
+            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+            else if (counterEstados > 0)
+            {
+                counterEstados += 100;
+                StartCoroutine("combinacionesElementales");
+                return;
+            }
+
+            //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
+            estadoVeneno = true;
+            counterEstados = 100;
+            StartCoroutine("afectacionEstadoVeneno");
+        }
+
     }
 
 }

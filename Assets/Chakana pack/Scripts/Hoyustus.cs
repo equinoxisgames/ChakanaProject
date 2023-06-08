@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 
+
 public class Hoyustus : CharactersBehaviour
 {
 
@@ -893,6 +894,8 @@ public class Hoyustus : CharactersBehaviour
 
             }
 
+            collisionElementos_1_1_1(collision);
+            /*
             //CONVERTIFLO A FUNCION
             if (collision.gameObject.tag == "Viento")
             {
@@ -958,7 +961,7 @@ public class Hoyustus : CharactersBehaviour
                 estadoVeneno = true;
                 counterEstados = 100;
                 StartCoroutine("afectacionEstadoVeneno");
-            }
+            }*/
             //vida -= 20;
             //StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
@@ -998,6 +1001,8 @@ public class Hoyustus : CharactersBehaviour
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    triggerElementos_1_1_1(collider);
+                    return;
                 }
 
             }
@@ -1006,7 +1011,9 @@ public class Hoyustus : CharactersBehaviour
 
             }
         }
+        triggerElementos_1_1_1(collider);
 
+        /*
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")
         {
@@ -1072,7 +1079,7 @@ public class Hoyustus : CharactersBehaviour
             estadoVeneno = true;
             counterEstados = 100;
             StartCoroutine("afectacionEstadoVeneno");
-        }
+        }*/
     }
 
 

@@ -151,6 +151,8 @@ public class Tzantza : CharactersBehaviour
 
 
         if (!collider.name.Contains("Enemy")) {
+            triggerElementos_1_1_1(collider);
+            /*
             if (collider.gameObject.tag == "Viento")
             {
                 if (estadoViento)
@@ -201,6 +203,7 @@ public class Tzantza : CharactersBehaviour
                 counterEstados = 100;
                 StartCoroutine("afectacionEstadoVeneno");
             }
+            */
         }
     }
 
