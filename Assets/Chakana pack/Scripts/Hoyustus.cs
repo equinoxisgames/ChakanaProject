@@ -7,13 +7,12 @@ using Unity.VisualScripting;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 
+
 public class Hoyustus : CharactersBehaviour
 {
 
     [Header("CineMachine")]
     [SerializeField] CinemachineVirtualCamera myVirtualCamera;
-    CinemachineComponentBase myComponentBase;
-    float myCameraDistance;
     [SerializeField] float myCameraSensivity = 0.006f;
 
     public PlayerStateList pState;
@@ -31,24 +30,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] int jumpSteps = 20;
     [SerializeField] int jumpThreshold = 7;
     [Space(5)]
-
-    [Header("Attacking")]
-    /*[SerializeField] float timeBetweenAttack = 0.4f;
-    [SerializeField] Transform attackTransform;
-    [SerializeField] float attackRadius = 1;
-    [SerializeField] Transform downAttackTransform;
-    [SerializeField] float downAttackRadius = 1;
-    [SerializeField] Transform upAttackTransform;
-    [SerializeField] float upAttackRadius = 1;*/
-    [SerializeField] LayerMask attackableLayer;
-    [Space(5)]
-
-    /*[Header("Recoil")]
-    [SerializeField] int recoilXSteps = 4;
-    [SerializeField] int recoilYSteps = 10;
-    [SerializeField] float recoilXSpeed = 45;
-    [SerializeField] float recoilYSpeed = 45;
-    [Space(5)]*/
 
     [Header("Ground Checking")]
     [SerializeField] Transform groundTransform;
@@ -70,13 +51,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float roofCheckX = 1;
     [Space(5)]
 
-
-    float timeSinceAttack;
-    float xAxis;
-    float yAxis;
     float grabity;
-    int stepsXRecoiled;
-    int stepsYRecoiled;
     int stepsJumped = 0;
 
     public float groundCheckRadius;
@@ -104,19 +79,12 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] AudioSource GameplayIntro;
     [SerializeField] AudioSource GameplayLoop;
 
-    [SerializeField] CharacterController Controller;
-
-    [Header("Particles")]
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
-    [SerializeField] ParticleSystem hurtParticleSystem = null;
 
     [Header("Movement")]
     public bool doubleJump = false;
 
 
-
-    string nextPositionXPrefsName = "nextPositionX";
-    string nextPositionYPrefsName = "nextPositionY";
     string firstRunPrefsName = "firstRun";
     string flipFlagPrefsName = "flipFlag";
 
@@ -181,9 +149,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private Transform roofPoint;
 
 
-
-    private float limitSaltoUno = 5f;
-    private float limitSaltoDos = 4f;
     private float posYAntesSalto = 0f;
 
 
@@ -577,52 +542,6 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
-
-    private void saltoEspecialSalto() {
-
-        if (Input.GetButtonDown("Jump") && !isJumping)
-        {
-            CSTEPS = 1;
-            //currentStepsImpulso = 0;
-            rb.velocity = new Vector2(rb.velocity.x, 0.0f);
-            rb.AddForce(new Vector2(0, 18f), ForceMode2D.Impulse);
-            Debug.Log("Salto 2");
-            isJumping = true;
-            secondJump = true;
-            limitY = transform.position.y + 8.5f;
-            cargaHabilidadCondor += 0.05f;
-            saltoEspecial = true;
-        }
-        else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
-        {
-            //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-            //MODIFICANDO VELOCIDADES
-            //rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
-            //AGREGANDO FUERZAS
-            CSTEPS++;
-            rb.AddForce(new Vector2(0, 1.15f - (limitY - transform.position.y) / 10), ForceMode2D.Impulse);
-            currentTimeAir += Time.fixedDeltaTime;
-            isJumping = true;
-            //Debug.Log("Impulso 2");
-            cargaHabilidadCondor += 0.005f;
-            saltoEspecial = true;
-        }
-
-
-        if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS >= SSTEPS - 5)// || transform.position.y - posYAntesSalto > limitSaltoUno)
-        {
-            CSTEPS = 0;
-            isJumping = false;
-            secondJump = false;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            saltoEspecial = false;
-            //Debug.Log("Alto 2");
-            return;
-        }
-
-    }
-
-
     private void LateUpdate()
     {
         if (playable)
@@ -893,6 +812,8 @@ public class Hoyustus : CharactersBehaviour
 
             }
 
+            collisionElementos_1_1_1(collision);
+            /*
             //CONVERTIFLO A FUNCION
             if (collision.gameObject.tag == "Viento")
             {
@@ -958,7 +879,7 @@ public class Hoyustus : CharactersBehaviour
                 estadoVeneno = true;
                 counterEstados = 100;
                 StartCoroutine("afectacionEstadoVeneno");
-            }
+            }*/
             //vida -= 20;
             //StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
@@ -998,6 +919,8 @@ public class Hoyustus : CharactersBehaviour
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    triggerElementos_1_1_1(collider);
+                    return;
                 }
 
             }
@@ -1006,7 +929,9 @@ public class Hoyustus : CharactersBehaviour
 
             }
         }
+        triggerElementos_1_1_1(collider);
 
+        /*
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")
         {
@@ -1072,7 +997,7 @@ public class Hoyustus : CharactersBehaviour
             estadoVeneno = true;
             counterEstados = 100;
             StartCoroutine("afectacionEstadoVeneno");
-        }
+        }*/
     }
 
 
@@ -1242,107 +1167,14 @@ public class Hoyustus : CharactersBehaviour
 
 
     //***************************************************************************************************
-    //METODO PARA EL SALTO Y EL DOBLE SALTO
-    //***************************************************************************************************
-    void Jump(float x, float y)
-    {
-        //Salto simple
-        if (firstJump && !secondJump)
-        {
-
-            if (Input.GetButtonDown("Jump") && Grounded())
-            {
-                isJumping = true;
-                secondJump = false;
-                currentStepsImpulso = 0;
-                rb.AddForce(new Vector2(0, 10f), ForceMode2D.Impulse);
-                //Debug.Log("Salto");
-                isJumping = true;
-                cargaHabilidadCondor += 0.05f;
-                posYAntesSalto = transform.position.y;
-            }
-            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
-            {
-                //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                //MODIFICANDO VELOCIDADES
-                //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
-                //AGREGANDO FUERZAS
-                isJumping = true;
-                rb.AddForce(new Vector2(0, 0.45f - CSTEPS), ForceMode2D.Impulse);
-                currentTimeAir += Time.deltaTime;
-                //Debug.Log("Impulso");
-                cargaHabilidadCondor += 0.005f;
-            }
-
-
-            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir)// || transform.position.y - posYAntesSalto > limitSaltoUno)
-            {
-                isJumping = false;
-                firstJump = false;
-                secondJump = true;
-                //Debug.Log("Alto");
-                return;
-            }
-        }
-        //DOBLE SALTO
-        else if (!firstJump && secondJump)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                currentStepsImpulso = 0;
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                rb.AddForce(new Vector2(0, 9f), ForceMode2D.Impulse);
-                //Debug.Log("Salto 2");
-                isJumping = true;
-                secondJump = true;
-                cargaHabilidadCondor += 0.05f;
-            }
-            else if (Input.GetButton("Jump") && isJumping && currentTimeAir <= timeAir - 0.2f)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
-            {
-                //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                //MODIFICANDO VELOCIDADES
-                //rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
-                //AGREGANDO FUERZAS
-                rb.AddForce(new Vector2(0, 0.15f), ForceMode2D.Impulse);
-                currentTimeAir += Time.deltaTime;
-                isJumping = true;
-                //Debug.Log("Impulso 2");
-                cargaHabilidadCondor += 0.005f;
-            }
-
-            if (Input.GetButtonUp("Jump") || currentTimeAir > timeAir - 0.2f)// || transform.position.y - posYAntesSalto > limitSaltoUno)
-            {
-                isJumping = false;
-                secondJump = false;
-                //Debug.Log("Alto 2");
-                return;
-            }
-        }
-    }
-
-
-    //***************************************************************************************************
     //AUMENTO DE LA VELOCIDAD DE CAIDA DE LOS OBJETOS
     //***************************************************************************************************
     void Falling()
     {
-        //if (!isJumping && !Grounded())
-        //{
         if (rb.velocity.y < 0)
         {
-            //Falling();
-            //rb.gravityScale = 6;
             rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 9f;
         }
-        /*else {
-            rb.gravityScale = 2;
-        }*/
-        //rb.gravityScale = 4;
-        //}
-        //else {
-        //  rb.gravityScale = 2;
-        //}
-        //rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 3f;
     }
 
 
@@ -1491,24 +1323,6 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    /*protected new void Recoil(int direccion)
-    {
-        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        if (Grounded()) {
-            if (rb.gravityScale == 0)
-                rb.AddForce(new Vector2(direccion * 4.5f, 1), ForceMode2D.Impulse);
-            else
-                rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
-        }
-        else
-        {
-            if (rb.gravityScale == 0)
-                rb.AddForce(new Vector2(direccion * 3, 1), ForceMode2D.Impulse);
-            else
-                rb.AddForce(new Vector2(direccion * 10, 8), ForceMode2D.Impulse);
-        }
-        EstablecerInvulnerabilidades(layerObject);
-    }*/
 
     private void ImproveJump()
     {
@@ -1526,268 +1340,6 @@ public class Hoyustus : CharactersBehaviour
         }
 
     }
-
-    void Jump()
-    {
-
-        if (pState.jumping)
-        {
-            //Debug.Log("Entra a Jump");
-            //Debug.Log("stepsJumped: " + stepsJumped);
-            //Debug.Log("jumpSteps " + stepsJumped);
-
-
-            //if (stepsJumped < jumpSteps && !Roofed())
-            if (stepsJumped < jumpSteps)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-
-                //TEST 10/01/2022
-                //rb.velocity += Vector2.up * Physics2D.gravity.y * (20f - 1) * Time.deltaTime;
-
-                stepsJumped++;
-            }
-            else
-            {
-                StopJumpSlow();
-            }
-        }
-
-
-        if (rb.velocity.y < -Mathf.Abs(fallSpeed))
-        {
-            //Debug.Log("rb.velocity.y < -Mathf.Abs(fallSpeed)");
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -Mathf.Abs(fallSpeed), Mathf.Infinity));
-        }
-    }
-
-    /*void Walk(float MoveDirection)
-    {
-        //anim.SetBool("Walking", pState.walking); 
-        anim.SetBool("Walking", true);
-      //Debug.Log("Walking, true");
-
-        //Rigidbody2D rigidbody2D = rb;
-        //float x = MoveDirection * walkSpeed;
-        //Vector2 velocity = rb.velocity;
-        //rigidbody2D.velocity = new Vector2(x, velocity.y);
-        if (!pState.recoilingX)
-        {
-            //Debug.Log("Entra a Walk");
-           
-
-            rb.velocity = new Vector2(MoveDirection * walkSpeed, rb.velocity.y);
-
-            //Cinemachine Zoom
-            if (escena == "14-Boss Room")
-            {
-                //Cinemachine Zoom
-                if (myComponentBase == null)
-                {
-                    myComponentBase = myVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
-                }
-
-            //Debug.Log("CameraDistance: " + (myComponentBase as CinemachineFramingTransposer).m_CameraDistance);
-
-                if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 20f 
-                    && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
-                {
-                    myCameraDistance = MoveDirection * 0.007f;
-
-                    if (myComponentBase is CinemachineFramingTransposer)
-                    {
-                        (myComponentBase as CinemachineFramingTransposer).m_CameraDistance -= myCameraDistance;
-                        //(myComponentBase as CinemachineFramingTransposer).m_ScreenY -= myCameraDistance;
-                        
-                    }
-                }
-                else
-                    (myComponentBase as CinemachineFramingTransposer).m_CameraDistance = 8;
-            }
-
-
-
-            //AudioWalking.Pause();
-            //AudioWalking.Play();
-            //AudioWalking.Play();
-
-            if (Mathf.Abs(rb.velocity.x) > 0)
-            {
-                pState.walking = true;
-                
-            }
-            else
-            {
-                pState.walking = false;
-                
-            }
-            if (xAxis > 0)
-            {
-                pState.lookingRight = true;
-            }
-            else if (xAxis < 0)
-            {
-                pState.lookingRight = false;
-            }
-           
-            anim.SetBool("Walking", pState.walking);
-        }
-
-    }
-
-    void Attack()
-    {
-        timeSinceAttack += Time.deltaTime;
-        if (Input.GetButtonDown("Jump") && timeSinceAttack >= timeBetweenAttack)
-        {
-            timeSinceAttack = 0;
-            //Attack Side
-            if (yAxis == 0 || yAxis < 0 && Grounded())
-            {
-                //anim.SetTrigger("1");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(attackTransform.position, attackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingX = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-                   
-                    
-                }
-            }
-           
-            else if (yAxis > 0)
-            {
-                //anim.SetTrigger("2");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(upAttackTransform.position, upAttackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingY = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-                    //Here is where you would do whatever attacking does in your script.
-                    //In my case its passing the Hit method to an Enemy script attached to the other object(s).
-                }
-            }
-           
-            else if (yAxis < 0 && !Grounded())
-            {
-                //anim.SetTrigger("3");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(downAttackTransform.position, downAttackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingY = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-
-                    
-
-
-                    /*Instantiate(slashEffect1, objectsToHit[i].transform);
-                    if (!(objectsToHit[i].GetComponent<EnemyV1>() == null))
-                    {
-                        objectsToHit[i].GetComponent<EnemyV1>().Hit(damage, 0, -YForce);
-                    }
-
-                    if (objectsToHit[i].tag == "Enemy")
-                    {
-                        Mana += ManaGain;
-                    }
-                }
-            }
-
-        }
-    }
-
-    /*void Recoil()
-    {
-        //since this is run after Walk, it takes priority, and effects momentum properly.
-        if (pState.recoilingX)
-        {
-            if (pState.lookingRight)
-            {
-                rb.velocity = new Vector2(-recoilXSpeed, 0);
-            }
-            else
-            {
-                rb.velocity = new Vector2(recoilXSpeed, 0);
-            }
-        }
-        if (pState.recoilingY)
-        {
-            if (yAxis < 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, recoilYSpeed);
-                rb.gravityScale = 0;
-            }
-            else
-            {
-                rb.velocity = new Vector2(rb.velocity.x, -recoilYSpeed);
-                rb.gravityScale = 0;
-            }
-
-        }
-        else
-        {
-            rb.gravityScale = grabity;
-        }
-    }
-
-    void Flip()
-    {
-        if (xAxis > 0)
-        {
-            transform.localScale = new Vector2(-1, transform.localScale.y);
-        }
-        else if (xAxis < 0)
-        {
-            transform.localScale = new Vector2(1, transform.localScale.y);
-        }
-    }*/
-
-    void StopJumpQuick()
-    {
-
-        stepsJumped = 0;
-        pState.jumping = false;
-        //TEST 01/10/2022
-        //rb.velocity += Vector2.up * Physics2D.gravity.y * (70f - 1) * Time.deltaTime;
-
-        //rb.velocity = new Vector2(rb.velocity.x, -1);
-        rb.velocity = new Vector2(rb.velocity.x, 1);
-        //anim.SetFloat("YVelocity", rb.velocity.y);
-        anim.SetBool("Walking", false);
-        anim.SetTrigger("Jumping");
-    }
-
-    void StopJumpSlow()
-    {
-
-        //TEST 01/10/2022
-        //rb.velocity += Vector2.up * Physics2D.gravity.y * (70f - 1) * Time.deltaTime;
-        stepsJumped = 0;
-        pState.jumping = false;
-        anim.SetFloat("YVelocity", rb.velocity.y);
-        anim.SetTrigger("Jumping");
-    }
-
-
-    /*void StopRecoilX()
-    {
-        stepsXRecoiled = 0;
-        pState.recoilingX = false;
-    }
-
-    void StopRecoilY()
-    {
-        stepsYRecoiled = 0;
-        pState.recoilingY = false;
-    }
-
-    */
 
 
     public bool EventTransition()
