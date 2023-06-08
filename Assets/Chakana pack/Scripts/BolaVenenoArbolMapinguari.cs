@@ -35,6 +35,7 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     public void instanciarValores(GameObject explosion, int layer) {
         this.explosion = explosion;
         gameObject.layer = layer;
+        gameObject.tag = "Veneno";
         this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(6, 25, 6, 12, "Veneno", "ExplosionEnemy");
     }
 

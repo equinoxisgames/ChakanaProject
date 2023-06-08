@@ -50,6 +50,7 @@ public class BolaVeneno : MonoBehaviour
 
     public void aniadirFuerza(float direccion, int layer) {
         transform.gameObject.layer = layer;
+        gameObject.tag = "Veneno";
         rb.WakeUp();
         rb.AddForce(new Vector3(12f * -direccion, 18f, 0f), ForceMode2D.Impulse);
     }
@@ -58,6 +59,7 @@ public class BolaVeneno : MonoBehaviour
     public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY, GameObject explosion)
     {
         transform.gameObject.layer = layer;
+        gameObject.tag = "Veneno";
         rb.WakeUp();
         rb.AddForce(new Vector3(velocityX * -direccion, velocityY, 0f), ForceMode2D.Impulse);
         this.explosion = explosion;
