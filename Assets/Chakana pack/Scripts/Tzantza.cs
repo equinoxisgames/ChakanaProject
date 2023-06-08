@@ -5,21 +5,6 @@ using UnityEngine;
 
 public class Tzantza : CharactersBehaviour
 {
-    //variables
-
-    //private CinemachineVirtualCamera cm;
-    //private SpriteRenderer sp;
-    //private Hoyustus hoyustusPlayerCotroller;
-    //private bool applyForce;
-    //public float detectionRadius = 3;
-    //public LayerMask playerLayer;
-
-    //public Vector2 tzantzaHeadPossition;
-    //public bool inTzantzaHead;
-    //public int tzantzaLives;
-
-    //public string tzantzaName;
-
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool siguiendo = false;
     [SerializeField] private GameObject bolaFuego;
@@ -30,12 +15,6 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private bool atacando;
 
 
-    private void Awake()
-    {
-        //cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
-        //sp = GetComponent<SpriteRenderer>();
-    }
-
     private void Muerte()
     {
         if (vida <= 0) {
@@ -43,47 +22,21 @@ public class Tzantza : CharactersBehaviour
         }      
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        //gameObject.name = tzantzaName; 
         rb = GetComponent<Rigidbody2D>();
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
         bolaFuego = Resources.Load<GameObject>("BolaVeneno");
         layerObject = transform.gameObject.layer;
-        //hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         Muerte();
-        /*detectionRadius = 15;
-        movementSpeed = 7;
-
-        Vector2 direction = hoyustusPlayerCotroller.transform.position - transform.position;
-        float distance = Vector2.Distance(transform.position, hoyustusPlayerCotroller.transform.position);
-
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
-
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
-
-        if (distance <= detectionRadius)
-        {
-            rb.velocity = direction.normalized * movementSpeed;
-            TzantzaFlip(direction.normalized.x);
-        }
-        else {
-            rb.velocity = direction.normalized * -0.5f;
-
-            if (distance <= detectionRadius +1)
-                transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            //TzantzaFlipBack(direction.normalized.x);
-        }*/
-
 
         if (siguiendo && playable) {
             Move();
@@ -152,58 +105,6 @@ public class Tzantza : CharactersBehaviour
 
         if (!collider.name.Contains("Enemy")) {
             triggerElementos_1_1_1(collider);
-            /*
-            if (collider.gameObject.tag == "Viento")
-            {
-                if (estadoViento)
-                {
-                    StopCoroutine("afectacionEstadoViento");
-                }
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 1;
-                    StartCoroutine("combinacionesElementales");
-                    return;
-
-                }
-
-                estadoViento = true;
-                counterEstados = 1;
-                StartCoroutine("afectacionEstadoViento");
-            }
-            else if (collider.gameObject.tag == "Fuego")
-            {
-                if (estadoFuego)
-                {
-                    StopCoroutine("afectacionEstadoFuego");
-                }
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 10;
-                    StartCoroutine("combinacionesElementales");
-                    return;
-                }
-                estadoFuego = true;
-                counterEstados = 10;
-                StartCoroutine("afectacionEstadoFuego");
-            }
-            else if (collider.gameObject.tag == "Veneno")
-            {
-                if (estadoVeneno)
-                {
-                    StopCoroutine("afectacionEstadoVeneno");
-                }
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 100;
-                    StartCoroutine("combinacionesElementales");
-                    return;
-                }
-                estadoVeneno = true;
-                counterEstados = 100;
-                StartCoroutine("afectacionEstadoVeneno");
-            }
-            */
         }
     }
 
@@ -290,49 +191,4 @@ public class Tzantza : CharactersBehaviour
         yield return new WaitForEndOfFrame();
     }
 
-    /*
-    private void TzantzaFlip(float xDirection)
-    {
-        //Debug.Log("TzantzaFlip xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x);
-
-        if (xDirection<0 && transform.localScale.x >0)
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        }else if (xDirection > 0 && transform.localScale.x < 0)
-        {
-
-            transform.localScale = new Vector3( Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-
-    }
-    */
-    /*
-    private void TzantzaFlipBack(float xDirection)
-    {
-
-        
-
-        // if (xDirection < 0 && transform.localScale.x > 0)
-        if (xDirection > 0 &&  transform.localScale.x < 0)
-        {
-
-            Debug.Log("Entra if 1 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: " + hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3((-1*hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-
-        }
-        //else if (xDirection > 0 && transform.localScale.x < 0)
-        else if (xDirection < 0 && transform.localScale.x > 0)
-        {
-
-            Debug.Log("Entra if 2 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: "+ hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            
-
-        }
-
-    }
-    */
 }
