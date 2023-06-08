@@ -264,7 +264,6 @@ public class Hoyustus : CharactersBehaviour
 
     void Start()
     {
-
         //ESTABLECER FRAME RATE
         Application.targetFrameRate = 70;
 
@@ -441,6 +440,7 @@ public class Hoyustus : CharactersBehaviour
         //Attack();
     }
 
+
     /*private void Jump()
     {
         rb.AddForce(new Vector2(0f, 5), ForceMode2D.Impulse);
@@ -454,6 +454,7 @@ public class Hoyustus : CharactersBehaviour
         rb.AddForce(new Vector2(0f, 5), ForceMode2D.Impulse);
         doubleJump = true;
     }*/
+
 
     private void jumpPrueba()
     {
@@ -576,6 +577,7 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+
     private void saltoEspecialSalto() {
 
         if (Input.GetButtonDown("Jump") && !isJumping)
@@ -620,6 +622,7 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+
     private void LateUpdate()
     {
         if (playable)
@@ -627,6 +630,7 @@ public class Hoyustus : CharactersBehaviour
             jumpPrueba();
         }
     }
+
 
     void FixedUpdate()
     {
@@ -710,6 +714,7 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
@@ -760,7 +765,6 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         rb.gravityScale = 2;
     }
-
 
 
     private IEnumerator habilidadSerpiente()
@@ -889,71 +893,72 @@ public class Hoyustus : CharactersBehaviour
 
             }
 
-                                if (collision.gameObject.tag == "Viento")
-                    {
-                        //REINICIO ESTADO VIENTO
-                        if (estadoViento)
-                        {
-                            StopCoroutine("afectacionEstadoViento");
-                        }
-                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                        else if (counterEstados > 0)
-                        {
-                            counterEstados += 1;
-                            StartCoroutine("combinacionesElementales");
-                            return;
+            //CONVERTIFLO A FUNCION
+            if (collision.gameObject.tag == "Viento")
+            {
+                //REINICIO ESTADO VIENTO
+                if (estadoViento)
+                {
+                    StopCoroutine("afectacionEstadoViento");
+                }
+                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 1;
+                    StartCoroutine("combinacionesElementales");
+                    return;
 
-                        }
+                }
 
-                        //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
-                        estadoViento = true;
-                        counterEstados = 1;
-                        StartCoroutine("afectacionEstadoViento");
-                    }
+                //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
+                estadoViento = true;
+                counterEstados = 1;
+                StartCoroutine("afectacionEstadoViento");
+            }
 
-                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-                    else if (collision.gameObject.tag == "Fuego")
-                    {
-                        //REINICIO ESTADO FUEGO
-                        if (estadoFuego)
-                        {
-                            StopCoroutine("afectacionEstadoFuego");
-                        }
-                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                        else if (counterEstados > 0)
-                        {
-                            counterEstados += 10;
-                            StartCoroutine("combinacionesElementales");
-                            return;
-                        }
+            //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
+            else if (collision.gameObject.tag == "Fuego")
+            {
+                //REINICIO ESTADO FUEGO
+                if (estadoFuego)
+                {
+                    StopCoroutine("afectacionEstadoFuego");
+                }
+                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 10;
+                    StartCoroutine("combinacionesElementales");
+                    return;
+                }
 
-                        //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
-                        estadoFuego = true;
-                        counterEstados = 10;
-                        StartCoroutine("afectacionEstadoFuego");
-                    }
+                //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
+                estadoFuego = true;
+                counterEstados = 10;
+                StartCoroutine("afectacionEstadoFuego");
+            }
 
-                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
-                    else if (collision.gameObject.tag == "Veneno")
-                    {
-                        //REINICIO ESTADO VENENO
-                        if (estadoVeneno)
-                        {
-                            StopCoroutine("afectacionEstadoVeneno");
-                        }
-                        //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                        else if (counterEstados > 0)
-                        {
-                            counterEstados += 100;
-                            StartCoroutine("combinacionesElementales");
-                            return;
-                        }
+            //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
+            else if (collision.gameObject.tag == "Veneno")
+            {
+                //REINICIO ESTADO VENENO
+                if (estadoVeneno)
+                {
+                    StopCoroutine("afectacionEstadoVeneno");
+                }
+                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
+                else if (counterEstados > 0)
+                {
+                    counterEstados += 100;
+                    StartCoroutine("combinacionesElementales");
+                    return;
+                }
 
-                        //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
-                        estadoVeneno = true;
-                        counterEstados = 100;
-                        StartCoroutine("afectacionEstadoVeneno");
-                    }
+                //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
+                estadoVeneno = true;
+                counterEstados = 100;
+                StartCoroutine("afectacionEstadoVeneno");
+            }
             //vida -= 20;
             //StartCoroutine(cooldownRecibirDanio(direccion));
             //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
@@ -1769,6 +1774,7 @@ public class Hoyustus : CharactersBehaviour
         anim.SetTrigger("Jumping");
     }
 
+
     /*void StopRecoilX()
     {
         stepsXRecoiled = 0;
@@ -1816,6 +1822,8 @@ public class Hoyustus : CharactersBehaviour
         else return false;
 
     }
+
+
     public void LoadNextLevel()
     {
 

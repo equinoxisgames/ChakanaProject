@@ -100,7 +100,7 @@ public class Tzantza : CharactersBehaviour
     }
 
 
-    private IEnumerator Ataque() {
+    private IEnumerator Ataque(Vector3 objetivoAtaque) {
         ataqueDisponible = false;
         GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
         bolaFuegoGenerada.SetActive(false);
@@ -109,12 +109,18 @@ public class Tzantza : CharactersBehaviour
         playable = false;
         rb.velocity = Vector2.zero;
         yield return new WaitForEndOfFrame();
-        bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject);
+        bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
         bolaFuegoGenerada.SetActive(true);
+
+        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        bolaFuegoGenerada.GetComponent<BolaFuego>().aniadirFuerza();
         yield return new WaitForSeconds(0.7f);
         atacando = false;
         playable = true;
-        yield return new WaitForSeconds(4.3f);
+        yield return new WaitForSeconds(2.3f);
         ataqueDisponible = true;
     }
 
@@ -206,7 +212,7 @@ public class Tzantza : CharactersBehaviour
             objetivo = collision.transform.position;
 
             if (Vector3.Distance(transform.position, collision.transform.position) <= rangoAtaque && ataqueDisponible) {
-                StartCoroutine(Ataque());
+                StartCoroutine(Ataque(collision.transform.position));
             }
         }
     }
