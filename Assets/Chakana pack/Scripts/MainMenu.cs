@@ -44,8 +44,8 @@ public class MainMenu : MonoBehaviour
             gamePadConectado = true;
             joystickIzquierdoMovido = true;
             //Debug.Log("Start Gamepad conectado");
-        }else
-            mouseMovido = true;
+        }
+        mouseMovido = true;
 
     }
 
@@ -56,6 +56,7 @@ public class MainMenu : MonoBehaviour
         if (e.isKey)
         {
             anyKeyPress = true;
+            
             Debug.Log("Se ha presionado una tecla en el teclado: " + e.keyCode);
         }
     }
@@ -77,10 +78,14 @@ public class MainMenu : MonoBehaviour
             altKeyPress = false;
         }
 
-        //if(anyKeyPress)
-        //    mouseMovido = true;
-        //else
-        //    mouseMovido = false ;
+        if (anyKeyPress)
+        {
+            mouseMovido = true;
+            //joystickIzquierdoMovido = false;
+        }
+        
+        else
+            mouseMovido = false;
 
         // Validar movimiento del mouse
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
