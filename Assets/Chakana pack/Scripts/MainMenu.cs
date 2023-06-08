@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 public class MainMenu : MonoBehaviour
@@ -24,12 +25,11 @@ public class MainMenu : MonoBehaviour
     string escena;
     bool boolHomeMenuActive = true;
 
-    private bool mouseMovido = false;
+    public bool mouseMovido = false;
+    public bool joystickIzquierdoMovido = false;
+
+    private float joystickThreshold = 0.2f; // Umbral de sensibilidad del joystick
     private bool gamePadConectado = false;
-
-    public float joystickThreshold = 0.2f; // Umbral de sensibilidad del joystick
-
-    private bool joystickIzquierdoMovido = false;
     private bool botonGamePadPress = false;
     private bool anyKeyPress = false;
     private bool altKeyPress = false;
@@ -64,57 +64,75 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         mouseMovido = true;
+        
+
+        //mouseMovido = true;
         //joystickIzquierdoMovido = true;
-        
 
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
-        {
-            altKeyPress = true;
-            //Debug.Log("Se ha presionado la tecla Alt en el teclado.");
-        }
-        if (altKeyPress && !Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
-        {
-            //Debug.Log("Se ha soltado la tecla Alt en el teclado.");
-            altKeyPress = false;
-        }
 
-        if (anyKeyPress)
-        {
-            mouseMovido = true;
-            //joystickIzquierdoMovido = false;
-        }
-        
-        else
-            mouseMovido = false;
+        //if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+        //{
+        //    altKeyPress = true;
+        //    //Debug.Log("Se ha presionado la tecla Alt en el teclado.");
+        //}
+        //if (altKeyPress && !Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
+        //{
+        //    //Debug.Log("Se ha soltado la tecla Alt en el teclado.");
+        //    altKeyPress = false;
+        //}
+
+        //if (anyKeyPress)
+        //{
+        //    mouseMovido = true;
+        //    joystickIzquierdoMovido = false;
+        //}
+
+        //else
+
+        //{
+        //    mouseMovido = false;
+        //    joystickIzquierdoMovido = true;
+        //}
+
 
         // Validar movimiento del mouse
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
         {
             mouseMovido = true;
             joystickIzquierdoMovido = false;
-            anyKeyPress = false;
-            //Debug.Log("El mouse se ha movido.");
-        }
-        // Validar movimiento del joystick izquierdo del gamepad
-        float joystickX = Input.GetAxis("Horizontal");
-        float joystickY = Input.GetAxis("Vertical");
-        if (Mathf.Abs(joystickX) > joystickThreshold || Mathf.Abs(joystickY) > joystickThreshold)
-        {
-            mouseMovido = false;
-            joystickIzquierdoMovido = true;
-            if (!anyKeyPress)
-            { 
-            joystickIzquierdoMovido = true;
-            
-            anyKeyPress = false;
-            //Debug.Log("Joystick izquierdo del gamepad se ha movido. La variable mouseMovido es "+ mouseMovido);
-            }else
-                Debug.Log("Else Joystick izquierdo del gamepad se ha movido. mouseMovido es " + mouseMovido);
         }
 
-        //mouseMovido = true;
+        //// Validar movimiento del joystick izquierdo del gamepad
+        //float joystickX = Input.GetAxis("Horizontal");
+        //float joystickY = Input.GetAxis("Vertical");
+        //if (Mathf.Abs(joystickX) > joystickThreshold || Mathf.Abs(joystickY) > joystickThreshold)
+        //{
+            
+           
+           
+        //}
+
+
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            Vector2 leftStick = gamepad.leftStick.ReadValue();
+
+            if (leftStick != Vector2.zero && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) &&
+                !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+            {
+                mouseMovido = false;
+                joystickIzquierdoMovido = true;
+
+                Debug.Log("El joystick izquierdo del gamepad se ha movido exclusivamente.");
+                // Realiza las acciones que desees cuando solo el joystick izquierdo se haya movido
+            }
+        }
+
+
 
         Escape();
+      
     }
     public void Escape()
     {
