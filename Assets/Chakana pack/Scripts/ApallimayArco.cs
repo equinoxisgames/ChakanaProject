@@ -11,11 +11,13 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
     [SerializeField] private bool jugadorDetectado;
     [SerializeField] private float direction = 1;
+    [SerializeField] private float detectionTime = 0;
 
 
     void Start()
@@ -25,6 +27,7 @@ public class ApallimayArco : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
+        flecha = Resources.Load<GameObject>("BolaVeneno");
         objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -83,6 +86,35 @@ public class ApallimayArco : CharactersBehaviour
         transform.localScale = new Vector3(direction, 1, 0);
     }
 
+
+    private IEnumerator Ataque(Vector3 objetivoAtaque) {
+        //ataqueDisponible = false;
+        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);
+        flechaGenerada.SetActive(false);
+        flechaGenerada.name += "Enemy";
+        atacando = true;
+        //playable = false;
+        //rb.velocity = Vector2.zero;
+        yield return new WaitForEndOfFrame();
+        //CAMBIAR POR FLECHA
+        flechaGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
+        flechaGenerada.SetActive(true);
+
+        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        flechaGenerada.GetComponent<BolaFuego>().aniadirFuerza();
+        //TIEMPO DE ANIMACION
+        yield return new WaitForSeconds(0.4f);
+        atacando = false;
+        //playable = true;
+        //yield return new WaitForSeconds(2.3f);
+        //ataqueDisponible = true;
+
+    }
+
+
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
@@ -119,8 +151,12 @@ public class ApallimayArco : CharactersBehaviour
             rb.velocity = Vector2.zero;
         }
 
-        triggerElementos_1_1_1(collider);
+        if (!collider.name.Contains("Enemy"))
+        {
+            triggerElementos_1_1_1(collider);
+        }
     }
+
 
     private void OnTriggerStay2D(Collider2D collider)
     {
@@ -128,13 +164,21 @@ public class ApallimayArco : CharactersBehaviour
         if (collider.gameObject.tag == "Player")
         {
             jugadorDetectado = true;
-            //DISPARO DE FLECHA
+            detectionTime += Time.deltaTime;
+
+            if (detectionTime >= 2.5f) {
+                //DISPARO DE FLECHA
+                detectionTime = 0;
+                StartCoroutine(Ataque(collider.transform.position));
+            }
         }
     }
+
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         jugadorDetectado = false;
+        detectionTime = 0;
     }
 
 
