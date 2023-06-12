@@ -25,16 +25,26 @@ public class Pinchos02 : MonoBehaviour
 
     IEnumerator DelayDmg(Hoyustus player)
     {
-        player.recibirDanio(10);
-        Instantiate(exVFX, transform.position, Quaternion.identity);
-        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
+        player.recibirDanio(250);
 
-        yield return new WaitForSeconds(0.44f);
+        if(player.getVida() <= 0)
+        {
+            Instantiate(exVFX, transform.position, Quaternion.identity);
+            player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
+        }
+        else
+        {
+            Instantiate(exVFX, transform.position, Quaternion.identity);
+            player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
 
-        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        pos.z = player.transform.position.z;
-        player.transform.position = pos;
-        isActive = false;
+            yield return new WaitForSeconds(0.44f);
+
+            player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            pos.z = player.transform.position.z;
+            player.transform.position = pos;
+            isActive = false;
+        }
     }
 }

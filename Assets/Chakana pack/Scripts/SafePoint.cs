@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SafePoint : MonoBehaviour
 {
@@ -9,10 +10,11 @@ public class SafePoint : MonoBehaviour
     [SerializeField] Transform pivot;
     [SerializeField] GameObject particles;
     [SerializeField] GameObject txt;
+    [SerializeField] int spNum;
     bool isIn, isOn;
     void Start()
     {
-        if (PlayerPrefs.GetInt("SP01") == 1)
+        if (PlayerPrefs.GetInt("SP" + spNum) == 1)
         {
             fire.SetActive(true);
         }
@@ -27,7 +29,8 @@ public class SafePoint : MonoBehaviour
             fire.SetActive(true);
             Destroy(Instantiate(particles, pivot), 2.5f);
 
-            PlayerPrefs.SetInt("SP01", 1);
+            PlayerPrefs.SetInt("SP" + spNum, 1);
+            PlayerPrefs.SetInt("respawn", SceneManager.GetActiveScene().buildIndex);
 
             isOn = false;
             StartCoroutine(Timer());

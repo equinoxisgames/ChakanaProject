@@ -976,9 +976,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 0
+  vida: 1000
   defensa: 0
-  ataque: 0
+  ataque: 25
   ataqueMax: 0
   estadoViento: 0
   estadoFuego: 0
@@ -1004,9 +1004,6 @@ MonoBehaviour:
   fallSpeed: 150
   jumpSteps: 15
   jumpThreshold: 2
-  attackableLayer:
-    serializedVersion: 2
-    m_Bits: 64
   groundTransform: {fileID: 1103388191273375783}
   groundCheckY: 0.2
   groundCheckX: 1
@@ -1053,11 +1050,10 @@ MonoBehaviour:
   AudioStep8: {fileID: 0}
   GameplayIntro: {fileID: 0}
   GameplayLoop: {fileID: 0}
-  Controller: {fileID: 0}
   ParticleTestParticleTest: {fileID: 4228418058471364819}
-  hurtParticleSystem: {fileID: 0}
   doubleJump: 0
-  maxVida: 100
+  menuMuerte: {fileID: 0}
+  maxVida: 1000
   tiempoInvulnerabilidad: 2
   timeAir: 1.2
   currentTimeAir: 0
@@ -1073,9 +1069,9 @@ MonoBehaviour:
   body: {fileID: 0}
   ataqueAvailable: 1
   lanzas: []
-  cargaHabilidadCondor: 100
-  cargaHabilidadSerpiente: 100
-  cargaHabilidadLanza: 100
+  cargaHabilidadCondor: 0
+  cargaHabilidadSerpiente: 0
+  cargaHabilidadLanza: 0
   cargaCuracion: 0
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
@@ -1089,7 +1085,7 @@ MonoBehaviour:
   codigoAtaque: 0
   SSTEPS: 80
   CSTEPS: 0
-  correctorSalto: 24
+  correctorSalto: 26
 --- !u!61 &1998959458
 BoxCollider2D:
   m_ObjectHideFlags: 0

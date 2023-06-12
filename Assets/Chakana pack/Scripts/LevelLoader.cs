@@ -10,7 +10,6 @@ public class LevelLoader : MonoBehaviour
     [SerializeField] int actualPos;
     [SerializeField] Transform player;
     Transform appearPos;
-    private string actualScene;
 
     private void Awake()
     {
@@ -25,15 +24,11 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        actualScene = SceneManager.GetActiveScene().name;
-    }
-
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player")
         {
+            player.GetComponent<Hoyustus>().SavePlayerData();
             PlayerPrefs.SetInt("scenePos", scenePos);
             //SceneManager.UnloadSceneAsync(actualScene);
             SceneManager.LoadScene(sceneNum);

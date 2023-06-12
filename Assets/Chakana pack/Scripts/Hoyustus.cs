@@ -91,7 +91,7 @@ public class Hoyustus : CharactersBehaviour
     string escena;
 
 
-    private Canvas menuMuerte;
+    [SerializeField] private GameObject menuMuerte;
     private BoxCollider2D dashBodyTESTING;
 
 
@@ -212,18 +212,33 @@ public class Hoyustus : CharactersBehaviour
 
     private void LoadData()
     {
+        if (!PlayerPrefs.HasKey("iniciado"))
+        {
+            PlayerPrefs.SetInt("iniciado", 1);
+            SaveManager.SavePlayerData(GetComponent<Hoyustus>());
+        }
+
         PlayerData playerData = SaveManager.LoadPlayerData();
         if (playerData != null)
         {
             gold = playerData.getGold();
-            //ataque = playerData.getAtaque();
-            //transform.position = new Vector3(playerData.getX(), playerData.getY(), transform.position.z);
+            ataque = playerData.getAtaque();
+            vida = playerData.getVida();
+            if (playerData.getVida() <= 0) vida = maxVida;
+            cargaHabilidadCondor = playerData.getCondor();
+            cargaHabilidadSerpiente = playerData.getSerpiente();
+            cargaHabilidadLanza = playerData.getLanza();
+            cargaCuracion = playerData.getCuracion();
         }
         else
         {
-            ataque = ataqueMax;
+            SaveManager.SavePlayerData(GetComponent<Hoyustus>());
         }
-        vida = 1000;
+    }
+
+    public void SavePlayerData()
+    {
+        SaveManager.SavePlayerData(vida, gold, cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza, cargaCuracion);
     }
 
 
@@ -277,12 +292,6 @@ public class Hoyustus : CharactersBehaviour
 
 
         //escalaGravedad = rb.gravityScale;
-        //menuMuerte = GameObject.Find("MenuMuerte").GetComponent<Canvas>();
-
-        if (menuMuerte != null)
-        {
-            menuMuerte.enabled = false;
-        }
 
 
         if (escena == "00- StartRoom 1" || escena == "05 - Room GA1" || escena == "05 - Room GA1")
@@ -1083,7 +1092,11 @@ public class Hoyustus : CharactersBehaviour
         //WaitForSeconds deberia tener el tiempo de la animacion para desplegar el menu
         yield return new WaitForSeconds(1f);
         //Desplegar el menu
-        menuMuerte.enabled = true;
+
+        SaveManager.SavePlayerData(GetComponent<Hoyustus>());
+
+        Time.timeScale = 0;
+        menuMuerte.SetActive(true);
         //La correccion de las acciones tomadas al "revivir" se implementaran despues al contar con el resto de mecanicas implementadas
         //Es decir la posicion en el checkpoint, vida y gold
     }
