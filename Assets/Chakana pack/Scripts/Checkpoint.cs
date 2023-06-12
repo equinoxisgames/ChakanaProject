@@ -23,7 +23,7 @@ public class Checkpoint : MonoBehaviour
             string scene = SceneManager.GetActiveScene().name;
             Transform position = data.gameObject.transform;
             Debug.Log(position.transform.position);
-            SaveManager.SavePlayerData(vida, gold, scene, position.position.x, position.position.y, position.position.z);
+            //SaveManager.SavePlayerData(vida, gold, scene, position.position.x, position.position.y, position.position.z);
         }
     }
 }

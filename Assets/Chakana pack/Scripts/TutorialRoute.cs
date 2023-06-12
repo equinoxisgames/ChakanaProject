@@ -7,7 +7,7 @@ public class TutorialRoute : MonoBehaviour
     [SerializeField] private GameObject tutoObj;
     [SerializeField] private int tutoNum;
 
-    private bool isActive;
+    private bool isActive, scene01;
     private GameObject keyObj, joyObj;
     private bool joystick = false;
     private Transform player;
@@ -32,6 +32,12 @@ public class TutorialRoute : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
+            if (tutoNum == 5 && !scene01)
+            {
+                StartCoroutine(StartTuto());
+                scene01 = true;
+            }
+
             if (joystick)
             {
                 joystick = false;
@@ -43,6 +49,12 @@ public class TutorialRoute : MonoBehaviour
 
         if (Input.GetButtonDown("JoystickButton") || Input.GetAxis("HorizontalJ") != 0f || Input.GetAxis("VerticalJ") != 0f)
         {
+            if (tutoNum == 5 && !scene01)
+            {
+                StartCoroutine(StartTuto());
+                scene01 = true;
+            }
+
             if (!joystick)
             {
                 joystick = true;
@@ -60,15 +72,18 @@ public class TutorialRoute : MonoBehaviour
             if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10)
             {
                 Time.timeScale = 0;
+                tutoObj.SetActive(true);
+                isActive = true;
             }
 
             player = collision.transform;
-            if (tutoNum <= 7)
+
+            if (tutoNum <= 7 && tutoNum != 5)
             {
                 tutoObj.transform.position = player.position;
+                tutoObj.SetActive(true);
+                isActive = true;
             }
-            tutoObj.SetActive(true);
-            isActive = true;
         }
     }
 
@@ -81,10 +96,20 @@ public class TutorialRoute : MonoBehaviour
         }
     }
 
+    private IEnumerator StartTuto()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        tutoObj.SetActive(true);
+        isActive = true;
+    }
+
     private void TutoDetector()
     {
         if (isActive)
         {
+            print("asdfasfd");
+
             if (tutoNum <= 7)
             {
                 tutoObj.transform.position = player.position;
