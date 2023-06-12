@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ElementalAltar : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] string keyCode;
     [SerializeField] GameObject altarFX;
     [SerializeField] GameObject txtUse;
+    [SerializeField] GameObject details;
+    [SerializeField] TextMeshProUGUI detailTxt;
+    [SerializeField] GameObject explodeFx;
 
     private bool isIn, isOn;
     private string altarName;
@@ -33,7 +37,7 @@ public class ElementalAltar : MonoBehaviour
         {
             altarFX.SetActive(true);
             txtUse.SetActive(false);
-
+            
             isOn = true;
             isIn = false;
 
@@ -41,6 +45,7 @@ public class ElementalAltar : MonoBehaviour
 
             int e = PlayerPrefs.GetInt(doorName) + 1;
             PlayerPrefs.SetInt(doorName, e);
+            StartCoroutine(ShowDetails());
         }
     }
 
@@ -60,5 +65,30 @@ public class ElementalAltar : MonoBehaviour
             isIn = false;
             txtUse.SetActive(false);
         }
+    }
+
+    IEnumerator ShowDetails()
+    {
+        int e = 3 - PlayerPrefs.GetInt(doorName);
+
+        if(e == 2)
+        {
+            detailTxt.text = e + " MORE" + " ALTARS";
+        }
+        else if(e == 1)
+        {
+            detailTxt.text = e + " MORE" + " ALTAR";
+        }
+        else
+        {
+            detailTxt.text = "THE DOOR HAS OPENED";
+            Instantiate(explodeFx);
+        }
+
+        details.SetActive(true);
+
+        yield return new WaitForSeconds(4.4f);
+
+        details.SetActive(false);
     }
 }

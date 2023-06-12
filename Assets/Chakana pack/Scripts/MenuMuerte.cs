@@ -18,13 +18,25 @@ public class MenuMuerte : MonoBehaviour
         correccionLogicas();
         if (data != null)
         {
-            SceneManager.LoadScene(data.getSceneName());
+            //SceneManager.LoadScene(data.getSceneName());
             //PlayerPrefs.SetFloat("nextPositionXPrefsName", data.getX());
             //PlayerPrefs.SetFloat("nextPositionYPrefsName", data.getY());
         }
         else {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+    }
+
+    public void RespawnContinue()
+    {
+        PlayerPrefs.SetInt("scenePos", 0);
+        Time.timeScale = 1;
+
+        if (!PlayerPrefs.HasKey("respawn"))
+        {
+            SceneManager.LoadScene(1);
+        }
+        else SceneManager.LoadScene(PlayerPrefs.GetInt("respawn"));
     }
 
     private void correccionLogicas() {

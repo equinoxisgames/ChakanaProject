@@ -3,27 +3,26 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData{
 
-    private float maxVida = 100;
+    private float maxVida = 1000;
     private float vida;
     private int gold;
     private float ataque;
-    private string sceneName;
     //private Transform positionRevivir;
-    private float x, y, z;
     private float cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza;
+    private float curacion;
     public PlayerData(Hoyustus hoyustus) {
-        //vida =  hoyustus.getVida();
+        vida =  hoyustus.getVida();
         ataque = hoyustus.getAtaque();
         gold = hoyustus.getGold();
     }
 
-    public PlayerData(float vida, int gold, string sceneName, float x, float y, float z) { 
-        //this.vida = vida;
+    public PlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion) { 
+        this.vida = vida;
         this.gold = gold;
-        this.sceneName = sceneName;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.cargaHabilidadCondor = condor;
+        this.cargaHabilidadSerpiente = serpiente;
+        this.cargaHabilidadLanza = lanza;
+        this.curacion = curacion;
     }
 
     public float getVida(){
@@ -38,20 +37,23 @@ public class PlayerData{
         return ataque;
     }
 
-    public string getSceneName(){
-        return sceneName;
+    public float getCondor()
+    {
+        return cargaHabilidadCondor;
     }
 
-    public float getX(){
-        return x;
+    public float getSerpiente()
+    {
+        return cargaHabilidadSerpiente;
     }
 
-    public float getY(){
-        return y;
+    public float getLanza()
+    {
+        return cargaHabilidadLanza;
     }
 
-    public float getZ(){
-        return z;
+    public float getCuracion()
+    {
+        return curacion;
     }
-
 }
