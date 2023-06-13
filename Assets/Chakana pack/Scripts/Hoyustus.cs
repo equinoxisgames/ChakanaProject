@@ -177,19 +177,23 @@ public class Hoyustus : CharactersBehaviour
         tocandoPared = value;
     }
 
-    public float getCargaHabilidadCondor(){
+    public float getCargaHabilidadCondor()
+    {
         return cargaHabilidadCondor;
     }
 
-    public float getCargaHabilidadSerpiente(){
+    public float getCargaHabilidadSerpiente()
+    {
         return cargaHabilidadSerpiente;
     }
 
-    public float getCargaHabilidadLanza(){
+    public float getCargaHabilidadLanza()
+    {
         return cargaHabilidadLanza;
     }
 
-    public float getCargaCuracion(){
+    public float getCargaCuracion()
+    {
         return cargaCuracion;
     }
 
@@ -200,10 +204,10 @@ public class Hoyustus : CharactersBehaviour
         LoadData();
         //Debug.Log(gold);
 
-        // Establecer el m�nimo de FPS
+        // Establecer el m nimo de FPS
         //Application.targetFrameRate = 30; // Por ejemplo, 30 FPS
 
-        // Establecer el m�ximo de FPS
+        // Establecer el m ximo de FPS
         //QualitySettings.vSyncCount = 0; // Desactivar el VSync
         //Application.targetFrameRate = 90; // Por ejemplo, 60 FPS
 
@@ -337,6 +341,13 @@ public class Hoyustus : CharactersBehaviour
         //Flip();
         //Walk(xAxis);
         tocarPared();
+
+        if(transform.parent != null)
+        {
+            limitY = transform.position.y + 8.5f;
+        }
+        Debug.Log(limitY);
+
         //HABILIDADES ELEMENTALES
         //Debug.Log(CSTEPS);
         //Debug.Log(rb.velocity.y);
@@ -446,7 +457,8 @@ public class Hoyustus : CharactersBehaviour
 
     private void jumpPrueba()
     {
-        if (Input.GetButtonUp("Jump")) {
+        if (Input.GetButtonUp("Jump"))
+        {
             anim.Play("Caer");
             rb.velocity = new Vector2(rb.velocity.x, 0);
             isJumping = false;
@@ -459,7 +471,8 @@ public class Hoyustus : CharactersBehaviour
                 currentTimeAir = 0;
                 return;
             }
-            else {                
+            else
+            {
                 secondJump = false;
                 return;
             }
@@ -546,7 +559,7 @@ public class Hoyustus : CharactersBehaviour
                 isJumping = true;
                 //Debug.Log("Impulso 2");
                 //cargaHabilidadCondor += 0.005f;
-                
+
             }
 
 
@@ -578,7 +591,7 @@ public class Hoyustus : CharactersBehaviour
     {
         /*if (isJumping && currentTimeAir < timeAir)
         {
-            // Incrementar la fuerza del salto en funci�n del tiempo que se mantiene presionado el bot�n
+            // Incrementar la fuerza del salto en funci n del tiempo que se mantiene presionado el bot n
             rb.AddForce(new Vector2(0f, 5f * (timeAir - currentTimeAir)), ForceMode2D.Impulse);
             currentTimeAir += Time.fixedDeltaTime;
         }*/
@@ -631,7 +644,7 @@ public class Hoyustus : CharactersBehaviour
         */
         if (EventTransition())
         {
-            //Debug.Log("Disparar Transici�n");
+            //Debug.Log("Disparar Transici n");
             LoadNextLevel();
         }
         //ImproveJump();
@@ -661,7 +674,7 @@ public class Hoyustus : CharactersBehaviour
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
 
-        if(rb.gravityScale == 0) 
+        if (rb.gravityScale == 0)
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, 1), ForceMode2D.Impulse);
         else
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
@@ -734,6 +747,7 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza()
     {
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
         EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
         cargaCuracion += 30;
@@ -804,7 +818,7 @@ public class Hoyustus : CharactersBehaviour
     {
 
         //COLISIONES PARA OBJETOS TAGUEADOS COMO ENEMY
-        if (collision.gameObject.layer == 3)
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -827,6 +841,7 @@ public class Hoyustus : CharactersBehaviour
                     //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    collisionElementos_1_1_1(collision);
                 }
 
             }
@@ -835,7 +850,8 @@ public class Hoyustus : CharactersBehaviour
 
             }
 
-            collisionElementos_1_1_1(collision);
+            if (!invulnerable)
+                collisionElementos_1_1_1(collision);
             /*
             //CONVERTIFLO A FUNCION
             if (collision.gameObject.tag == "Viento")
@@ -937,7 +953,15 @@ public class Hoyustus : CharactersBehaviour
             {
 
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
-                if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES")
+                if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 3)
+                {
+                    //StartCoroutine(HurtParticlesPlayer());
+                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    triggerElementos_1_1_1(collider);
+                    return;
+                }
+                else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18)
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
@@ -952,7 +976,8 @@ public class Hoyustus : CharactersBehaviour
 
             }
         }
-        triggerElementos_1_1_1(collider);
+        if (!invulnerable)
+            triggerElementos_1_1_1(collider);
 
         /*
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
@@ -1042,6 +1067,9 @@ public class Hoyustus : CharactersBehaviour
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || //|| Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
+            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f) {
+                return false;
+            }
 
             anim.SetBool("Grounded", true);
             //isJumping = false;
@@ -1051,6 +1079,8 @@ public class Hoyustus : CharactersBehaviour
             currentTimeAir = 0;
             saltoEspecial = false;
             CSTEPS = 0;
+            //if(Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer))
+                //limitY = transform.position.y + 8.5f;
             isJumping = false;
             return true;
         }
@@ -1067,8 +1097,10 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    private bool isTouchingRoof() {
-        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer)) {
+    private bool isTouchingRoof()
+    {
+        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer))
+        {
             return true;
         }
         return false;
@@ -1078,7 +1110,7 @@ public class Hoyustus : CharactersBehaviour
     private void tocarPared()
     {
         //tocandoPared = (Physics2D.OverlapBox(wallPoint.position, Vector2.right * 2f, 0, wallLayer)) ? 0 : 1;
-        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x  * 0.5f +
+        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x * 0.5f +
             Vector3.up * 1.25f, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
 
     }
@@ -1291,7 +1323,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash()
     {
-        if (dashAvailable && Input.GetButton("Dash"))
+        if (dashAvailable && Input.GetButton("Dash") && tocandoPared != 0)
         {
             invulnerable = true;
             playable = false;
@@ -1299,6 +1331,7 @@ public class Hoyustus : CharactersBehaviour
             rb.velocity = Vector2.zero;
             rb.gravityScale = 0f;
             StartCoroutine(dashCooldown());
+
         }
     }
 
@@ -1311,6 +1344,8 @@ public class Hoyustus : CharactersBehaviour
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
         isDashing = true;
+
+        body.isTrigger = true;
         //body.enabled = false; **********************************************
         //bodyHoyustus.SetActive(false);
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
@@ -1338,6 +1373,7 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         rb.gravityScale = 2;
         QuitarInvulnerabilidades(layerObject);
+        body.isTrigger = false;
         invulnerable = false;
         yield return new WaitForSeconds(1f);
         dashAvailable = true;
@@ -1787,21 +1823,21 @@ public class Hoyustus : CharactersBehaviour
 
     void WalkingControl()
     {
-        //Debug.Log("Entra a la secci�n de get button");
+        //Debug.Log("Entra a la secci n de get button");
 
         if (Input.GetButtonDown("Horizontal"))// && Grounded() )//&& pState.walking == true)
         {
-            //Debug.Log("Entra a la secci�n de get button Horizontal Input");
+            //Debug.Log("Entra a la secci n de get button Horizontal Input");
             if (Grounded())
             {
-                //Debug.Log("Entra a la secci�n de get button Horizontal Input Grounded");
+                //Debug.Log("Entra a la secci n de get button Horizontal Input Grounded");
 
                 AudioWalking.Play();
             }
             else
             {
 
-                //Debug.Log("Entra a la secci�n de get button Horizontal Input Not Grounded");
+                //Debug.Log("Entra a la secci n de get button Horizontal Input Not Grounded");
                 AudioWalking.Stop();
             }
 
@@ -1810,14 +1846,14 @@ public class Hoyustus : CharactersBehaviour
         {
             if (Grounded())
             {
-                //Debug.Log("Entra a la secci�n de get button Horizontal Input !Grounded Grounded");
+                //Debug.Log("Entra a la secci n de get button Horizontal Input !Grounded Grounded");
 
                 AudioWalking.Play();
             }
             else
             {
 
-                //Debug.Log("Entra a la secci�n de get button Horizontal Input !Grounded !Grounded");
+                //Debug.Log("Entra a la secci n de get button Horizontal Input !Grounded !Grounded");
                 AudioWalking.Stop();
             }
         }
@@ -1849,7 +1885,8 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
-    public float getMaxVida() { 
+    public float getMaxVida()
+    {
         return maxVida;
     }
 
