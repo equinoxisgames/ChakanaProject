@@ -341,6 +341,13 @@ public class Hoyustus : CharactersBehaviour
         //Flip();
         //Walk(xAxis);
         tocarPared();
+
+        if(transform.parent != null)
+        {
+            limitY = transform.position.y + 8.5f;
+        }
+        Debug.Log(limitY);
+
         //HABILIDADES ELEMENTALES
         //Debug.Log(CSTEPS);
         //Debug.Log(rb.velocity.y);
@@ -1060,6 +1067,9 @@ public class Hoyustus : CharactersBehaviour
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || //|| Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
+            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f) {
+                return false;
+            }
 
             anim.SetBool("Grounded", true);
             //isJumping = false;
@@ -1069,6 +1079,8 @@ public class Hoyustus : CharactersBehaviour
             currentTimeAir = 0;
             saltoEspecial = false;
             CSTEPS = 0;
+            //if(Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer))
+                //limitY = transform.position.y + 8.5f;
             isJumping = false;
             return true;
         }
@@ -1311,7 +1323,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash()
     {
-        if (dashAvailable && Input.GetButton("Dash"))
+        if (dashAvailable && Input.GetButton("Dash") && tocandoPared != 0)
         {
             invulnerable = true;
             playable = false;
@@ -1319,6 +1331,7 @@ public class Hoyustus : CharactersBehaviour
             rb.velocity = Vector2.zero;
             rb.gravityScale = 0f;
             StartCoroutine(dashCooldown());
+
         }
     }
 
@@ -1331,6 +1344,7 @@ public class Hoyustus : CharactersBehaviour
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
         isDashing = true;
+
         body.isTrigger = true;
         //body.enabled = false; **********************************************
         //bodyHoyustus.SetActive(false);
