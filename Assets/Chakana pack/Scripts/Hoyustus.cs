@@ -340,7 +340,7 @@ public class Hoyustus : CharactersBehaviour
         //HABILIDADES ELEMENTALES
         //Debug.Log(CSTEPS);
         //Debug.Log(rb.velocity.y);
-        if (botonCuracion >= 0.2f)
+        if (botonCuracion >= 0.3f)
         {
             botonCuracion = 0f;
             aplastarBotonCuracion = false;
@@ -349,24 +349,6 @@ public class Hoyustus : CharactersBehaviour
         if (aplastarBotonCuracion)
         {
             botonCuracion += Time.deltaTime;
-        }
-
-        if (Input.GetButtonDown("Activador_Habilidades"))
-        {
-
-            aplastarBotonCuracion = true;
-            //ACTIVACION DE LA CURACION
-            if (cargaCuracion >= maxHabilidad_Curacion && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.2f)
-            {
-                curando = true;
-                cargaCuracion = 0;
-                playable = false;
-                aplastarBotonCuracion = false;
-                botonCuracion = 0f;
-                StartCoroutine("Curacion");
-                return;
-            }
-
 
             if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
@@ -381,6 +363,38 @@ public class Hoyustus : CharactersBehaviour
             {
                 StartCoroutine("habilidadLanza");
             }
+        }
+
+        if (Input.GetButtonDown("Activador_Habilidades"))
+        {
+
+            aplastarBotonCuracion = true;
+            //ACTIVACION DE LA CURACION
+            if (cargaCuracion >= maxHabilidad_Curacion && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.3f)
+            {
+                curando = true;
+                cargaCuracion = 0;
+                playable = false;
+                aplastarBotonCuracion = false;
+                botonCuracion = 0f;
+                StartCoroutine("Curacion");
+                return;
+            }
+
+
+            /*if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
+            {
+                StartCoroutine("habilidadCondor");
+            }
+            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
+            {
+                dashAvailable = false;
+                StartCoroutine("habilidadSerpiente");
+            }
+            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
+            {
+                StartCoroutine("habilidadLanza");
+            }*/
 
             return;
         }
@@ -663,7 +677,7 @@ public class Hoyustus : CharactersBehaviour
         //CAMBIO A LA ANIMACION
         yield return new WaitForSeconds(1f);
         playable = true;
-        vida += 45;
+        vida += 350;
         curando = false;
         Debug.Log("Curado");
     }
