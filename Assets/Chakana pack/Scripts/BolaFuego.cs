@@ -47,12 +47,9 @@ public class BolaFuego : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == 6 || collision.gameObject.layer == 16)
         {
             if (collision.gameObject.CompareTag("Player")) {
-                try {
-                    collision.gameObject.GetComponent<Hoyustus>().recibirDanio(15);
-                }
-                catch (Exception e) { 
-                
-                }
+                collision.gameObject.GetComponent<Hoyustus>().recibirDanio(15);
+                //collision.gameObject.GetComponent<Hoyustus>().ejecucionCorrutinaPrueba((transform.position.x <= collision.transform.position.x) ? 1 : -1, 2f);
+
             }
             Destroy(gameObject);
         }

@@ -1438,6 +1438,10 @@ public class Hoyustus : CharactersBehaviour
 
     }
 
+    public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
+        StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
+    }
+
 
     public void LoadNextLevel()
     {
