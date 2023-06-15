@@ -346,7 +346,6 @@ public class Hoyustus : CharactersBehaviour
         {
             limitY = transform.position.y + 8.5f;
         }
-        Debug.Log(limitY);
 
         //HABILIDADES ELEMENTALES
         //Debug.Log(CSTEPS);
