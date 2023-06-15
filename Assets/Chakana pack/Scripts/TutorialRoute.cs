@@ -69,7 +69,7 @@ public class TutorialRoute : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10)
+            if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10 || tutoNum == 11)
             {
                 Time.timeScale = 0;
                 tutoObj.SetActive(true);
@@ -108,8 +108,6 @@ public class TutorialRoute : MonoBehaviour
     {
         if (isActive)
         {
-            print("asdfasfd");
-
             if (tutoNum <= 7)
             {
                 tutoObj.transform.position = player.position;
@@ -172,6 +170,13 @@ public class TutorialRoute : MonoBehaviour
                 Destroy(gameObject);
             }
             if (tutoNum == 10 && Input.anyKeyDown)
+            {
+                Time.timeScale = 1;
+                tutoObj.SetActive(false);
+                PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
+                Destroy(gameObject);
+            }
+            if (tutoNum == 11 && Input.anyKeyDown)
             {
                 Time.timeScale = 1;
                 tutoObj.SetActive(false);

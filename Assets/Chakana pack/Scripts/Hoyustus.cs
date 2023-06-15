@@ -804,6 +804,10 @@ public class Hoyustus : CharactersBehaviour
         playable = state;
     }
 
+    public void setGold(int e)
+    {
+        gold += e;
+    }
 
     public void setAumentoDanioParalizacion(float value)
     {
@@ -1139,6 +1143,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForSeconds(1f);
         //Desplegar el menu
 
+        SavePlayerData();
         SaveManager.SavePlayerData(GetComponent<Hoyustus>());
 
         Time.timeScale = 0;

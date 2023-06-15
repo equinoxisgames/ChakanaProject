@@ -7,7 +7,7 @@ public class ObjDestroy : MonoBehaviour
     [SerializeField] private GameObject vfxDestroy;
     [SerializeField] private bool door, gold;
     [SerializeField] private int doorNum;
-
+    [SerializeField] GameObject goldObj;
     void Start()
     {
         if (PlayerPrefs.HasKey("puerta" + doorNum) && door)
@@ -23,6 +23,16 @@ public class ObjDestroy : MonoBehaviour
             if (door)
             {
                 PlayerPrefs.SetInt("puerta" + doorNum, 1);
+            }
+
+            if (gold)
+            {
+                int e = Random.Range(1, 4);
+
+                for (int i = 0; i <= e; i++)
+                {
+                    Instantiate(goldObj, transform.position, Quaternion.identity);
+                }
             }
 
             Instantiate(vfxDestroy, transform.position, Quaternion.identity);
