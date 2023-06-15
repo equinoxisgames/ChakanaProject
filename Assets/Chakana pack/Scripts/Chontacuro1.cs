@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -117,6 +118,7 @@ public class Chontacuro1 : CharactersBehaviour
                 speed = 0;
             }
             else {
+
                 speed = 6.2f;
                 siguiendo = true;
                 objetivo = collider.transform.position;
@@ -203,6 +205,7 @@ public class Chontacuro1 : CharactersBehaviour
             }
         }
     }
+
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
