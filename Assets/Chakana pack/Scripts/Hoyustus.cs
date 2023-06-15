@@ -459,7 +459,8 @@ public class Hoyustus : CharactersBehaviour
     {
         if (Input.GetButtonUp("Jump"))
         {
-            anim.Play("Caer");
+            if(!atacando)
+                anim.Play("Caer");
             rb.velocity = new Vector2(rb.velocity.x, 0);
             isJumping = false;
             CSTEPS = 0;
@@ -565,7 +566,8 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS > SSTEPS || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
             {
-                anim.Play("Caer");
+                if (!atacando)
+                    anim.Play("Caer");
                 CSTEPS = 0;
                 isJumping = false;
                 secondJump = false;
