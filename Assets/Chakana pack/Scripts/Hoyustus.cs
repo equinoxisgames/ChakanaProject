@@ -596,7 +596,7 @@ public class Hoyustus : CharactersBehaviour
             currentTimeAir += Time.fixedDeltaTime;
         }*/
 
-        if (playable)
+        if (playable && !atacando)
         {
             /*if (!saltoEspecial)
             {
@@ -926,6 +926,40 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18)
+        {
+            //direccion nos dara la orientacion de recoil al sufrir danio
+            int direccion = 1;
+            if (collision.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
+
+
+            try
+            {
+                //DETECCION DE DEL CUERPO DEL ENEMIGO
+                if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
+                {
+                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    collisionElementos_1_1_1(collision);
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+    }
     //***************************************************************************************************
     //DETECCION DE TRIGGERS
     //***************************************************************************************************
@@ -1243,8 +1277,10 @@ public class Hoyustus : CharactersBehaviour
     private void ataqueLanza()
     {
 
-        if (ataqueAvailable && Input.GetButton("Atacar"))
+        if (ataqueAvailable && Input.GetButtonDown("Atacar"))
         {
+            atacando = true;
+            //playable = false;
             int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
             //VOLVERLAS VARIABLES GLOBALES
             float h = Input.GetAxis("Horizontal");
@@ -1269,6 +1305,11 @@ public class Hoyustus : CharactersBehaviour
                     index = 2;
                     codigoAtaque = 6;
                 }
+                else if (v <= 0 && Grounded())
+                {
+                    anim.Play("Lanza Lateral");
+                    codigoAtaque = 4;
+                }
             }
             else if (v != 0 && h != 0)
             {
@@ -1284,6 +1325,11 @@ public class Hoyustus : CharactersBehaviour
                     {
                         index = 2;
                         codigoAtaque = 6;
+                    }
+                    else if (v <= 0 && Grounded())
+                    {
+                        anim.Play("Lanza Lateral");
+                        codigoAtaque = 4;
                     }
                 }
                 else
@@ -1307,10 +1353,12 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator lanzaCooldown(int index)
     {
-        atacando = true;
+        //rb.velocity = new Vector2(0, rb.velocity.y);
         lanzas[index].SetActive(true);
+        atacando = true;
         yield return new WaitForSeconds(0.2f);
         atacando = false;
+        playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(false);
         yield return new WaitForSeconds(0.5f);
@@ -1436,6 +1484,10 @@ public class Hoyustus : CharactersBehaviour
         }
         else return false;
 
+    }
+
+    public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
+        StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
     }
 
 

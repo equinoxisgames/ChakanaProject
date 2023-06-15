@@ -70,10 +70,10 @@ public class Tzantza : CharactersBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         bolaFuegoGenerada.GetComponent<BolaFuego>().aniadirFuerza();
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.5f);
         atacando = false;
         playable = true;
-        yield return new WaitForSeconds(2.3f);
+        yield return new WaitForSeconds(2.0f);
         ataqueDisponible = true;
     }
 
@@ -115,9 +115,13 @@ public class Tzantza : CharactersBehaviour
             siguiendo = true;
             objetivo = collision.transform.position;
 
-            if (Vector3.Distance(transform.position, collision.transform.position) <= rangoAtaque && ataqueDisponible) {
-                StartCoroutine(Ataque(collision.transform.position));
-            }
+            try
+            {
+                if (Vector3.Distance(transform.position, collision.transform.position) <= rangoAtaque && ataqueDisponible)
+                {
+                    StartCoroutine(Ataque(collision.transform.position));
+                }
+            } catch { }
         }
     }
 
@@ -144,7 +148,13 @@ public class Tzantza : CharactersBehaviour
             transform.localScale = Vector3.one;
         }
 
-        rb.velocity = direction.normalized * movementSpeed * (1 - afectacionViento);
+        if (Vector3.Distance(transform.position, objetivo) > 3.2f)
+        {
+            rb.velocity = direction.normalized * movementSpeed * (1 - afectacionViento);
+        }
+        else {
+            rb.velocity = Vector2.zero;
+        }
     }
 
     private IEnumerator combinacionesElementales()
