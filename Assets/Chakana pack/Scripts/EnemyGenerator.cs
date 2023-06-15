@@ -15,8 +15,6 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Awake()
     {
-        PlayerPrefs.DeleteAll();
-
         if (PlayerPrefs.HasKey("combat"))
         {
             Destroy(gameObject);

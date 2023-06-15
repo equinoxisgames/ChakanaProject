@@ -6,15 +6,15 @@ public class GoldObj : MonoBehaviour
 {
     [SerializeField] int goldType;
     [SerializeField] int goldTypeFisic;
-    [SerializeField] List<Sprite> goldSprite = new List<Sprite>();
 
     int amount;
     void Start()
     {
-        if (goldType == 1)
+        int e = Random.Range(1, 11);
+
+        if (e > 6)
         {
-            int e = Random.Range(1, 6);
-            goldType = e;
+            Destroy(gameObject);
         }
 
         if (goldType == 0)
@@ -31,11 +31,6 @@ public class GoldObj : MonoBehaviour
         else if (goldType == 3) amount = 7;
         else if (goldType == 4) amount = 1;
         else if (goldType == 5) amount = 4;
-
-        if(goldType != 0)
-        {
-            GetComponent<SpriteRenderer>().sprite = goldSprite[(goldType - 1)];
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

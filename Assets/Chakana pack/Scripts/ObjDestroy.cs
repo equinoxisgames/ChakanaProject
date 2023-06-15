@@ -27,11 +27,20 @@ public class ObjDestroy : MonoBehaviour
 
             if (gold)
             {
-                int e = Random.Range(1, 4);
+                Instantiate(goldObj, transform.position, Quaternion.identity);
 
-                for (int i = 0; i <= e; i++)
+                Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+
+                foreach(Collider2D collider in objetos)
                 {
-                    Instantiate(goldObj, transform.position, Quaternion.identity);
+                    Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
+                    if(rb2D != null)
+                    {
+                        Vector2 direccion = collider.transform.position - transform.position;
+                        float distancia = 1 + direccion.magnitude;
+                        float fuerza = 200 / distancia;
+                        rb2D.AddForce(direccion * fuerza);
+                    }
                 }
             }
 
