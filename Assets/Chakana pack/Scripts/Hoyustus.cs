@@ -1280,7 +1280,7 @@ public class Hoyustus : CharactersBehaviour
         if (ataqueAvailable && Input.GetButtonDown("Atacar"))
         {
             atacando = true;
-            playable = false;
+            //playable = false;
             int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
             //VOLVERLAS VARIABLES GLOBALES
             float h = Input.GetAxis("Horizontal");
@@ -1305,6 +1305,11 @@ public class Hoyustus : CharactersBehaviour
                     index = 2;
                     codigoAtaque = 6;
                 }
+                else if (v <= 0 && Grounded())
+                {
+                    anim.Play("Lanza Lateral");
+                    codigoAtaque = 4;
+                }
             }
             else if (v != 0 && h != 0)
             {
@@ -1320,6 +1325,11 @@ public class Hoyustus : CharactersBehaviour
                     {
                         index = 2;
                         codigoAtaque = 6;
+                    }
+                    else if (v <= 0 && Grounded())
+                    {
+                        anim.Play("Lanza Lateral");
+                        codigoAtaque = 4;
                     }
                 }
                 else
