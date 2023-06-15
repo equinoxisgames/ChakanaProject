@@ -505,7 +505,7 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Salto");
                 isJumping = true;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 20;
+                cargaHabilidadCondor += 10;
                 //posYAntesSalto = transform.position.y;
                 CSTEPS++;
                 limitY = transform.position.y + 8.5f;
@@ -545,7 +545,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 limitY = transform.position.y + 8.5f;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 20;
+                cargaHabilidadCondor += 10;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
@@ -804,6 +804,10 @@ public class Hoyustus : CharactersBehaviour
         playable = state;
     }
 
+    public void setGold(int e)
+    {
+        gold += e;
+    }
 
     public void setAumentoDanioParalizacion(float value)
     {
@@ -1173,6 +1177,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForSeconds(1f);
         //Desplegar el menu
 
+        SavePlayerData();
         SaveManager.SavePlayerData(GetComponent<Hoyustus>());
 
         Time.timeScale = 0;
