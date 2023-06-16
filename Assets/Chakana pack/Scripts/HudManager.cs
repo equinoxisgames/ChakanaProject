@@ -8,9 +8,9 @@ public class HudManager : MonoBehaviour
     Hoyustus player;
     [SerializeField] LiquidBar lifeBar;
     [SerializeField] LiquidBar manaBar;
-    [SerializeField] Image condorBar;
-    [SerializeField] Image snakeBar;
-    [SerializeField] Image weaponBar;
+    [SerializeField] LiquidBar condorBar;
+    [SerializeField] LiquidBar snakeBar;
+    [SerializeField] LiquidBar weaponBar;
     [SerializeField] Text goldTxt;
 
     float lifeMax;
@@ -50,11 +50,18 @@ public class HudManager : MonoBehaviour
 
         lifeBar.currentFillAmount = (life / lifeMax);
         lifeBar.targetFillAmount = (life / lifeMax);
+
         manaBar.currentFillAmount = (mana / maxValue);
         manaBar.targetFillAmount = (mana / maxValue);
-        condorBar.fillAmount = (condor / maxValue);
-        snakeBar.fillAmount = (snake / maxValue);
-        weaponBar.fillAmount = (weapon / maxValue);
+
+        condorBar.currentFillAmount = (condor / maxValue);
+        condorBar.targetFillAmount = (condor / maxValue);
+
+        snakeBar.currentFillAmount = (snake / maxValue);
+        snakeBar.targetFillAmount = (snake / maxValue);
+
+        weaponBar.currentFillAmount = (weapon / maxValue);
+        weaponBar.targetFillAmount = (weapon / maxValue);
         goldTxt.text = player.getGold().ToString();
 
         string[] joystickNames = Input.GetJoystickNames();
@@ -99,21 +106,21 @@ public class HudManager : MonoBehaviour
         {
             condor = player.getCargaHabilidadCondor();
 
-            condorBar.fillAmount = (condor / maxValue);
+            condorBar.targetFillAmount = (condor / maxValue);
         }
 
         if (player.getCargaHabilidadSerpiente() != snake)
         {
             snake = player.getCargaHabilidadSerpiente();
 
-            snakeBar.fillAmount = (snake / maxValue);
+            snakeBar.targetFillAmount = (snake / maxValue);
         }
 
         if (player.getCargaHabilidadLanza() != weapon)
         {
             weapon = player.getCargaHabilidadLanza();
 
-            weaponBar.fillAmount = (weapon / maxValue);
+            weaponBar.targetFillAmount = (weapon / maxValue);
         }
     }
 }
