@@ -59,6 +59,8 @@ public class ApallimayArco : CharactersBehaviour
 
     private void Move() {
 
+        Debug.Log("me muevo");
+
         rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
 
         if (transform.position.x <= limit1.x)
@@ -145,7 +147,7 @@ public class ApallimayArco : CharactersBehaviour
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
         }
-        else if (collider.gameObject.CompareTag("Player"))
+        else if (collider.gameObject.layer == 11)
         {
             jugadorDetectado = true;
             rb.velocity = Vector2.zero;
@@ -161,7 +163,7 @@ public class ApallimayArco : CharactersBehaviour
     private void OnTriggerStay2D(Collider2D collider)
     {
 
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.layer == 11)
         {
             jugadorDetectado = true;
             detectionTime += Time.deltaTime;
@@ -177,8 +179,11 @@ public class ApallimayArco : CharactersBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        jugadorDetectado = false;
-        detectionTime = 0;
+        if (collision.gameObject.layer == 11)
+        {
+            jugadorDetectado = false;
+            detectionTime = 0;
+        }
     }
 
 
