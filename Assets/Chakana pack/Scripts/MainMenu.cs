@@ -64,8 +64,26 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
         mouseMovido = true;
-        
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (escena == "00- Main Menu 0")
+            {
+                if (homeMenu.gameObject.activeSelf)
+                    btContinue.Select();
+                else
+                if (exitMenu.gameObject.activeSelf)
+                    btExitGame.Select();
+            }
+            else
+            {
+                if (pauseMenu.gameObject.activeSelf)
+                    btContinue.Select();
+                else
+                if (exitMenu.gameObject.activeSelf)
+                    btExitGame.Select();
+            }
+        }
         //mouseMovido = true;
         //joystickIzquierdoMovido = true;
 
