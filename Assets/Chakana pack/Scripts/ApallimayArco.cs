@@ -44,9 +44,10 @@ public class ApallimayArco : CharactersBehaviour
             Flip();
         }
 
-        if (!jugadorDetectado) {
+        if (!jugadorDetectado)
+        {
             Move();
-        }        
+        }
     }
 
     private void Muerte()
@@ -58,8 +59,6 @@ public class ApallimayArco : CharactersBehaviour
     }
 
     private void Move() {
-
-        Debug.Log("me muevo");
 
         rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
 

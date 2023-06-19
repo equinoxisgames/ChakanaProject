@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CharactersBehaviour : MonoBehaviour
 {
-
+    [Header("Atributos Basicos")]
     [SerializeField] protected int gold;
     [SerializeField] protected float vida;
     [SerializeField] protected float defensa;
     [SerializeField] protected float ataque;
     [SerializeField] protected float ataqueMax;
+    [Space(5)]
 
     [Header("Estados Elementales")]
     [SerializeField] protected bool estadoViento;
@@ -21,15 +22,20 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float afectacionVeneno = 0.05f;
     [SerializeField] protected int aumentoFuegoPotenciado = 1;
     [SerializeField] protected float aumentoDanioParalizacion = 1f;
+    [Space(5)]
+
+    [Header("Invulnerabilidad")]
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
     [SerializeField] protected string explosionInvulnerable;
+    [SerializeField] protected bool inmuneDash = false;
+
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
     public float fuerzaRecoil;
 
-    [SerializeField] protected bool inmuneDash = false;
+    
 
 
 
