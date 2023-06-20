@@ -5,6 +5,21 @@ using UnityEngine;
 
 public class MenuMuerte : MonoBehaviour
 {
+    bool isDead;
+
+    private void Start()
+    {
+        isDead = true;
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            RespawnContinue();
+        }
+    }
+
     public void changeScene(string sceneName) {
         SceneManager.LoadScene(sceneName);
         correccionLogicas();

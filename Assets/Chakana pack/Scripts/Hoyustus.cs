@@ -198,6 +198,16 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
+    public void setCargaCuracion(int e)
+    {
+        cargaCuracion += e;
+    }
+
+    public void CurarCompletamente()
+    {
+        vida = maxVida;
+    }
+
     private void Awake()
     {
         //CARGAR DATA
@@ -210,7 +220,6 @@ public class Hoyustus : CharactersBehaviour
         // Establecer el m ximo de FPS
         //QualitySettings.vSyncCount = 0; // Desactivar el VSync
         //Application.targetFrameRate = 90; // Por ejemplo, 60 FPS
-
     }
 
 
@@ -329,7 +338,7 @@ public class Hoyustus : CharactersBehaviour
 
 
         SSTEPS = 55;
-        maxVida = vida;
+        //maxVida = vida;
     }
 
 

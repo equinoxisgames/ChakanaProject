@@ -27,6 +27,7 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] bool hayPiso = true;
+    [SerializeField] GameObject deathFX;
 
     private void Awake()
     {
@@ -77,6 +78,8 @@ public class Chontacuro1 : CharactersBehaviour
     }
 
     private void Muerte() {
+        Instantiate(deathFX, transform.position, Quaternion.identity);
+
         Destroy(this.gameObject);
     }
 

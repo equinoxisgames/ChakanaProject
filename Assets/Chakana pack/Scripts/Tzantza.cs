@@ -13,11 +13,14 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private bool atacando;
+    [SerializeField] GameObject deathFX;
 
 
     private void Muerte()
     {
         if (vida <= 0) {
+            Instantiate(deathFX, transform.position, Quaternion.identity);
+
             Destroy(this.gameObject);
         }      
     }
