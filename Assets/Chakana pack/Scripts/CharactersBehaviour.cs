@@ -44,7 +44,6 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
-
         Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
         {

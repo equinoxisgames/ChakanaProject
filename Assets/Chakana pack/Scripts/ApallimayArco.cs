@@ -18,6 +18,11 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private bool jugadorDetectado;
     [SerializeField] private float direction = 1;
     [SerializeField] private float detectionTime = 0;
+    [SerializeField] private float posY = 0;
+    [SerializeField] Transform groundDetector;
+    [SerializeField] LayerMask groundLayer;
+
+    [SerializeField] private bool prueba = false;
 
 
     void Start()
@@ -31,18 +36,25 @@ public class ApallimayArco : CharactersBehaviour
         objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
+        posY = transform.position.y;
+        groundDetector = transform.GetChild(3).gameObject.transform;
     }
 
 
     void Update()
     {
+        if (playable) {
+            //Falling();
+        }
+
         Muerte();
         //Flip();
 
-        if (transform.position.x < limit1.x || transform.position.x > limit2.x)
-        {
+       // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
+        //{
             Flip();
-        }
+        //}
+        detectarPiso();
 
         if (!jugadorDetectado)
         {
@@ -123,12 +135,15 @@ public class ApallimayArco : CharactersBehaviour
         //EstablecerInvulnerabilidades(layerObject);
     }
 
+
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
 
-        if (collider.gameObject.layer == 14 && playable)
+        if (collider.gameObject.layer == 14)
         {
+            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             int direccion = 1;
             if (collider.transform.position.x > gameObject.transform.position.x)
             {
@@ -139,6 +154,13 @@ public class ApallimayArco : CharactersBehaviour
                 direccion = 1;
             }
 
+            if (prueba) {
+                //rb.bodyType = RigidbodyType2D.Dynamic;
+                rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
+                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+                //Recoil(direccion, 1);
+            }
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
@@ -158,7 +180,6 @@ public class ApallimayArco : CharactersBehaviour
         }
     }
 
-
     private void OnTriggerStay2D(Collider2D collider)
     {
 
@@ -170,9 +191,88 @@ public class ApallimayArco : CharactersBehaviour
             if (detectionTime >= 2.5f) {
                 //DISPARO DE FLECHA
                 detectionTime = 0;
-                StartCoroutine(Ataque(collider.transform.position));
+                //StartCoroutine(Ataque(collider.transform.position));
             }
         }
+    }
+
+    private void Falling()
+    {
+        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 16)
+        {
+            if (objetivo == limit1)
+            {
+                limit1 = transform.position + Vector3.right * 0.5f;
+                objetivo = limit1;
+                direction = 1;
+            }
+            else if (objetivo == limit2)
+            {
+                limit2 = transform.position - Vector3.right * 0.5f;
+                objetivo = limit2;
+                direction = -1;
+            }
+
+        }
+
+        if (collision.gameObject.layer == 6 && transform.position.y <= posY -2) {
+            posY = transform.position.y;
+            limit1 = transform.GetChild(0).gameObject.transform.position;
+            limit2 = transform.GetChild(1).gameObject.transform.position;
+
+            if (limit1.x > limit2.x) {
+                Vector3 aux = limit1;
+                limit1 = limit2;
+                limit2 = limit1;
+            }
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 11)
+        {
+            //rb.bodyType = RigidbodyType2D.Static;
+            prueba = true;
+                 
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+        }
+
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 11)
+        {
+            //rb.bodyType = RigidbodyType2D.Dynamic;
+            prueba = false;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        }
+    }
+
+    public bool detectarPiso()
+    {
+        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
+        {
+            if (direction == -1)
+            {
+                limit1 = transform.position + Vector3.right * 0.1f;
+            }
+            else if (direction == 1)
+            {
+                limit2 = transform.position - Vector3.right * 0.1f;
+            }
+            return false;
+        }
+        return true;
     }
 
 
