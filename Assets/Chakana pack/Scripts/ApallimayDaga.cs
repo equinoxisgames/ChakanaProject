@@ -221,15 +221,17 @@ public class ApallimayDaga : CharactersBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6 && transform.position.y <= posY -2) {
+        if (collision.gameObject.layer == 6){//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
+            objetivo = limit2;
 
-            if (limit1.x > limit2.x) {
+            if (limit1.x >= limit2.x)
+            {
                 Vector3 aux = limit1;
                 limit1 = limit2;
-                limit2 = limit1;
+                limit2 = aux;
             }
         }
     }
