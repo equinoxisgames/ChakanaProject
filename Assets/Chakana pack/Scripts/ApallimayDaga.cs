@@ -11,16 +11,17 @@ public class ApallimayDaga : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private GameObject explosion;
-    [SerializeField] private GameObject flecha;
+    //[SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
-    [SerializeField] private bool jugadorDetectado = false;
+    //[SerializeField] private bool jugadorDetectado = false;
     [SerializeField] private float direction = 1;
     [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] private CapsuleCollider2D daga;
 
     [SerializeField] private bool prueba = false;
 
@@ -32,12 +33,12 @@ public class ApallimayDaga : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
-        flecha = Resources.Load<GameObject>("BolaVeneno");
+        daga = transform.GetChild(2).gameObject.GetComponent<CapsuleCollider2D>();
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
         objetivo = limit2;
         posY = transform.position.y;
-        groundDetector = transform.GetChild(3).gameObject.transform;
+        groundDetector = transform.GetChild(4).gameObject.transform;
     }
 
 
@@ -56,7 +57,8 @@ public class ApallimayDaga : CharactersBehaviour
         //}
         detectarPiso();
 
-        if (!jugadorDetectado)
+
+        if (playable)
         {
             Move();
         }
@@ -101,37 +103,14 @@ public class ApallimayDaga : CharactersBehaviour
 
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        //ataqueDisponible = false;
-        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);
-        flechaGenerada.SetActive(false);
-        flechaGenerada.name += "Enemy";
-        atacando = true;
-        //playable = false;
-        //rb.velocity = Vector2.zero;
         yield return new WaitForEndOfFrame();
-        //CAMBIAR POR FLECHA
-        flechaGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
-        flechaGenerada.SetActive(true);
-
-        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        flechaGenerada.GetComponent<BolaFuego>().aniadirFuerza();
-        //TIEMPO DE ANIMACION
-        yield return new WaitForSeconds(0.4f);
-        atacando = false;
-        //playable = true;
-        //yield return new WaitForSeconds(2.3f);
-        //ataqueDisponible = true;
-
     }
 
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion * 8, rb.gravityScale * 4), ForceMode2D.Impulse);
         //EstablecerInvulnerabilidades(layerObject);
     }
 
@@ -170,7 +149,7 @@ public class ApallimayDaga : CharactersBehaviour
         }
         else if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
+            //jugadorDetectado = true;
             rb.velocity = Vector2.zero;
         }
 
@@ -185,14 +164,15 @@ public class ApallimayDaga : CharactersBehaviour
 
         if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
+            //jugadorDetectado = true;
             detectionTime += Time.deltaTime;
+            objetivo = collider.transform.position;
 
-            if (detectionTime >= 2.5f) {
+            //if (detectionTime >= 2.5f) {
                 //DISPARO DE FLECHA
                 detectionTime = 0;
                 //StartCoroutine(Ataque(collider.transform.position));
-            }
+            //}
         }
     }
 
@@ -257,6 +237,18 @@ public class ApallimayDaga : CharactersBehaviour
             prueba = false;
             rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+
+            posY = transform.position.y;
+            limit1 = transform.GetChild(0).gameObject.transform.position;
+            limit2 = transform.GetChild(1).gameObject.transform.position;
+            objetivo = limit2;
+
+            if (limit1.x >= limit2.x)
+            {
+                Vector3 aux = limit1;
+                limit1 = limit2;
+                limit2 = aux;
+            }
         }
     }
 
@@ -282,8 +274,16 @@ public class ApallimayDaga : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            jugadorDetectado = false;
+            //jugadorDetectado = false;
             detectionTime = 0;
+
+            if (transform.position.x > limit2.x) {
+                objetivo = limit1;
+            }
+            if (transform.position.x < limit1.x)
+            {
+                objetivo = limit2;
+            }
         }
     }
 
