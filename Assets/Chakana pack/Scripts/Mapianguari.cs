@@ -39,6 +39,7 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private bool cambioPlataformaDisponible = true;
     [SerializeField] private float timerAtaqueEspecial = 0f;
+    [SerializeField] private LiquidBar lifeBar;
 
 
     private float xCharco = 10f;
@@ -88,9 +89,15 @@ public class Mapianguari : CharactersBehaviour
         explosion = Resources.Load<GameObject>("Explosion");
     }
 
+    private void UpdateLife()
+    {
+        lifeBar.targetFillAmount = (vida / maxVida);
+    }
 
     private void FixedUpdate()
     {
+        UpdateLife();
+
         if (vida <= maxVida / 2) {
             movementVelocity = 12;
             segundaEtapa = true;
