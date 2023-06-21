@@ -79,8 +79,8 @@ public class Mapianguari : CharactersBehaviour
         layerObject = transform.gameObject.layer;
 
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
-        Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
-        Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").transform.GetChild(0).GetComponent<BoxCollider2D>());
+        //Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
+        //Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").transform.GetChild(0).GetComponent<BoxCollider2D>());
 
 
         //CARGA DE PREFABS
@@ -173,6 +173,9 @@ public class Mapianguari : CharactersBehaviour
                 direccion = 1;
             }
 
+            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
@@ -181,40 +184,6 @@ public class Mapianguari : CharactersBehaviour
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
-        /*if (collider.gameObject.layer == 12 || collider.gameObject.layer == 14)
-        {
-            //direccion nos dara la orientacion de recoil al sufrir danio
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
-
-            StartCoroutine(cooldownRecibirDanio(direccion));
-            if (collider.gameObject.layer == 12) {
-                Debug.Log("golpeado por explosion");
-                recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
-            }
-            else {
-                Debug.Log("golpeado por arma");
-                //EN EL CASO DE TRATARSE DE LA LANZA DE HOYUSTUS
-                if (collider.transform.parent != null)
-                {
-                    recibirDanio(collider.transform.parent.parent.GetComponent<CharactersBehaviour>().getAtaque());
-                }
-                else {
-                    //Reg
-                    // DE LO CONTRARIO SE RECIBIRIA EL DANIO DE EL ARCO (NO DISPONIBLE EN LA BETA) O DE LA EXPLOSION DE LA HABILIDAD CONDOR
-                    if (collider.transform.name == "Explosion(Clone)") {
-                        recibirDanio(collider.transform.GetComponent<ExplosionBehaviour>().getDanioExplosion());
-                    }
-                }
-            }
-        }*/
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")
@@ -638,4 +607,25 @@ public class Mapianguari : CharactersBehaviour
         }
     }
 
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 11)
+        {
+            //rb.bodyType = RigidbodyType2D.Static;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+        }
+
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 11)
+        {
+            //rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        }
+    }
 }

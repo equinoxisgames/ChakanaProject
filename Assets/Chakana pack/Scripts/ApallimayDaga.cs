@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ApallimayArco : CharactersBehaviour
+public class ApallimayDaga : CharactersBehaviour
 {
 
     [SerializeField] private float speed;
@@ -15,7 +15,7 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
-    [SerializeField] private bool jugadorDetectado;
+    [SerializeField] private bool jugadorDetectado = false;
     [SerializeField] private float direction = 1;
     [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
@@ -33,9 +33,9 @@ public class ApallimayArco : CharactersBehaviour
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
         flecha = Resources.Load<GameObject>("BolaVeneno");
-        objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
+        objetivo = limit2;
         posY = transform.position.y;
         groundDetector = transform.GetChild(3).gameObject.transform;
     }
@@ -191,7 +191,7 @@ public class ApallimayArco : CharactersBehaviour
             if (detectionTime >= 2.5f) {
                 //DISPARO DE FLECHA
                 detectionTime = 0;
-                StartCoroutine(Ataque(collider.transform.position));
+                //StartCoroutine(Ataque(collider.transform.position));
             }
         }
     }
