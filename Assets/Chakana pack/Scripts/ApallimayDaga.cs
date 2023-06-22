@@ -26,6 +26,7 @@ public class ApallimayDaga : CharactersBehaviour
 
     void Start()
     {
+        explosionInvulnerable = "ExplosionEnemy";
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;

@@ -21,12 +21,15 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] private float timeNear = 0;
+    [SerializeField] private bool realizandoAtaqueEspecial = false;
 
     [SerializeField] private bool prueba = false;
 
 
     void Start()
     {
+        explosionInvulnerable = "ExplosionEnemy";
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
@@ -188,12 +191,39 @@ public class ApallimayArco : CharactersBehaviour
             jugadorDetectado = true;
             detectionTime += Time.deltaTime;
 
-            if (detectionTime >= 2.5f) {
+            if (Vector3.Distance(transform.position, collider.transform.position) <= 5) {
+                timeNear += Time.deltaTime;
+            }
+            else
+            {
+                timeNear = 0;
+            }
+
+
+            if (timeNear >= 3 && !realizandoAtaqueEspecial) {
+                realizandoAtaqueEspecial = true;
+                StartCoroutine(AtaqueEspecial());
+            }
+            else if (detectionTime >= 2.5f && !realizandoAtaqueEspecial)
+            {
                 //DISPARO DE FLECHA
                 detectionTime = 0;
                 StartCoroutine(Ataque(collider.transform.position));
             }
         }
+    }
+
+
+    private IEnumerator AtaqueEspecial() {
+        timeNear = 0;
+        detectionTime = 0;
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
+        Instantiate(explosion, transform.position, Quaternion.identity);
+
+        //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
+        yield return new WaitForSeconds(0.8f);
+        timeNear = 0;
+        realizandoAtaqueEspecial = false;
     }
 
     private void Falling()
