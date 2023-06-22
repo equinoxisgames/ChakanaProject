@@ -284,10 +284,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 35
+  vida: 240
   defensa: 0
-  ataque: 0
-  ataqueMax: 0
+  ataque: 75
+  ataqueMax: 75
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -302,9 +302,9 @@ MonoBehaviour:
   explosionInvulnerable: 
   inmuneDash: 0
   fuerzaRecoil: 0
-  speed: 6
+  speed: 5
   objetivo: {x: 0, y: 0, z: 0}
-  rangoAtaque: 0
+  rangoAtaque: 2
   ataqueDisponible: 0
   explosion: {fileID: 0}
   atacando: 0
@@ -318,6 +318,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   daga: {fileID: 0}
+  rangoDeteccion: 8
+  cooldownAtaque: 2
   prueba: 0
 --- !u!1 &8436099179091101279
 GameObject:

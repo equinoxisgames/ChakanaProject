@@ -20,6 +20,9 @@ public class ApallimayDaga : CharactersBehaviour
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] private CapsuleCollider2D daga;
+    [SerializeField] private float rangoDeteccion;
+    [SerializeField] private float cooldownAtaque;
+ 
 
     [SerializeField] private bool prueba = false;
 
@@ -181,13 +184,13 @@ public class ApallimayDaga : CharactersBehaviour
             //jugadorDetectado = true;
             objetivo = collider.transform.position;
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= 9.5f)
+            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoDeteccion)
             {
                 detectionTime += Time.deltaTime;
             }
 
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= 1.5f)
+            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaque)
             {
                 rb.constraints = RigidbodyConstraints2D.FreezePositionX;
                 rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
@@ -197,7 +200,7 @@ public class ApallimayDaga : CharactersBehaviour
                 rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             }
 
-            if (detectionTime >= 1.5f && !atacando && playable) {
+            if (detectionTime >= cooldownAtaque && !atacando && playable) {
                 detectionTime = 0;
                 StartCoroutine(Ataque());
             }

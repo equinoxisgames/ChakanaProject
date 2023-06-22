@@ -19,9 +19,10 @@ public class Mapianguari : CharactersBehaviour
     public bool ataqueDisponible;
     private BoxCollider2D ataqueCuerpo, campoVision;
     private CapsuleCollider2D cuerpo;
-    private float movementVelocity = 6;
-    private float valorAtaqueBasico = 20;
-    private float valorAtaqueEspecial = 30;
+    [SerializeField] private float movementVelocity = 6;
+    [SerializeField] private float valorAtaqueBasico;
+    [SerializeField] private float valorAtaqueEspecial;
+    [SerializeField] private float coolDownAtaque;
     //private float movementVelocitySecondStage = 8;
     private float maxVida;
     private bool segundaEtapa = false;
@@ -63,7 +64,7 @@ public class Mapianguari : CharactersBehaviour
 
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
-        vida = 200;
+        //vida = 200;
         maxVida = vida;
         ataqueMax = valorAtaqueBasico;
         ataque = ataqueMax;
@@ -387,7 +388,7 @@ public class Mapianguari : CharactersBehaviour
             rb.velocity = Vector2.zero;
         }
         atacando = false;
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(coolDownAtaque);
         ataqueDisponible = true;
     }
 

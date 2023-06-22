@@ -978,32 +978,31 @@ MonoBehaviour:
   gold: 0
   vida: 1000
   defensa: 0
-  ataque: 25
-  ataqueMax: 0
+  ataque: 50
+  ataqueMax: 50
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
   counterEstados: 0
   afectacionViento: 0
-  afectacionFuego: 5
+  afectacionFuego: 15
   afectacionVeneno: 0.05
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 0
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  fuerzaRecoil: 0
   inmuneDash: 0
-  myVirtualCamera: {fileID: 0}
-  myCameraSensivity: 10
-  pState: {fileID: 0}
+  fuerzaRecoil: 0
   walkSpeedGround: 12
   resistenciaAire: 0.3
   walkSpeed: 12
-  jumpSpeed: 20
-  fallSpeed: 150
-  jumpSteps: 15
-  jumpThreshold: 2
+  isWalking: 0
+  isJumping: 0
+  correctorSalto: 26
+  firstJump: 1
+  secondJump: 0
+  groundCheckRadius: 0.15
   groundTransform: {fileID: 1103388191273375783}
   groundCheckY: 0.2
   groundCheckX: 1
@@ -1016,9 +1015,6 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 131072
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
   transitionLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1034,7 +1030,6 @@ MonoBehaviour:
   roofTransform: {fileID: 1103388191273375783}
   roofCheckY: 0.2
   roofCheckX: 1
-  groundCheckRadius: 0.15
   anim: {fileID: 0}
   AudioWalking: {fileID: 0}
   AudioJump: {fileID: 0}
@@ -1051,41 +1046,44 @@ MonoBehaviour:
   GameplayIntro: {fileID: 0}
   GameplayLoop: {fileID: 0}
   ParticleTestParticleTest: {fileID: 4228418058471364819}
-  doubleJump: 0
   menuMuerte: {fileID: 0}
   maxVida: 1000
   tiempoInvulnerabilidad: 2
   timeAir: 1.2
   currentTimeAir: 0
-  currentStepsImpulso: 0
-  firstJump: 1
-  secondJump: 0
   tocandoPared: 1
-  isJumping: 0
-  isWalking: 0
+  timeDashCooldown: 0.5
   dashAvailable: 1
   bodyHoyustus: {fileID: 0}
   dashBody: {fileID: 0}
   body: {fileID: 0}
+  isDashing: 0
+  atacando: 0
+  codigoAtaque: 0
+  tiempoCooldownAtaque: 0.2
   ataqueAvailable: 1
   lanzas: []
+  valorAtaqueNormal: 50
+  valorAtaqueHabilidadCondor: 100
+  valorAtaqueHabilidadLanza: 150
   cargaHabilidadCondor: 0
   cargaHabilidadSerpiente: 0
   cargaHabilidadLanza: 0
   cargaCuracion: 0
+  aumentoBarraSalto: 0
+  aumentoBarraDash: 0
+  aumentoBarraAtaque: 0
+  danioExplosionCombinacionFuego_Veneno: 35
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 9010123227811289174}
   roofPoint: {fileID: 0}
   botonCuracion: 0
   aplastarBotonCuracion: 0
+  realizandoHabilidadLanza: 0
   curando: 0
-  isDashing: 0
-  atacando: 0
-  codigoAtaque: 0
   SSTEPS: 80
   CSTEPS: 0
-  correctorSalto: 26
 --- !u!61 &1998959458
 BoxCollider2D:
   m_ObjectHideFlags: 0

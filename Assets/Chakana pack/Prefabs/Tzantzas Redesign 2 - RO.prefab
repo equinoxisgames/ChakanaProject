@@ -11116,10 +11116,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 35
+  vida: 175
   defensa: 0
-  ataque: 5
-  ataqueMax: 5
+  ataque: 45
+  ataqueMax: 45
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -11132,8 +11132,8 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  fuerzaRecoil: 0
   inmuneDash: 0
+  fuerzaRecoil: 0
   movementSpeed: 5
   siguiendo: 0
   bolaFuego: {fileID: 0}
@@ -11141,6 +11141,8 @@ MonoBehaviour:
   objetivo: {x: 0, y: 0, z: 0}
   rangoAtaque: 6
   ataqueDisponible: 0
+  atacando: 0
+  cooldownAtaque: 1.5
 --- !u!1 &7018684030751906704
 GameObject:
   m_ObjectHideFlags: 0
