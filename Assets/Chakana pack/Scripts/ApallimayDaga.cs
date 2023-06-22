@@ -11,11 +11,9 @@ public class ApallimayDaga : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private GameObject explosion;
-    //[SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
-    //[SerializeField] private bool jugadorDetectado = false;
     [SerializeField] private float direction = 1;
     [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
@@ -51,14 +49,16 @@ public class ApallimayDaga : CharactersBehaviour
         Muerte();
         //Flip();
 
-       // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
+        // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
         //{
+        if (!atacando) {
             Flip();
+        }
         //}
         detectarPiso();
 
 
-        if (playable)
+        if (playable && !atacando && Grounded())
         {
             Move();
         }
@@ -102,8 +102,20 @@ public class ApallimayDaga : CharactersBehaviour
     }
 
 
-    private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        yield return new WaitForEndOfFrame();
+    private IEnumerator Ataque() {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        playable = false;
+        yield return new WaitForSeconds(0.4f);
+        atacando = true;
+        rb.AddForce(new Vector2(direction * 12f, 0f), ForceMode2D.Impulse);
+        daga.enabled = true;
+        yield return new WaitForSeconds(0.4f);
+        atacando = false;
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        daga.enabled = false;
+        yield return new WaitForSeconds(0.2f);
+        playable = true;
+        detectionTime = 0;
     }
 
 
@@ -143,6 +155,7 @@ public class ApallimayDaga : CharactersBehaviour
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
+                detectionTime = 0;
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
@@ -165,14 +178,42 @@ public class ApallimayDaga : CharactersBehaviour
         if (collider.gameObject.layer == 11)
         {
             //jugadorDetectado = true;
-            detectionTime += Time.deltaTime;
             objetivo = collider.transform.position;
 
-            //if (detectionTime >= 2.5f) {
-                //DISPARO DE FLECHA
+            if (Vector3.Distance(transform.position, collider.transform.position) <= 9.5f)
+            {
+                detectionTime += Time.deltaTime;
+            }
+
+
+            if (Vector3.Distance(transform.position, collider.transform.position) <= 1.5f)
+            {
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            }
+            else {
+                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            }
+
+            if (detectionTime >= 1.5f && !atacando && playable) {
                 detectionTime = 0;
-                //StartCoroutine(Ataque(collider.transform.position));
-            //}
+                StartCoroutine(Ataque());
+            }
+        }
+    }
+
+
+    private bool Grounded() {
+        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer)) //||
+        //Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+
         }
     }
 
@@ -223,8 +264,8 @@ public class ApallimayDaga : CharactersBehaviour
             //rb.bodyType = RigidbodyType2D.Static;
             prueba = true;
                  
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -235,8 +276,9 @@ public class ApallimayDaga : CharactersBehaviour
         {
             //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
+            detectionTime = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
             rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
 
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
