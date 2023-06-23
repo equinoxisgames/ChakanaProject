@@ -41,6 +41,9 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
 
+    [SerializeField] private GameObject combFX01;
+
+    private GameObject combObj01;
 
     private float xCharco = 10f;
     private float yCharco = 1.0f;
@@ -272,6 +275,9 @@ public class Mapianguari : CharactersBehaviour
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;

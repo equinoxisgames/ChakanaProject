@@ -17,21 +17,25 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected bool estadoVeneno;
     [SerializeField] protected int counterEstados;
     [SerializeField] protected float afectacionViento;
-    [SerializeField] protected float afectacionFuego = 5;
+    [SerializeField] protected float afectacionFuego = 15;
     [SerializeField] protected float afectacionVeneno = 0.05f;
     [SerializeField] protected int aumentoFuegoPotenciado = 1;
     [SerializeField] protected float aumentoDanioParalizacion = 1f;
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
     [SerializeField] protected string explosionInvulnerable;
+    [SerializeField] GameObject vientoFX;
+    [SerializeField] GameObject fuegoFX;
+    [SerializeField] GameObject venenoFX;
+    [SerializeField] GameObject recieveDmgFX;
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
     public float fuerzaRecoil;
+    private GameObject vientoObj, fuegoObj, venenoObj;
+    private float vidaMax = 0;
 
     [SerializeField] protected bool inmuneDash = false;
-
-
 
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
@@ -140,11 +144,14 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoViento()
     {
+        if (vientoObj == null) vientoObj = Instantiate(vientoFX, transform.position, Quaternion.identity, transform);
         afectacionViento = 0.10f;
+        print(gameObject.name);
         yield return new WaitForSeconds(10f);
         estadoViento = false;
         afectacionViento = 0;
         counterEstados = 0;
+        if (vientoObj != null) Destroy(vientoObj);
     }
 
 
@@ -153,6 +160,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoFuego()
     {
+        if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, transform.position, Quaternion.identity, transform);
         for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(2f);
@@ -162,6 +170,7 @@ public class CharactersBehaviour : MonoBehaviour
         estadoFuego = false;
         counterEstados = 0;
         ataque = this.ataqueMax;
+        if (fuegoObj != null) Destroy(fuegoObj);
     }
 
 
@@ -170,13 +179,17 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoVeneno()
     {
+        if (venenoObj == null) venenoObj = Instantiate(venenoFX, transform.position, venenoFX.transform.rotation, transform);
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(2f);
-            vida *= (1 - afectacionVeneno);
+            float dmg = vidaMax * afectacionVeneno;
+            vida -= dmg;
+            print(vidaMax);
         }
         estadoVeneno = false;
         counterEstados = 0;
+        if (venenoObj != null) Destroy(venenoObj);
     }
 
 
@@ -184,7 +197,12 @@ public class CharactersBehaviour : MonoBehaviour
     //RECIBIR DANIO ATAQUE ENEMIGO
     //***************************************************************************************************
     public void recibirDanio(float danio) {
+
+        if(vidaMax == 0) vidaMax = vida;
+
         vida -= (danio * aumentoDanioParalizacion);
+
+        Instantiate(recieveDmgFX, transform.position, Quaternion.identity);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)
@@ -247,6 +265,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
 
@@ -255,7 +276,7 @@ public class CharactersBehaviour : MonoBehaviour
             //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
             estadoViento = true;
             counterEstados = 1;
-            StartCoroutine("afectacionEstadoViento");
+            StartCoroutine("afectacionEstadoViento");            
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
@@ -270,6 +291,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
             }
@@ -292,6 +316,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 100;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
             }
@@ -318,6 +345,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
 
@@ -341,6 +371,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
             }
@@ -363,6 +396,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 100;
+                if (venenoObj != null) Destroy(venenoObj);
+                if (fuegoObj != null) Destroy(fuegoObj);
+                if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
             }
