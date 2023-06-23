@@ -294,7 +294,7 @@ public class Hoyustus : MonoBehaviour
                 if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 20f 
                     && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
                 {
-                    myCameraDistance = MoveDirection * 0.007f;
+                    myCameraDistance = MoveDirection * 0.00007f;
 
                     if (myComponentBase is CinemachineFramingTransposer)
                     {
