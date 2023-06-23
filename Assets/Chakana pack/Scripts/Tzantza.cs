@@ -13,6 +13,7 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private bool atacando;
+    [SerializeField] private float cooldownAtaque;
     [SerializeField] GameObject deathFX;
 
     [SerializeField] private GameObject combFX01;
@@ -80,7 +81,7 @@ public class Tzantza : CharactersBehaviour
         yield return new WaitForSeconds(0.5f);
         atacando = false;
         playable = true;
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(cooldownAtaque);
         ataqueDisponible = true;
     }
 

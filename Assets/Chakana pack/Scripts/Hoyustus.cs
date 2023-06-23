@@ -11,34 +11,29 @@ using System.Runtime.InteropServices.WindowsRuntime;
 public class Hoyustus : CharactersBehaviour
 {
 
-    [Header("CineMachine")]
-    [SerializeField] CinemachineVirtualCamera myVirtualCamera;
-    [SerializeField] float myCameraSensivity = 0.006f;
-
-    public PlayerStateList pState;
-
-    [Header("X Axis Movement")]
+    [Header("Movimiento")]
     [SerializeField] float walkSpeedGround = 9f;
     [SerializeField] float resistenciaAire = 0.3f;
     [SerializeField] float walkSpeed = 12f;
-
+    [SerializeField] private bool isWalking = false;
     [Space(5)]
 
-    [Header("Y Axis Movement")]
-    [SerializeField] float jumpSpeed = 45;
-    [SerializeField] float fallSpeed = 45;
-    [SerializeField] int jumpSteps = 20;
-    [SerializeField] int jumpThreshold = 7;
+    [Header("Salto")]
+    [SerializeField] private bool isJumping = false;
+    [SerializeField] private float correctorSalto = 19;
+    [SerializeField] private bool firstJump = true;
+    [SerializeField] private bool secondJump = false;
     [Space(5)]
 
     [Header("Ground Checking")]
+    [SerializeField] public float groundCheckRadius;
     [SerializeField] Transform groundTransform;
     [SerializeField] float groundCheckY = 0.2f;
     [SerializeField] float groundCheckX = 1;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask platformLayer;
-    [SerializeField] LayerMask enemyLayer;
+    //[SerializeField] LayerMask enemyLayer;
     [SerializeField] LayerMask transitionLayer;
     [SerializeField] LayerMask transitionLayer1;
     [SerializeField] LayerMask transitionLayer2;
@@ -51,15 +46,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float roofCheckX = 1;
     [Space(5)]
 
-    float grabity;
-    int stepsJumped = 0;
-
-    public float groundCheckRadius;
-
 
     [SerializeField] Animator anim;
-
-
 
     [Header("Audio")]
     [SerializeField] AudioSource AudioWalking;
@@ -81,9 +69,6 @@ public class Hoyustus : CharactersBehaviour
 
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
 
-    [Header("Movement")]
-    public bool doubleJump = false;
-
 
     string firstRunPrefsName = "firstRun";
     string flipFlagPrefsName = "flipFlag";
@@ -96,40 +81,38 @@ public class Hoyustus : CharactersBehaviour
 
 
     //Variables relacionadas al recibir danio y la muerte del personaje.
-    //public float vida = 100;
     [Header("Variables Player")]
     [SerializeField] private float maxVida = 1000;
     [SerializeField] private float tiempoInvulnerabilidad = 2f;
-    //[SerializeField] private const int maxStepsImpulso = 13;
     [SerializeField] private float timeAir = 1.2f;
     [SerializeField] private float currentTimeAir = 0f;
-    [SerializeField] private int currentStepsImpulso = 0;
     [Space(5)]
 
 
-    //[SerializeField] private float multiplicadorGravedad;
-    //[SerializeField] private float escalaGravedad;
-    //public bool botonSaltoArriba = true;
     [Header("Estados Player")]
-    [SerializeField] private bool firstJump = true;
-    [SerializeField] private bool secondJump = false;
     [SerializeField] private int tocandoPared = 1;
-    [SerializeField] private bool isJumping = false;
-    [SerializeField] private bool isWalking = false;
     [Space(5)]
 
 
     [Header("Dash")]
+    [SerializeField] private float timeDashCooldown = 0.6f;
     [SerializeField] private bool dashAvailable = true;
     [SerializeField] private GameObject bodyHoyustus;
     [SerializeField] private GameObject dashBody;
     [SerializeField] private CapsuleCollider2D body;
+    [SerializeField] private bool isDashing = false;
     [Space(5)]
 
 
     [Header("Ataque")]
+    [SerializeField] private bool atacando = false;
+    [SerializeField] private int codigoAtaque = 0;
+    [SerializeField] private float tiempoCooldownAtaque = 0.2f;
     [SerializeField] private bool ataqueAvailable = true;
     [SerializeField] private GameObject[] lanzas;
+    [SerializeField] private float valorAtaqueNormal = 50;
+    [SerializeField] private float valorAtaqueHabilidadCondor = 100;
+    [SerializeField] private float valorAtaqueHabilidadLanza = 150;
     [Space(5)]
 
 
@@ -138,6 +121,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float cargaHabilidadSerpiente;
     [SerializeField] float cargaHabilidadLanza;
     [SerializeField] float cargaCuracion;
+    [SerializeField] float aumentoBarraSalto = 10;
+    [SerializeField] float aumentoBarraDash = 15;
+    [SerializeField] float aumentoBarraAtaque = 15;
+    [SerializeField] float danioExplosionCombinacionFuego_Veneno = 35;
     [Space(5)]
 
 
@@ -155,22 +142,20 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float botonCuracion = 0f;
     [SerializeField] private bool aplastarBotonCuracion = false;
 
-    private bool realizandoHabilidadLanza = false;
+    [SerializeField] private bool realizandoHabilidadLanza = false;
 
     [SerializeField] private bool curando = false;
 
-    [SerializeField] private bool isDashing = false;
-    [SerializeField] private bool atacando = false;
-    [SerializeField] private int codigoAtaque = 0;
     [SerializeField] private int SSTEPS = 60;
     [SerializeField] private int CSTEPS = 0;
     private float maxHabilidad_Curacion = 100f;
 
     float limitY = 0f;
 
-    [SerializeField] private float correctorSalto = 19;
+
 
     private bool saltoEspecial = false;
+    
 
     [SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
@@ -216,7 +201,7 @@ public class Hoyustus : CharactersBehaviour
 
     private void Awake()
     {
-        //CARGAR DATA
+
         LoadData();
         //Debug.Log(gold);
 
@@ -282,8 +267,10 @@ public class Hoyustus : CharactersBehaviour
         lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
-        grabity = rb.gravityScale;
+        //grabity = rb.gravityScale;
         escena = SceneManager.GetActiveScene().name;
+        //ataqueMax = 5;
+        ataque = ataqueMax;
         ataqueMax = ataque;
         dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
         dashBodyTESTING.enabled = false;
@@ -303,10 +290,10 @@ public class Hoyustus : CharactersBehaviour
 
 
         //AudioWalking.Play();
-        if (pState == null)
+        /*if (pState == null)
         {
             pState = GetComponent<PlayerStateList>();
-        }
+        }*/
 
 
         //escalaGravedad = rb.gravityScale;
@@ -317,25 +304,11 @@ public class Hoyustus : CharactersBehaviour
             //StartCoroutine(PlayGamePlayLoop());
         }
 
-        //Debug.Log("Escena: " + escena);
 
         //Lee datos de memoria
 
-        pState.firstRunFlag = PlayerPrefs.GetInt(firstRunPrefsName, 1);
-        pState.flipFlag = PlayerPrefs.GetInt(flipFlagPrefsName, 0);
-
-        /*if (pState.firstRunFlag == 0)
-        {
-            pState.x = PlayerPrefs.GetFloat(nextPositionXPrefsName, 0);
-            pState.y = PlayerPrefs.GetFloat(nextPositionYPrefsName, 0);
-            PlayerPrefs.SetInt(firstRunPrefsName, 1);
-            rb.transform.position = new Vector2(pState.x, pState.y);
-           // Debug.Log("pState.flipFlag : " + pState.flipFlag);
-            if (pState.flipFlag == 1) transform.localScale = new Vector2(-1, transform.localScale.y);
-        }*/
-
-        //Debug.Log(maxStepsImpulso);
-
+        //pState.firstRunFlag = PlayerPrefs.GetInt(firstRunPrefsName, 1);
+        //pState.flipFlag = PlayerPrefs.GetInt(flipFlagPrefsName, 0);
 
         //CARGA DE PREFABS
         explosion = Resources.Load<GameObject>("Explosion");
@@ -406,20 +379,6 @@ public class Hoyustus : CharactersBehaviour
             }
 
 
-            /*if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
-            {
-                StartCoroutine("habilidadCondor");
-            }
-            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
-            {
-                dashAvailable = false;
-                StartCoroutine("habilidadSerpiente");
-            }
-            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
-            {
-                StartCoroutine("habilidadLanza");
-            }*/
-
             return;
         }
 
@@ -429,43 +388,10 @@ public class Hoyustus : CharactersBehaviour
             Falling();
             ataqueLanza();
             Dash();
-            //Jump(0.1f, 0.1f);
-            //jumpPrueba();
-
-
-            /*if (Input.GetButton("Jump") && !isJumping && !doubleJump)
-            {
-                Jump();
-            }
-
-            if (Input.GetButton("Jump") && isJumping && !doubleJump)
-            {
-                isJumping = false;
-            }
-
-            if (Input.GetButton("Jump") && !isJumping && doubleJump)
-            {
-                DoubleJump();
-            }*/
         }
-        //Recoil();
-        //Attack();
+
     }
 
-
-    /*private void Jump()
-    {
-        rb.AddForce(new Vector2(0f, 5), ForceMode2D.Impulse);
-        isJumping = true;
-        //timeAir = 0f;
-    }
-
-    private void DoubleJump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, 0f);
-        rb.AddForce(new Vector2(0f, 5), ForceMode2D.Impulse);
-        doubleJump = true;
-    }*/
 
 
     private void jumpPrueba()
@@ -519,7 +445,7 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Salto");
                 isJumping = true;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 10;
+                cargaHabilidadCondor += aumentoBarraSalto;
                 //posYAntesSalto = transform.position.y;
                 CSTEPS++;
                 limitY = transform.position.y + 8.5f;
@@ -559,7 +485,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 limitY = transform.position.y + 8.5f;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 10;
+                cargaHabilidadCondor += aumentoBarraSalto;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
@@ -604,70 +530,22 @@ public class Hoyustus : CharactersBehaviour
 
     void FixedUpdate()
     {
-        /*if (isJumping && currentTimeAir < timeAir)
-        {
-            // Incrementar la fuerza del salto en funci n del tiempo que se mantiene presionado el bot n
-            rb.AddForce(new Vector2(0f, 5f * (timeAir - currentTimeAir)), ForceMode2D.Impulse);
-            currentTimeAir += Time.fixedDeltaTime;
-        }*/
-
         if (playable && !atacando)
         {
-            /*if (!saltoEspecial)
-            {
-                jumpPrueba();
-            }
-            else {
-                saltoEspecialSalto();
-            }*/
-            //jumpPrueba();
             Walk();
         }
-        /*if (rb.velocity.y < 0)
-        {
-            //Falling();
-            rb.gravityScale = 4;
-        }
-        else {
-            rb.gravityScale = 2;
-        }*/
 
         if (vida <= 0)
         {
             StartCoroutine(Muerte());
         }
-        /*if (pState.recoilingX == true && stepsXRecoiled < recoilXSteps)
-        {
-            stepsXRecoiled++;
-        }
-        else
-        {
-            StopRecoilX();
-        }
-        if (pState.recoilingY == true && stepsYRecoiled < recoilYSteps)
-        {
-            stepsYRecoiled++;
-        }
-        else
-        {
-            StopRecoilY();
-        }
-        if (Grounded())
-        {
-            StopRecoilY();
-        }
-        */
+
         if (EventTransition())
         {
             //Debug.Log("Disparar Transici n");
             LoadNextLevel();
         }
-        //ImproveJump();
-        //Jump();
-        //Walk();
-        //Walk(xAxis);
-        //WalkingControl();
-        //Jump(0.1f, 0.1f);
+
         anim.SetBool("Walking", rb.velocity.x != 0);
         anim.SetBool("Grounded", Grounded());
         anim.SetFloat("YVelocity", rb.velocity.y);
@@ -725,7 +603,7 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Viento", explosionInvulnerable);
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable);
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
 
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
@@ -781,6 +659,7 @@ public class Hoyustus : CharactersBehaviour
 
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
+        ataque = valorAtaqueHabilidadLanza;
         ataque = 150;
         lanzas[0].SetActive(true);
 
@@ -805,6 +684,7 @@ public class Hoyustus : CharactersBehaviour
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
+        ataque = valorAtaqueNormal;
         ataque = ataqueMax;
 
         //DESACTIVACION Y MODIFICACION DE LA LANZA
@@ -857,7 +737,6 @@ public class Hoyustus : CharactersBehaviour
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-                    //hurtParticleSystem.Play();
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     collisionElementos_1_1_1(collision);
@@ -871,79 +750,14 @@ public class Hoyustus : CharactersBehaviour
 
             if (!invulnerable)
                 collisionElementos_1_1_1(collision);
-            /*
-            //CONVERTIFLO A FUNCION
-            if (collision.gameObject.tag == "Viento")
-            {
-                //REINICIO ESTADO VIENTO
-                if (estadoViento)
-                {
-                    StopCoroutine("afectacionEstadoViento");
-                }
-                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 1;
-                    StartCoroutine("combinacionesElementales");
-                    return;
 
-                }
-
-                //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
-                estadoViento = true;
-                counterEstados = 1;
-                StartCoroutine("afectacionEstadoViento");
-            }
-
-            //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-            else if (collision.gameObject.tag == "Fuego")
-            {
-                //REINICIO ESTADO FUEGO
-                if (estadoFuego)
-                {
-                    StopCoroutine("afectacionEstadoFuego");
-                }
-                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 10;
-                    StartCoroutine("combinacionesElementales");
-                    return;
-                }
-
-                //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
-                estadoFuego = true;
-                counterEstados = 10;
-                StartCoroutine("afectacionEstadoFuego");
-            }
-
-            //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
-            else if (collision.gameObject.tag == "Veneno")
-            {
-                //REINICIO ESTADO VENENO
-                if (estadoVeneno)
-                {
-                    StopCoroutine("afectacionEstadoVeneno");
-                }
-                //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-                else if (counterEstados > 0)
-                {
-                    counterEstados += 100;
-                    StartCoroutine("combinacionesElementales");
-                    return;
-                }
-
-                //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
-                estadoVeneno = true;
-                counterEstados = 100;
-                StartCoroutine("afectacionEstadoVeneno");
-            }*/
-            //vida -= 20;
-            //StartCoroutine(cooldownRecibirDanio(direccion));
-            //recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
         }
     }
 
+
+    public bool isInvulnerable() {
+        return invulnerable;
+    }
 
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -1032,73 +846,6 @@ public class Hoyustus : CharactersBehaviour
         if (!invulnerable)
             triggerElementos_1_1_1(collider);
 
-        /*
-        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        if (collider.gameObject.tag == "Viento")
-        {
-            //REINICIO ESTADO VIENTO
-            if (estadoViento)
-            {
-                StopCoroutine("afectacionEstadoViento");
-            }
-            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-            else if (counterEstados > 0)
-            {
-                counterEstados += 1;
-                StartCoroutine("combinacionesElementales");
-                return;
-
-            }
-
-            //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
-            estadoViento = true;
-            counterEstados = 1;
-            StartCoroutine("afectacionEstadoViento");
-        }
-
-        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
-        {
-            //REINICIO ESTADO FUEGO
-            if (estadoFuego)
-            {
-                StopCoroutine("afectacionEstadoFuego");
-            }
-            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-            else if (counterEstados > 0)
-            {
-                counterEstados += 10;
-                StartCoroutine("combinacionesElementales");
-                return;
-            }
-
-            //SE ESTABLECE EL ESTADO DE FUEGO Y SUS RESPECTIVOS COMO ACTIVOS
-            estadoFuego = true;
-            counterEstados = 10;
-            StartCoroutine("afectacionEstadoFuego");
-        }
-
-        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
-        else if (collider.gameObject.tag == "Veneno")
-        {
-            //REINICIO ESTADO VENENO
-            if (estadoVeneno)
-            {
-                StopCoroutine("afectacionEstadoVeneno");
-            }
-            //SE DISPARA AL TENER YA UN ESTADO ELEMENTAL ACTIVO
-            else if (counterEstados > 0)
-            {
-                counterEstados += 100;
-                StartCoroutine("combinacionesElementales");
-                return;
-            }
-
-            //SE ESTABLECE EL ESTADO DE VENENO Y SUS RESPECTIVOS COMO ACTIVOS
-            estadoVeneno = true;
-            counterEstados = 100;
-            StartCoroutine("afectacionEstadoVeneno");
-        }*/
     }
 
 
@@ -1116,8 +863,7 @@ public class Hoyustus : CharactersBehaviour
     public bool Grounded()
     {
 
-        //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || //|| Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
+        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
             if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f) {
@@ -1132,8 +878,6 @@ public class Hoyustus : CharactersBehaviour
             currentTimeAir = 0;
             saltoEspecial = false;
             CSTEPS = 0;
-            //if(Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer))
-                //limitY = transform.position.y + 8.5f;
             isJumping = false;
             return true;
         }
@@ -1256,7 +1000,7 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionEnemy");
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, danioExplosionCombinacionFuego_Veneno, 6, 12, "Untagged", "ExplosionEnemy");
             Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
@@ -1377,7 +1121,6 @@ public class Hoyustus : CharactersBehaviour
             }
 
             ataqueAvailable = false;
-            //cargaHabilidadLanza += 0.5f;
             StartCoroutine(lanzaCooldown(index));
         }
     }
@@ -1388,7 +1131,6 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator lanzaCooldown(int index)
     {
-        //rb.velocity = new Vector2(0, rb.velocity.y);
         lanzas[index].SetActive(true);
         atacando = true;
         yield return new WaitForSeconds(0.2f);
@@ -1396,7 +1138,7 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(false);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(tiempoCooldownAtaque);
         ataqueAvailable = true;
     }
 
@@ -1430,14 +1172,10 @@ public class Hoyustus : CharactersBehaviour
 
         body.isTrigger = true;
         //body.enabled = false; **********************************************
-        //bodyHoyustus.SetActive(false);
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
         //dashBody.SetActive(true); **********************************************************************
         //dashBodyTESTING.enabled = true; **************************************
-        cargaHabilidadSerpiente += 15f;
-        //rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
-        //MODIFICAR EL TIEMPO QUE DURARIA EL DASH
-        //yield return new WaitForSeconds(0.2f);
+        cargaHabilidadSerpiente += aumentoBarraDash;
 
         IEnumerator movimientoDash()
         {
@@ -1458,14 +1196,14 @@ public class Hoyustus : CharactersBehaviour
         QuitarInvulnerabilidades(layerObject);
         body.isTrigger = false;
         invulnerable = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(timeDashCooldown);
         dashAvailable = true;
     }
 
 
     public void cargaLanza()
     {
-        cargaHabilidadLanza += 15f;
+        cargaHabilidadLanza += aumentoBarraAtaque;
     }
 
 
@@ -1507,13 +1245,11 @@ public class Hoyustus : CharactersBehaviour
         }
         else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
         {
-            // Debug.Log("transitionLayer2 " + transitionLayer2.ToString());
             return true;
 
         }
         else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
         {
-            //Debug.Log("transitionLayer3 " + transitionLayer3.ToString());
             return true;
 
         }
@@ -1533,305 +1269,27 @@ public class Hoyustus : CharactersBehaviour
 
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
         {
-            //Debug.Log("transitionLayer " + transitionLayer.ToString());
             transitionLayerExit = "Transition";
 
         }
         else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer1))
         {
-            //Debug.Log("transitionLayer1 " + transitionLayer1.ToString());
             transitionLayerExit = "Transition1";
 
         }
         else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
         {
-            //Debug.Log("transitionLayer2 " + transitionLayer2.ToString());
             transitionLayerExit = "Transition2";
 
         }
         else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
         {
-            //Debug.Log("transitionLayer3 " + transitionLayer3.ToString());
             transitionLayerExit = "Transition3";
 
         }
         else transitionLayerExit = "";
 
-        //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
         escena = SceneManager.GetActiveScene().name;
-        //Debug.Log("Escena: " + escena);
-        //Debug.Log("transitionLayerExit: " + transitionLayerExit);
-
-        /*if (escena == "00- StartRoom 1")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -29.344f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(1 + 1);
-            }
-
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 29.576f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(5 + 1);
-            }
-
-
-        }
-        if (escena == "01-Level 1")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(0 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -55.934f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(2 + 1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -137.45f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.468f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3 + 1);
-            }
-            else if (transitionLayerExit == "Transition3")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -137.45f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3 + 1);
-            }
-        }
-        if (escena == "03-Room 3")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -56.341f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(1 + 1);
-        }
-        if (escena == "04-Level 2")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -133.46f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -132.69f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.422f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1 + 1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.845f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -8.851f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(4 + 1);
-            }
-        }
-        if (escena == "05-Room GA1")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -188.567f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(3 + 1);
-        }
-        if (escena == "06- Room 6")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.160f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(0 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -27.914f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 38.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6 + 1);
-            }
-
-
-        }
-        if (escena == "07-Room 7")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 100.690f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(5 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 63.045f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.417f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7 + 1);
-
-            }
-
-        }
-        if (escena == "08-Room 8")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 45.333f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.160f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8 + 1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 119.625f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(12 + 1);
-            }
-        }
-        if (escena == "09-Room 9")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.635f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9 + 1);
-
-
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 114.528f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7 + 1);
-
-            }
-
-        }
-        if (escena == "10-Room 10 - 11")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8 + 1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -55.934f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(10 + 1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(11 + 1);
-            }
-        }
-        if (escena == "12-Room 12")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -0.653f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -82.824f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(9 + 1);
-        }
-        if (escena == "13- SaveRoom")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.211f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -102.327f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9 + 1);
-            }
-
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -64.304f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -103.677f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(13 + 1);
-            }
-        }
-        if (escena == "13-Room 13")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, 151.409f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(7 + 1);
-        }
-        if (escena == "14-Boss Room")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.340f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(11 + 1);
-        }*/
     }
 
     public bool Roofed()
@@ -1846,120 +1304,6 @@ public class Hoyustus : CharactersBehaviour
             return false;
         }
     }
-
-
-    /*void GetInputs()
-    {
-        
-        yAxis = Input.GetAxis("Vertical");
-        xAxis = Input.GetAxis("Horizontal");
-
-        
-        if (yAxis > 0.25)
-        {
-            yAxis = 1;
-        }
-        else if (yAxis < -0.25)
-        {
-            yAxis = -1;
-        }
-        else
-        {
-            yAxis = 0;
-        }
-
-        if (xAxis > 0.25)
-        {
-            xAxis = 1;
-        }
-        else if (xAxis < -0.25)
-        {
-            xAxis = -1;
-        }
-        else
-        {
-            xAxis = 0;
-        }
-
-        anim.SetBool("Grounded", Grounded());
-        anim.SetFloat("YVelocity", rb.velocity.y);
-
-         
-        //if (Input.GetButtonDown("Jump") && Grounded()) DNA 11/01/2022 SE AUMENTA VARIABLE DOUBLE JUMP 
-            if (Input.GetButtonDown("Jump") && Grounded() || doubleJump==true)
-        {
-            //Debug.Log("Entra a Jumping :" + pState.jumping);
-            pState.jumping = true;
-            anim.SetTrigger("Jumping");
-            anim.SetBool("Jump", Grounded());
-            //AudioJump.Play();
-        }
-
-        if (!Input.GetButton("Jump") && stepsJumped < jumpSteps && stepsJumped > jumpThreshold && pState.jumping)
-        {
-            //Debug.Log("Entra a StopJumpQuick :" + pState.jumping);
-            StopJumpQuick();
-        }
-        else if (!Input.GetButton("Jump") && stepsJumped < jumpThreshold && pState.jumping)
-        {
-            //Debug.Log("Entra a StopJumpSlow :" + pState.jumping);
-            StopJumpSlow();
-        }
-
-    }
-
-    void WalkingControl()
-    {
-        //Debug.Log("Entra a la secci n de get button");
-
-        if (Input.GetButtonDown("Horizontal"))// && Grounded() )//&& pState.walking == true)
-        {
-            //Debug.Log("Entra a la secci n de get button Horizontal Input");
-            if (Grounded())
-            {
-                //Debug.Log("Entra a la secci n de get button Horizontal Input Grounded");
-
-                AudioWalking.Play();
-            }
-            else
-            {
-
-                //Debug.Log("Entra a la secci n de get button Horizontal Input Not Grounded");
-                AudioWalking.Stop();
-            }
-
-        }
-        else if (!Grounded())
-        {
-            if (Grounded())
-            {
-                //Debug.Log("Entra a la secci n de get button Horizontal Input !Grounded Grounded");
-
-                AudioWalking.Play();
-            }
-            else
-            {
-
-                //Debug.Log("Entra a la secci n de get button Horizontal Input !Grounded !Grounded");
-                AudioWalking.Stop();
-            }
-        }
-
-        if (Input.GetButtonDown("Horizontal") && Grounded())
-        {
-            AudioWalking.Play();
-        }
-
-        if (Input.GetButtonUp("Horizontal"))
-        {
-            AudioWalking.Stop();
-        }
-        if (Input.GetButtonDown("Jump") && Grounded())
-        {
-            AudioWalking.Stop();
-        }
-
-    }*/
 
     void PlayJumpAudio()
     {
@@ -2024,21 +1368,6 @@ public class Hoyustus : CharactersBehaviour
         ParticleTestParticleTest.Play();
     }
 
-    /*IEnumerator HurtParticlesPlayer()
-    {
-        //hurtParticleSystem.loop = false;
-        var ps = transform.GetChild(transform.childCount - 3).GetChild(0).GetComponent<ParticleSystem>();
-        var psMain = ps.main;
-        psMain.loop = false;
-        hurtParticleSystem.Play();
-        //hurtParticleSystem.Clear();
-        hurtParticleSystem.Play();
-        yield return new WaitForSeconds(3f);
-        //psMain.loop = true;
-        hurtParticleSystem.Clear();
-        hurtParticleSystem.Play();
-        //hurtParticleSystem.Clear();
-    }*/
 
     void OnDrawGizmos()
     {

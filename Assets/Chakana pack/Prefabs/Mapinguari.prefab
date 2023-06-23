@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 0
+  vida: 3000
   defensa: 0
   ataque: 0
   ataqueMax: 0
@@ -118,6 +118,8 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: ExplosionPlayer
+  inmuneDash: 0
+  fuerzaRecoil: 0
   persiguiendo: 0
   atacando: 0
   cambiandoPlataforma: 0
@@ -128,13 +130,18 @@ MonoBehaviour:
   maxX: 0
   xObjetivo: 0
   ataqueDisponible: 0
+  movementVelocity: 6
+  valorAtaqueBasico: 20
+  valorAtaqueEspecial: 30
+  coolDownAtaque: 2
   bolaVeneno: {fileID: 0}
   explosion: {fileID: 0}
-  plataformaUno: {fileID: 0}
-  plataformaDos: {fileID: 0}
-  plataformaTres: {fileID: 0}
   nuevaPlataforma: 0
   plataformaActual: 0
+  usandoAtaqueEspecial: 0
+  ataqueEspecialDisponible: 1
+  cambioPlataformaDisponible: 1
+  timerAtaqueEspecial: 0
 --- !u!50 &627248762632895300
 Rigidbody2D:
   serializedVersion: 4
@@ -147,7 +154,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
+  m_Mass: 80
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2

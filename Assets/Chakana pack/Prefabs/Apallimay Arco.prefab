@@ -124,6 +124,7 @@ Transform:
   - {fileID: 8121405141560141104}
   - {fileID: 5851274737754425580}
   - {fileID: 854937195}
+  - {fileID: 399219049880165367}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -140,10 +141,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 35
+  vida: 175
   defensa: 0
-  ataque: 5
-  ataqueMax: 5
+  ataque: 50
+  ataqueMax: 50
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -156,18 +157,28 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  fuerzaRecoil: 0
   inmuneDash: 0
+  fuerzaRecoil: 0
   speed: 6
   objetivo: {x: 0, y: 0, z: 0}
   rangoAtaque: 0
   ataqueDisponible: 0
   explosion: {fileID: 0}
+  flecha: {fileID: 0}
   atacando: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
   jugadorDetectado: 0
   direction: 1
+  detectionTime: 0
+  posY: 0
+  groundDetector: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  timeNear: 0
+  realizandoAtaqueEspecial: 0
+  prueba: 0
 --- !u!212 &586347738180471964
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -228,7 +239,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358139068768279747}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -257,6 +268,37 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!1 &6108470176081746140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 399219049880165367}
+  m_Layer: 0
+  m_Name: GroundDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &399219049880165367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108470176081746140}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.6, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8059498668322056468}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7044487949952634384
 GameObject:
   m_ObjectHideFlags: 0

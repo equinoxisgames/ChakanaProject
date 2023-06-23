@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ApallimayArco : CharactersBehaviour
+public class ApallimayDaga : CharactersBehaviour
 {
 
     [SerializeField] private float speed;
@@ -11,18 +11,18 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private GameObject explosion;
-    [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
-    [SerializeField] private bool jugadorDetectado;
     [SerializeField] private float direction = 1;
     [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] private float timeNear = 0;
-    [SerializeField] private bool realizandoAtaqueEspecial = false;
+    [SerializeField] private CapsuleCollider2D daga;
+    [SerializeField] private float rangoDeteccion;
+    [SerializeField] private float cooldownAtaque;
+ 
 
     [SerializeField] private bool prueba = false;
 
@@ -35,12 +35,12 @@ public class ApallimayArco : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
-        flecha = Resources.Load<GameObject>("BolaVeneno");
-        objetivo = limit2;
+        daga = transform.GetChild(2).gameObject.GetComponent<CapsuleCollider2D>();
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
+        objetivo = limit2;
         posY = transform.position.y;
-        groundDetector = transform.GetChild(3).gameObject.transform;
+        groundDetector = transform.GetChild(4).gameObject.transform;
     }
 
 
@@ -53,13 +53,16 @@ public class ApallimayArco : CharactersBehaviour
         Muerte();
         //Flip();
 
-       // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
+        // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
         //{
+        if (!atacando) {
             Flip();
+        }
         //}
         detectarPiso();
 
-        if (!jugadorDetectado)
+
+        if (playable && !atacando && Grounded())
         {
             Move();
         }
@@ -103,38 +106,27 @@ public class ApallimayArco : CharactersBehaviour
     }
 
 
-    private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        //ataqueDisponible = false;
-        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);
-        flechaGenerada.SetActive(false);
-        flechaGenerada.name += "Enemy";
+    private IEnumerator Ataque() {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        playable = false;
+        yield return new WaitForSeconds(0.4f);
         atacando = true;
-        //playable = false;
-        //rb.velocity = Vector2.zero;
-        yield return new WaitForEndOfFrame();
-        //CAMBIAR POR FLECHA
-        flechaGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
-        flechaGenerada.SetActive(true);
-
-        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        flechaGenerada.GetComponent<BolaFuego>().aniadirFuerza();
-        //TIEMPO DE ANIMACION
+        rb.AddForce(new Vector2(direction * 12f, 0f), ForceMode2D.Impulse);
+        daga.enabled = true;
         yield return new WaitForSeconds(0.4f);
         atacando = false;
-        //playable = true;
-        //yield return new WaitForSeconds(2.3f);
-        //ataqueDisponible = true;
-
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        daga.enabled = false;
+        yield return new WaitForSeconds(0.2f);
+        playable = true;
+        detectionTime = 0;
     }
 
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion * 8, rb.gravityScale * 4), ForceMode2D.Impulse);
         //EstablecerInvulnerabilidades(layerObject);
     }
 
@@ -167,13 +159,14 @@ public class ApallimayArco : CharactersBehaviour
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
+                detectionTime = 0;
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
         }
         else if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
+            //jugadorDetectado = true;
             rb.velocity = Vector2.zero;
         }
 
@@ -188,42 +181,44 @@ public class ApallimayArco : CharactersBehaviour
 
         if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
-            detectionTime += Time.deltaTime;
+            //jugadorDetectado = true;
+            objetivo = collider.transform.position;
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= 5) {
-                timeNear += Time.deltaTime;
-            }
-            else
+            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoDeteccion)
             {
-                timeNear = 0;
+                detectionTime += Time.deltaTime;
             }
 
 
-            if (timeNear >= 3 && !realizandoAtaqueEspecial) {
-                realizandoAtaqueEspecial = true;
-                StartCoroutine(AtaqueEspecial());
-            }
-            else if (detectionTime >= 2.5f && !realizandoAtaqueEspecial)
+            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaque)
             {
-                //DISPARO DE FLECHA
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            }
+            else {
+                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            }
+
+            if (detectionTime >= cooldownAtaque && !atacando && playable) {
                 detectionTime = 0;
-                StartCoroutine(Ataque(collider.transform.position));
+                StartCoroutine(Ataque());
             }
         }
     }
 
 
-    private IEnumerator AtaqueEspecial() {
-        timeNear = 0;
-        detectionTime = 0;
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
-        Instantiate(explosion, transform.position, Quaternion.identity);
+    private bool Grounded() {
+        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer)) //||
+        //Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
 
-        //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(0.8f);
-        timeNear = 0;
-        realizandoAtaqueEspecial = false;
+        }
     }
 
     private void Falling()
@@ -251,13 +246,14 @@ public class ApallimayArco : CharactersBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6 ){//&& transform.position.y <= posY -1.5f) {
+        if (collision.gameObject.layer == 6){//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
             objetivo = limit2;
 
-            if (limit1.x >= limit2.x) {
+            if (limit1.x >= limit2.x)
+            {
                 Vector3 aux = limit1;
                 limit1 = limit2;
                 limit2 = aux;
@@ -272,8 +268,8 @@ public class ApallimayArco : CharactersBehaviour
             //rb.bodyType = RigidbodyType2D.Static;
             prueba = true;
                  
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -284,8 +280,21 @@ public class ApallimayArco : CharactersBehaviour
         {
             //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
+            detectionTime = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
             rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+
+            posY = transform.position.y;
+            limit1 = transform.GetChild(0).gameObject.transform.position;
+            limit2 = transform.GetChild(1).gameObject.transform.position;
+            objetivo = limit2;
+
+            if (limit1.x >= limit2.x)
+            {
+                Vector3 aux = limit1;
+                limit1 = limit2;
+                limit2 = aux;
+            }
         }
     }
 
@@ -311,8 +320,16 @@ public class ApallimayArco : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            jugadorDetectado = false;
+            //jugadorDetectado = false;
             detectionTime = 0;
+
+            if (transform.position.x > limit2.x) {
+                objetivo = limit1;
+            }
+            if (transform.position.x < limit1.x)
+            {
+                objetivo = limit2;
+            }
         }
     }
 

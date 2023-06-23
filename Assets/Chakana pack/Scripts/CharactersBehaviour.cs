@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CharactersBehaviour : MonoBehaviour
 {
-
+    [Header("Atributos Basicos")]
     [SerializeField] protected int gold;
     [SerializeField] protected float vida;
     [SerializeField] protected float defensa;
     [SerializeField] protected float ataque;
     [SerializeField] protected float ataqueMax;
+    [Space(5)]
 
     [Header("Estados Elementales")]
     [SerializeField] protected bool estadoViento;
@@ -21,9 +22,14 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected float afectacionVeneno = 0.05f;
     [SerializeField] protected int aumentoFuegoPotenciado = 1;
     [SerializeField] protected float aumentoDanioParalizacion = 1f;
+    [Space(5)]
+
+    [Header("Invulnerabilidad")]
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
     [SerializeField] protected string explosionInvulnerable;
+    [SerializeField] protected bool inmuneDash = false;
+
     [SerializeField] GameObject vientoFX;
     [SerializeField] GameObject fuegoFX;
     [SerializeField] GameObject venenoFX;
@@ -35,14 +41,13 @@ public class CharactersBehaviour : MonoBehaviour
     private GameObject vientoObj, fuegoObj, venenoObj;
     private float vidaMax = 0;
 
-    [SerializeField] protected bool inmuneDash = false;
+    
 
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
     protected IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
-
         Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
         {
