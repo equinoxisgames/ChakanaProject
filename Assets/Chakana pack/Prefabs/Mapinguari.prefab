@@ -111,14 +111,18 @@ MonoBehaviour:
   estadoVeneno: 0
   counterEstados: 0
   afectacionViento: 0
-  afectacionFuego: 5
-  afectacionVeneno: 0.05
+  afectacionFuego: 15
+  afectacionVeneno: 0.02
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 1
   invulnerable: 0
   playable: 1
   explosionInvulnerable: ExplosionPlayer
   inmuneDash: 0
+  vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
+  fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
+  venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
+  recieveDmgFX: {fileID: 3799911095927636051, guid: b6c93d0f9116d3e43acde6f202642a93, type: 3}
   fuerzaRecoil: 0
   persiguiendo: 0
   atacando: 0
@@ -142,6 +146,8 @@ MonoBehaviour:
   ataqueEspecialDisponible: 1
   cambioPlataformaDisponible: 1
   timerAtaqueEspecial: 0
+  lifeBar: {fileID: 0}
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
 --- !u!50 &627248762632895300
 Rigidbody2D:
   serializedVersion: 4

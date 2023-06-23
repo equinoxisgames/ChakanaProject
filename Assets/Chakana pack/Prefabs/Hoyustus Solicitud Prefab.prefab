@@ -986,13 +986,17 @@ MonoBehaviour:
   counterEstados: 0
   afectacionViento: 0
   afectacionFuego: 15
-  afectacionVeneno: 0.05
+  afectacionVeneno: 0.02
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 0
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
   inmuneDash: 0
+  vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
+  fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
+  venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
+  recieveDmgFX: {fileID: 3799911095927636051, guid: b6c93d0f9116d3e43acde6f202642a93, type: 3}
   fuerzaRecoil: 0
   walkSpeedGround: 12
   resistenciaAire: 0.3
@@ -1070,9 +1074,9 @@ MonoBehaviour:
   cargaHabilidadSerpiente: 0
   cargaHabilidadLanza: 0
   cargaCuracion: 0
-  aumentoBarraSalto: 0
-  aumentoBarraDash: 0
-  aumentoBarraAtaque: 0
+  aumentoBarraSalto: 10
+  aumentoBarraDash: 15
+  aumentoBarraAtaque: 15
   danioExplosionCombinacionFuego_Veneno: 35
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
@@ -1084,6 +1088,9 @@ MonoBehaviour:
   curando: 0
   SSTEPS: 80
   CSTEPS: 0
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
+  combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
+  combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
 --- !u!61 &1998959458
 BoxCollider2D:
   m_ObjectHideFlags: 0

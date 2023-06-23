@@ -132,6 +132,13 @@ public class CharactersBehaviour : MonoBehaviour
             return;
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
+
+        if ((collider.gameObject.layer != gameObject.layer))
+        {
+            triggerElementos_1_1_1(collider);
+            return;
+            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
+        }
     }
 
 
@@ -283,7 +290,7 @@ public class CharactersBehaviour : MonoBehaviour
             counterEstados = 1;
             StartCoroutine("afectacionEstadoViento");            
         }
-
+       
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
         else if (collider.gameObject.tag == "Fuego")
         {

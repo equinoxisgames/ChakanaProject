@@ -25526,7 +25526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 120
+  vida: 220
   defensa: 0
   ataque: 25
   ataqueMax: 25
@@ -25535,14 +25535,18 @@ MonoBehaviour:
   estadoVeneno: 0
   counterEstados: 0
   afectacionViento: 0
-  afectacionFuego: 5
-  afectacionVeneno: 0.05
+  afectacionFuego: 15
+  afectacionVeneno: 0.02
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 1
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
   inmuneDash: 0
+  vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
+  fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
+  venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
+  recieveDmgFX: {fileID: 3799911095927636051, guid: b6c93d0f9116d3e43acde6f202642a93, type: 3}
   fuerzaRecoil: 0
   movementSpeed: 2
   seguimientoSpeed: 4.8
@@ -25562,6 +25566,7 @@ MonoBehaviour:
     m_Bits: 64
   hayPiso: 1
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
 --- !u!68 &6461231520278799732
 EdgeCollider2D:
   m_ObjectHideFlags: 0
