@@ -9,8 +9,9 @@ public class Chontacuro1 : CharactersBehaviour
 {
     private Hoyustus hoyustusPlayerCotroller;
 
-    public float movementSpeed = 3;
-    public float detectionRadius = 3;
+    [SerializeField] public float movementSpeed;
+    [SerializeField] public float seguimientoSpeed;
+    [SerializeField] public float detectionRadius = 3;
 
     [SerializeField] private float speed;
     [SerializeField] private float direction = 1;
@@ -40,7 +41,7 @@ public class Chontacuro1 : CharactersBehaviour
         inmuneDash = true;
         explosionInvulnerable = "ExplosionEnemy";
         hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
-        speed = 4f;
+        speed = movementSpeed;
 
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -119,7 +120,7 @@ public class Chontacuro1 : CharactersBehaviour
             }
             else {
 
-                speed = 6.2f;
+                speed = seguimientoSpeed;
                 siguiendo = true;
                 objetivo = collider.transform.position;
             }
@@ -144,7 +145,7 @@ public class Chontacuro1 : CharactersBehaviour
     {
         if (collider.gameObject.tag == "Player") {
             siguiendo = false;
-            speed = 4f;
+            speed = movementSpeed;
             deteccion = 1;
             if (transform.position.x >= collider.transform.position.x) {
                 if (transform.position.x < limit1.x)
@@ -201,7 +202,7 @@ public class Chontacuro1 : CharactersBehaviour
                 speed = 0;
             }
             else {
-                speed = 4;
+                speed = movementSpeed;
             }
         }
     }

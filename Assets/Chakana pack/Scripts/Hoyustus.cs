@@ -110,6 +110,9 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float tiempoCooldownAtaque = 0.2f;
     [SerializeField] private bool ataqueAvailable = true;
     [SerializeField] private GameObject[] lanzas;
+    [SerializeField] private float valorAtaqueNormal = 50;
+    [SerializeField] private float valorAtaqueHabilidadCondor = 100;
+    [SerializeField] private float valorAtaqueHabilidadLanza = 150;
     [Space(5)]
 
 
@@ -118,6 +121,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float cargaHabilidadSerpiente;
     [SerializeField] float cargaHabilidadLanza;
     [SerializeField] float cargaCuracion;
+    [SerializeField] float aumentoBarraSalto = 10;
+    [SerializeField] float aumentoBarraDash = 15;
+    [SerializeField] float aumentoBarraAtaque = 15;
+    [SerializeField] float danioExplosionCombinacionFuego_Veneno = 35;
     [Space(5)]
 
 
@@ -238,7 +245,7 @@ public class Hoyustus : CharactersBehaviour
         anim = this.gameObject.GetComponent<Animator>();
         //grabity = rb.gravityScale;
         escena = SceneManager.GetActiveScene().name;
-        ataqueMax = 5;
+        //ataqueMax = 5;
         ataque = ataqueMax;
         dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
         dashBodyTESTING.enabled = false;
@@ -413,7 +420,7 @@ public class Hoyustus : CharactersBehaviour
                 //Debug.Log("Salto");
                 isJumping = true;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 10;
+                cargaHabilidadCondor += aumentoBarraSalto;
                 //posYAntesSalto = transform.position.y;
                 CSTEPS++;
                 limitY = transform.position.y + 8.5f;
@@ -453,7 +460,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = true;
                 limitY = transform.position.y + 8.5f;
                 //cargaHabilidadCondor += 0.05f;
-                cargaHabilidadCondor += 10;
+                cargaHabilidadCondor += aumentoBarraSalto;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
@@ -571,7 +578,7 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Viento", explosionInvulnerable);
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable);
         Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
 
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
@@ -627,7 +634,7 @@ public class Hoyustus : CharactersBehaviour
 
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
-        ataque = 15;
+        ataque = valorAtaqueHabilidadLanza;
         lanzas[0].SetActive(true);
 
 
@@ -651,7 +658,7 @@ public class Hoyustus : CharactersBehaviour
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
-        ataque = 5;
+        ataque = valorAtaqueNormal;
 
         //DESACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].SetActive(false);
@@ -720,6 +727,10 @@ public class Hoyustus : CharactersBehaviour
         }
     }
 
+
+    public bool isInvulnerable() {
+        return invulnerable;
+    }
 
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -947,7 +958,7 @@ public class Hoyustus : CharactersBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionEnemy");
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, danioExplosionCombinacionFuego_Veneno, 6, 12, "Untagged", "ExplosionEnemy");
             Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
@@ -1122,7 +1133,7 @@ public class Hoyustus : CharactersBehaviour
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
         //dashBody.SetActive(true); **********************************************************************
         //dashBodyTESTING.enabled = true; **************************************
-        cargaHabilidadSerpiente += 15f;
+        cargaHabilidadSerpiente += aumentoBarraDash;
 
         IEnumerator movimientoDash()
         {
@@ -1150,7 +1161,7 @@ public class Hoyustus : CharactersBehaviour
 
     public void cargaLanza()
     {
-        cargaHabilidadLanza += 15f;
+        cargaHabilidadLanza += aumentoBarraAtaque;
     }
 
 

@@ -5987,7 +5987,7 @@ GameObject:
   - component: {fileID: 375014367}
   m_Layer: 15
   m_Name: TestEstados (1)
-  m_TagString: Veneno
+  m_TagString: Viento
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6068,7 +6068,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375014366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 0.91999996, z: 0}
+  m_LocalPosition: {x: 25.7, y: 1.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6359,8 +6359,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468411298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -31, y: -18.5, z: 0}
-  m_LocalScale: {x: 9, y: 7, z: 1}
+  m_LocalPosition: {x: 12, y: 2, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 331555597}
@@ -6956,7 +6956,7 @@ GameObject:
   - component: {fileID: 660793197}
   - component: {fileID: 660793196}
   - component: {fileID: 660793195}
-  m_Layer: 6
+  m_Layer: 16
   m_Name: Plataforma (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6971,8 +6971,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660793193}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -50, y: -7.4, z: 0}
-  m_LocalScale: {x: 9, y: 7, z: 1}
+  m_LocalPosition: {x: -19.48, y: 1.74, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1419628652}
@@ -8723,10 +8723,17 @@ MonoBehaviour:
   tiempoCooldownAtaque: 0.2
   ataqueAvailable: 1
   lanzas: []
+  valorAtaqueNormal: 50
+  valorAtaqueHabilidadCondor: 100
+  valorAtaqueHabilidadLanza: 150
   cargaHabilidadCondor: 0
   cargaHabilidadSerpiente: 0
   cargaHabilidadLanza: 0
   cargaCuracion: 0
+  aumentoBarraSalto: 0
+  aumentoBarraDash: 0
+  aumentoBarraAtaque: 0
+  danioExplosionCombinacionFuego_Veneno: 35
   explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 0}
@@ -9296,11 +9303,6 @@ MonoBehaviour:
 --- !u!4 &1285630220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7165638828952281755, guid: 437d947e62240154a94c862267bc0490, type: 3}
-  m_PrefabInstance: {fileID: 7165638828371565291}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1366082082 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7165638829158275273, guid: 437d947e62240154a94c862267bc0490, type: 3}
   m_PrefabInstance: {fileID: 7165638828371565291}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1397396107
@@ -10136,7 +10138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702955593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 1.16, z: 0}
+  m_LocalPosition: {x: 19.7, y: 1.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10588,10 +10590,6 @@ PrefabInstance:
       propertyPath: AudioWalking
       value: 
       objectReference: {fileID: 1603279521}
-    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
-      propertyPath: hurtParticleSystem
-      value: 
-      objectReference: {fileID: 1366082082}
     - target: {fileID: 2374536855388483605, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_Name
       value: Hoyustus Solicitud Prefab
@@ -11028,7 +11026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1358139068768279747, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2751620291725323903, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_BodyType
@@ -11040,7 +11038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -44
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -11087,14 +11085,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1463244124}
     m_Modifications:
-    - target: {fileID: 800625032474066332, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 800625032474066332, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
     - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -11139,9 +11129,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5265702550096484452, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
+      propertyPath: vida
+      value: 9000
+      objectReference: {fileID: 0}
     - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_Name
       value: Apallimay V1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607281612455688741, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
@@ -11163,11 +11165,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.75
+      value: 40.18
       objectReference: {fileID: 0}
     - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.22
+      value: 14.96
       objectReference: {fileID: 0}
     - target: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_LocalPosition.z
@@ -11207,7 +11209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7018684030615050251, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
