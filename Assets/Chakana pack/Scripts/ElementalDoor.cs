@@ -53,7 +53,7 @@ public class ElementalDoor : MonoBehaviour
         if(collision.tag == "Player")
         {
             int e = 3 - PlayerPrefs.GetInt(doorName);
-            adTxt.text = "Activates " + e + " altars";
+            adTxt.text = "ACTIVATE " + e + " ALTARS";
             adTxt.gameObject.SetActive(true);
         }
     }

@@ -28,6 +28,10 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] bool hayPiso = true;
+    [SerializeField] GameObject deathFX;
+
+    [SerializeField] private GameObject combFX01;
+    private GameObject combObj01;
 
     private void Awake()
     {
@@ -78,6 +82,8 @@ public class Chontacuro1 : CharactersBehaviour
     }
 
     private void Muerte() {
+        Instantiate(deathFX, transform.position, Quaternion.identity);
+
         Destroy(this.gameObject);
     }
 
@@ -312,6 +318,9 @@ public class Chontacuro1 : CharactersBehaviour
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;

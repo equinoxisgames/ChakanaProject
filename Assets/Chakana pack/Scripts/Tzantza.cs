@@ -14,11 +14,18 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private bool atacando;
     [SerializeField] private float cooldownAtaque;
+    [SerializeField] GameObject deathFX;
 
+    [SerializeField] private GameObject combFX01;
+    [SerializeField] private GameObject combFX02;
+    [SerializeField] private GameObject combFX03;
 
+    private GameObject combObj01, combObj02, combObj03;
     private void Muerte()
     {
         if (vida <= 0) {
+            Instantiate(deathFX, transform.position, Quaternion.identity);
+
             Destroy(this.gameObject);
         }      
     }
@@ -163,6 +170,9 @@ public class Tzantza : CharactersBehaviour
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;
@@ -174,6 +184,9 @@ public class Tzantza : CharactersBehaviour
         else if (counterEstados == 101)
         {
             //VENENO - VIENTO
+
+            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
+
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoViento");
             rb.velocity = Vector3.zero;
@@ -185,12 +198,18 @@ public class Tzantza : CharactersBehaviour
             yield return new WaitForSeconds(2f);
             playable = true;
             aumentoDanioParalizacion = 1f;
+
+            if (combObj02 != null) Destroy(combObj02);
+
             //StartCoroutine(setParalisis());
 
         }
         else if (counterEstados == 110)
         {
             //FUEGO - VENENO
+
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity, transform);
+
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;

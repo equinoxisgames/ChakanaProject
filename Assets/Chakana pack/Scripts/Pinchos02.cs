@@ -25,7 +25,7 @@ public class Pinchos02 : MonoBehaviour
 
     IEnumerator DelayDmg(Hoyustus player)
     {
-        player.recibirDanio(250);
+        player.recibirDanio(200);
 
         if(player.getVida() <= 0)
         {

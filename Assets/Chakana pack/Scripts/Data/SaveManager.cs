@@ -14,10 +14,10 @@ public static class SaveManager{
         fileStream.Close();
     }
 
-    public static void SavePlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion)
+    public static void SavePlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion, float ataque)
     {
         //Simplificar la firma
-        PlayerData data = new PlayerData(vida, gold, condor, serpiente, lanza, curacion);
+        PlayerData data = new PlayerData(vida, gold, condor, serpiente, lanza, curacion, ataque);
         string dataPath = Application.persistentDataPath + "/player.save";
         FileStream fileStream = new FileStream(dataPath, FileMode.Create);
         BinaryFormatter binaryFormatter = new BinaryFormatter();
