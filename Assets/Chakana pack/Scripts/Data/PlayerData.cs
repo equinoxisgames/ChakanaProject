@@ -16,8 +16,9 @@ public class PlayerData{
         gold = hoyustus.getGold();
     }
 
-    public PlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion) { 
+    public PlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion, float ataque) { 
         this.vida = vida;
+        this.ataque = ataque;
         this.gold = gold;
         this.cargaHabilidadCondor = condor;
         this.cargaHabilidadSerpiente = serpiente;
