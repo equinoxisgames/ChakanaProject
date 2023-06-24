@@ -215,6 +215,8 @@ public class CharactersBehaviour : MonoBehaviour
         vida -= (danio * aumentoDanioParalizacion);
 
         Instantiate(recieveDmgFX, transform.position, Quaternion.identity);
+        //GetComponent<AudioSource>().Stop();
+        //GetComponent<AudioSource>().Play();
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)
