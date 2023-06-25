@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -70,14 +71,21 @@ public class Tzantza : CharactersBehaviour
         playable = false;
         rb.velocity = Vector2.zero;
         yield return new WaitForEndOfFrame();
-        bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
-        bolaFuegoGenerada.SetActive(true);
-
+        try
+        {
+            bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
+            bolaFuegoGenerada.SetActive(true);
+        }
+        catch (Exception e) { }
         //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
-        bolaFuegoGenerada.GetComponent<BolaFuego>().aniadirFuerza();
+        try
+        {
+            bolaFuegoGenerada.GetComponent<BolaFuego>().aniadirFuerza();
+        }
+        catch (Exception e) { }
         yield return new WaitForSeconds(0.5f);
         atacando = false;
         playable = true;
