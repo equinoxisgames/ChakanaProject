@@ -8715,6 +8715,10 @@ MonoBehaviour:
   playable: 1
   explosionInvulnerable: ExplosionPlayer
   inmuneDash: 0
+  vientoFX: {fileID: 0}
+  fuegoFX: {fileID: 0}
+  venenoFX: {fileID: 0}
+  recieveDmgFX: {fileID: 0}
   fuerzaRecoil: 0
   walkSpeedGround: 9
   resistenciaAire: 0.3
@@ -8806,6 +8810,9 @@ MonoBehaviour:
   curando: 0
   SSTEPS: 60
   CSTEPS: 0
+  combFX01: {fileID: 0}
+  combFX02: {fileID: 0}
+  combFX03: {fileID: 0}
 --- !u!95 &1097574632
 Animator:
   serializedVersion: 4
@@ -11237,6 +11244,10 @@ PrefabInstance:
     - target: {fileID: 7018684030615050251, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_Name
       value: Tzantzas Redesign 2 - RO
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018684030615050251, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}

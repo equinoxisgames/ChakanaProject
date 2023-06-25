@@ -604,7 +604,8 @@ public class Hoyustus : CharactersBehaviour
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable);
-        Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
+        GameObject extraExplosion = Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
+        extraExplosion.name += "Player";
 
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
         yield return new WaitForSeconds(1.2f);
@@ -800,7 +801,6 @@ public class Hoyustus : CharactersBehaviour
     {
         base.OnTriggerEnter2D(collider);
 
-
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
         if (collider.gameObject.layer == 3 || collider.gameObject.layer == 18)
         {
@@ -818,15 +818,19 @@ public class Hoyustus : CharactersBehaviour
 
             try
             {
-
+                //PROYECTILES
+                Debug.Log(invulnerable);
+                if (collider.gameObject.transform.parent == null)
+                {
+                    triggerElementos_1_1_1(collider);
+                }
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
-                if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 3)
+                else if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 3)
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     triggerElementos_1_1_1(collider);
-                    return;
                 }
                 else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18)
                 {
@@ -834,8 +838,8 @@ public class Hoyustus : CharactersBehaviour
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     triggerElementos_1_1_1(collider);
-                    return;
                 }
+                return;
 
             }
             catch (Exception e)
@@ -843,7 +847,7 @@ public class Hoyustus : CharactersBehaviour
 
             }
         }
-        if (!invulnerable)
+        if (!invulnerable && !collider.gameObject.name.Contains("Player"))
             triggerElementos_1_1_1(collider);
 
     }
