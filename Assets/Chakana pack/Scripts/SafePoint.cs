@@ -12,6 +12,9 @@ public class SafePoint : MonoBehaviour
     [SerializeField] GameObject txt;
     [SerializeField] int spNum;
     bool isIn, isOn;
+
+    Hoyustus player;
+
     void Start()
     {
         if (PlayerPrefs.GetInt("SP" + spNum) == 1)
@@ -34,6 +37,8 @@ public class SafePoint : MonoBehaviour
 
             isOn = false;
             StartCoroutine(Timer());
+
+            player.CurarCompletamente();
         }
     }
 
@@ -43,6 +48,8 @@ public class SafePoint : MonoBehaviour
         {
             isIn = true;
             txt.SetActive(true);
+
+            player = collision.gameObject.GetComponent<Hoyustus>();
         }
     }
 

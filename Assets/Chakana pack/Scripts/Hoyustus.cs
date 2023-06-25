@@ -157,6 +157,12 @@ public class Hoyustus : CharactersBehaviour
     private bool saltoEspecial = false;
     
 
+    [SerializeField] private GameObject combFX01;
+    [SerializeField] private GameObject combFX02;
+    [SerializeField] private GameObject combFX03;
+
+    private GameObject combObj01, combObj02, combObj03;
+
     public void isTocandoPared(int value)
     {
         tocandoPared = value;
@@ -183,10 +189,28 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
+    public void setCargaCuracion(int e)
+    {
+        cargaCuracion += e;
+    }
+
+    public void CurarCompletamente()
+    {
+        vida = maxVida;
+    }
+
     private void Awake()
     {
 
         LoadData();
+        //Debug.Log(gold);
+
+        // Establecer el m nimo de FPS
+        //Application.targetFrameRate = 30; // Por ejemplo, 30 FPS
+
+        // Establecer el m ximo de FPS
+        //QualitySettings.vSyncCount = 0; // Desactivar el VSync
+        //Application.targetFrameRate = 90; // Por ejemplo, 60 FPS
     }
 
 
@@ -218,7 +242,7 @@ public class Hoyustus : CharactersBehaviour
 
     public void SavePlayerData()
     {
-        SaveManager.SavePlayerData(vida, gold, cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza, cargaCuracion);
+        SaveManager.SavePlayerData(vida, gold, cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza, cargaCuracion, ataque);
     }
 
 
@@ -247,6 +271,7 @@ public class Hoyustus : CharactersBehaviour
         escena = SceneManager.GetActiveScene().name;
         //ataqueMax = 5;
         ataque = ataqueMax;
+        ataqueMax = ataque;
         dashBodyTESTING = this.gameObject.GetComponent<BoxCollider2D>();
         dashBodyTESTING.enabled = false;
 
@@ -291,7 +316,7 @@ public class Hoyustus : CharactersBehaviour
 
 
         SSTEPS = 55;
-        maxVida = vida;
+        //maxVida = vida;
     }
 
 
@@ -635,6 +660,7 @@ public class Hoyustus : CharactersBehaviour
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
         ataque = valorAtaqueHabilidadLanza;
+        ataque = 150;
         lanzas[0].SetActive(true);
 
 
@@ -659,6 +685,7 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         rb.gravityScale = 2f;
         ataque = valorAtaqueNormal;
+        ataque = ataqueMax;
 
         //DESACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].SetActive(false);
@@ -927,6 +954,9 @@ public class Hoyustus : CharactersBehaviour
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;
@@ -934,12 +964,18 @@ public class Hoyustus : CharactersBehaviour
             ataque = ataqueMax * 0.75f;
             StopCoroutine("afectacionEstadoFuego");
             StartCoroutine("afectacionEstadoFuego");
+
+            yield return new WaitForSeconds(5f);
+            ataque = ataqueMax;
         }
         else if (counterEstados == 101)
         {
             //VENENO - VIENTO
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoViento");
+
+            if(combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
+
             rb.velocity = Vector3.zero;
             counterEstados = 0;
             estadoVeneno = false;
@@ -949,12 +985,18 @@ public class Hoyustus : CharactersBehaviour
             yield return new WaitForSeconds(2f);
             playable = true;
             aumentoDanioParalizacion = 1f;
+
+            if (combObj02 != null) Destroy(combObj02);
+
             //StartCoroutine(setParalisis());
 
         }
         else if (counterEstados == 110)
         {
             //FUEGO - VENENO
+
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity, transform);
+
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;

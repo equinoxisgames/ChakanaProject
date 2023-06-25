@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjDestroy : MonoBehaviour
 {
     [SerializeField] private GameObject vfxDestroy;
-    [SerializeField] private bool door, gold;
+    [SerializeField] private bool door, gold, heal;
     [SerializeField] private int doorNum;
     [SerializeField] GameObject goldObj;
     void Start()
@@ -42,6 +42,14 @@ public class ObjDestroy : MonoBehaviour
                         rb2D.AddForce(direccion * fuerza);
                     }
                 }
+            }
+
+            if (heal)
+            {
+                Vector3 newPos = transform.position;
+                newPos.y += 0.5f;
+
+                Instantiate(goldObj, newPos, Quaternion.identity);
             }
 
             Instantiate(vfxDestroy, transform.position, Quaternion.identity);

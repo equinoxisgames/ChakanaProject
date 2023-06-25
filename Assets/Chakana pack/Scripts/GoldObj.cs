@@ -6,27 +6,31 @@ public class GoldObj : MonoBehaviour
 {
     [SerializeField] int goldType;
     [SerializeField] int goldTypeFisic;
+    [SerializeField] bool heal;
 
     int amount;
     void Start()
     {
-        int e = Random.Range(1, 11);
-
-        if (e > 6)
-        {
-            Destroy(gameObject);
-        }
-
         if (goldType == 0)
         {
-            if(PlayerPrefs.HasKey("gold" + goldTypeFisic))
+            if(PlayerPrefs.HasKey("goldfisic" + goldTypeFisic))
             {
                 Destroy(gameObject);
             }
 
             amount = 10;
         }
-        else if (goldType == 1) amount = 3;
+        else
+        {
+            int e = Random.Range(1, 11);
+
+            if (e > 6)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        if (goldType == 1) amount = 3;
         else if (goldType == 2) amount = 5;
         else if (goldType == 3) amount = 7;
         else if (goldType == 4) amount = 1;
@@ -35,7 +39,7 @@ public class GoldObj : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if(collision.tag == "Player" && !heal)
         {
             if(goldType == 0)
             {
@@ -43,6 +47,11 @@ public class GoldObj : MonoBehaviour
             }
 
             collision.GetComponent<Hoyustus>().setGold(amount);
+            Destroy(gameObject);
+        }
+        else if(collision.tag == "Player" && heal)
+        {
+            collision.GetComponent<Hoyustus>().setCargaCuracion(50);
             Destroy(gameObject);
         }
     }
