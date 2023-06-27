@@ -353,7 +353,6 @@ public class Hoyustus : CharactersBehaviour
             }
             if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
             {
-                dashAvailable = false;
                 StartCoroutine("habilidadSerpiente");
             }
             if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
@@ -629,7 +628,7 @@ public class Hoyustus : CharactersBehaviour
         bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
         bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
-        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(transform.localScale.x, layerObject);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject);
         yield return new WaitForEndOfFrame();
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
@@ -819,7 +818,6 @@ public class Hoyustus : CharactersBehaviour
             try
             {
                 //PROYECTILES
-                Debug.Log(invulnerable);
                 if (collider.gameObject.transform.parent == null)
                 {
                     triggerElementos_1_1_1(collider);
@@ -1152,7 +1150,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash()
     {
-        if (dashAvailable && Input.GetButton("Dash") && tocandoPared != 0)
+        if (dashAvailable && Input.GetButtonDown("Dash") && tocandoPared != 0)
         {
             invulnerable = true;
             playable = false;
