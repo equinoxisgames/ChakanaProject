@@ -1004,7 +1004,7 @@ MonoBehaviour:
   walkSpeed: 12
   isWalking: 0
   isJumping: 0
-  correctorSalto: 26
+  correctorSalto: 35
   firstJump: 1
   secondJump: 0
   groundCheckRadius: 0.15
@@ -1092,6 +1092,7 @@ MonoBehaviour:
   combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  condorFX: {fileID: 1955253382737796067, guid: 2aebd9ecdf17b734b9d278c82456fe5e, type: 3}
 --- !u!61 &1998959458
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2159,9 +2160,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8219284701690621551}
-  - component: {fileID: 8336769527591065878}
   - component: {fileID: 2573068212317161316}
   - component: {fileID: 4295587534955603985}
+  - component: {fileID: 2998988625730628302}
   m_Layer: 14
   m_Name: Lanza Lateral
   m_TagString: Untagged
@@ -2184,32 +2185,6 @@ Transform:
   m_Father: {fileID: 3246166418984944529}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &8336769527591065878
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4731999492176801590}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 1.8102069, y: 1.6494536}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.6204138, y: 2.761989}
-  m_EdgeRadius: 0
 --- !u!114 &2573068212317161316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2318,6 +2293,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!68 &2998988625730628302
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731999492176801590}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.17494965, y: -0.2234726}
+  - {x: 1.6502247, y: 0.2788992}
+  - {x: 2.4187622, y: 0.49822378}
+  - {x: 3.1268005, y: 1.085094}
+  - {x: 3.3519325, y: 2.316327}
+  - {x: 2.617735, y: 3.500869}
+  - {x: 1.0356064, y: 4.4082904}
+  - {x: 0.93512344, y: 3.3075235}
+  - {x: 2.0569038, y: 2.266979}
+  - {x: 2.0233555, y: 1.5917292}
+  - {x: 1.353054, y: 0.7595067}
+  - {x: -0.69862556, y: -0.38599753}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &4816996125715382145
 GameObject:
   m_ObjectHideFlags: 0
