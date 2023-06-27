@@ -62,13 +62,13 @@ public class Chontacuro1 : CharactersBehaviour
         }*/
 
         if ((int)limit1.x == (int)limit2.x) {
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
+            limit1 = gameObject.transform.position - Vector3.right;
+            limit2 = gameObject.transform.position + Vector3.right;
         }
 
         if (limit1.x > limit2.x){
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
+            limit1 = gameObject.transform.position - Vector3.right;
+            limit2 = gameObject.transform.position + Vector3.right;
             Vector3 aux = limit1;
             limit1 = limit2;
             limit2 = aux;
@@ -211,6 +211,8 @@ public class Chontacuro1 : CharactersBehaviour
                 speed = movementSpeed;
             }
         }
+
+
     }
 
 
@@ -275,7 +277,9 @@ public class Chontacuro1 : CharactersBehaviour
             }
         }
 
-        if (collider.gameObject.tag == "Viento")
+
+
+        if (collider.gameObject.tag == "Viento" && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoViento)
             {
@@ -293,7 +297,7 @@ public class Chontacuro1 : CharactersBehaviour
             StartCoroutine("afectacionEstadoViento");
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
+        else if (collider.gameObject.tag == "Fuego" && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoFuego)
             {

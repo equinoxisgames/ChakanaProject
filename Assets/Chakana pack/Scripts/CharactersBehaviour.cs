@@ -133,12 +133,12 @@ public class CharactersBehaviour : MonoBehaviour
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
 
-        if ((collider.gameObject.layer != gameObject.layer))
+        /*if ((collider.gameObject.layer != gameObject.layer))
         {
             triggerElementos_1_1_1(collider);
             return;
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
-        }
+        }*/
     }
 
 
