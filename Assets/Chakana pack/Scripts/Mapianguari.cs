@@ -197,7 +197,7 @@ public class Mapianguari : CharactersBehaviour
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        if (collider.gameObject.tag == "Viento")
+        if (collider.gameObject.tag == "Viento" && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoViento)
             {
@@ -216,7 +216,7 @@ public class Mapianguari : CharactersBehaviour
             StartCoroutine("afectacionEstadoViento");
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
+        else if (collider.gameObject.tag == "Fuego" && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoFuego)
             {
@@ -423,6 +423,7 @@ public class Mapianguari : CharactersBehaviour
             {
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
                 bolaVenenoGenerada.AddComponent<BolaVeneno>();
+                //bolaVenenoGenerada += "Enemy";
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
                 auxDisparo++; 
@@ -440,6 +441,7 @@ public class Mapianguari : CharactersBehaviour
                 }
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
                 bolaVenenoGenerada.AddComponent<BolaVeneno>();
+                //bolaVenenoGenerada += "Enemy";
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
                 yield return new WaitForSeconds(0.05f);
@@ -494,7 +496,7 @@ public class Mapianguari : CharactersBehaviour
                     bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-75, -72), 0), Quaternion.identity);
                     break;
             }
-
+            //bolaVenenoGenerada.name += "Enemy";
             //GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-58, -13), aux.Next(-99, -73), 0), Quaternion.identity);
             bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
             yield return new WaitForEndOfFrame();
@@ -624,7 +626,7 @@ public class Mapianguari : CharactersBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 11)
+        if (collision.gameObject.layer == 11 && !usandoAtaqueEspecial)
         {
             //rb.bodyType = RigidbodyType2D.Static;
             rb.constraints = RigidbodyConstraints2D.FreezePositionX;
