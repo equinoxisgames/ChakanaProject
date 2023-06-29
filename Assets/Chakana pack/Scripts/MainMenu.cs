@@ -294,6 +294,10 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("00- Main Menu 0");
     }
+    public void OpenCredits()
+    {
+        SceneManager.LoadScene("00- Credits 0");
+    }
     public void QuitGame()
     {
         Application.Quit();
