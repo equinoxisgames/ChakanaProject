@@ -41,6 +41,7 @@ public class ApallimayDaga : CharactersBehaviour
         objetivo = limit2;
         posY = transform.position.y;
         groundDetector = transform.GetChild(4).gameObject.transform;
+        vidaMax = vida;
     }
 
 
@@ -163,11 +164,13 @@ public class ApallimayDaga : CharactersBehaviour
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
+            return;
         }
         else if (collider.gameObject.layer == 11)
         {
             //jugadorDetectado = true;
             rb.velocity = Vector2.zero;
+            return;
         }
 
         if (!collider.name.Contains("Enemy"))
@@ -258,6 +261,11 @@ public class ApallimayDaga : CharactersBehaviour
                 limit1 = limit2;
                 limit2 = aux;
             }
+        }
+
+        if (!collision.gameObject.name.Contains("Enemy"))
+        {
+            collisionElementos_1_1_1(collision);
         }
     }
 

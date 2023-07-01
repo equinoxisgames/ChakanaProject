@@ -628,12 +628,13 @@ public class Hoyustus : CharactersBehaviour
         bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
         bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
-        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         dashAvailable = true;
         playable = true;
+        vidaMax = 1000;
 
     }
 
@@ -818,7 +819,7 @@ public class Hoyustus : CharactersBehaviour
             try
             {
                 //PROYECTILES
-                if (collider.gameObject.transform.parent == null)
+                if (collider.gameObject.transform.parent == null && !invulnerable)
                 {
                     triggerElementos_1_1_1(collider);
                 }

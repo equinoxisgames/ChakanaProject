@@ -30,16 +30,16 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected string explosionInvulnerable;
     [SerializeField] protected bool inmuneDash = false;
 
-    [SerializeField] GameObject vientoFX;
-    [SerializeField] GameObject fuegoFX;
-    [SerializeField] GameObject venenoFX;
-    [SerializeField] GameObject recieveDmgFX;
+    [SerializeField] protected GameObject vientoFX;
+    [SerializeField] protected GameObject fuegoFX;
+    [SerializeField] protected GameObject venenoFX;
+    [SerializeField] protected GameObject recieveDmgFX;
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
     public float fuerzaRecoil;
     private GameObject vientoObj, fuegoObj, venenoObj;
-    private float vidaMax = 0;
+    protected float vidaMax = 0;
 
     
 
@@ -113,7 +113,7 @@ public class CharactersBehaviour : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
         //LAYER EXPLOSION
-        if ((collider.gameObject.layer == 12 && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
+        if ((collider.gameObject.layer == 12 && !invulnerable && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
