@@ -40,6 +40,7 @@ public class Tzantza : CharactersBehaviour
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
+        vidaMax = vida;
     }
 
 
@@ -116,6 +117,7 @@ public class Tzantza : CharactersBehaviour
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
+            return;
         }
 
 
@@ -138,6 +140,14 @@ public class Tzantza : CharactersBehaviour
                     StartCoroutine(Ataque(collision.transform.position));
                 }
             } catch { }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.name.Contains("Enemy"))
+        {
+            collisionElementos_1_1_1(collision);
         }
     }
 

@@ -57,6 +57,7 @@ public class Boraro : CharactersBehaviour
         navMesh.updateRotation = navMesh.updateUpAxis = false;
         objetivoX = transform;*/
         //StartCoroutine(SetDestinationDelayed());
+        vidaMax = vida;
     }
 
     /*private IEnumerator SetDestinationDelayed()
