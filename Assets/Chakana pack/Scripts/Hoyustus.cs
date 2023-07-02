@@ -155,7 +155,7 @@ public class Hoyustus : CharactersBehaviour
 
 
     private bool saltoEspecial = false;
-    
+
 
     [SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
@@ -329,7 +329,7 @@ public class Hoyustus : CharactersBehaviour
         //Walk(xAxis);
         tocarPared();
 
-        if(transform.parent != null)
+        if (transform.parent != null)
         {
             limitY = transform.position.y + 8.5f;
         }
@@ -397,7 +397,7 @@ public class Hoyustus : CharactersBehaviour
     {
         if (Input.GetButtonUp("Jump"))
         {
-            if(!atacando)
+            if (!atacando)
                 anim.Play("Caer");
             rb.velocity = new Vector2(rb.velocity.x, 0);
             isJumping = false;
@@ -718,7 +718,7 @@ public class Hoyustus : CharactersBehaviour
     {
 
         //COLISIONES PARA OBJETOS TAGUEADOS COMO ENEMY
-        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18)
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18 || collision.gameObject.layer == 19)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -763,7 +763,7 @@ public class Hoyustus : CharactersBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18)
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18 || collision.gameObject.layer == 19)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -802,7 +802,7 @@ public class Hoyustus : CharactersBehaviour
         base.OnTriggerEnter2D(collider);
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
-        if (collider.gameObject.layer == 3 || collider.gameObject.layer == 18)
+        if (collider.gameObject.layer == 3 || collider.gameObject.layer == 18 || collider.gameObject.layer == 19)
         {
             //direccion nos dara la orientacion de recoil al sufrir danio
             int direccion = 1;
@@ -824,7 +824,7 @@ public class Hoyustus : CharactersBehaviour
                     triggerElementos_1_1_1(collider);
                 }
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
-                else if (!invulnerable && collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 3)
+                else if (!invulnerable && (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && (collider.gameObject.layer == 3 || collider.gameObject.layer == 19)))
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
