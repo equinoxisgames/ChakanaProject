@@ -72,7 +72,7 @@ public class EnemyGenerator : MonoBehaviour
             }
         }
 
-        if (treasureCollect && treasure == null)
+        if (treasureCollect && !treasure.GetComponent<SpriteRenderer>().enabled)
         {
             isOnBattle = false;
             isMove = true;
