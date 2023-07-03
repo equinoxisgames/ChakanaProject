@@ -189,7 +189,7 @@ public class Tzantza : CharactersBehaviour
         {
             //VIENTO - FUEGO
 
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
 
             estadoViento = false;
             afectacionViento = 0;
@@ -226,7 +226,7 @@ public class Tzantza : CharactersBehaviour
         {
             //FUEGO - VENENO
 
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity, transform);
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
 
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
