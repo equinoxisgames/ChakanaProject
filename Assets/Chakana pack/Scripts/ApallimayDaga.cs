@@ -25,6 +25,12 @@ public class ApallimayDaga : CharactersBehaviour
  
 
     [SerializeField] private bool prueba = false;
+    [SerializeField] GameObject deathFX;
+    [SerializeField] private GameObject combFX01;
+    [SerializeField] private GameObject combFX02;
+    [SerializeField] private GameObject combFX03;
+
+    private GameObject combObj01, combObj02, combObj03;
 
 
     void Start()
@@ -73,6 +79,7 @@ public class ApallimayDaga : CharactersBehaviour
     {
         if (vida <= 0)
         {
+            Instantiate(deathFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }
@@ -347,6 +354,7 @@ public class ApallimayDaga : CharactersBehaviour
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;
@@ -358,6 +366,7 @@ public class ApallimayDaga : CharactersBehaviour
         else if (counterEstados == 101)
         {
             //VENENO - VIENTO
+            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoViento");
             rb.velocity = Vector3.zero;
@@ -375,6 +384,7 @@ public class ApallimayDaga : CharactersBehaviour
         else if (counterEstados == 110)
         {
             //FUEGO - VENENO
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;

@@ -172,7 +172,17 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoFuego()
     {
-        if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, transform.position, Quaternion.identity, transform);
+        if(transform.tag == "Player")
+        {
+            Vector3 newPos = transform.position;
+            newPos.y -= 0.75f;
+            if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, newPos, Quaternion.identity, transform);
+        }
+        else
+        {
+            if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, transform.position, Quaternion.identity, transform);
+        }
+
         for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(2f);
