@@ -584,7 +584,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(1+1);
+                SceneManager.LoadScene(1+1+1);
             }
                 
             else if (transitionLayerExit == "Transition1")
@@ -603,7 +603,7 @@ public class Hoyustus : MonoBehaviour
 
                 if (!corutinaIniciada)
                 {
-                    StartCoroutine(LoadAsyncScene(5 + 1));
+                    StartCoroutine(LoadAsyncScene(5 + 1+1));
                     corutinaIniciada = true;
                 }
             }
@@ -620,7 +620,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(0+1);
+                SceneManager.LoadScene(0+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -628,7 +628,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(2+1);
+                SceneManager.LoadScene(2+1+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -636,7 +636,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.468f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3+1);
+                SceneManager.LoadScene(3+1+1);
             }
             else if (transitionLayerExit == "Transition3")
             {
@@ -644,7 +644,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3+1);
+                SceneManager.LoadScene(3+1+1);
             }
         }
         if (escena == "03-Room 3")
@@ -653,7 +653,7 @@ public class Hoyustus : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(1+1);
+            SceneManager.LoadScene(1+1+1);
         }
         if (escena == "04-Level 2")
         {
@@ -663,7 +663,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1+1);
+                SceneManager.LoadScene(1+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -671,7 +671,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.422f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1+1);
+                SceneManager.LoadScene(1+1+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -687,7 +687,7 @@ public class Hoyustus : MonoBehaviour
 
                 if (!corutinaIniciada)
                 {
-                    StartCoroutine(LoadAsyncScene(4 + 1));
+                    StartCoroutine(LoadAsyncScene(4 + 1+1));
                     corutinaIniciada = true;
                 }
 
@@ -700,7 +700,7 @@ public class Hoyustus : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(3+1);
+            SceneManager.LoadScene(3+1+1);
         }
         if (escena == "06- Room 6")
         {
@@ -710,7 +710,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(0+1);
+                SceneManager.LoadScene(0+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -718,7 +718,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 38.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6+1);
+                SceneManager.LoadScene(6+1+1);
             }
                 
             
@@ -731,7 +731,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(5+1);
+                SceneManager.LoadScene(5+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -739,7 +739,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.417f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7+1);
+                SceneManager.LoadScene(7+1+1);
 
             }
 
@@ -752,7 +752,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6+1);
+                SceneManager.LoadScene(6+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -760,7 +760,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8+1);
+                SceneManager.LoadScene(8+1+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -768,7 +768,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(12+1);
+                SceneManager.LoadScene(12+1+1);
             }
         }
         if (escena == "09-Room 9")
@@ -787,7 +787,7 @@ public class Hoyustus : MonoBehaviour
 
                 if (!corutinaIniciada)
                 {
-                    StartCoroutine(LoadAsyncScene(9 + 1));
+                    StartCoroutine(LoadAsyncScene(9 + 1+1));
                     corutinaIniciada = true;
                 }
                 
@@ -804,7 +804,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7+1);
+                SceneManager.LoadScene(7+1+1);
 
             }
 
@@ -817,7 +817,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8+1);
+                SceneManager.LoadScene(8+1+1);
             }
             else if (transitionLayerExit == "Transition1")
             {
@@ -825,7 +825,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(10+1);
+                SceneManager.LoadScene(10+1+1);
             }
             else if (transitionLayerExit == "Transition2")
             {
@@ -833,7 +833,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(11+1);
+                SceneManager.LoadScene(11+1+1);
             }
         }
         if (escena == "12-Room 12")
@@ -849,7 +849,7 @@ public class Hoyustus : MonoBehaviour
 
             if (!corutinaIniciada)
             {
-                StartCoroutine(LoadAsyncScene(9 + 1));
+                StartCoroutine(LoadAsyncScene(9 + 1+1));
                 corutinaIniciada = true;
             }
 
@@ -865,7 +865,7 @@ public class Hoyustus : MonoBehaviour
                 PlayerPrefs.SetFloat(nextPositionYPrefsName, -102.327f);
                 PlayerPrefs.SetInt(firstRunPrefsName, 0);
                 PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9+1);
+                SceneManager.LoadScene(9+1+1);
             }
 
             else if (transitionLayerExit == "Transition1")
@@ -881,7 +881,7 @@ public class Hoyustus : MonoBehaviour
 
                 if (!corutinaIniciada)
                 {
-                    StartCoroutine(LoadAsyncScene(13+1));
+                    StartCoroutine(LoadAsyncScene(13+1+1));
                     corutinaIniciada = true;
                 }
 
@@ -893,7 +893,7 @@ public class Hoyustus : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(7+1);
+            SceneManager.LoadScene(7+1+1);
         }
         if (escena == "14-Boss Room")
         {
@@ -901,7 +901,7 @@ public class Hoyustus : MonoBehaviour
             PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
             PlayerPrefs.SetInt(firstRunPrefsName, 0);
             PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(11+1);
+            SceneManager.LoadScene(11+1+1);
         }
     }
 

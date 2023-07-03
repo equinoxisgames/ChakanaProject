@@ -46,7 +46,7 @@ public class CreditsMenu : MonoBehaviour
 
         //if (!corutinaIniciada)
         //{
-            StartCoroutine(LoadAsyncScene(0));
+            StartCoroutine(LoadAsyncScene(1));
             //corutinaIniciada = true;
         //}
 

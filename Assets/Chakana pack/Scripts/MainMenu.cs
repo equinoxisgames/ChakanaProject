@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour
     public RectTransform exitMenu;
     public RectTransform confirmQuitMenu;
 
+    public RectTransform inventoryMenu;
+
 
     //public RectTransform exitMenu;
     //public Transform hoyustusGameObject;
@@ -33,6 +35,10 @@ public class MainMenu : MonoBehaviour
     private bool botonGamePadPress = false;
     private bool anyKeyPress = false;
     private bool altKeyPress = false;
+
+    [Header("LoadPanel")]
+    [SerializeField] GameObject loadPanel;
+    [SerializeField] Slider loadBar;
 
     void Start()
     {
@@ -150,7 +156,16 @@ public class MainMenu : MonoBehaviour
 
 
         Escape();
-      
+        Inventory();
+    }
+    public void Inventory()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            inventoryMenu.gameObject.SetActive(true);
+            Debug.Log("Se ha presionado la tecla 'I'.");       
+            
+        }
     }
     public void Escape()
     {
@@ -288,15 +303,68 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        SceneManager.LoadScene("00- StartRoom 1");
+
+        loadPanel.SetActive(true);
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(2));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- StartRoom 1");
     }
     public void OpenMainMenu()
     {
-        SceneManager.LoadScene("00- Main Menu 0");
+        loadPanel.SetActive(true);
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(1));
+        //corutinaIniciada = true;
+        //}
+    }
+
+    IEnumerator LoadAsyncScene(int sceneIndex)
+    {
+
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        //SceneManager.LoadScene(9 + 1);
+        //yield return new WaitForSeconds(1f);
+        //while(!asyncOperation.isDone)
+        //{
+        //    Debug.Log("Progres: "+asyncOperation.progress);
+        //    loadBar.value = asyncOperation.progress+0.05f;
+        //    yield return null;
+        //}
+
+        for (int i = 0; i < 20; i++)
+        {
+            //Debug.Log("Progres: "+asyncOperation.progress);
+            //loadBar.value = asyncOperation.progress+0.05f;
+            if (i < 15)
+            {
+                loadBar.value = i * 0.01f;
+                yield return new WaitForSeconds(1f);
+            }
+            else
+            {
+                loadBar.value = i * 0.09f + 0.16f;
+                yield return new WaitForSeconds(1.5f);
+            }
+        }
+
+        //yield break;
     }
     public void OpenCredits()
     {
-        SceneManager.LoadScene("00- Credits 0");
+        loadPanel.SetActive(true);
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(16));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- Credits 0");
     }
     public void QuitGame()
     {
