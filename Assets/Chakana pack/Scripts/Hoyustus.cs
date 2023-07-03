@@ -819,7 +819,7 @@ public class Hoyustus : CharactersBehaviour
             try
             {
                 //PROYECTILES
-                if (collider.gameObject.transform.parent == null && !invulnerable)
+                if (collider.gameObject.transform.parent == null)
                 {
                     triggerElementos_1_1_1(collider);
                 }
