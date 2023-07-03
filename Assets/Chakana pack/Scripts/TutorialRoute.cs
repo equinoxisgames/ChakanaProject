@@ -20,8 +20,6 @@ public class TutorialRoute : MonoBehaviour
             Destroy(gameObject);
         }
 
-        PlayerPrefs.DeleteAll();
-
         keyObj = tutoObj.transform.GetChild(0).gameObject;
         joyObj = tutoObj.transform.GetChild(1).gameObject;
 

@@ -6,6 +6,9 @@ using UnityEngine;
 public class MenuMuerte : MonoBehaviour
 {
     bool isDead;
+    int sceneLoad;
+
+    [SerializeField] GameObject loadScenePanel;
 
     private void Start()
     {
@@ -49,9 +52,11 @@ public class MenuMuerte : MonoBehaviour
 
         if (!PlayerPrefs.HasKey("respawn"))
         {
-            SceneManager.LoadScene(1);
+            sceneLoad = 1;
         }
-        else SceneManager.LoadScene(PlayerPrefs.GetInt("respawn"));
+        else sceneLoad = PlayerPrefs.GetInt("respawn");
+
+        StartCoroutine(LoadNextScene());
     }
 
     private void correccionLogicas() {
@@ -61,4 +66,15 @@ public class MenuMuerte : MonoBehaviour
         //this.gameObject.layer = 11;
     }
 
+    IEnumerator LoadNextScene()
+    {
+        loadScenePanel.SetActive(true);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneLoad);
+
+        while (asyncLoad.isDone == false)
+        {
+            yield return null;
+        }
+    }
 }
