@@ -362,6 +362,7 @@ public class ApallimayDaga : CharactersBehaviour
             aumentoFuegoPotenciado = 3;
             ataque = ataqueMax * 0.75f;
             StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
         }
         else if (counterEstados == 101)
