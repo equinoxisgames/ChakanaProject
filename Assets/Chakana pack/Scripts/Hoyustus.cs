@@ -966,6 +966,7 @@ public class Hoyustus : CharactersBehaviour
             aumentoFuegoPotenciado = 3;
             ataque = ataqueMax * 0.75f;
             StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
 
             yield return new WaitForSeconds(5f);

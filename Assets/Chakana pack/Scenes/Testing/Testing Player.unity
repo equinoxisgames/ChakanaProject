@@ -5991,7 +5991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!58 &375014367
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6068,7 +6068,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375014366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.7, y: 1.65, z: 0}
+  m_LocalPosition: {x: 36, y: 1.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21258,7 +21258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!58 &1702955594
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -21335,7 +21335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702955593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.7, y: 1.89, z: 0}
+  m_LocalPosition: {x: 30, y: 1.59, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21866,9 +21866,25 @@ PrefabInstance:
       propertyPath: AudioWalking
       value: 
       objectReference: {fileID: 1603279521}
+    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: cargaHabilidadLanza
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: cargaHabilidadCondor
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: cargaHabilidadSerpiente
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2374536855388483605, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_Name
       value: Hoyustus Solicitud Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 2374536855388483605, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3475676534869305462, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: m_RootOrder
@@ -22298,11 +22314,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6
+      value: 23.81
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.38
+      value: 1.98
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22390,6 +22406,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5265702550096484452, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
+      propertyPath: vida
+      value: 9000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265702550096484452, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: speed
       value: 0.01
       objectReference: {fileID: 0}
@@ -22465,7 +22485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7018684030615050251, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
