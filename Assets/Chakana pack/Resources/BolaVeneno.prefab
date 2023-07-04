@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 2879518540465207448}
   - component: {fileID: 8328643306341018074}
   - component: {fileID: 2866573978253660073}
+  - component: {fileID: 6018718717433883113}
   m_Layer: 11
   m_Name: BolaVeneno
-  m_TagString: Untagged
+  m_TagString: Veneno
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +98,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -124,6 +125,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6018718717433883113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073483916779072741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0e3be269fa16c4db4d5ff569caef4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  charco: {fileID: 8081575625336725374, guid: 3f708db572fd8254fbdd12681c730e63, type: 3}
 --- !u!1 &4914940100605359209
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private GameObject explosion;
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
-    private GameObject charcoVeneno;
+    [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private bool cambioPlataformaDisponible = true;
@@ -51,12 +51,12 @@ public class Mapianguari : CharactersBehaviour
     {
         fuerzaRecoil = 5;
         //Physics2D.IgnoreLayerCollision(13, 15, true);
-        charcoVeneno = new GameObject();
-        charcoVeneno.SetActive(false);
-        charcoVeneno.tag = "Veneno";
-        charcoVeneno.AddComponent<BoxCollider2D>();
-        charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
-        charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
+        //charcoVeneno = new GameObject();
+        //charcoVeneno.SetActive(false);
+        //charcoVeneno.tag = "Veneno";
+        //charcoVeneno.AddComponent<BoxCollider2D>();
+        //charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
+        //charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
 
         plataformaActual = 1;
         nuevaPlataforma = 1;
@@ -330,7 +330,7 @@ public class Mapianguari : CharactersBehaviour
 
         //GENERACION DEL CHARCO DE VENENO
         if (segundaEtapa) {
-            GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 5f, Quaternion.identity);
+            GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
             StartCoroutine(destruirCharco(charcoGenerado));
         }
 
