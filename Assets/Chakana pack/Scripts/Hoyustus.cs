@@ -331,7 +331,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (transform.parent != null)
         {
-            limitY = transform.position.y + 8.5f;
+            limitY = transform.position.y + 10f;
         }
 
         //HABILIDADES ELEMENTALES
@@ -419,7 +419,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (firstJump && !secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
-            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())
             {
                 anim.Play("Caer");
                 secondJump = true;
@@ -428,7 +428,6 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 currentTimeAir = 0;
-                //limitY += 7;
                 //Debug.Log("Alto");
                 return;
             }
@@ -439,31 +438,18 @@ public class Hoyustus : CharactersBehaviour
                 saltoEspecial = false;
                 isJumping = true;
                 secondJump = false;
-                //currentStepsImpulso = 0;
                 rb.AddForce(new Vector2(0, 6f), ForceMode2D.Impulse);
                 //Debug.Log("Salto");
                 isJumping = true;
-                //cargaHabilidadCondor += 0.05f;
                 cargaHabilidadCondor += aumentoBarraSalto;
-                //posYAntesSalto = transform.position.y;
                 CSTEPS++;
-                limitY = transform.position.y + 8.5f;
-                //Debug.Log(limitY);
-
+                limitY = transform.position.y + 10f;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir*/)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
             {
-                //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                //MODIFICANDO VELOCIDADES
-                //rb.velocity += Vector2.up * -Physics2D.gravity * (1.5f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
-                //AGREGANDO FUERZAS
                 isJumping = true;
-                //rb.velocity = new Vector2(rb.velocity.x, ((7 + 0.5f * 18f * ((35 - CSTEPS) * (35 - CSTEPS) )/20)/(35 - CSTEPS)/20));
-                rb.AddForce(new Vector2(0, ((7 + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 35) / (SSTEPS - CSTEPS) / 35)), ForceMode2D.Impulse);
-                ///rb.AddForce(new Vector2(0, 0.8f - (0.022f * CSTEPS)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, ((6.0f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 38) / (SSTEPS - CSTEPS) / 35)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
-                //Debug.Log("Impulso");
-                //cargaHabilidadCondor += 0.005f;
                 CSTEPS++;
             }
 
@@ -482,23 +468,16 @@ public class Hoyustus : CharactersBehaviour
                 Debug.Log("Salto 2");
                 isJumping = true;
                 secondJump = true;
-                limitY = transform.position.y + 8.5f;
-                //cargaHabilidadCondor += 0.05f;
+                limitY = transform.position.y + 10f;
                 cargaHabilidadCondor += aumentoBarraSalto;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
             {
-                //Seria mejor subir la fuerza inicial e impulso de salto pero reducir a costa el tiempo limite de esta mecanica
-                //MODIFICANDO VELOCIDADES
-                //rb.velocity += Vector2.up * -Physics2D.gravity * (2f /*- 0.5f * currentStepsImpulso/maxStepsImpulso)*/ ) * Time.deltaTime;
-                //AGREGANDO FUERZAS
                 CSTEPS++;
                 rb.AddForce(new Vector2(0, 1.15f - (limitY - transform.position.y) / 10), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 isJumping = true;
                 //Debug.Log("Impulso 2");
-                //cargaHabilidadCondor += 0.005f;
-
             }
 
 
