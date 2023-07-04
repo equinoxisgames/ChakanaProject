@@ -11,8 +11,6 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
-        //rb.isKinematic = true;
-        //rb.Sleep();
         hoyustus = GameObject.Find("Hoyustus Solicitud Prefab").transform.position + Vector3.up;
     }
 
@@ -32,10 +30,8 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     }
 
 
-    public void instanciarValores(GameObject explosion, int layer) {
+    public void instanciarValores(GameObject explosion) {
         this.explosion = explosion;
-        gameObject.layer = layer;
-        gameObject.tag = "Veneno";
         this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(6, 25, 6, 12, "Veneno", "ExplosionEnemy");
     }
 

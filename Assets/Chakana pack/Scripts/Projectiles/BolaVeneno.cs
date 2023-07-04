@@ -10,22 +10,13 @@ public class BolaVeneno : MonoBehaviour
     protected float tiempoEliminacion = 5f;
     protected GameObject explosion;
     private bool activado = true;
-    private GameObject charco;
+    [SerializeField] private GameObject charco;
     private bool residuos = false;
 
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();;
         rb.Sleep();
-
-        //CONFIGURACION DEL OBJETO CHARCO
-        charco = new GameObject();
-        charco.SetActive(false);
-        charco.tag = "Veneno";
-        charco.layer = 11;
-        charco.AddComponent<BoxCollider2D>();
-        charco.GetComponent<BoxCollider2D>().isTrigger = true;
-        charco.GetComponent<BoxCollider2D>().size = new Vector2(10f, 1f);
     }
 
     private void Update()
@@ -73,15 +64,10 @@ public class BolaVeneno : MonoBehaviour
         rb.velocity= Vector3.zero;
         rb.isKinematic = true;
         this.GetComponent<CircleCollider2D>().enabled = false;
-        //particulas.SetActive(true);
-        //GetComponent<CircleCollider2D>().enabled = false;
-        charco.name = "CharcoVenenoPlayer";
-        charco.layer = 0;
-        charco.transform.position = position;
-        charco.SetActive(true);
+        GameObject charcoGenerado = Instantiate(charco, transform.position, Quaternion.identity);
+        charcoGenerado.name = "CharcoVenenoPlayer";
         yield return new WaitForSeconds(5f);
-        //Destroy(charco.gameObject);
-        Destroy(charco);
+        Destroy(charcoGenerado);
         Destroy(this.gameObject);
     }
 

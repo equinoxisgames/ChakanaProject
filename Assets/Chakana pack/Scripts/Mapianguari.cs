@@ -23,19 +23,14 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private float valorAtaqueBasico;
     [SerializeField] private float valorAtaqueEspecial;
     [SerializeField] private float coolDownAtaque;
-    //private float movementVelocitySecondStage = 8;
-    private float maxVida;
+    //private float maxVida;
     private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
     [SerializeField] private GameObject explosion;
-
-    /*[SerializeField] private GameObject plataformaUno;
-    [SerializeField] private GameObject plataformaDos;
-    [SerializeField] private GameObject plataformaTres;*/
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
-    private GameObject charcoVeneno;
+    [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private bool cambioPlataformaDisponible = true;
@@ -56,12 +51,12 @@ public class Mapianguari : CharactersBehaviour
     {
         fuerzaRecoil = 5;
         //Physics2D.IgnoreLayerCollision(13, 15, true);
-        charcoVeneno = new GameObject();
-        charcoVeneno.SetActive(false);
-        charcoVeneno.tag = "Veneno";
-        charcoVeneno.AddComponent<BoxCollider2D>();
-        charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
-        charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
+        //charcoVeneno = new GameObject();
+        //charcoVeneno.SetActive(false);
+        //charcoVeneno.tag = "Veneno";
+        //charcoVeneno.AddComponent<BoxCollider2D>();
+        //charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
+        //charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
 
         plataformaActual = 1;
         nuevaPlataforma = 1;
@@ -69,7 +64,7 @@ public class Mapianguari : CharactersBehaviour
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
         //vida = 200;
-        maxVida = vida;
+        vidaMax = vida;
         ataqueMax = valorAtaqueBasico;
         ataque = ataqueMax;
         rb = this.gameObject.GetComponent<Rigidbody2D>();
@@ -89,20 +84,20 @@ public class Mapianguari : CharactersBehaviour
 
 
         //CARGA DE PREFABS
-        bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
+        //bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
         explosion = Resources.Load<GameObject>("Explosion");
     }
 
     private void UpdateLife()
     {
-        lifeBar.targetFillAmount = (vida / maxVida);
+        lifeBar.targetFillAmount = (vida / vidaMax);
     }
 
     private void FixedUpdate()
     {
         UpdateLife();
 
-        if (vida <= maxVida / 2) {
+        if (vida <= vidaMax / 2) {
             movementVelocity = 12;
             segundaEtapa = true;
             reduccionTiempoAtaqueDistancia = 5;
@@ -335,7 +330,7 @@ public class Mapianguari : CharactersBehaviour
 
         //GENERACION DEL CHARCO DE VENENO
         if (segundaEtapa) {
-            GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 5f, Quaternion.identity);
+            GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
             StartCoroutine(destruirCharco(charcoGenerado));
         }
 
@@ -413,7 +408,6 @@ public class Mapianguari : CharactersBehaviour
         //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         atacando = true;
         ataqueDisponible = false;
-        Debug.Log("Listo para atacar a distancia");
         //CORREGIR POR EL TIEMPO DE LA ANIMACION
         yield return new WaitForSeconds(1f);
         if (!segundaEtapa)
@@ -423,7 +417,7 @@ public class Mapianguari : CharactersBehaviour
             {
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
                 bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                //bolaVenenoGenerada += "Enemy";
+                bolaVenenoGenerada.name += "Enemy";
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
                 auxDisparo++; 
@@ -441,7 +435,7 @@ public class Mapianguari : CharactersBehaviour
                 }
                 GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
                 bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                //bolaVenenoGenerada += "Enemy";
+                bolaVenenoGenerada.name += "Enemy";
                 yield return new WaitForEndOfFrame();
                 bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
                 yield return new WaitForSeconds(0.05f);
@@ -496,11 +490,10 @@ public class Mapianguari : CharactersBehaviour
                     bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-75, -72), 0), Quaternion.identity);
                     break;
             }
-            //bolaVenenoGenerada.name += "Enemy";
-            //GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-58, -13), aux.Next(-99, -73), 0), Quaternion.identity);
+            bolaVenenoGenerada.name += "Enemy";
             bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
             yield return new WaitForEndOfFrame();
-            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().instanciarValores(explosion, this.gameObject.layer);
+            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().instanciarValores(explosion);
             yield return new WaitForSeconds(1f);
             Debug.Log($"Lanzamiento de bola de veneno {i}");
         }
