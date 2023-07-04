@@ -40,6 +40,10 @@ public class HongoLum : MonoBehaviour
             way = true;
 
             GetComponent<BoxCollider2D>().enabled = false;
+
+            yield return new WaitForSeconds(bTime/2);
+
+            StartCoroutine(HongoTimer());
         }
         else
         {
@@ -53,10 +57,10 @@ public class HongoLum : MonoBehaviour
             }
 
             way = false;
+
+            yield return new WaitForSeconds((bTime));
+
+            StartCoroutine(HongoTimer());
         }
-
-        yield return new WaitForSeconds(bTime);
-
-        StartCoroutine(HongoTimer());
     }
 }

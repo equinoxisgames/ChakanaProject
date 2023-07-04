@@ -6,6 +6,7 @@ public class TutorialRoute : MonoBehaviour
 {
     [SerializeField] private GameObject tutoObj;
     [SerializeField] private int tutoNum;
+    private HudManager hud;
 
     private bool isActive, scene01;
     private GameObject keyObj, joyObj;
@@ -24,11 +25,17 @@ public class TutorialRoute : MonoBehaviour
 
         keyObj.SetActive(true);
         joyObj.SetActive(false);
+
+        if (tutoNum == 8 || tutoNum == 9 || tutoNum == 10 || tutoNum == 11)
+        {
+            hud = GameObject.Find("HUDMenu").GetComponent<HudManager>();
+        }
     }
 
     void Update()
     {
         TutoDetector();
+        DetectSkills();
 
         if (Input.anyKeyDown)
         {
@@ -69,13 +76,6 @@ public class TutorialRoute : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10 || tutoNum == 11)
-            {
-                Time.timeScale = 0;
-                tutoObj.SetActive(true);
-                isActive = true;
-            }
-
             player = collision.transform;
 
             if (tutoNum <= 7 && tutoNum != 5)
@@ -158,6 +158,7 @@ public class TutorialRoute : MonoBehaviour
             if (tutoNum == 8 && Input.anyKeyDown)
             {
                 Time.timeScale = 1;
+                print("dfas");
                 tutoObj.SetActive(false);
                 PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
                 Destroy(gameObject);
@@ -182,6 +183,39 @@ public class TutorialRoute : MonoBehaviour
                 tutoObj.SetActive(false);
                 PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
                 Destroy(gameObject);
+            }
+        }
+    }
+
+    private void DetectSkills()
+    {
+        if(tutoNum == 8 || tutoNum == 9 || tutoNum == 10 || tutoNum == 11)
+        {
+            if (isActive) return;
+
+            if(tutoNum == 8 && hud.GetCondor() >= 100)
+            {
+                Time.timeScale = 0;
+                tutoObj.SetActive(true);
+                isActive = true;
+            }
+            else if (tutoNum == 9 && hud.GetSnake() >= 100)
+            {
+                Time.timeScale = 0;
+                tutoObj.SetActive(true);
+                isActive = true;
+            }
+            else if (tutoNum == 10 && hud.GetWeapon() >= 100)
+            {
+                Time.timeScale = 0;
+                tutoObj.SetActive(true);
+                isActive = true;
+            }
+            else if (tutoNum == 11 && hud.GetCuracion() >= 100)
+            {
+                Time.timeScale = 0;
+                tutoObj.SetActive(true);
+                isActive = true;
             }
         }
     }

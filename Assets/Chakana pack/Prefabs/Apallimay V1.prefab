@@ -190,7 +190,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 9000
+  vida: 340
   defensa: 0
   ataque: 75
   ataqueMax: 75
@@ -261,18 +261,18 @@ MonoBehaviour:
   estadoVeneno: 0
   counterEstados: 0
   afectacionViento: 0
-  afectacionFuego: 5
-  afectacionVeneno: 0.05
+  afectacionFuego: 15
+  afectacionVeneno: 0.02
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 1
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
   inmuneDash: 0
-  vientoFX: {fileID: 100000, guid: 3cb9f48491c62c14a90616a4ef303e90, type: 3}
+  vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
   fuegoFX: {fileID: 8392620470651161117, guid: 19e5b513668805f43a5d9ab53d1b6013, type: 3}
   venenoFX: {fileID: 100000, guid: e410ec8ad62ab3f46becd4fc37508a01, type: 3}
-  recieveDmgFX: {fileID: 0}
+  recieveDmgFX: {fileID: 1313361013208637518, guid: 6826bee3237ef6d4bb1cc8e40cbbcbc9, type: 3}
   fuerzaRecoil: 0
   speed: 5
   objetivo: {x: 0, y: 0, z: 0}
@@ -293,6 +293,10 @@ MonoBehaviour:
   rangoDeteccion: 8
   cooldownAtaque: 2
   prueba: 0
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  combFX01: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
+  combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
 --- !u!1 &8436099179091101279
 GameObject:
   m_ObjectHideFlags: 0

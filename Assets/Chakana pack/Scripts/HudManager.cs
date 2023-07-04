@@ -123,4 +123,24 @@ public class HudManager : MonoBehaviour
             weaponBar.targetFillAmount = (weapon / maxValue);
         }
     }
+
+    public float GetCondor()
+    {
+        return condor;
+    }
+
+    public float GetSnake()
+    {
+        return snake;
+    }
+
+    public float GetWeapon()
+    {
+        return weapon;
+    }
+
+    public float GetCuracion()
+    {
+        return mana;
+    }
 }
