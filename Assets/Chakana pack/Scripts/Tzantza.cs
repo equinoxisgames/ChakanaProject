@@ -110,7 +110,7 @@ public class Tzantza : CharactersBehaviour
             {
                 direccion = 1;
             }
-
+            triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {

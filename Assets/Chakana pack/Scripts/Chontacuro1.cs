@@ -289,7 +289,7 @@ public class Chontacuro1 : CharactersBehaviour
             {
                 counterEstados += 1;
                 //StartCoroutine("combinacionesElementales");
-                combinacionesElementales();
+                this.combinacionesElementales();
                 return;
             }
             estadoViento = true;
@@ -331,6 +331,7 @@ public class Chontacuro1 : CharactersBehaviour
             aumentoFuegoPotenciado = 3;
             ataque = ataqueMax * 0.75f;
             StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
         }
         //yield return new WaitForEndOfFrame();
