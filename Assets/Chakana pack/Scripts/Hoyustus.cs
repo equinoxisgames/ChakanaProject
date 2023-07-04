@@ -315,7 +315,7 @@ public class Hoyustus : CharactersBehaviour
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
 
 
-        SSTEPS = 55;
+        SSTEPS = 65;
         //maxVida = vida;
     }
 
@@ -448,7 +448,7 @@ public class Hoyustus : CharactersBehaviour
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir*/)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
             {
                 isJumping = true;
-                rb.AddForce(new Vector2(0, ((6.0f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 38) / (SSTEPS - CSTEPS) / 35)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
                 currentTimeAir += Time.fixedDeltaTime;
                 CSTEPS++;
             }
