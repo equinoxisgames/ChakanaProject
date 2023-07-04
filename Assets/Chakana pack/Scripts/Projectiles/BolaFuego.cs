@@ -12,13 +12,12 @@ public class BolaFuego : MonoBehaviour
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
         hoyustus = GameObject.Find("Hoyustus Solicitud Prefab").transform.position;
+        aniadirFuerza();
     }
 
     void Update()
     {
-        //transform.position = Vector3.MoveTowards(transform.position, hoyustus, 20 * Time.deltaTime);
         tiempoEliminacion -= Time.deltaTime;
 
         if (tiempoEliminacion <= 0)
@@ -26,14 +25,6 @@ public class BolaFuego : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
-    public void instanciarValores(int layer, Vector3 objetivo)
-    {
-        gameObject.layer = layer;
-        gameObject.tag = "Fuego";
-        this.gameObject.SetActive(true);
-    }
-
 
     public void aniadirFuerza() {
         Vector2 direction = hoyustus - transform.position;

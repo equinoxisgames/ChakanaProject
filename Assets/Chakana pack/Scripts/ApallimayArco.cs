@@ -41,7 +41,7 @@ public class ApallimayArco : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
-        flecha = Resources.Load<GameObject>("BolaVeneno");
+        //flecha = Resources.Load<GameObject>("BolaVeneno");
         objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -112,23 +112,9 @@ public class ApallimayArco : CharactersBehaviour
 
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        //ataqueDisponible = false;
-        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);
-        flechaGenerada.SetActive(false);
-        flechaGenerada.name += "Enemy";
+        //ROTAR SPRITE
+        Instantiate(flecha, transform.position, Quaternion.identity).name += "Enemy";
         atacando = true;
-        //playable = false;
-        //rb.velocity = Vector2.zero;
-        yield return new WaitForEndOfFrame();
-        //CAMBIAR POR FLECHA
-        flechaGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
-        flechaGenerada.SetActive(true);
-
-        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        flechaGenerada.GetComponent<BolaFuego>().aniadirFuerza();
         //TIEMPO DE ANIMACION
         yield return new WaitForSeconds(0.4f);
         atacando = false;

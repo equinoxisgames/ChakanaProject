@@ -36,7 +36,7 @@ public class Tzantza : CharactersBehaviour
         rb = GetComponent<Rigidbody2D>();
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
-        bolaFuego = Resources.Load<GameObject>("BolaVeneno");
+        //bolaFuego = Resources.Load<GameObject>("BolaVeneno");
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
@@ -65,28 +65,10 @@ public class Tzantza : CharactersBehaviour
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
         ataqueDisponible = false;
-        GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
-        bolaFuegoGenerada.SetActive(false);
-        bolaFuegoGenerada.name += "Enemy";
+        Instantiate(bolaFuego, transform.position, Quaternion.identity).name += "Enemy";
         atacando = true;
         playable = false;
         rb.velocity = Vector2.zero;
-        yield return new WaitForEndOfFrame();
-        try
-        {
-            bolaFuegoGenerada.AddComponent<BolaFuego>().instanciarValores(layerObject, objetivoAtaque);
-            bolaFuegoGenerada.SetActive(true);
-        }
-        catch (Exception e) { }
-        //REVISAR SI ES IGUAL DE BUENO CON DOS DE ESTOS RETORNOS
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        try
-        {
-            bolaFuegoGenerada.GetComponent<BolaFuego>().aniadirFuerza();
-        }
-        catch (Exception e) { }
         yield return new WaitForSeconds(0.5f);
         atacando = false;
         playable = true;
