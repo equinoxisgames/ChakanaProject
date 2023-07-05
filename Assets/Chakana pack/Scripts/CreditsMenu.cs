@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement; 
 
 public class CreditsMenu : MonoBehaviour
 {
@@ -19,24 +19,29 @@ public class CreditsMenu : MonoBehaviour
 
     void Start()
     {
-        btExit.Select();
+        //btExit.Select();
     }
 
     // Update is called once per frame
     void Update()
     {
-        btExit.Select();
+        //btExit.Select();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            btExit.Select();
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    btExit.Select();
+        //}
 
 
-        if (Input.GetButtonDown("Cancel"))
-        {
-            OpenMainMenu();
-        }
+        //if (Input.GetButtonDown("Cancel"))
+        //{
+        //    OpenMainMenu();
+        //}
+
+        //if (Input.GetButtonDown("Fire2"))
+        //{
+        //    OpenMainMenu();
+        //}
 
     }
     public void OpenMainMenu()
