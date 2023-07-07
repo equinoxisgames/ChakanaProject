@@ -196,27 +196,34 @@ public class TutorialRoute : MonoBehaviour
             if(tutoNum == 8 && hud.GetCondor() >= 100)
             {
                 Time.timeScale = 0;
-                tutoObj.SetActive(true);
-                isActive = true;
+                StartCoroutine(SkillsTuto());
             }
             else if (tutoNum == 9 && hud.GetSnake() >= 100)
             {
                 Time.timeScale = 0;
-                tutoObj.SetActive(true);
-                isActive = true;
+                StartCoroutine(SkillsTuto());
             }
             else if (tutoNum == 10 && hud.GetWeapon() >= 100)
             {
                 Time.timeScale = 0;
-                tutoObj.SetActive(true);
-                isActive = true;
+                StartCoroutine(SkillsTuto());
             }
             else if (tutoNum == 11 && hud.GetCuracion() >= 100)
             {
                 Time.timeScale = 0;
-                tutoObj.SetActive(true);
-                isActive = true;
+                StartCoroutine(SkillsTuto());
             }
         }
+    }
+
+    IEnumerator SkillsTuto()
+    {
+        tutoObj.transform.GetChild(5).gameObject.SetActive(false);
+        tutoObj.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(1f);
+        print("asfas");
+        tutoObj.transform.GetChild(5).gameObject.SetActive(true);
+        isActive = true;
     }
 }
