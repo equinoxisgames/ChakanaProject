@@ -7,7 +7,9 @@ public class GoldObj : MonoBehaviour
     [SerializeField] int goldType;
     [SerializeField] int goldTypeFisic;
     [SerializeField] bool heal;
+    [SerializeField] GameObject healFX;
 
+    Hoyustus player;
     int amount;
     void Start()
     {
@@ -51,8 +53,21 @@ public class GoldObj : MonoBehaviour
         }
         else if(collision.tag == "Player" && heal)
         {
-            collision.GetComponent<Hoyustus>().setCargaCuracion(50);
-            Destroy(gameObject);
+            player = collision.GetComponent<Hoyustus>();
+            StartCoroutine(HealEffect());
         }
+    }
+
+    IEnumerator HealEffect()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        GetComponent<SpriteRenderer>().enabled = false;
+        player.setCargaCuracion(25);
+        Destroy(Instantiate(healFX, transform.position, Quaternion.identity), 1);
+
+        yield return new WaitForSeconds(0.61f);
+
+        Destroy(gameObject);
     }
 }
