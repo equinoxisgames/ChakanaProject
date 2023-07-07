@@ -20,8 +20,11 @@ public class Boraro : CharactersBehaviour
     [SerializeField] private bool entroRangoAtaque;
     [SerializeField] private GameObject garras;
     [SerializeField] private GameObject detectorPared;
+    [SerializeField] private GameObject detectorPiso;
+    [SerializeField] private GameObject campoVision;
     [SerializeField] private GameObject hoyustus;
     [SerializeField] private LayerMask pared;
+    [SerializeField] private LayerMask piso;
 
 
     [SerializeField] private float movementSpeed = 3;
@@ -49,22 +52,14 @@ public class Boraro : CharactersBehaviour
         explosion = Resources.Load<GameObject>("Explosion");
         detectorPared = transform.GetChild(transform.childCount - 3).GameObject();
         garras = transform.GetChild(transform.childCount - 2).GameObject();
+        campoVision = transform.GetChild(transform.childCount - 1).GameObject();
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         objetivo = transform.position;
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        /*navMesh = GetComponent<NavMeshAgent>();
-        navMesh.updateRotation = navMesh.updateUpAxis = false;
-        objetivoX = transform;*/
-        //StartCoroutine(SetDestinationDelayed());
         vidaMax = vida;
     }
 
-    /*private IEnumerator SetDestinationDelayed()
-    {
-        yield return new WaitUntil(() => navMesh.isActiveAndEnabled);
-        navMesh.SetDestination(player.position);
-    }*/
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
@@ -142,10 +137,6 @@ public class Boraro : CharactersBehaviour
             direction = -direction;
         else if(transform.position.x > objetivo.x)
             direction = -direction;
-        /*if (transform.position.x < player.position.x)
-            direction = 1;
-        else
-            direction = -1;*/
 
         transform.localScale = new Vector3(direction, 1, 1);
         tiempoVolteo = 0;
@@ -185,16 +176,19 @@ public class Boraro : CharactersBehaviour
                 direccion = 1;
             }
 
+            triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
+            return;
         }
         else if (collider.gameObject.layer == 11)
         {
             rb.velocity = Vector2.zero;
+            return;
         }
 
         if (!collider.name.Contains("Enemy"))
@@ -219,18 +213,7 @@ public class Boraro : CharactersBehaviour
             }
             else if (Vector3.Distance(transform.position, collider.transform.position) <= 8f && ataqueDisponible)
             {
-                detectorPared.transform.position = hoyustus.transform.position;
-                if (entroRangoAtaque && 
-                !Physics2D.OverlapCircle(detectorPared.transform.position, 4f, pared))
-                {
-                    //DESAPARECER
-                    //ANALIZAR LA ORIENTACION
-                    Debug.Log("Pan");
-                }
-                else if (!entroRangoAtaque) {
-                    entroRangoAtaque = true;
-                    StartCoroutine(Ataque());
-                }
+                StartCoroutine(Teletransportacion());
             }
             else
             {
@@ -239,6 +222,60 @@ public class Boraro : CharactersBehaviour
                 rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             }
         }
+    }
+
+
+    private IEnumerator Teletransportacion() {
+        
+        detectorPared.transform.position = hoyustus.transform.position;
+        detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
+        
+        if (entroRangoAtaque)
+        {
+            //DESAPAREZCO
+            void Desaparecer(){ 
+                campoVision.SetActive(false);
+                rb.Sleep();
+                this.gameObject.SetActive(false);
+                this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            }
+
+            void Aparecer() {
+                campoVision.SetActive(true);
+                rb.WakeUp();
+                this.gameObject.SetActive(true);
+                this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
+            Desaparecer();
+
+            //TIEMPO DE DESAPARICIÓN/TELETRANSPORTACIÓN
+            yield return new WaitForSeconds(1);
+
+            if (!Physics2D.OverlapCircle(detectorPared.transform.position, 4f, pared) &&
+                Physics2D.OverlapCircle(detectorPiso.transform.position, 4f, piso))
+            {
+                //ANALIZO LA ORIENTACIÓN
+                float aux = hoyustus.transform.localScale.x; 
+                transform.position = detectorPared.transform.position + Vector3.right * aux;
+                //CAMBIO MI ORIENTACIÓN
+                transform.localScale = new Vector3(aux, 1, 1);
+                //ME MUEVO A ESE PUNTO
+                //APAREZCO JUNTO AL JUGADOR 
+                Aparecer();
+                StartCoroutine(Ataque());
+            }
+            else {
+                //APAREZCO EN LA MISMA POSICIÓN
+                Aparecer();
+            }
+        }
+        else
+        {
+            entroRangoAtaque = true;
+            StartCoroutine(Ataque());
+        }
+        yield return null;
     }
 
 
@@ -327,5 +364,7 @@ public class Boraro : CharactersBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(detectorPared.transform.position, 4);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(detectorPiso.transform.position, 1);
     }
 }
