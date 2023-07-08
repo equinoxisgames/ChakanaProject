@@ -113,7 +113,9 @@ public class ApallimayArco : CharactersBehaviour
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
         //ROTAR SPRITE
-        Instantiate(flecha, transform.position, Quaternion.identity).name += "Enemy";
+        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
+        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivo, transform.right)));
+        flechaGenerada.name += "Enemy";
         atacando = true;
         //TIEMPO DE ANIMACION
         yield return new WaitForSeconds(0.4f);
@@ -174,7 +176,7 @@ public class ApallimayArco : CharactersBehaviour
             return;
         }
 
-        if (!collider.name.Contains("Enemy"))
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             triggerElementos_1_1_1(collider);
         }
