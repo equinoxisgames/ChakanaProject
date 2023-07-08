@@ -25,6 +25,7 @@ public class Boraro : CharactersBehaviour
     [SerializeField] private GameObject hoyustus;
     [SerializeField] private LayerMask pared;
     [SerializeField] private LayerMask piso;
+    [SerializeField] private bool teletransportandose;
 
 
     [SerializeField] private float movementSpeed = 3;
@@ -32,6 +33,7 @@ public class Boraro : CharactersBehaviour
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private float distancia;
     [SerializeField] private Transform objetivoX;
+
 
 
     [SerializeField] Animator anim;
@@ -78,42 +80,18 @@ public class Boraro : CharactersBehaviour
     }
 
 
+    private void FixedUpdate()
+    {
+        //if (!atacando) {
+            detectorPared.transform.position = hoyustus.transform.position - Vector3.right * transform.localScale.x * 2;
+            objetivo = hoyustus.transform.position;
+            detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
+        //}
+    }
+
+
     void Update()
     {
-        /*distancia = Vector3.Distance(transform.position, player.position);
-
-        if (!atacando && distancia <= 2.5f)
-        {
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        }
-        else if (distancia <= 5.5f)
-        {
-            entroRangoAtaque = true;
-            //if (ataqueDisponible)
-            //StartCoroutine(Ataque());
-        }
-        else if (distancia <= 10f)
-        {
-            siguiendo = true;
-            objetivoX = player.transform;
-        }
-        else if(distancia > 10f){
-            if (!entroRangoAtaque)
-            {
-                objetivoX = this.gameObject.transform;
-            }
-            else {
-                //DESAPARICION
-                Vector3 aux = new Vector3(player.transform.position.x, transform.position.y, transform.position.z);
-                objetivoX = player.transform;
-                objetivoX.transform.position = new Vector3(aux.x, aux.y, aux.z);
-                Debug.Log("Desparicion");
-            }
-        }
-
-
-        navMesh.SetDestination(objetivoX.position);*/
         tiempoVolteo += Time.deltaTime;
         Muerte();
 
@@ -125,7 +103,7 @@ public class Boraro : CharactersBehaviour
             //tiempoVolteo = 0;
         }
 
-        if (siguiendo && !atacando)
+        if (siguiendo && !atacando && !teletransportandose)
         {
             Move();
         }
@@ -188,6 +166,15 @@ public class Boraro : CharactersBehaviour
         else if (collider.gameObject.layer == 11)
         {
             rb.velocity = Vector2.zero;
+            //objetivo = hoyustus.transform.position;
+            if (objetivo.x < transform.position.x)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
             return;
         }
 
@@ -227,23 +214,26 @@ public class Boraro : CharactersBehaviour
 
     private IEnumerator Teletransportacion() {
         
-        detectorPared.transform.position = hoyustus.transform.position;
-        detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
+        //detectorPared.transform.position = hoyustus.transform.position;
+        //detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
         
         if (entroRangoAtaque)
         {
             //DESAPAREZCO
-            void Desaparecer(){ 
+            void Desaparecer(){
+                teletransportandose = true;
                 campoVision.SetActive(false);
+                rb.velocity = Vector3.zero;
                 rb.Sleep();
-                this.gameObject.SetActive(false);
                 this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
 
             void Aparecer() {
+                teletransportandose = false;
                 campoVision.SetActive(true);
+                //objetivo = detectorPared.transform.position = hoyustus.transform.position;
+                //detectorPiso.transform.position = objetivo - Vector3.down;
                 rb.WakeUp();
-                this.gameObject.SetActive(true);
                 this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             }
 
@@ -252,17 +242,28 @@ public class Boraro : CharactersBehaviour
             //TIEMPO DE DESAPARICIÓN/TELETRANSPORTACIÓN
             yield return new WaitForSeconds(1);
 
-            if (!Physics2D.OverlapCircle(detectorPared.transform.position, 4f, pared) &&
+            if (!Physics2D.OverlapArea(detectorPared.transform.position + Vector3.left + Vector3.up, 
+                detectorPared.transform.position + Vector3.right + Vector3.down, pared) &&
                 Physics2D.OverlapCircle(detectorPiso.transform.position, 4f, piso))
             {
-                //ANALIZO LA ORIENTACIÓN
-                float aux = hoyustus.transform.localScale.x; 
-                transform.position = detectorPared.transform.position + Vector3.right * aux;
+
                 //CAMBIO MI ORIENTACIÓN
-                transform.localScale = new Vector3(aux, 1, 1);
+                //ANALIZO LA ORIENTACIÓN
+                float aux = hoyustus.transform.localScale.x;
+                transform.position = objetivo - Vector3.right * aux;
+                Aparecer();
+                if (hoyustus.transform.position.x < transform.position.x)
+                {
+                    direction = -1;
+                    transform.localScale = new Vector3(-1, 1, 1);
+                }
+                else {
+                    direction = 1;
+                    transform.localScale = new Vector3(1, 1, 1);
+                }
+
                 //ME MUEVO A ESE PUNTO
                 //APAREZCO JUNTO AL JUGADOR 
-                Aparecer();
                 StartCoroutine(Ataque());
             }
             else {
@@ -300,8 +301,13 @@ public class Boraro : CharactersBehaviour
         rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         rb.velocity = new Vector2(0f, rb.velocity.y);
-
+        detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 1.5f;
         for (int i = 0; i < 4; i++) {
+            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 2.5f, piso)) {
+                rb.velocity = Vector3.zero;
+                i = 4;
+                break;
+            }
             rb.AddForce(new Vector2(6f * direction, 0), ForceMode2D.Impulse);
             garras.SetActive(true);
             yield return new WaitForSeconds(0.3f);
@@ -363,7 +369,7 @@ public class Boraro : CharactersBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(detectorPared.transform.position, 4);
+        Gizmos.DrawWireCube(detectorPared.transform.position, new Vector3(2, 4, 1));
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(detectorPiso.transform.position, 1);
     }
