@@ -238,7 +238,7 @@ public class Boraro : CharactersBehaviour
 
             Desaparecer();
 
-            //TIEMPO DE DESAPARICIÓN/TELETRANSPORTACIÓN
+            //TIEMPO DE DESAPARICIÃ“N/TELETRANSPORTACIÃ“N
             yield return new WaitForSeconds(1);
 
             detectorPared.transform.position = hoyustus.transform.position - Vector3.right * hoyustus.transform.localScale.x * 2.5f;
@@ -249,8 +249,8 @@ public class Boraro : CharactersBehaviour
                 Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, piso))
             {
 
-                //CAMBIO MI ORIENTACIÓN
-                //ANALIZO LA ORIENTACIÓN
+                //CAMBIO MI ORIENTACIÃ“N
+                //ANALIZO LA ORIENTACIÃ“N
                 float aux = hoyustus.transform.localScale.x;
                 transform.position = objetivo - Vector3.right * aux;
                 Aparecer();
@@ -269,7 +269,7 @@ public class Boraro : CharactersBehaviour
                 StartCoroutine(Ataque());
             }
             else {
-                //APAREZCO EN LA MISMA POSICIÓN
+                //APAREZCO EN LA MISMA POSICIÃ“N
 
                 Aparecer();
                 ataqueDisponible = false;
