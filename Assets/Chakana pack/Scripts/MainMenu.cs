@@ -45,13 +45,14 @@ public class MainMenu : MonoBehaviour
         btContinue.Select();
         Time.timeScale = 1f;
 
-        //if (Input.GetJoystickNames().Length > 0 && !string.IsNullOrEmpty(Input.GetJoystickNames()[0]))
-        //{
-        //    gamePadConectado = true;
-        //    joystickIzquierdoMovido = true;
-        //    //Debug.Log("Start Gamepad conectado");
-        //}
-        mouseMovido = true;
+        if (Input.GetJoystickNames().Length > 0 && !string.IsNullOrEmpty(Input.GetJoystickNames()[0]))
+        {
+            joystickIzquierdoMovido = true;
+            //Debug.Log("Start Gamepad conectado");
+        }else
+            mouseMovido = true;
+
+        //mouseMovido = true;
 
     }
 
