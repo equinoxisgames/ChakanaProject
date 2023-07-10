@@ -22,7 +22,7 @@ public class ApallimayDaga : CharactersBehaviour
     [SerializeField] private CapsuleCollider2D daga;
     [SerializeField] private float rangoDeteccion;
     [SerializeField] private float cooldownAtaque;
- 
+
 
     [SerializeField] private bool prueba = false;
     [SerializeField] GameObject deathFX;
@@ -220,7 +220,8 @@ public class ApallimayDaga : CharactersBehaviour
 
 
     private bool Grounded() {
-        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer)) //||
+        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer)
+            ) //||
         //Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
             return true;
@@ -257,7 +258,8 @@ public class ApallimayDaga : CharactersBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6){//&& transform.position.y <= posY -1.5f) {
+        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
+        {//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;

@@ -256,7 +256,8 @@ public class ApallimayArco : CharactersBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6 ){//&& transform.position.y <= posY -1.5f) {
+        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
+        {//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
