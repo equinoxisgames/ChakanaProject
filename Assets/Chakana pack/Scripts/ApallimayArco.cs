@@ -116,11 +116,7 @@ public class ApallimayArco : CharactersBehaviour
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
         //ROTAR SPRITE
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
-        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque, transform.right)));
-        if (objetivoAtaque.x < transform.position.x) {
-            flechaGenerada.transform.localScale = new Vector3(-1f, 1, 1);
-            flechaGenerada.transform.Rotate(new Vector3(0, 0f, -2 * Vector3.Angle(objetivoAtaque, transform.right)));
-        }  
+        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
         flechaGenerada.name += "Enemy";
         atacando = true;
         //TIEMPO DE ANIMACION

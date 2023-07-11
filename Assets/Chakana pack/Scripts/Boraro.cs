@@ -86,11 +86,14 @@ public class Boraro : CharactersBehaviour
             objetivo = hoyustus.transform.position;
             detectorPiso.transform.position = detectorPared.transform.position + Vector3.down * 1f;
         }
+
+        //testPrueba();
     }
 
 
     void Update()
     {
+        testPrueba();
         tiempoVolteo += Time.deltaTime;
         Muerte();
 
@@ -210,6 +213,34 @@ public class Boraro : CharactersBehaviour
         }
     }
 
+    void testPrueba() {
+
+        objetivo = hoyustus.transform.position;
+
+        if (!atacando && Vector3.Distance(transform.position, hoyustus.transform.position) <= 2.5f)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+        }
+        else if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
+        {
+            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 8f && !entroRangoAtaque)
+            {
+                siguiendo = true;
+                ataqueDisponible = false;
+                StartCoroutine(Teletransportacion());
+            }
+            else if(entroRangoAtaque)
+            {
+                ataqueDisponible = false;
+                StartCoroutine(Teletransportacion());
+            }
+            
+        }
+    }
+
 
     private IEnumerator Teletransportacion() {
         
@@ -279,6 +310,7 @@ public class Boraro : CharactersBehaviour
         }
         else
         {
+            ataqueDisponible = false;
             entroRangoAtaque = true;
             StartCoroutine(Ataque());
         }
