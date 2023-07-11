@@ -1121,6 +1121,7 @@ public class Hoyustus : CharactersBehaviour
         playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(false);
+        anim.Play("Idel");
         yield return new WaitForSeconds(tiempoCooldownAtaque);
         ataqueAvailable = true;
     }
