@@ -29,6 +29,7 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
     [SerializeField] private GameObject combFX03;
+    [SerializeField] private GameObject hoyustus;
 
     private GameObject combObj01, combObj02, combObj03;
 
@@ -48,6 +49,7 @@ public class ApallimayArco : CharactersBehaviour
         posY = transform.position.y;
         groundDetector = transform.GetChild(3).gameObject.transform;
         vidaMax = vida;
+        hoyustus = GameObject.FindGameObjectWithTag("Player");
     }
 
 
@@ -113,7 +115,9 @@ public class ApallimayArco : CharactersBehaviour
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
         //ROTAR SPRITE
-        Instantiate(flecha, transform.position, Quaternion.identity).name += "Enemy";
+        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
+        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
+        flechaGenerada.name += "Enemy";
         atacando = true;
         //TIEMPO DE ANIMACION
         yield return new WaitForSeconds(0.4f);
@@ -174,7 +178,7 @@ public class ApallimayArco : CharactersBehaviour
             return;
         }
 
-        if (!collider.name.Contains("Enemy"))
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             triggerElementos_1_1_1(collider);
         }
@@ -248,7 +252,8 @@ public class ApallimayArco : CharactersBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6 ){//&& transform.position.y <= posY -1.5f) {
+        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
+        {//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
