@@ -29,11 +29,11 @@ public class ElementalDoor : MonoBehaviour
         else if (PlayerPrefs.GetInt(doorName) == 3)
         {
             PlayerPrefs.SetInt(doorName, 4);
-            Destroy(transform.parent);
+            Destroy(transform.parent.gameObject);
         }
         else
         {
-            Destroy(transform.parent);
+            Destroy(transform.parent.gameObject);
         }
     }
 
