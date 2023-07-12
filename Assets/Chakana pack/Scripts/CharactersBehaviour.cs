@@ -34,6 +34,8 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject fuegoFX;
     [SerializeField] protected GameObject venenoFX;
     [SerializeField] protected GameObject recieveDmgFX;
+    [SerializeField] protected Material receiveDmgMat;
+    protected Material playerMat = null;
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
@@ -223,7 +225,8 @@ public class CharactersBehaviour : MonoBehaviour
 
         vida -= (danio * aumentoDanioParalizacion);
 
-        Instantiate(recieveDmgFX, transform.position, Quaternion.identity);
+        StartCoroutine(RecibirDanioBrillo());
+        Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
         //GetComponent<AudioSource>().Stop();
         //GetComponent<AudioSource>().Play();
 
@@ -236,6 +239,15 @@ public class CharactersBehaviour : MonoBehaviour
         }
     }
 
+    IEnumerator RecibirDanioBrillo()
+    {
+        if(playerMat == null) playerMat = GetComponent<SpriteRenderer>().material;
+        GetComponent<SpriteRenderer>().material = receiveDmgMat;
+
+        yield return new WaitForSeconds(0.1f);
+
+        GetComponent<SpriteRenderer>().material = playerMat;
+    }
 
     public void setParalisis()
     {

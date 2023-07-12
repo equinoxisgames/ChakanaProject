@@ -5,8 +5,7 @@ using UnityEngine;
 public class CameraTopDown : MonoBehaviour
 {
     private float vertical, horizontal;
-    private float timer;
-    private Vector3 destination, originalPos;
+    private Vector3 destination;
     private bool isMove;
 
     [SerializeField] private GameObject cinemaC, cinemaC2;
@@ -14,75 +13,61 @@ public class CameraTopDown : MonoBehaviour
 
     void Update()
     {
-        vertical = Input.GetAxis("Vertical");
-        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical2");
+        horizontal = Input.GetAxis("Horizontal2");
 
         DoUCamera(vertical, horizontal);
     }
 
     private void DoUCamera(float a, float b)
     {
-        if(b <= 0.2 && b >= -0.2)
+        if(b <= 0.2 && b >= -0.2 && !isMove)
         {
-            if(a >= 0.8)
+            if(a >= 0.5)
             {
-                timer += 1 * Time.deltaTime;
-
-                if (timer >= 0.12f)
+                if (!cinemaC2.activeSelf)
                 {
-                    if (!cinemaC2.activeSelf)
-                    {
-                        cinemaC2.SetActive(true);
-                        cinemaC2.transform.position = cinemaC.transform.position;
-                    }
-
-                    if (!isMove)
-                    {
-                        originalPos = cinemaC2.transform.position;
-                        destination = cinemaC2.transform.position;
-                        destination.y += 8;
-                        isMove = true;
-                    }
-
-                    cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
+                    cinemaC2.SetActive(true);
+                    cinemaC2.transform.position = cinemaC.transform.position;
                 }
+
+                destination = cinemaC.transform.position;
+                destination.y += 8;
+
+                cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
 
             }
-            else if(a <= -0.8)
+            else if(a <= -0.5)
             {
-                timer += 1 * Time.deltaTime;
-
-                if(timer >= 0.12f)
+                if (!cinemaC2.activeSelf)
                 {
-                    if (!cinemaC2.activeSelf)
-                    {
-                        cinemaC2.SetActive(true);
-                        cinemaC2.transform.position = cinemaC.transform.position;
-                    }
-
-                    if (!isMove)
-                    {
-                        originalPos = cinemaC2.transform.position;
-                        destination = cinemaC2.transform.position;
-                        destination.y -= 8;
-                        isMove = true;
-                    }
-
-                    cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
+                    cinemaC2.SetActive(true);
+                    cinemaC2.transform.position = cinemaC.transform.position;
                 }
+
+                destination = cinemaC.transform.position;
+                destination.y -= 8;
+
+                cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
             }
             else
             {
-                if (timer != 0) timer = 0;
                 if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
-                isMove = false;
+                StartCoroutine(EnableCamera());
+                isMove = true;
             }
         }
         else
         {
-            if (timer != 0) timer = 0;
             if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
-            isMove = false;
+            StartCoroutine(EnableCamera());
+            isMove = true;
         }
+    }
+
+    IEnumerator EnableCamera()
+    {
+        yield return new WaitForSeconds(1.7f);
+        isMove = false;
     }
 }
