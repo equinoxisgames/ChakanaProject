@@ -49,22 +49,22 @@ public class GoldObj : MonoBehaviour
             }
 
             collision.GetComponent<Hoyustus>().setGold(amount);
-            Destroy(gameObject);
+            StartCoroutine(Effect());
         }
         else if(collision.tag == "Player" && heal)
         {
             player = collision.GetComponent<Hoyustus>();
-            StartCoroutine(HealEffect());
+            player.setCargaCuracion(25);
+            StartCoroutine(Effect());
         }
     }
 
-    IEnumerator HealEffect()
+    IEnumerator Effect()
     {
         yield return new WaitForSeconds(0.1f);
 
         GetComponent<SpriteRenderer>().enabled = false;
-        player.setCargaCuracion(25);
-        Destroy(Instantiate(healFX, transform.position, Quaternion.identity), 1);
+        Destroy(Instantiate(healFX, transform.position, Quaternion.identity), 1.2f);
 
         yield return new WaitForSeconds(0.61f);
 
