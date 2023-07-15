@@ -187,46 +187,12 @@ public class Boraro : CharactersBehaviour
     }
 
 
-    //BORRAR
-    private void OnTriggerStay2D(Collider2D collider)
-    {
-
-        if (collider.gameObject.layer == 11)
-        {
-            //jugadorDetectado = true;
-            objetivo = collider.transform.position;
-
-            if (!atacando && Vector3.Distance(transform.position, collider.transform.position) <= 2.5f)
-            {
-                rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            }
-            if (Vector3.Distance(transform.position, collider.transform.position) <= 8f && ataqueDisponible)
-            {
-                StartCoroutine(Teletransportacion());
-            }
-            else
-            {
-                siguiendo = true;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            }
-        }
-    }
-
     void testPrueba() {
 
         objetivo = hoyustus.transform.position;
 
-        //if (!atacando && Vector3.Distance(transform.position, hoyustus.transform.position) <= 2.5f)
-        //{
-            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        //}
         if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
         {
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 8f && !entroRangoAtaque)
             {
                 siguiendo = true;
@@ -244,10 +210,7 @@ public class Boraro : CharactersBehaviour
 
 
     private IEnumerator Teletransportacion() {
-        
-        //detectorPared.transform.position = hoyustus.transform.position;
-        //detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
-        
+                
         if (entroRangoAtaque)
         {
             //DESAPAREZCO
@@ -345,8 +308,6 @@ public class Boraro : CharactersBehaviour
         ataqueDisponible = false;
         atacando = true;
 
-        //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {

@@ -135,12 +135,6 @@ public class CharactersBehaviour : MonoBehaviour
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
 
-        /*if ((collider.gameObject.layer != gameObject.layer))
-        {
-            triggerElementos_1_1_1(collider);
-            return;
-            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
-        }*/
     }
 
 
@@ -226,10 +220,8 @@ public class CharactersBehaviour : MonoBehaviour
 
         vida -= (danio * aumentoDanioParalizacion);
 
-        StartCoroutine(RecibirDanioBrillo());
+        //StartCoroutine(RecibirDanioBrillo());
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
-        //GetComponent<AudioSource>().Stop();
-        //GetComponent<AudioSource>().Play();
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)

@@ -143,8 +143,6 @@ public class ApallimayArco : CharactersBehaviour
 
         if (collider.gameObject.layer == 14)
         {
-            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             int direccion = 1;
             if (collider.transform.position.x > gameObject.transform.position.x)
             {
@@ -156,11 +154,7 @@ public class ApallimayArco : CharactersBehaviour
             }
 
             if (prueba) {
-                //rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-                //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-                //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-                //Recoil(direccion, 1);
             }
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
@@ -276,11 +270,7 @@ public class ApallimayArco : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            //rb.bodyType = RigidbodyType2D.Static;
             prueba = true;
-                 
-            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -289,10 +279,7 @@ public class ApallimayArco : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
     }
 

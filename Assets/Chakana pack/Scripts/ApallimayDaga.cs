@@ -145,8 +145,6 @@ public class ApallimayDaga : CharactersBehaviour
 
         if (collider.gameObject.layer == 14)
         {
-            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             int direccion = 1;
             if (collider.transform.position.x > gameObject.transform.position.x)
             {
@@ -158,10 +156,7 @@ public class ApallimayDaga : CharactersBehaviour
             }
 
             if (prueba) {
-                //rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-                //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-                //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
                 //Recoil(direccion, 1);
             }
             triggerElementos_1_1_1(collider);
@@ -198,17 +193,6 @@ public class ApallimayDaga : CharactersBehaviour
             if (Vector3.Distance(transform.position, collider.transform.position) <= rangoDeteccion)
             {
                 detectionTime += Time.deltaTime;
-            }
-
-
-            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaque)
-            {
-               //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-               //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            }
-            else {
-               //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-               //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             }
 
             if (detectionTime >= cooldownAtaque && !atacando && playable) {
@@ -296,11 +280,8 @@ public class ApallimayDaga : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
             detectionTime = 0;
-            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
 
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
@@ -349,55 +330,6 @@ public class ApallimayDaga : CharactersBehaviour
                 objetivo = limit2;
             }
         }
-    }
-
-
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            estadoFuego = true;
-            StartCoroutine("afectacionEstadoFuego");
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
 }

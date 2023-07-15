@@ -617,8 +617,6 @@ public class Hoyustus : CharactersBehaviour
 
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
-        //bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
-        //bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
