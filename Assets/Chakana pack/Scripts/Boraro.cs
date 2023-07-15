@@ -187,6 +187,7 @@ public class Boraro : CharactersBehaviour
     }
 
 
+    //BORRAR
     private void OnTriggerStay2D(Collider2D collider)
     {
 
@@ -200,7 +201,7 @@ public class Boraro : CharactersBehaviour
                 rb.constraints = RigidbodyConstraints2D.FreezePositionX;
                 rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             }
-            else if (Vector3.Distance(transform.position, collider.transform.position) <= 8f && ataqueDisponible)
+            if (Vector3.Distance(transform.position, collider.transform.position) <= 8f && ataqueDisponible)
             {
                 StartCoroutine(Teletransportacion());
             }
@@ -217,15 +218,15 @@ public class Boraro : CharactersBehaviour
 
         objetivo = hoyustus.transform.position;
 
-        if (!atacando && Vector3.Distance(transform.position, hoyustus.transform.position) <= 2.5f)
+        //if (!atacando && Vector3.Distance(transform.position, hoyustus.transform.position) <= 2.5f)
+        //{
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+        //}
+        if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
         {
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        }
-        else if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
-        {
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 8f && !entroRangoAtaque)
             {
                 siguiendo = true;
@@ -344,8 +345,8 @@ public class Boraro : CharactersBehaviour
         ataqueDisponible = false;
         atacando = true;
 
-        rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {

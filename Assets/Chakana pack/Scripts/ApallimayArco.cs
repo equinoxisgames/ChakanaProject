@@ -158,8 +158,8 @@ public class ApallimayArco : CharactersBehaviour
             if (prueba) {
                 //rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+                //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+                //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
                 //Recoil(direccion, 1);
             }
             triggerElementos_1_1_1(collider);
@@ -279,8 +279,8 @@ public class ApallimayArco : CharactersBehaviour
             //rb.bodyType = RigidbodyType2D.Static;
             prueba = true;
                  
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -291,8 +291,8 @@ public class ApallimayArco : CharactersBehaviour
         {
             //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
     }
 

@@ -179,8 +179,8 @@ public class Mapianguari : CharactersBehaviour
                 direccion = 1;
             }
 
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
 
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
@@ -622,8 +622,8 @@ public class Mapianguari : CharactersBehaviour
         if (collision.gameObject.layer == 11 && !usandoAtaqueEspecial)
         {
             //rb.bodyType = RigidbodyType2D.Static;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -633,8 +633,8 @@ public class Mapianguari : CharactersBehaviour
         if (collision.gameObject.layer == 11)
         {
             //rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
     }
 }

@@ -48,7 +48,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
-    protected IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
         Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
@@ -63,7 +63,8 @@ public class CharactersBehaviour : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
-        yield return new WaitForSeconds(2f);
+        //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
+        yield return new WaitForSeconds(0.5f);
         QuitarInvulnerabilidades(layerObject);
         //this.GetComponent<SpriteRenderer>().color = Color.white;
     }
@@ -99,7 +100,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //FUNCION DE INVULNERABILIDAD A TODO DANIO
     //***************************************************************************************************
-    protected void QuitarInvulnerabilidades(int layerObject)
+    protected virtual void QuitarInvulnerabilidades(int layerObject)
     {
         invulnerable = false;
         Physics2D.IgnoreLayerCollision(3, layerObject, false);
@@ -147,7 +148,7 @@ public class CharactersBehaviour : MonoBehaviour
     //CORRUTINA DE COOLDOWN INVULNERABILIDADES POR EXPLOSIONES
     //***************************************************************************************************
     protected IEnumerator cooldownInvulnerabilidadExplosiones() {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         QuitarInvulnerabilidades(layerObject);
     }
 

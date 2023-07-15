@@ -6586,7 +6586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595062070234725047, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1768239101035504340, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_RootOrder
@@ -20129,6 +20129,7 @@ MonoBehaviour:
   fuegoFX: {fileID: 0}
   venenoFX: {fileID: 0}
   recieveDmgFX: {fileID: 0}
+  receiveDmgMat: {fileID: 0}
   fuerzaRecoil: 0
   walkSpeedGround: 9
   resistenciaAire: 0.3
@@ -22293,6 +22294,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
+      propertyPath: tiempoCooldownAtaque
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676624618257397915, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
       propertyPath: cargaHabilidadSerpiente
       value: 100
       objectReference: {fileID: 0}
@@ -22841,7 +22846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5265702550096484452, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: speed
-      value: 0.01
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_Name
@@ -22849,7 +22854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22948,7 +22953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7165638828952281755, guid: 437d947e62240154a94c862267bc0490, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 40.16
+      value: 19.69
       objectReference: {fileID: 0}
     - target: {fileID: 7165638828952281755, guid: 437d947e62240154a94c862267bc0490, type: 3}
       propertyPath: m_LocalPosition.y

@@ -549,7 +549,20 @@ public class Hoyustus : CharactersBehaviour
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, 1), ForceMode2D.Impulse);
         else
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19 , true);
         EstablecerInvulnerabilidades(layerObject);
+    }
+
+
+    protected override sealed void QuitarInvulnerabilidades(int layerObject)
+    {
+        invulnerable = false;
+        Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, false);
+
     }
 
 
@@ -621,6 +634,7 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator habilidadLanza()
     {
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
         cargaCuracion += 30;
@@ -732,6 +746,26 @@ public class Hoyustus : CharactersBehaviour
                 collisionElementos_1_1_1(collision);
 
         }
+    }
+
+    protected override sealed IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    {
+        Recoil(direccion, fuerzaRecoil);
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
+        //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
+        yield return new WaitForSeconds(0.5f);
+        //SE DETIENE EL RECOIL
+        rb.velocity = Vector2.zero;
+        yield return new WaitForEndOfFrame();
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
+        playable = true;
+        yield return new WaitForSeconds(0.7f);
+        QuitarInvulnerabilidades(layerObject);
+
     }
 
 
@@ -1151,6 +1185,8 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
         isDashing = true;

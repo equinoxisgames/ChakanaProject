@@ -160,8 +160,8 @@ public class ApallimayDaga : CharactersBehaviour
             if (prueba) {
                 //rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+                //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+                //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
                 //Recoil(direccion, 1);
             }
             triggerElementos_1_1_1(collider);
@@ -203,12 +203,12 @@ public class ApallimayDaga : CharactersBehaviour
 
             if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaque)
             {
-                rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+               //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+               //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             }
             else {
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+               //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+               //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             }
 
             if (detectionTime >= cooldownAtaque && !atacando && playable) {
@@ -299,8 +299,8 @@ public class ApallimayDaga : CharactersBehaviour
             //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
             detectionTime = 0;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
 
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
