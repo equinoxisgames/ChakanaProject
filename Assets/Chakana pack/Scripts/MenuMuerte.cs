@@ -52,7 +52,7 @@ public class MenuMuerte : MonoBehaviour
 
         if (!PlayerPrefs.HasKey("respawn"))
         {
-            sceneLoad = 1;
+            sceneLoad = 2;
         }
         else sceneLoad = PlayerPrefs.GetInt("respawn");
 

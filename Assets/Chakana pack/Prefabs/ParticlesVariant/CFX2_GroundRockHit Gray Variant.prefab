@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 100012, guid: 3882d0ee9d9f28645995cc57dc657346, type: 3}
@@ -268,6 +269,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100012, guid: 3882d0ee9d9f28645995cc57dc657346, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9021469350288852928}
   m_SourcePrefab: {fileID: 100100000, guid: 3882d0ee9d9f28645995cc57dc657346, type: 3}
 --- !u!1 &192738598766699818 stripped
 GameObject:
@@ -295,7 +302,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
