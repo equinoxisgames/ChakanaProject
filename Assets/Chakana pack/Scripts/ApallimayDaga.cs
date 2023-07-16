@@ -332,4 +332,52 @@ public class ApallimayDaga : CharactersBehaviour
         }
     }
 
+    private IEnumerator combinacionesElementales()
+    {
+        if (counterEstados == 11)
+        {
+            //VIENTO - FUEGO
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
+            estadoViento = false;
+            afectacionViento = 0;
+            counterEstados = 10;
+            aumentoFuegoPotenciado = 3;
+            ataque = ataqueMax * 0.75f;
+            StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
+            StartCoroutine("afectacionEstadoFuego");
+        }
+        else if (counterEstados == 101)
+        {
+            //VENENO - VIENTO
+            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
+            StopCoroutine("afectacionEstadoVeneno");
+            StopCoroutine("afectacionEstadoViento");
+            rb.velocity = Vector3.zero;
+            counterEstados = 0;
+            estadoVeneno = false;
+            estadoViento = false;
+            playable = false;
+            aumentoDanioParalizacion = 1.5f;
+            yield return new WaitForSeconds(2f);
+            playable = true;
+            aumentoDanioParalizacion = 1f;
+            //StartCoroutine(setParalisis());
+
+        }
+        else if (counterEstados == 110)
+        {
+            //FUEGO - VENENO
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
+            StopCoroutine("afectacionEstadoVeneno");
+            StopCoroutine("afectacionEstadoFuego");
+            counterEstados = 0;
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
+            Instantiate(explosion, transform.position, Quaternion.identity);
+            estadoVeneno = false;
+            estadoFuego = false;
+        }
+        yield return new WaitForEndOfFrame();
+    }
+
 }

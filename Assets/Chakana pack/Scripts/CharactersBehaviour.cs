@@ -75,13 +75,6 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected virtual void Recoil(int direccion, float fuerzaRecoil)
     {
-        /*playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-
-        if(rb.gravityScale == 0) 
-            rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
-        else
-            rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-        EstablecerInvulnerabilidades(layerObject);*/
     }
 
 
@@ -103,10 +96,9 @@ public class CharactersBehaviour : MonoBehaviour
     protected virtual void QuitarInvulnerabilidades(int layerObject)
     {
         invulnerable = false;
-        Physics2D.IgnoreLayerCollision(3, layerObject, false);
-        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
-        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
-
+        //Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        //Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        //Physics2D.IgnoreLayerCollision(layerObject, 15, false);
     }
 
 
@@ -220,7 +212,7 @@ public class CharactersBehaviour : MonoBehaviour
 
         vida -= (danio * aumentoDanioParalizacion);
 
-        //StartCoroutine(RecibirDanioBrillo());
+        StartCoroutine(RecibirDanioBrillo());
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
@@ -438,5 +430,6 @@ public class CharactersBehaviour : MonoBehaviour
         }
 
     }
+
 
 }
