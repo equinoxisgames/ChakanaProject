@@ -546,9 +546,18 @@ public class Hoyustus : CharactersBehaviour
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
 
         if (rb.gravityScale == 0)
-            rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+        {
+            rb.velocity = Vector3.zero;
+            rb.gravityScale = 2f;
+            rb.AddForce(new Vector2(direccion * 2 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+            Debug.Log("1 prueba recoil");
+        }
         else
+        {
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
+            Debug.Log("2 prueba recoil");
+        }
+
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19 , true);
         EstablecerInvulnerabilidades(layerObject);
@@ -1183,12 +1192,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
+        isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
-        isDashing = true;
-
         body.isTrigger = true;
         //body.enabled = false; **********************************************
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
@@ -1201,20 +1209,21 @@ public class Hoyustus : CharactersBehaviour
             rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.2f);
             //rb.velocity = Vector2.zero;
+            rb.gravityScale = 2;
             isDashing = false;
         }
         StartCoroutine(movimientoDash());
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
+        rb.gravityScale = 2;
         isDashing = false;
         //dashBody.SetActive(false);**********************************************************************
         //dashBodyTESTING.enabled = false; *********************************************
         //body.enabled = true; *******************************************************
         //bodyHoyustus.SetActive(true);
         playable = true;
-        rb.gravityScale = 2;
         QuitarInvulnerabilidades(layerObject);
         body.isTrigger = false;
-        invulnerable = false;
+        //invulnerable = false;
         yield return new WaitForSeconds(timeDashCooldown);
         dashAvailable = true;
     }

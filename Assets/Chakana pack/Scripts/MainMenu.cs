@@ -79,8 +79,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (pauseMenu.gameObject.activeSelf)
                     btContinue.Select();
-                else
-                if (exitMenu.gameObject.activeSelf)
+                else if (exitMenu.gameObject.activeSelf)
                     btExitGame.Select();
             }
         }

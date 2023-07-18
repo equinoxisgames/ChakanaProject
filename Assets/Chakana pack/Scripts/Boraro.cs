@@ -105,7 +105,7 @@ public class Boraro : CharactersBehaviour
             //tiempoVolteo = 0;
         }
 
-        if (siguiendo && !atacando && !teletransportandose)
+        if (siguiendo && !atacando && !teletransportandose && playable)
         {
             Move();
         }

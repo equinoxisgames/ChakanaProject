@@ -134,7 +134,7 @@ public class ApallimayDaga : CharactersBehaviour
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 8, rb.gravityScale * 4), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion * 4, rb.gravityScale * 2), ForceMode2D.Impulse);
         //EstablecerInvulnerabilidades(layerObject);
     }
 
@@ -155,10 +155,10 @@ public class ApallimayDaga : CharactersBehaviour
                 direccion = 1;
             }
 
-            if (prueba) {
-                rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
+            //if (prueba) {
+              //  rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
                 //Recoil(direccion, 1);
-            }
+            //}
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
@@ -204,9 +204,7 @@ public class ApallimayDaga : CharactersBehaviour
 
 
     private bool Grounded() {
-        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer)
-            ) //||
-        //Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
+        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer))
         {
             return true;
         }
@@ -268,7 +266,7 @@ public class ApallimayDaga : CharactersBehaviour
         if (collision.gameObject.layer == 11)
         {
             //rb.bodyType = RigidbodyType2D.Static;
-            prueba = true;
+            //prueba = true;
                  
             //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
             //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
@@ -280,7 +278,7 @@ public class ApallimayDaga : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            prueba = false;
+            //prueba = false;
             detectionTime = 0;
 
             posY = transform.position.y;
