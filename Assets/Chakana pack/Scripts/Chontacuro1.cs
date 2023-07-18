@@ -30,8 +30,8 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] bool hayPiso = true;
     [SerializeField] GameObject deathFX;
 
-    [SerializeField] private GameObject combFX01;
-    private GameObject combObj01;
+    //[SerializeField] private GameObject combFX01;
+    //private GameObject combObj01;
 
     private void Awake()
     {
@@ -317,7 +317,7 @@ public class Chontacuro1 : CharactersBehaviour
     }
 
 
-    private void combinacionesElementales()
+    private new void combinacionesElementales()
     {
         if (counterEstados == 11)
         {

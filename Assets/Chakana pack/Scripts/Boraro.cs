@@ -10,7 +10,7 @@ public class Boraro : CharactersBehaviour
 
     [SerializeField] private bool applyForce;
     [SerializeField] private Vector3 objetivo;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] private float tiempoVolteo;
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float direction;
@@ -281,19 +281,6 @@ public class Boraro : CharactersBehaviour
     }
 
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == 11 && !entroRangoAtaque)
-        {
-            rb.velocity = Vector3.zero;
-            siguiendo = false;
-            tiempoVolteo = 0;
-        }
-        else if (collision.gameObject.layer == 11 && entroRangoAtaque) { 
-            //DESAPARECER
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.name.Contains("Enemy"))
@@ -330,51 +317,6 @@ public class Boraro : CharactersBehaviour
         ataqueDisponible = true;
     }
 
-    /*
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            StartCoroutine("afectacionEstadoFuego");
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
-    }
-    */
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

@@ -6586,7 +6586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595062070234725047, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1768239101035504340, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_RootOrder
@@ -20130,6 +20130,10 @@ MonoBehaviour:
   venenoFX: {fileID: 0}
   recieveDmgFX: {fileID: 0}
   receiveDmgMat: {fileID: 0}
+  explosion: {fileID: 0}
+  combFX01: {fileID: 0}
+  combFX02: {fileID: 0}
+  combFX03: {fileID: 0}
   fuerzaRecoil: 0
   walkSpeedGround: 9
   resistenciaAire: 0.3
@@ -20211,7 +20215,6 @@ MonoBehaviour:
   aumentoBarraDash: 0
   aumentoBarraAtaque: 0
   danioExplosionCombinacionFuego_Veneno: 35
-  explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 0}
   roofPoint: {fileID: 0}
@@ -20221,9 +20224,6 @@ MonoBehaviour:
   curando: 0
   SSTEPS: 60
   CSTEPS: 0
-  combFX01: {fileID: 0}
-  combFX02: {fileID: 0}
-  combFX03: {fileID: 0}
 --- !u!95 &1097574632
 Animator:
   serializedVersion: 5
@@ -22854,7 +22854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

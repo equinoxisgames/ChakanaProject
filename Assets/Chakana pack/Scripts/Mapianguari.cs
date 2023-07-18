@@ -27,7 +27,7 @@ public class Mapianguari : CharactersBehaviour
     private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
     [SerializeField] private GameObject charcoVeneno;
@@ -37,9 +37,9 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
 
-    [SerializeField] private GameObject combFX01;
+    //[SerializeField] private GameObject combFX01;
 
-    private GameObject combObj01;
+    //private GameObject combObj01;
 
     private float xCharco = 10f;
     private float yCharco = 1.0f;
@@ -224,7 +224,7 @@ public class Mapianguari : CharactersBehaviour
     //***************************************************************************************************
     //COMBINACIONES ELEMENTALES
     //***************************************************************************************************
-    private void combinacionesElementales()
+    private new void combinacionesElementales()
     {
         if (counterEstados == 11)
         {

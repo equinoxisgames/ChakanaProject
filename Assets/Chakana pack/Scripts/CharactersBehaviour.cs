@@ -35,6 +35,13 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject venenoFX;
     [SerializeField] protected GameObject recieveDmgFX;
     [SerializeField] protected Material receiveDmgMat;
+
+    [SerializeField] protected GameObject explosion;
+    [SerializeField] protected GameObject combFX01;
+    [SerializeField] protected GameObject combFX02;
+    [SerializeField] protected GameObject combFX03;
+
+    protected GameObject combObj01, combObj02, combObj03;
     protected Material playerMat = null;
     protected int layerObject;
     protected Rigidbody2D rb;
@@ -434,22 +441,25 @@ public class CharactersBehaviour : MonoBehaviour
 
     }
 
-    /*protected IEnumerator combinacionesElementales()
+    protected virtual IEnumerator combinacionesElementales()
     {
         if (counterEstados == 11)
         {
             //VIENTO - FUEGO
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
             estadoViento = false;
             afectacionViento = 0;
             counterEstados = 10;
             aumentoFuegoPotenciado = 3;
             ataque = ataqueMax * 0.75f;
             StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
         }
         else if (counterEstados == 101)
         {
             //VENENO - VIENTO
+            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoViento");
             rb.velocity = Vector3.zero;
@@ -467,6 +477,7 @@ public class CharactersBehaviour : MonoBehaviour
         else if (counterEstados == 110)
         {
             //FUEGO - VENENO
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
@@ -477,7 +488,4 @@ public class CharactersBehaviour : MonoBehaviour
         }
         yield return new WaitForEndOfFrame();
     }
-
-}
-*/
 }

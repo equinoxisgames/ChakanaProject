@@ -9,7 +9,7 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool siguiendo = false;
     [SerializeField] private GameObject bolaFuego;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] private Vector3 objetivo;
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
@@ -17,11 +17,12 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private float cooldownAtaque;
     [SerializeField] GameObject deathFX;
 
-    [SerializeField] private GameObject combFX01;
-    [SerializeField] private GameObject combFX02;
-    [SerializeField] private GameObject combFX03;
+    /*
+    [SerializeField] protected GameObject combFX01;
+    [SerializeField] protected GameObject combFX02;
+    [SerializeField] protected GameObject combFX03;
 
-    private GameObject combObj01, combObj02, combObj03;
+    protected GameObject combObj01, combObj02, combObj03;*/
     private void Muerte()
     {
         if (vida <= 0) {
@@ -163,63 +164,6 @@ public class Tzantza : CharactersBehaviour
         else {
             rb.velocity = Vector2.zero;
         }
-    }
-
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
-
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            estadoFuego = true;
-            StartCoroutine("afectacionEstadoFuego");
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-
-            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
-
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-
-            if (combObj02 != null) Destroy(combObj02);
-
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
-
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
 }

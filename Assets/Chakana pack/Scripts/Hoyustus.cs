@@ -129,7 +129,6 @@ public class Hoyustus : CharactersBehaviour
 
 
     [Header("PREFABS")]
-    [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
     //MODIFICAR TRAS PRUEBAS
     [SerializeField] private Transform wallPoint;
@@ -157,11 +156,11 @@ public class Hoyustus : CharactersBehaviour
     private bool saltoEspecial = false;
 
 
-    [SerializeField] private GameObject combFX01;
+    /*[SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
     [SerializeField] private GameObject combFX03;
 
-    private GameObject combObj01, combObj02, combObj03;
+    private GameObject combObj01, combObj02, combObj03;*/
 
     public void isTocandoPared(int value)
     {
@@ -966,70 +965,6 @@ public class Hoyustus : CharactersBehaviour
         menuMuerte.SetActive(true);
         //La correccion de las acciones tomadas al "revivir" se implementaran despues al contar con el resto de mecanicas implementadas
         //Es decir la posicion en el checkpoint, vida y gold
-    }
-
-
-    //***************************************************************************************************
-    //CORRUTINA DE COMBINACIONES ELEMENTALES
-    //***************************************************************************************************
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
-
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            estadoFuego = true;
-            StartCoroutine("afectacionEstadoFuego");
-
-            yield return new WaitForSeconds(5f);
-            ataque = ataqueMax;
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-
-            if(combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
-
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-
-            if (combObj02 != null) Destroy(combObj02);
-
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
-
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, danioExplosionCombinacionFuego_Veneno, 6, 12, "Untagged", "ExplosionEnemy");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
 
