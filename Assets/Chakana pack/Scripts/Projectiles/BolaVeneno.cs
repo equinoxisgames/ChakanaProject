@@ -66,6 +66,7 @@ public class BolaVeneno : MonoBehaviour
         this.GetComponent<CircleCollider2D>().enabled = false;
         GameObject charcoGenerado = Instantiate(charco, transform.position, Quaternion.identity);
         charcoGenerado.name = "CharcoVenenoPlayer";
+        //charcoGenerado.layer = 11;
         yield return new WaitForSeconds(5f);
         Destroy(charcoGenerado);
         Destroy(this.gameObject);

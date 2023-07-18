@@ -320,6 +320,8 @@ public class Mapianguari : CharactersBehaviour
         //GENERACION DEL CHARCO DE VENENO
         if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
+            charcoGenerado.name = "CharcoVenenoEnemy";
+            //charcoGenerado.layer = 3;
             StartCoroutine(destruirCharco(charcoGenerado));
         }
 
