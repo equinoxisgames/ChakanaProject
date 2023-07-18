@@ -10,7 +10,7 @@ public class Boraro : CharactersBehaviour
 
     [SerializeField] private bool applyForce;
     [SerializeField] private Vector3 objetivo;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] private float tiempoVolteo;
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float direction;
@@ -87,25 +87,21 @@ public class Boraro : CharactersBehaviour
             detectorPiso.transform.position = detectorPared.transform.position + Vector3.down * 1f;
         }
 
-        //testPrueba();
     }
 
 
     void Update()
     {
-        testPrueba();
+        comportamiento();
         tiempoVolteo += Time.deltaTime;
         Muerte();
 
         if (maxTiempoVolteo < tiempoVolteo && !siguiendo && !atacando)
         {
             Flip();
-            //direction = -direction;
-            //transform.localScale = new Vector3(direction, 1, 1);
-            //tiempoVolteo = 0;
         }
 
-        if (siguiendo && !atacando && !teletransportandose)
+        if (siguiendo && !atacando && !teletransportandose && playable)
         {
             Move();
         }
@@ -180,57 +176,27 @@ public class Boraro : CharactersBehaviour
             return;
         }
 
-        if (!collider.name.Contains("Enemy"))
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             triggerElementos_1_1_1(collider);
         }
     }
 
 
-    private void OnTriggerStay2D(Collider2D collider)
-    {
-
-        if (collider.gameObject.layer == 11)
-        {
-            //jugadorDetectado = true;
-            objetivo = collider.transform.position;
-
-            if (!atacando && Vector3.Distance(transform.position, collider.transform.position) <= 2.5f)
-            {
-                rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            }
-            else if (Vector3.Distance(transform.position, collider.transform.position) <= 8f && ataqueDisponible)
-            {
-                StartCoroutine(Teletransportacion());
-            }
-            else
-            {
-                siguiendo = true;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            }
-        }
-    }
-
-    void testPrueba() {
+    void comportamiento() {
 
         objetivo = hoyustus.transform.position;
 
-        if (!atacando && Vector3.Distance(transform.position, hoyustus.transform.position) <= 2.5f)
+        if (ataqueDisponible)
         {
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        }
-        else if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
-        {
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 8f && !entroRangoAtaque)
             {
-                siguiendo = true;
                 ataqueDisponible = false;
                 StartCoroutine(Teletransportacion());
+            }
+            else if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 18f && !entroRangoAtaque)
+            {
+                siguiendo = true;
             }
             else if(entroRangoAtaque)
             {
@@ -243,10 +209,7 @@ public class Boraro : CharactersBehaviour
 
 
     private IEnumerator Teletransportacion() {
-        
-        //detectorPared.transform.position = hoyustus.transform.position;
-        //detectorPiso.transform.position = detectorPared.transform.position + Vector3.down;
-        
+                
         if (entroRangoAtaque)
         {
             //DESAPAREZCO
@@ -318,19 +281,6 @@ public class Boraro : CharactersBehaviour
     }
 
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == 11 && !entroRangoAtaque)
-        {
-            rb.velocity = Vector3.zero;
-            siguiendo = false;
-            tiempoVolteo = 0;
-        }
-        else if (collision.gameObject.layer == 11 && entroRangoAtaque) { 
-            //DESAPARECER
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.name.Contains("Enemy"))
@@ -344,8 +294,6 @@ public class Boraro : CharactersBehaviour
         ataqueDisponible = false;
         atacando = true;
 
-        rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
@@ -367,51 +315,6 @@ public class Boraro : CharactersBehaviour
         atacando = false;
         yield return new WaitForSeconds(2.5f);
         ataqueDisponible = true;
-    }
-
-
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            StartCoroutine("afectacionEstadoFuego");
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
     private void OnDrawGizmos()

@@ -35,6 +35,13 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject venenoFX;
     [SerializeField] protected GameObject recieveDmgFX;
     [SerializeField] protected Material receiveDmgMat;
+
+    [SerializeField] protected GameObject explosion;
+    [SerializeField] protected GameObject combFX01;
+    [SerializeField] protected GameObject combFX02;
+    [SerializeField] protected GameObject combFX03;
+
+    protected GameObject combObj01, combObj02, combObj03;
     protected Material playerMat = null;
     protected int layerObject;
     protected Rigidbody2D rb;
@@ -43,12 +50,12 @@ public class CharactersBehaviour : MonoBehaviour
     private GameObject vientoObj, fuegoObj, venenoObj;
     protected float vidaMax = 0;
 
-    
+
 
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
-    protected IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
         Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
@@ -63,7 +70,8 @@ public class CharactersBehaviour : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
-        yield return new WaitForSeconds(2f);
+        //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
+        yield return new WaitForSeconds(0.5f);
         QuitarInvulnerabilidades(layerObject);
         //this.GetComponent<SpriteRenderer>().color = Color.white;
     }
@@ -74,13 +82,6 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected virtual void Recoil(int direccion, float fuerzaRecoil)
     {
-        /*playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-
-        if(rb.gravityScale == 0) 
-            rb.AddForce(new Vector2(direccion * 10, 1), ForceMode2D.Impulse);
-        else
-            rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-        EstablecerInvulnerabilidades(layerObject);*/
     }
 
 
@@ -99,13 +100,12 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //FUNCION DE INVULNERABILIDAD A TODO DANIO
     //***************************************************************************************************
-    protected void QuitarInvulnerabilidades(int layerObject)
+    protected virtual void QuitarInvulnerabilidades(int layerObject)
     {
         invulnerable = false;
-        Physics2D.IgnoreLayerCollision(3, layerObject, false);
-        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
-        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
-
+        //Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        //Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        //Physics2D.IgnoreLayerCollision(layerObject, 15, false);
     }
 
 
@@ -134,20 +134,15 @@ public class CharactersBehaviour : MonoBehaviour
             //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
 
-        /*if ((collider.gameObject.layer != gameObject.layer))
-        {
-            triggerElementos_1_1_1(collider);
-            return;
-            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
-        }*/
     }
 
 
     //***************************************************************************************************
     //CORRUTINA DE COOLDOWN INVULNERABILIDADES POR EXPLOSIONES
     //***************************************************************************************************
-    protected IEnumerator cooldownInvulnerabilidadExplosiones() {
-        yield return new WaitForSeconds(2f);
+    protected IEnumerator cooldownInvulnerabilidadExplosiones()
+    {
+        yield return new WaitForSeconds(0.5f);
         QuitarInvulnerabilidades(layerObject);
     }
 
@@ -173,7 +168,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoFuego()
     {
-        if(transform.tag == "Player")
+        if (transform.tag == "Player")
         {
             Vector3 newPos = transform.position;
             newPos.y -= 0.75f;
@@ -219,16 +214,15 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //RECIBIR DANIO ATAQUE ENEMIGO
     //***************************************************************************************************
-    public void recibirDanio(float danio) {
+    public void recibirDanio(float danio)
+    {
 
-        if(vidaMax == 0) vidaMax = vida;
+        if (vidaMax == 0) vidaMax = vida;
 
         vida -= (danio * aumentoDanioParalizacion);
 
         StartCoroutine(RecibirDanioBrillo());
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
-        //GetComponent<AudioSource>().Stop();
-        //GetComponent<AudioSource>().Play();
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)
@@ -241,7 +235,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     IEnumerator RecibirDanioBrillo()
     {
-        if(playerMat == null) playerMat = GetComponent<SpriteRenderer>().material;
+        if (playerMat == null) playerMat = GetComponent<SpriteRenderer>().material;
         GetComponent<SpriteRenderer>().material = receiveDmgMat;
 
         yield return new WaitForSeconds(0.1f);
@@ -287,7 +281,8 @@ public class CharactersBehaviour : MonoBehaviour
     }
 
 
-    protected void collisionElementos_1_1_1(Collision2D collider) {
+    protected void collisionElementos_1_1_1(Collision2D collider)
+    {
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.tag == "Viento")
         {
@@ -311,9 +306,9 @@ public class CharactersBehaviour : MonoBehaviour
             //SE ESTABLECE EL ESTADO DE VIENTO Y SUS RESPECTIVOS COMO ACTIVOS
             estadoViento = true;
             counterEstados = 1;
-            StartCoroutine("afectacionEstadoViento");            
+            StartCoroutine("afectacionEstadoViento");
         }
-       
+
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
         else if (collider.gameObject.tag == "Fuego")
         {
@@ -446,4 +441,51 @@ public class CharactersBehaviour : MonoBehaviour
 
     }
 
+    protected virtual IEnumerator combinacionesElementales()
+    {
+        if (counterEstados == 11)
+        {
+            //VIENTO - FUEGO
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
+            estadoViento = false;
+            afectacionViento = 0;
+            counterEstados = 10;
+            aumentoFuegoPotenciado = 3;
+            ataque = ataqueMax * 0.75f;
+            StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
+            StartCoroutine("afectacionEstadoFuego");
+        }
+        else if (counterEstados == 101)
+        {
+            //VENENO - VIENTO
+            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
+            StopCoroutine("afectacionEstadoVeneno");
+            StopCoroutine("afectacionEstadoViento");
+            rb.velocity = Vector3.zero;
+            counterEstados = 0;
+            estadoVeneno = false;
+            estadoViento = false;
+            playable = false;
+            aumentoDanioParalizacion = 1.5f;
+            yield return new WaitForSeconds(2f);
+            playable = true;
+            aumentoDanioParalizacion = 1f;
+            //StartCoroutine(setParalisis());
+
+        }
+        else if (counterEstados == 110)
+        {
+            //FUEGO - VENENO
+            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
+            StopCoroutine("afectacionEstadoVeneno");
+            StopCoroutine("afectacionEstadoFuego");
+            counterEstados = 0;
+            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
+            Instantiate(explosion, transform.position, Quaternion.identity);
+            estadoVeneno = false;
+            estadoFuego = false;
+        }
+        yield return new WaitForEndOfFrame();
+    }
 }

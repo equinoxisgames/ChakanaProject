@@ -10,7 +10,7 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private Vector3 objetivo;
     [SerializeField] private float rangoAtaque;
     [SerializeField] private bool ataqueDisponible;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
@@ -26,12 +26,12 @@ public class ApallimayArco : CharactersBehaviour
 
     [SerializeField] private bool prueba = false;
     [SerializeField] GameObject deathFX;
-    [SerializeField] private GameObject combFX01;
+    [SerializeField] private GameObject hoyustus;
+    /*[SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
     [SerializeField] private GameObject combFX03;
-    [SerializeField] private GameObject hoyustus;
 
-    private GameObject combObj01, combObj02, combObj03;
+    private GameObject combObj01, combObj02, combObj03;*/
 
 
     void Start()
@@ -143,8 +143,6 @@ public class ApallimayArco : CharactersBehaviour
 
         if (collider.gameObject.layer == 14)
         {
-            //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
             int direccion = 1;
             if (collider.transform.position.x > gameObject.transform.position.x)
             {
@@ -156,11 +154,7 @@ public class ApallimayArco : CharactersBehaviour
             }
 
             if (prueba) {
-                //rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-                rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-                //Recoil(direccion, 1);
             }
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
@@ -276,11 +270,7 @@ public class ApallimayArco : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            //rb.bodyType = RigidbodyType2D.Static;
             prueba = true;
-                 
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
     }
@@ -289,10 +279,7 @@ public class ApallimayArco : CharactersBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            //rb.bodyType = RigidbodyType2D.Dynamic;
             prueba = false;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
     }
 
@@ -321,55 +308,6 @@ public class ApallimayArco : CharactersBehaviour
             jugadorDetectado = false;
             detectionTime = 0;
         }
-    }
-
-
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            estadoFuego = true;
-            StartCoroutine("afectacionEstadoFuego");
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
 }

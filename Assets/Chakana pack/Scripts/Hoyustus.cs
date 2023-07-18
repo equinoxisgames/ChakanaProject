@@ -130,7 +130,6 @@ public class Hoyustus : CharactersBehaviour
 
 
     [Header("PREFABS")]
-    [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject bolaVeneno;
     //MODIFICAR TRAS PRUEBAS
     [SerializeField] private Transform wallPoint;
@@ -158,11 +157,11 @@ public class Hoyustus : CharactersBehaviour
     private bool saltoEspecial = false;
 
 
-    [SerializeField] private GameObject combFX01;
+    /*[SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
     [SerializeField] private GameObject combFX03;
 
-    private GameObject combObj01, combObj02, combObj03;
+    private GameObject combObj01, combObj02, combObj03;*/
 
     public void isTocandoPared(int value)
     {
@@ -557,10 +556,32 @@ public class Hoyustus : CharactersBehaviour
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
 
         if (rb.gravityScale == 0)
-            rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+        {
+            rb.velocity = Vector3.zero;
+            rb.gravityScale = 2f;
+            rb.AddForce(new Vector2(direccion * 2 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+            Debug.Log("1 prueba recoil");
+        }
         else
+        {
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
+            Debug.Log("2 prueba recoil");
+        }
+
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19 , true);
         EstablecerInvulnerabilidades(layerObject);
+    }
+
+
+    protected override sealed void QuitarInvulnerabilidades(int layerObject)
+    {
+        invulnerable = false;
+        Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, false);
+
     }
 
 
@@ -615,8 +636,6 @@ public class Hoyustus : CharactersBehaviour
 
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
-        //bolaVenenoGenerada.GetComponent<CircleCollider2D>().isTrigger = false;
-        //bolaVenenoGenerada.AddComponent<BolaVeneno>();
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
@@ -632,6 +651,7 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator habilidadLanza()
     {
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
         cargaCuracion += 30;
@@ -745,6 +765,26 @@ public class Hoyustus : CharactersBehaviour
         }
     }
 
+    protected override sealed IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    {
+        Recoil(direccion, fuerzaRecoil);
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
+        //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
+        yield return new WaitForSeconds(0.5f);
+        //SE DETIENE EL RECOIL
+        rb.velocity = Vector2.zero;
+        yield return new WaitForEndOfFrame();
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
+        playable = true;
+        yield return new WaitForSeconds(0.7f);
+        QuitarInvulnerabilidades(layerObject);
+
+    }
+
 
     public bool isInvulnerable() {
         return invulnerable;
@@ -821,7 +861,7 @@ public class Hoyustus : CharactersBehaviour
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     triggerElementos_1_1_1(collider);
                 }
-                else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18)
+                else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
                 {
                     //StartCoroutine(HurtParticlesPlayer());
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
@@ -936,70 +976,6 @@ public class Hoyustus : CharactersBehaviour
         menuMuerte.SetActive(true);
         //La correccion de las acciones tomadas al "revivir" se implementaran despues al contar con el resto de mecanicas implementadas
         //Es decir la posicion en el checkpoint, vida y gold
-    }
-
-
-    //***************************************************************************************************
-    //CORRUTINA DE COMBINACIONES ELEMENTALES
-    //***************************************************************************************************
-    private IEnumerator combinacionesElementales()
-    {
-        if (counterEstados == 11)
-        {
-            //VIENTO - FUEGO
-
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity);
-
-            estadoViento = false;
-            afectacionViento = 0;
-            counterEstados = 10;
-            aumentoFuegoPotenciado = 3;
-            ataque = ataqueMax * 0.75f;
-            StopCoroutine("afectacionEstadoFuego");
-            estadoFuego = true;
-            StartCoroutine("afectacionEstadoFuego");
-
-            yield return new WaitForSeconds(5f);
-            ataque = ataqueMax;
-        }
-        else if (counterEstados == 101)
-        {
-            //VENENO - VIENTO
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoViento");
-
-            if(combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
-
-            rb.velocity = Vector3.zero;
-            counterEstados = 0;
-            estadoVeneno = false;
-            estadoViento = false;
-            playable = false;
-            aumentoDanioParalizacion = 1.5f;
-            yield return new WaitForSeconds(2f);
-            playable = true;
-            aumentoDanioParalizacion = 1f;
-
-            if (combObj02 != null) Destroy(combObj02);
-
-            //StartCoroutine(setParalisis());
-
-        }
-        else if (counterEstados == 110)
-        {
-            //FUEGO - VENENO
-
-            if (combObj03 == null) combObj03 = Instantiate(combFX03, transform.position, Quaternion.identity);
-
-            StopCoroutine("afectacionEstadoVeneno");
-            StopCoroutine("afectacionEstadoFuego");
-            counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, danioExplosionCombinacionFuego_Veneno, 6, 12, "Untagged", "ExplosionEnemy");
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            estadoVeneno = false;
-            estadoFuego = false;
-        }
-        yield return new WaitForEndOfFrame();
     }
 
 
@@ -1176,10 +1152,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
+        isDashing = true;
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
-        isDashing = true;
-
         body.isTrigger = true;
         //body.enabled = false; **********************************************
         //dashBody.transform.position = transform.position + Vector3.up; *********************************
@@ -1192,20 +1169,21 @@ public class Hoyustus : CharactersBehaviour
             rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.2f);
             //rb.velocity = Vector2.zero;
+            rb.gravityScale = 2;
             isDashing = false;
         }
         StartCoroutine(movimientoDash());
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
+        rb.gravityScale = 2;
         isDashing = false;
         //dashBody.SetActive(false);**********************************************************************
         //dashBodyTESTING.enabled = false; *********************************************
         //body.enabled = true; *******************************************************
         //bodyHoyustus.SetActive(true);
         playable = true;
-        rb.gravityScale = 2;
         QuitarInvulnerabilidades(layerObject);
         body.isTrigger = false;
-        invulnerable = false;
+        //invulnerable = false;
         yield return new WaitForSeconds(timeDashCooldown);
         dashAvailable = true;
     }

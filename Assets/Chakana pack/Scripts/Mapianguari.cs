@@ -27,7 +27,7 @@ public class Mapianguari : CharactersBehaviour
     private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
-    [SerializeField] private GameObject explosion;
+    //[SerializeField] private GameObject explosion;
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
     [SerializeField] private GameObject charcoVeneno;
@@ -37,9 +37,9 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
 
-    [SerializeField] private GameObject combFX01;
+    //[SerializeField] private GameObject combFX01;
 
-    private GameObject combObj01;
+    //private GameObject combObj01;
 
     private float xCharco = 10f;
     private float yCharco = 1.0f;
@@ -50,14 +50,6 @@ public class Mapianguari : CharactersBehaviour
     void Start()
     {
         fuerzaRecoil = 5;
-        //Physics2D.IgnoreLayerCollision(13, 15, true);
-        //charcoVeneno = new GameObject();
-        //charcoVeneno.SetActive(false);
-        //charcoVeneno.tag = "Veneno";
-        //charcoVeneno.AddComponent<BoxCollider2D>();
-        //charcoVeneno.GetComponent<BoxCollider2D>().isTrigger = true;
-        //charcoVeneno.GetComponent<BoxCollider2D>().size = new Vector2(xCharco, yCharco);
-
         plataformaActual = 1;
         nuevaPlataforma = 1;
 
@@ -179,9 +171,6 @@ public class Mapianguari : CharactersBehaviour
                 direccion = 1;
             }
 
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
@@ -235,7 +224,7 @@ public class Mapianguari : CharactersBehaviour
     //***************************************************************************************************
     //COMBINACIONES ELEMENTALES
     //***************************************************************************************************
-    private void combinacionesElementales()
+    private new void combinacionesElementales()
     {
         if (counterEstados == 11)
         {
@@ -331,6 +320,8 @@ public class Mapianguari : CharactersBehaviour
         //GENERACION DEL CHARCO DE VENENO
         if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
+            charcoGenerado.name = "CharcoVenenoEnemy";
+            //charcoGenerado.layer = 3;
             StartCoroutine(destruirCharco(charcoGenerado));
         }
 
@@ -541,26 +532,6 @@ public class Mapianguari : CharactersBehaviour
             }
             atacando = false;
         }
-        /*yield return new WaitForSeconds(0.1f);
-        //APARICION Y STUN
-        switch (nuevaPlataforma)
-        {
-            case 0:
-                transform.position = new Vector3(-14 - 8, -99.8f, 0);
-                break;
-            case 1:
-                transform.position = new Vector3(-14 - 8, -91.5f, 0);
-                break;
-            case 2:
-                transform.position = new Vector3(-33 - 8, -83.2f, 0);
-                break;
-            case 3:
-                transform.position = new Vector3(-14 - 8, -74.9f, 0);
-                break;
-        }
-        this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;*/
-
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         //STUN
         yield return new WaitForSeconds(2.8f);
@@ -613,28 +584,6 @@ public class Mapianguari : CharactersBehaviour
             minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
             maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
             plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
-        }
-    }
-
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11 && !usandoAtaqueEspecial)
-        {
-            //rb.bodyType = RigidbodyType2D.Static;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        }
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            //rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         }
     }
 }
