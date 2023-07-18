@@ -87,22 +87,18 @@ public class Boraro : CharactersBehaviour
             detectorPiso.transform.position = detectorPared.transform.position + Vector3.down * 1f;
         }
 
-        //testPrueba();
     }
 
 
     void Update()
     {
-        testPrueba();
+        comportamiento();
         tiempoVolteo += Time.deltaTime;
         Muerte();
 
         if (maxTiempoVolteo < tiempoVolteo && !siguiendo && !atacando)
         {
             Flip();
-            //direction = -direction;
-            //transform.localScale = new Vector3(direction, 1, 1);
-            //tiempoVolteo = 0;
         }
 
         if (siguiendo && !atacando && !teletransportandose && playable)
@@ -180,24 +176,27 @@ public class Boraro : CharactersBehaviour
             return;
         }
 
-        if (!collider.name.Contains("Enemy"))
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             triggerElementos_1_1_1(collider);
         }
     }
 
 
-    void testPrueba() {
+    void comportamiento() {
 
         objetivo = hoyustus.transform.position;
 
-        if (Vector3.Distance(transform.position, hoyustus.transform.position) > 2.5f && ataqueDisponible)
+        if (ataqueDisponible)
         {
             if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 8f && !entroRangoAtaque)
             {
-                siguiendo = true;
                 ataqueDisponible = false;
                 StartCoroutine(Teletransportacion());
+            }
+            else if (Vector3.Distance(transform.position, hoyustus.transform.position) <= 18f && !entroRangoAtaque)
+            {
+                siguiendo = true;
             }
             else if(entroRangoAtaque)
             {
@@ -331,7 +330,7 @@ public class Boraro : CharactersBehaviour
         ataqueDisponible = true;
     }
 
-
+    /*
     private IEnumerator combinacionesElementales()
     {
         if (counterEstados == 11)
@@ -375,7 +374,7 @@ public class Boraro : CharactersBehaviour
         }
         yield return new WaitForEndOfFrame();
     }
-
+    */
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
