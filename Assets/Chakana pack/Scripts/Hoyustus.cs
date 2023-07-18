@@ -50,8 +50,9 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] Animator anim;
 
     [Header("Audio")]
-    [SerializeField] AudioSource AudioWalking;
-    [SerializeField] AudioSource AudioJump;
+    AudioSource playerAudio;
+    [SerializeField] AudioClip AudioWalking;
+    [SerializeField] AudioClip AudioJump;
     [SerializeField] AudioSource AudioFall;
     [SerializeField] AudioSource AmbientFlute;
 
@@ -294,7 +295,7 @@ public class Hoyustus : CharactersBehaviour
             pState = GetComponent<PlayerStateList>();
         }*/
 
-
+        playerAudio = GetComponent<AudioSource>();
         //escalaGravedad = rb.gravityScale;
 
 
@@ -433,11 +434,16 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonDown("Jump") && Grounded())
             {
+                playerAudio.Stop();
+                playerAudio.loop = false;
+                playerAudio.clip = AudioJump;
+                playerAudio.Play();
+
                 anim.Play("Saltar");
                 saltoEspecial = false;
                 isJumping = true;
                 secondJump = false;
-                rb.AddForce(new Vector2(0, 6f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 12f), ForceMode2D.Impulse);
                 //Debug.Log("Salto");
                 isJumping = true;
                 cargaHabilidadCondor += aumentoBarraSalto;
@@ -459,6 +465,11 @@ public class Hoyustus : CharactersBehaviour
 
             if (Input.GetButtonDown("Jump") && CSTEPS == 0)
             {
+                playerAudio.loop = false;
+                playerAudio.Stop();
+                playerAudio.clip = AudioJump;
+                playerAudio.Play();
+
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
                 //currentStepsImpulso = 0;
@@ -979,6 +990,7 @@ public class Hoyustus : CharactersBehaviour
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
             isWalking = false;
+            if (playerAudio.clip == AudioWalking) playerAudio.Stop();
             return;
         }
         else if (h < -0.10)
@@ -990,6 +1002,19 @@ public class Hoyustus : CharactersBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
         isWalking = true;
+        if (isJumping)
+        {
+            if(playerAudio.clip == AudioWalking) playerAudio.Stop();
+        }
+        else if (Grounded() && !isJumping)
+        {
+            if (!playerAudio.isPlaying)
+            {
+                playerAudio.loop = true;
+                playerAudio.clip = AudioWalking;
+                playerAudio.Play();
+            }
+        }
 
         //TOCANDO PARED PERMITIRA QUE SE DETENGA EL PLAYER SI TRATA DE CAMINAR Y SE TOCA UNA PARED
         //LA AFECTACION DEL VIENTO REDUCIRA SU VELOCIDAD AL ESTAR EN EL AIRE
@@ -1270,7 +1295,7 @@ public class Hoyustus : CharactersBehaviour
 
     void PlayJumpAudio()
     {
-        AudioJump.Play();
+        //AudioJump.Play();
 
     }
     void PlayFallAudio()

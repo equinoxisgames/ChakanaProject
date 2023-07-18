@@ -67,7 +67,7 @@ public class CameraTopDown : MonoBehaviour
 
     IEnumerator EnableCamera()
     {
-        yield return new WaitForSeconds(1.7f);
+        yield return new WaitForSeconds(1.75f);
         isMove = false;
     }
 }
