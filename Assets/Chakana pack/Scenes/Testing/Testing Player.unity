@@ -5911,6 +5911,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1671242022381452182, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: cooldownAtaque
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671242022381452182, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: rangoDeteccion
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671242022381452182, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: afectacionVeneno
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671242022381452182, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 131136
+      objectReference: {fileID: 0}
     - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -6352,7 +6368,6 @@ GameObject:
   - component: {fileID: 420571961}
   - component: {fileID: 420571960}
   - component: {fileID: 420571959}
-  - component: {fileID: 420571962}
   m_Layer: 6
   m_Name: Plataforma (2)
   m_TagString: Untagged
@@ -6474,21 +6489,6 @@ Transform:
   m_Father: {fileID: 774945366}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &420571962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 420571958}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0032cf43e909964aaa9df6bb07c2843, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plataforma: 2
-  minX: 0
-  maxX: 0
 --- !u!1 &468411298
 GameObject:
   m_ObjectHideFlags: 0
@@ -6500,7 +6500,6 @@ GameObject:
   - component: {fileID: 468411299}
   - component: {fileID: 468411302}
   - component: {fileID: 468411301}
-  - component: {fileID: 468411300}
   m_Layer: 16
   m_Name: Plataforma (3)
   m_TagString: Untagged
@@ -6525,21 +6524,6 @@ Transform:
   m_Father: {fileID: 774945366}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &468411300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 468411298}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0032cf43e909964aaa9df6bb07c2843, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plataforma: 0
-  minX: 0
-  maxX: 0
 --- !u!61 &468411301
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -18343,7 +18327,6 @@ GameObject:
   - component: {fileID: 660793194}
   - component: {fileID: 660793197}
   - component: {fileID: 660793196}
-  - component: {fileID: 660793195}
   m_Layer: 16
   m_Name: Plataforma (4)
   m_TagString: Untagged
@@ -18368,21 +18351,6 @@ Transform:
   m_Father: {fileID: 774945366}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &660793195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 660793193}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0032cf43e909964aaa9df6bb07c2843, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plataforma: 0
-  minX: 0
-  maxX: 0
 --- !u!61 &660793196
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20314,8 +20282,10 @@ MonoBehaviour:
   anim: {fileID: 0}
   AudioWalking: {fileID: 0}
   AudioJump: {fileID: 0}
-  AudioFall: {fileID: 0}
-  AmbientFlute: {fileID: 0}
+  AudioHurt: {fileID: 0}
+  AudioSkill01: {fileID: 0}
+  AudioSkill02: {fileID: 0}
+  AudioSkill03: {fileID: 0}
   AudioStep1: {fileID: 0}
   AudioStep2: {fileID: 0}
   AudioStep3: {fileID: 0}
@@ -20364,6 +20334,11 @@ MonoBehaviour:
   curando: 0
   SSTEPS: 60
   CSTEPS: 0
+  dashVfx: {fileID: 0}
+  skillObj01: {fileID: 0}
+  skillObj02: {fileID: 0}
+  skillObj03: {fileID: 0}
+  skillObj04: {fileID: 0}
 --- !u!95 &1097574632
 Animator:
   serializedVersion: 5
