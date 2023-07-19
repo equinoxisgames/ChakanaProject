@@ -27,15 +27,17 @@ public class Pinchos02 : MonoBehaviour
     {
         player.recibirDanio(200);
 
+        GetComponent<AudioSource>().Play();
+
         if(player.getVida() <= 0)
         {
-            Instantiate(exVFX, transform.position, Quaternion.identity);
+            //Instantiate(exVFX, transform.position, Quaternion.identity);
             player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
         }
         else
         {
-            Instantiate(exVFX, transform.position, Quaternion.identity);
+            //Instantiate(exVFX, transform.position, Quaternion.identity);
             player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 12, ForceMode2D.Impulse);
 

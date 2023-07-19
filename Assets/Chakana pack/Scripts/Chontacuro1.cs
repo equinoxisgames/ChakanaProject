@@ -29,7 +29,9 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] bool hayPiso = true;
     [SerializeField] GameObject deathFX;
+    [SerializeField] AudioClip audioHurt;
 
+    AudioSource charAudio;
     //[SerializeField] private GameObject combFX01;
     //private GameObject combObj01;
 
@@ -37,6 +39,7 @@ public class Chontacuro1 : CharactersBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        charAudio = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -274,6 +277,10 @@ public class Chontacuro1 : CharactersBehaviour
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                charAudio.loop = false;
+                charAudio.Stop();
+                charAudio.clip = audioHurt;
+                charAudio.Play();
             }
         }
 

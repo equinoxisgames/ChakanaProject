@@ -830,6 +830,7 @@ GameObject:
   - component: {fileID: 1998959458}
   - component: {fileID: 1998959459}
   - component: {fileID: 984350795098282207}
+  - component: {fileID: 3959463878520757145}
   m_Layer: 11
   m_Name: Hoyustus Solicitud Prefab
   m_TagString: Player
@@ -1020,6 +1021,10 @@ MonoBehaviour:
   venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
   recieveDmgFX: {fileID: 1313361013208637518, guid: 6826bee3237ef6d4bb1cc8e40cbbcbc9, type: 3}
   receiveDmgMat: {fileID: 2100000, guid: cf19960cdfd3e724384d2fd13b05ed1e, type: 2}
+  explosion: {fileID: 0}
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
+  combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
+  combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
   fuerzaRecoil: 0
   walkSpeedGround: 12
   resistenciaAire: 0.3
@@ -1060,8 +1065,10 @@ MonoBehaviour:
   anim: {fileID: 0}
   AudioWalking: {fileID: 8300000, guid: ec8a8eea452af4e4f989295441d2792e, type: 3}
   AudioJump: {fileID: 8300000, guid: 44e95e59e433d3f4fbf76a2ab43a62a4, type: 3}
-  AudioFall: {fileID: 0}
-  AmbientFlute: {fileID: 0}
+  AudioHurt: {fileID: 8300000, guid: 613c70cff18e78445b9c8b380c18f1d1, type: 3}
+  AudioSkill01: {fileID: 0}
+  AudioSkill02: {fileID: 0}
+  AudioSkill03: {fileID: 0}
   AudioStep1: {fileID: 0}
   AudioStep2: {fileID: 0}
   AudioStep3: {fileID: 0}
@@ -1101,7 +1108,6 @@ MonoBehaviour:
   aumentoBarraDash: 15
   aumentoBarraAtaque: 15
   danioExplosionCombinacionFuego_Veneno: 35
-  explosion: {fileID: 0}
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 9010123227811289174}
   roofPoint: {fileID: 0}
@@ -1111,9 +1117,11 @@ MonoBehaviour:
   curando: 0
   SSTEPS: 65
   CSTEPS: 0
-  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
-  combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
-  combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  dashVfx: {fileID: 3229355411725376086, guid: c9d5289960023ba4ca58c26a651d5bc2, type: 3}
+  skillObj01: {fileID: 0}
+  skillObj02: {fileID: 0}
+  skillObj03: {fileID: 0}
+  skillObj04: {fileID: 794117543607883160, guid: 6b131bd84a93ee34db09dcf48b92966a, type: 3}
 --- !u!61 &1998959458
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1232,9 +1240,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -1267,7 +1275,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1307,6 +1315,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &3959463878520757145
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2374536855388483605}
+  m_Enabled: 1
 --- !u!1 &2394723655531926819
 GameObject:
   m_ObjectHideFlags: 0

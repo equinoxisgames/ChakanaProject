@@ -36,7 +36,9 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private bool cambioPlataformaDisponible = true;
     [SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
+    [SerializeField] AudioClip audioHurt;
 
+    AudioSource charAudio;
     //[SerializeField] private GameObject combFX01;
 
     //private GameObject combObj01;
@@ -52,6 +54,8 @@ public class Mapianguari : CharactersBehaviour
         fuerzaRecoil = 5;
         plataformaActual = 1;
         nuevaPlataforma = 1;
+
+        charAudio = GetComponent<AudioSource>();
 
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
@@ -176,6 +180,10 @@ public class Mapianguari : CharactersBehaviour
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                charAudio.loop = false;
+                charAudio.Stop();
+                charAudio.clip = audioHurt;
+                charAudio.Play();
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER

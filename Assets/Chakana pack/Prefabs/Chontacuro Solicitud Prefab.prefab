@@ -25648,6 +25648,7 @@ MonoBehaviour:
     m_Bits: 64
   hayPiso: 1
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  audioHurt: {fileID: 8300000, guid: 45c1f66e60215c4478a552a3fba5b249, type: 3}
 --- !u!68 &6461231520278799732
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -25763,7 +25764,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f3009cbfe783d594b9f6bd1ae62e657c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -25772,9 +25773,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -25807,7 +25808,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.6
       inSlope: 0
       outSlope: 0
       tangentMode: 0
