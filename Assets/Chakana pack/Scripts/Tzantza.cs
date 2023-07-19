@@ -16,6 +16,9 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private bool atacando;
     [SerializeField] private float cooldownAtaque;
     [SerializeField] GameObject deathFX;
+    [SerializeField] AudioClip audioHurt;
+
+    AudioSource charAudio;
 
     /*
     [SerializeField] protected GameObject combFX01;
@@ -34,6 +37,7 @@ public class Tzantza : CharactersBehaviour
 
     void Start()
     {
+        charAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
@@ -99,6 +103,10 @@ public class Tzantza : CharactersBehaviour
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                charAudio.loop = false;
+                charAudio.Stop();
+                charAudio.clip = audioHurt;
+                charAudio.Play();
             }
             return;
         }

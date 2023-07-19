@@ -53,8 +53,10 @@ public class Hoyustus : CharactersBehaviour
     AudioSource playerAudio;
     [SerializeField] AudioClip AudioWalking;
     [SerializeField] AudioClip AudioJump;
-    [SerializeField] AudioSource AudioFall;
-    [SerializeField] AudioSource AmbientFlute;
+    [SerializeField] AudioClip AudioHurt;
+    [SerializeField] AudioClip AudioSkill01;
+    [SerializeField] AudioClip AudioSkill02;
+    [SerializeField] AudioClip AudioSkill03;
 
     [SerializeField] AudioSource AudioStep1;
     [SerializeField] AudioSource AudioStep2;
@@ -152,11 +154,14 @@ public class Hoyustus : CharactersBehaviour
 
     float limitY = 0f;
 
-
+    [SerializeField] GameObject dashVfx;
 
     private bool saltoEspecial = false;
 
-
+    [SerializeField] GameObject skillObj01;
+    [SerializeField] GameObject skillObj02;
+    [SerializeField] GameObject skillObj03;
+    [SerializeField] GameObject skillObj04;
     /*[SerializeField] private GameObject combFX01;
     [SerializeField] private GameObject combFX02;
     [SerializeField] private GameObject combFX03;
@@ -590,8 +595,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator Curacion()
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        Destroy(Instantiate(skillObj04, transform.position, Quaternion.identity), 1);
         //CAMBIO A LA ANIMACION
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         playable = true;
         vida += 350;
         curando = false;
@@ -772,6 +780,11 @@ public class Hoyustus : CharactersBehaviour
         {
             yield break;
         }
+
+        playerAudio.loop = false;
+        playerAudio.Stop();
+        playerAudio.clip = AudioHurt;
+        playerAudio.Play();
 
         //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.5f);
@@ -1152,6 +1165,8 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
+        Destroy(Instantiate(dashVfx, transform.position, Quaternion.identity, transform), 0.5f);
+
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
@@ -1300,7 +1315,7 @@ public class Hoyustus : CharactersBehaviour
     }
     void PlayFallAudio()
     {
-        AudioFall.Play();
+        //AudioFall.Play();
 
     }
 

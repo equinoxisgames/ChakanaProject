@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5992701355794954231, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
@@ -81,13 +82,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6551108964664257145, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551108964664284121, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6551108964664284121, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6551108964646335255, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3932769255500428767}
   m_SourcePrefab: {fileID: 100100000, guid: 0dc647580ef68c243a240cd88bdcc544, type: 3}
 --- !u!1 &5849161027905352948 stripped
 GameObject:
@@ -106,11 +117,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 1
+  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
   m_LightLayerMask: 1
+  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
   m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 1
