@@ -153,9 +153,6 @@ public class ApallimayArco : CharactersBehaviour
                 direccion = 1;
             }
 
-            if (prueba) {
-                rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-            }
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
