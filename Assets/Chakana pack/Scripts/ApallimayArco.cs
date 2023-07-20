@@ -66,9 +66,8 @@ public class ApallimayArco : CharactersBehaviour
         //{
             Flip();
         //}
-        detectarPiso();
 
-        if (!jugadorDetectado)
+        if (detectarPiso() && !jugadorDetectado && playable)
         {
             Move();
         }
