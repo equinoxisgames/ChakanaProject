@@ -110,10 +110,15 @@ public class Tzantza : CharactersBehaviour
             }
             return;
         }
+        else if (collider.gameObject.layer == 11 && !collider.name.Contains("Hoyustus Solicitud Prefab"))
+        {
+            return;
+        }
 
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18){
             triggerElementos_1_1_1(collider);
+            Debug.Log(collider.gameObject.name);
         }
     }
 

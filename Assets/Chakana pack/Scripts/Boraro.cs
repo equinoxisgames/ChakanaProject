@@ -62,6 +62,7 @@ public class Boraro : CharactersBehaviour
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         objetivo = transform.position;
         //player = GameObject.FindGameObjectWithTag("Player").transform;
+        
     }
 
 
