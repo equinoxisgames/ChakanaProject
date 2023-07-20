@@ -66,8 +66,9 @@ public class ApallimayArco : CharactersBehaviour
         //{
             Flip();
         //}
+        detectarPiso();
 
-        if (detectarPiso() && !jugadorDetectado && playable)
+        if (!jugadorDetectado && playable)
         {
             Move();
         }
@@ -181,6 +182,14 @@ public class ApallimayArco : CharactersBehaviour
         {
             jugadorDetectado = true;
             detectionTime += Time.deltaTime;
+
+            if (collider.transform.position.x <= transform.position.x)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
 
             if (Vector3.Distance(transform.position, collider.transform.position) <= 5) {
                 timeNear += Time.deltaTime;
