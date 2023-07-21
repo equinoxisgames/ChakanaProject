@@ -134,7 +134,7 @@ public class ApallimayDaga : CharactersBehaviour
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 4, rb.gravityScale * 2), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion * 7, rb.gravityScale * 4), ForceMode2D.Impulse);
         //EstablecerInvulnerabilidades(layerObject);
     }
 

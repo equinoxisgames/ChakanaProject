@@ -68,7 +68,7 @@ public class ApallimayArco : CharactersBehaviour
         //}
         detectarPiso();
 
-        if (!jugadorDetectado)
+        if (!jugadorDetectado && playable)
         {
             Move();
         }
@@ -153,9 +153,6 @@ public class ApallimayArco : CharactersBehaviour
                 direccion = 1;
             }
 
-            if (prueba) {
-                rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-            }
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
@@ -185,6 +182,14 @@ public class ApallimayArco : CharactersBehaviour
         {
             jugadorDetectado = true;
             detectionTime += Time.deltaTime;
+
+            if (collider.transform.position.x <= transform.position.x)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
 
             if (Vector3.Distance(transform.position, collider.transform.position) <= 5) {
                 timeNear += Time.deltaTime;

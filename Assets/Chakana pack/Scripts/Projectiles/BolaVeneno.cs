@@ -105,7 +105,7 @@ public class BolaVeneno : MonoBehaviour
             StartCoroutine(GenerarCharco(transform.localPosition));
 
         }
-        else if (collision.gameObject.layer == 3) {
+        else if (collision.gameObject.layer == 3 || collision.gameObject.layer == 19) {
             //GENERAR BOLA DE VENENO DESCENDENTE
             residuos = true;
             tiempoEliminacion = 50f;

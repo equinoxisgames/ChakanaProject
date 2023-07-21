@@ -8,6 +8,7 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 
 
+
 public class Hoyustus : CharactersBehaviour
 {
 
@@ -393,6 +394,7 @@ public class Hoyustus : CharactersBehaviour
             ataqueLanza();
             Dash();
         }
+        Debug.Log("Prueba contador de escenas abiertas:" + SceneManager.sceneCount);
 
     }
 
