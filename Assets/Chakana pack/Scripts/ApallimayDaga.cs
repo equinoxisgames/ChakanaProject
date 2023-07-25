@@ -1,7 +1,10 @@
+using Cinemachine.Utility;
 using StylizedWater2;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class ApallimayDaga : CharactersBehaviour
 {
@@ -19,6 +22,7 @@ public class ApallimayDaga : CharactersBehaviour
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
+    //[SerializeField] LayerMask wallLayer;
     [SerializeField] private CapsuleCollider2D daga;
     [SerializeField] private float rangoDeteccion;
     [SerializeField] private float cooldownAtaque;
@@ -56,7 +60,7 @@ public class ApallimayDaga : CharactersBehaviour
         if (playable) {
             //Falling();
         }
-
+        //Debug.DrawLine(transform.position, transform.position + Vector3.right * 15 * direction, Color.red, 0.2f);
         Muerte();
         //Flip();
 
@@ -187,7 +191,6 @@ public class ApallimayDaga : CharactersBehaviour
 
         if (collider.gameObject.layer == 11)
         {
-            //jugadorDetectado = true;
             objetivo = collider.transform.position;
 
             if (Vector3.Distance(transform.position, collider.transform.position) <= rangoDeteccion)
@@ -261,7 +264,7 @@ public class ApallimayDaga : CharactersBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    /*private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 11)
         {
@@ -272,7 +275,7 @@ public class ApallimayDaga : CharactersBehaviour
             //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
         }
 
-    }
+    }*/
 
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -280,7 +283,6 @@ public class ApallimayDaga : CharactersBehaviour
         {
             //prueba = false;
             detectionTime = 0;
-
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -319,7 +321,6 @@ public class ApallimayDaga : CharactersBehaviour
         {
             //jugadorDetectado = false;
             detectionTime = 0;
-
             if (transform.position.x > limit2.x) {
                 objetivo = limit1;
             }

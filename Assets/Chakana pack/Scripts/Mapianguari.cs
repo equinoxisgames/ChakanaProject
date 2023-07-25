@@ -51,7 +51,7 @@ public class Mapianguari : CharactersBehaviour
     private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
     {
-        fuerzaRecoil = 5;
+        fuerzaRecoil = 4f;
         plataformaActual = 1;
         nuevaPlataforma = 1;
 
