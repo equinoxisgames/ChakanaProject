@@ -614,7 +614,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator habilidadCondor()
     {
-
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         cargaHabilidadCondor = 0f;
         playable = false;
@@ -660,6 +660,8 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza()
     {
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
+
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
