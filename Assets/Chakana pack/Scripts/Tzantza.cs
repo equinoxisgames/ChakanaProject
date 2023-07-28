@@ -118,7 +118,6 @@ public class Tzantza : CharactersBehaviour
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18){
             triggerElementos_1_1_1(collider);
-            Debug.Log(collider.gameObject.name);
         }
     }
 
