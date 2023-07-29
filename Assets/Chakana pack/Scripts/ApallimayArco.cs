@@ -1,4 +1,3 @@
-using StylizedWater2;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,31 +6,25 @@ public class ApallimayArco : CharactersBehaviour
 {
 
     [SerializeField] private float speed;
+    [SerializeField] private float rangoAtaqueEspecial;
+    [SerializeField] private float cooldownAtaqueEspecial;
+    [SerializeField] private float cooldownDisparoFlechas;
     [SerializeField] private Vector3 objetivo;
     [SerializeField] private float rangoAtaque;
-    [SerializeField] private bool ataqueDisponible;
-    //[SerializeField] private GameObject explosion;
+    [SerializeField] private bool ataqueDisponible = true;
+    [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
     [SerializeField] private bool jugadorDetectado;
     [SerializeField] private float direction = 1;
-    [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] private float timeNear = 0;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
-
-    [SerializeField] private bool prueba = false;
     [SerializeField] GameObject deathFX;
     [SerializeField] private GameObject hoyustus;
-    /*[SerializeField] private GameObject combFX01;
-    [SerializeField] private GameObject combFX02;
-    [SerializeField] private GameObject combFX03;
-
-    private GameObject combObj01, combObj02, combObj03;*/
 
 
     void Start()
@@ -42,7 +35,6 @@ public class ApallimayArco : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
-        //flecha = Resources.Load<GameObject>("BolaVeneno");
         objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -55,23 +47,13 @@ public class ApallimayArco : CharactersBehaviour
 
     void Update()
     {
-        if (playable) {
-            //Falling();
-        }
 
         Muerte();
-        //Flip();
-
-       // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
-        //{
-            Flip();
-        //}
+        Flip();
         detectarPiso();
 
         if (!jugadorDetectado && playable)
-        {
             Move();
-        }
     }
 
     private void Muerte()
@@ -101,14 +83,9 @@ public class ApallimayArco : CharactersBehaviour
 
     private void Flip()
     {
-        if (transform.position.x < objetivo.x)
-        {
-            direction = 1;
-        }
-        else if (transform.position.x > objetivo.x)
-        {
-            direction = -1;
-        }
+        if (transform.position.x < objetivo.x) direction = 1;
+        else if (transform.position.x > objetivo.x) direction = -1;
+
         transform.localScale = new Vector3(direction, 1, 0);
     }
 
@@ -119,13 +96,11 @@ public class ApallimayArco : CharactersBehaviour
         flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
         flechaGenerada.name += "Enemy";
         atacando = true;
-        //TIEMPO DE ANIMACION
+        //TIEMPO DE ANIMACION/PREPARACION
         yield return new WaitForSeconds(0.4f);
         atacando = false;
-        //playable = true;
-        //yield return new WaitForSeconds(2.3f);
-        //ataqueDisponible = true;
-
+        yield return new WaitForSeconds(cooldownDisparoFlechas);
+        ataqueDisponible = true;
     }
 
 
@@ -133,7 +108,6 @@ public class ApallimayArco : CharactersBehaviour
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
-        //EstablecerInvulnerabilidades(layerObject);
     }
 
 
@@ -181,7 +155,6 @@ public class ApallimayArco : CharactersBehaviour
         if (collider.gameObject.layer == 11)
         {
             jugadorDetectado = true;
-            detectionTime += Time.deltaTime;
 
             if (collider.transform.position.x <= transform.position.x)
             {
@@ -191,23 +164,16 @@ public class ApallimayArco : CharactersBehaviour
                 transform.localScale = new Vector3(1, 1, 1);
             }
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= 5) {
-                timeNear += Time.deltaTime;
-            }
-            else
-            {
-                timeNear = 0;
-            }
 
-
-            if (timeNear >= 3 && !realizandoAtaqueEspecial) {
+            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaqueEspecial && ataqueEspecialDisponible) {
+                atacando = true;
                 realizandoAtaqueEspecial = true;
                 StartCoroutine(AtaqueEspecial());
             }
-            else if (detectionTime >= 2.5f && !realizandoAtaqueEspecial)
+            else if (ataqueDisponible && !realizandoAtaqueEspecial)
             {
-                //DISPARO DE FLECHA
-                detectionTime = 0;
+                atacando = true;
+                ataqueDisponible = false;
                 StartCoroutine(Ataque(collider.transform.position));
             }
         }
@@ -215,20 +181,18 @@ public class ApallimayArco : CharactersBehaviour
 
 
     private IEnumerator AtaqueEspecial() {
-        timeNear = 0;
-        detectionTime = 0;
+        playable = false;
+        realizandoAtaqueEspecial = true;
+        ataqueEspecialDisponible = false;
+        yield return new WaitForSeconds(1);
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
         Instantiate(explosion, transform.position, Quaternion.identity);
-
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(0.8f);
-        timeNear = 0;
+        yield return new WaitForSeconds(0.4f);
         realizandoAtaqueEspecial = false;
-    }
-
-    private void Falling()
-    {
-        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
+        atacando = false;
+        yield return new WaitForSeconds(cooldownAtaqueEspecial);
+        ataqueEspecialDisponible = true;
     }
 
 
@@ -252,7 +216,7 @@ public class ApallimayArco : CharactersBehaviour
         }
 
         if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
-        {//&& transform.position.y <= posY -1.5f) {
+        {
             posY = transform.position.y;
             limit1 = transform.GetChild(0).gameObject.transform.position;
             limit2 = transform.GetChild(1).gameObject.transform.position;
@@ -271,22 +235,6 @@ public class ApallimayArco : CharactersBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            prueba = true;
-        }
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            prueba = false;
-        }
-    }
 
     public bool detectarPiso()
     {
@@ -308,11 +256,6 @@ public class ApallimayArco : CharactersBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 11)
-        {
-            jugadorDetectado = false;
-            detectionTime = 0;
-        }
+        if (collision.gameObject.layer == 11) jugadorDetectado = false;
     }
-
 }
