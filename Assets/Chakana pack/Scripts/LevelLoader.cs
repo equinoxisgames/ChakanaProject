@@ -40,6 +40,7 @@ public class LevelLoader : MonoBehaviour
 
     IEnumerator LoadNextScene()
     {
+        player.gameObject.GetComponent<AudioSource>().enabled = false;
         loadScenePanel.SetActive(true);
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNum);

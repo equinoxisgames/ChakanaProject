@@ -1039,6 +1039,7 @@ public class Hoyustus : CharactersBehaviour
         //TOCANDO PARED PERMITIRA QUE SE DETENGA EL PLAYER SI TRATA DE CAMINAR Y SE TOCA UNA PARED
         //LA AFECTACION DEL VIENTO REDUCIRA SU VELOCIDAD AL ESTAR EN EL AIRE
         rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
+        if (rb.velocity == Vector2.zero) playerAudio.Stop();
     }
 
 

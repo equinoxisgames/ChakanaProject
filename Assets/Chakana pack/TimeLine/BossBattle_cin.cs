@@ -22,8 +22,10 @@ public class BossBattle_cin : MonoBehaviour
 
     IEnumerator PlayScene()
     {
+        GetComponent<AudioSource>().Play();
         yield return new WaitForSeconds(1.51f);
         roca.Play();
+        
         yield return new WaitForSeconds(0.6f);
 
         player.GetComponent<Hoyustus>().enabled = true;
