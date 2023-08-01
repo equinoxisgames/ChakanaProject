@@ -37,6 +37,8 @@ public class Mapianguari : CharactersBehaviour
     [SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
     [SerializeField] AudioClip audioHurt;
+    [SerializeField] AudioClip audioAtk;
+    [SerializeField] AudioClip audioScream;
 
     AudioSource charAudio;
     //[SerializeField] private GameObject combFX01;
@@ -318,6 +320,9 @@ public class Mapianguari : CharactersBehaviour
     private IEnumerator ataqueAturdimiento() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        charAudio.Stop();
+        charAudio.clip = audioScream;
+        charAudio.Play();
         atacando = true;
         ataqueDisponible = false;
         //GameObject Hoyustus = GameObject.
@@ -377,6 +382,10 @@ public class Mapianguari : CharactersBehaviour
     private IEnumerator ataqueCuerpoCuerpo(){
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        charAudio.Stop();
+        charAudio.clip = audioAtk;
+        charAudio.Play();
+
         ataqueDisponible = false;
         ataqueCuerpo.enabled = true;
         atacando = true;

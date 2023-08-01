@@ -16,7 +16,7 @@ public class ElementalAltar : MonoBehaviour
     private bool isIn, isOn;
     private string altarName;
 
-    private void Awake()
+    private void Start()
     {
         altarName = doorName + keyCode;
 
@@ -82,6 +82,7 @@ public class ElementalAltar : MonoBehaviour
         else
         {
             detailTxt.text = "THE DOOR HAS OPENED";
+            GetComponent<AudioSource>().Play();
             Instantiate(explodeFx);
         }
 
