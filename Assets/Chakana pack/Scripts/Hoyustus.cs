@@ -394,7 +394,7 @@ public class Hoyustus : CharactersBehaviour
             ataqueLanza();
             Dash();
         }
-        Debug.Log("Prueba contador de escenas abiertas:" + SceneManager.sceneCount);
+        //Debug.Log("Prueba contador de escenas abiertas:" + SceneManager.sceneCount);
 
     }
 
@@ -562,11 +562,11 @@ public class Hoyustus : CharactersBehaviour
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
 
-        if (rb.gravityScale == 0)
+        if (!Grounded())
         {
             rb.velocity = Vector3.zero;
             rb.gravityScale = 2f;
-            rb.AddForce(new Vector2(direccion * 2 * fuerzaRecoil, 1), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(direccion * 2.6f * fuerzaRecoil, rb.gravityScale), ForceMode2D.Impulse);
             Debug.Log("1 prueba recoil");
         }
         else
@@ -758,9 +758,11 @@ public class Hoyustus : CharactersBehaviour
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
+                    invulnerable = true;
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     collisionElementos_1_1_1(collision);
+                    return;
                 }
 
             }
@@ -879,6 +881,7 @@ public class Hoyustus : CharactersBehaviour
                 else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
                 {
                     //StartCoroutine(HurtParticlesPlayer());
+                    invulnerable = true;
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
                     triggerElementos_1_1_1(collider);
@@ -1198,8 +1201,10 @@ public class Hoyustus : CharactersBehaviour
         //body.enabled = true; *******************************************************
         //bodyHoyustus.SetActive(true);
         playable = true;
-        QuitarInvulnerabilidades(layerObject);
+        yield return new WaitForEndOfFrame();
         body.isTrigger = false;
+        yield return new WaitForSeconds(0.1f);
+        QuitarInvulnerabilidades(layerObject);
         //invulnerable = false;
         yield return new WaitForSeconds(timeDashCooldown);
         dashAvailable = true;
