@@ -97,7 +97,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -225,7 +225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1777270745979198813
 Transform:
   m_ObjectHideFlags: 0
@@ -267,7 +267,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   combFX01: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
-  fuerzaRecoil: 0
+  fuerzaRecoil: 2
   speed: 5
   ataqueDisponible: 0
   objetivo: {x: 0, y: 0, z: 0}
@@ -408,13 +408,12 @@ MonoBehaviour:
   rangoPreparacion: 1.5
   atacando: 0
   siguiendo: 0
-  enBorde: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
   direction: 1
-  detectionTime: 0
   posY: 0
   groundDetector: {fileID: 0}
+  wallDetector: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 131136
@@ -422,7 +421,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   daga: {fileID: 0}
-  rangoVision: 20
+  rangoVision: 10
   cooldownAtaque: 1.5
   t1: 0.3
   t2: 0.4
