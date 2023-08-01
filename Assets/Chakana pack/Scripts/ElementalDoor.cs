@@ -12,7 +12,7 @@ public class ElementalDoor : MonoBehaviour
     private Vector3 destination;
     private bool isMove = false;
 
-    private void Awake()
+    private void Start()
     {
         //PlayerPrefs.DeleteAll();
 
@@ -41,7 +41,7 @@ public class ElementalDoor : MonoBehaviour
     {
         if (isMove)
         {
-            transform.position = Vector3.MoveTowards(transform.position, destination, 3 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, destination, 4 * Time.deltaTime);
 
             if (transform.position == destination) isMove = false;
         }

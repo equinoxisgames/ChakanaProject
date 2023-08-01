@@ -47,6 +47,8 @@ public class UkukuMision : MonoBehaviour
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
 
+            GetComponent<AudioSource>().Play();
+
             if (isDestroyed)
             {
                 GetComponent<SpriteRenderer>().enabled = false;
