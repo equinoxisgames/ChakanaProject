@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3354432359483531859
 Transform:
   m_ObjectHideFlags: 0
@@ -38,6 +38,7 @@ Transform:
   - {fileID: 628236046967622532}
   - {fileID: 8529676781732042558}
   - {fileID: 357083238060662605}
+  - {fileID: 6293307691400626687}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,8 +171,8 @@ MonoBehaviour:
   gold: 0
   vida: 9000
   defensa: 0
-  ataque: 10
-  ataqueMax: 10
+  ataque: 100
+  ataqueMax: 100
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -195,26 +196,33 @@ MonoBehaviour:
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   fuerzaRecoil: 2
-  speed: 2
-  objetivo: {x: 0, y: 0, z: 0}
-  rangoAtaque: 0
+  speed: 4
   ataqueDisponible: 0
+  objetivo: {x: 0, y: 0, z: 0}
+  rangoAtaque: 1.5
+  rangoPreparacion: 1.5
   atacando: 0
+  siguiendo: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
   direction: 1
-  detectionTime: 0
   posY: 0
-  groundDetector: {fileID: 0}
+  groundDetector: {fileID: 8529676781732042558}
+  wallDetector: {fileID: 6293307691400626687}
   groundLayer:
     serializedVersion: 2
     m_Bits: 131136
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 65536
   daga: {fileID: 0}
-  rangoDeteccion: 8
+  rangoVision: 10
   cooldownAtaque: 2
-  escudo: {fileID: 0}
-  prueba: 0
+  t1: 0.6
+  t2: 1.5
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  distanciaPlayer: 0
+  escudo: {fileID: 0}
 --- !u!1 &3021502075065343536
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,6 +284,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3354432359483531859}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5798353216852167671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6293307691400626687}
+  m_Layer: 0
+  m_Name: WallPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6293307691400626687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5798353216852167671}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3354432359483531859}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6351323459647296350
 GameObject:
@@ -341,7 +380,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 1.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -352,7 +391,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 30, y: 14}
+  m_Size: {x: 20, y: 5}
   m_EdgeRadius: 0
 --- !u!1 &6787275540869854148
 GameObject:
@@ -574,7 +613,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3604778292142709881}
-  - component: {fileID: 3031187231201088836}
+  - component: {fileID: 7398452362810188897}
   m_Layer: 3
   m_Name: Daga
   m_TagString: Untagged
@@ -590,15 +629,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9117162999543257588}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3354432359483531859}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &3031187231201088836
-CapsuleCollider2D:
+--- !u!61 &7398452362810188897
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -630,5 +669,15 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
-  m_Direction: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2}
+  m_EdgeRadius: 0

@@ -7,31 +7,28 @@ using UnityEngine.Playables;
 public class ApallimayEscudo : CharactersBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private bool ataqueDisponible;
     [SerializeField] private Vector3 objetivo;
     [SerializeField] private float rangoAtaque;
-    [SerializeField] private bool ataqueDisponible;
-    //[SerializeField] private GameObject explosion;
+    [SerializeField] private float rangoPreparacion;
     [SerializeField] private bool atacando;
+    [SerializeField] private bool siguiendo;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
     [SerializeField] private float direction = 1;
-    [SerializeField] private float detectionTime = 0;
     [SerializeField] private float posY = 0;
     [SerializeField] Transform groundDetector;
+    [SerializeField] Transform wallDetector;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] private CapsuleCollider2D daga;
-    [SerializeField] private float rangoDeteccion;
+    [SerializeField] LayerMask wallLayer;
+    [SerializeField] private BoxCollider2D daga;
+    [SerializeField] private float rangoVision;
     [SerializeField] private float cooldownAtaque;
-    [SerializeField] private GameObject escudo;
-
-
-    [SerializeField] private bool prueba = false;
+    [SerializeField] private float t1;
+    [SerializeField] private float t2;
     [SerializeField] GameObject deathFX;
-    /*[SerializeField] private GameObject combFX01;
-    [SerializeField] private GameObject combFX02;
-    [SerializeField] private GameObject combFX03;
-
-    private GameObject combObj01, combObj02, combObj03;*/
+    [SerializeField] private float distanciaPlayer;
+    [SerializeField] private GameObject escudo;
 
 
     void Start()
@@ -42,7 +39,7 @@ public class ApallimayEscudo : CharactersBehaviour
         ataqueDisponible = true;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
-        daga = transform.GetChild(2).gameObject.GetComponent<CapsuleCollider2D>();
+        daga = transform.GetChild(2).gameObject.GetComponent<BoxCollider2D>();
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
         objetivo = limit2;
@@ -50,32 +47,26 @@ public class ApallimayEscudo : CharactersBehaviour
         groundDetector = transform.GetChild(4).gameObject.transform;
         escudo = transform.GetChild(5).gameObject;
         vidaMax = vida;
+        rangoVision += 1;
+        rangoPreparacion += 1;
+        rangoAtaque += 1;
+        escudo.SetActive(false);
     }
 
 
     void Update()
     {
-        if (playable)
-        {
-            //Falling();
-        }
-
         Muerte();
-        //Flip();
-
-        // if (transform.position.x < limit1.x || transform.position.x > limit2.x)
-        //{
-        if (!atacando)
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x,
+            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
+            detectarPared();
+        if (Grounded() && !atacando)
         {
-            Flip();
-        }
-        //}
-        detectarPiso();
-
-
-        if (playable && !atacando && Grounded())
-        {
-            Move();
+            detectarPiso(distanciaPlayer, siguiendo);
+            if (playable)
+                Flip();
+            if (playable)
+                Move();
         }
     }
 
@@ -90,19 +81,10 @@ public class ApallimayEscudo : CharactersBehaviour
 
     private void Move()
     {
-
         rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
 
-        if (transform.position.x <= limit1.x)
-        {
-            objetivo = limit2;
-            //Flip();
-        }
-        else if (transform.position.x >= limit2.x)
-        {
-            objetivo = limit1;
-            //Flip();
-        }
+        if (transform.position.x <= limit1.x) objetivo = limit2;
+        else if (transform.position.x >= limit2.x) objetivo = limit1;
     }
 
     private void Flip()
@@ -110,40 +92,46 @@ public class ApallimayEscudo : CharactersBehaviour
         if (transform.position.x < objetivo.x)
         {
             direction = 1;
+            objetivo = limit2;
         }
         else if (transform.position.x > objetivo.x)
         {
             direction = -1;
+            objetivo = limit1;
         }
         transform.localScale = new Vector3(direction, 1, 0);
     }
 
 
-    private IEnumerator Ataque()
+    private IEnumerator Ataque(float direccionAtaque)
     {
-        escudo.SetActive(false);
         rb.velocity = new Vector2(0, rb.velocity.y);
         playable = false;
-        yield return new WaitForSeconds(0.4f);
+        ataqueDisponible = false;
+        //PREPARACION
+        escudo.SetActive(false);
+        yield return new WaitForSeconds(t1);
         atacando = true;
-        rb.AddForce(new Vector2(direction * 12f, 0f), ForceMode2D.Impulse);
+        //rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
         daga.enabled = true;
+        //ATAQUE
         yield return new WaitForSeconds(0.4f);
         atacando = false;
         rb.velocity = new Vector2(0, rb.velocity.y);
         daga.enabled = false;
-        yield return new WaitForSeconds(0.2f);
+        //DESCANSO DEL ATAQUE
+        yield return new WaitForSeconds(t2);
         escudo.SetActive(true);
         playable = true;
-        detectionTime = 0;
+        //ATAQUE DISPONIBLE NUEVAMENTE
+        yield return new WaitForSeconds(cooldownAtaque);
+        ataqueDisponible = true;
     }
-
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 4, rb.gravityScale * 2), ForceMode2D.Impulse);
-        //EstablecerInvulnerabilidades(layerObject);
     }
 
 
@@ -151,7 +139,7 @@ public class ApallimayEscudo : CharactersBehaviour
     {
         base.OnTriggerEnter2D(collider);
 
-        if (collider.gameObject.layer == 14  && !escudo.activeInHierarchy )
+        if (collider.gameObject.layer == 14 && !escudo.activeInHierarchy)
         {
             int direccion = 1;
             if (collider.transform.position.x > gameObject.transform.position.x)
@@ -163,15 +151,10 @@ public class ApallimayEscudo : CharactersBehaviour
                 direccion = 1;
             }
 
-            //if (prueba) {
-            //  rb.AddForce(new Vector2(direccion * 20, 0f), ForceMode2D.Impulse);
-            //Recoil(direccion, 1);
-            //}
             triggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
-                detectionTime = 0;
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
@@ -179,8 +162,7 @@ public class ApallimayEscudo : CharactersBehaviour
         }
         else if (collider.gameObject.layer == 11)
         {
-            //jugadorDetectado = true;
-            rb.velocity = Vector2.zero;
+            //rb.velocity = Vector2.zero;
             return;
         }
 
@@ -195,66 +177,55 @@ public class ApallimayEscudo : CharactersBehaviour
 
         if (collider.gameObject.layer == 11)
         {
-            //jugadorDetectado = true;
-            objetivo = collider.transform.position;
+            float orientacionDeteccion = orientacionDeteccionPlayer(collider.transform.position.x);
+            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoDeteccion)
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
+            if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && /*detectarPiso(distanciaPlayer, true) &&*/ Grounded())
             {
-                detectionTime += Time.deltaTime;
+                escudo.SetActive(true);
+                objetivo = collider.transform.position;
+                siguiendo = true;
+                if (distanciaPlayer <= rangoPreparacion && ataqueDisponible && !atacando && playable)
+                {
+                    StartCoroutine(Ataque(direction));
+                }
             }
-
-            if (detectionTime >= cooldownAtaque && !atacando && playable)
-            {
-                detectionTime = 0;
-                StartCoroutine(Ataque());
+            else {
+                escudo.SetActive(false);
             }
         }
+    }
+
+    float orientacionDeteccionPlayer(float playerPositionX)
+    {
+        if (playerPositionX < transform.position.x)
+        {
+            return -1;
+        }
+        else if (playerPositionX > transform.position.x)
+        {
+            return 1;
+        }
+
+        return playerPositionX;
     }
 
 
     private bool Grounded()
     {
-        if (Physics2D.OverlapCircle(groundDetector.position + Vector3.right * direction, 0.1f, groundLayer))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-
-        }
-    }
-
-    private void Falling()
-    {
-        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
+        return Physics2D.OverlapCircle(groundDetector.position - Vector3.right * transform.localScale.x, 0.2f, groundLayer);
     }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 16)
+
+        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 3 < posY)
         {
-            if (objetivo == limit1)
-            {
-                limit1 = transform.position + Vector3.right * 0.5f;
-                objetivo = limit1;
-                direction = 1;
-            }
-            else if (objetivo == limit2)
-            {
-                limit2 = transform.position - Vector3.right * 0.5f;
-                objetivo = limit2;
-                direction = -1;
-            }
-
-        }
-
-        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
-        {//&& transform.position.y <= posY -1.5f) {
             posY = transform.position.y;
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
+            limit1 = transform.position + Vector3.left * 5.5f;
+            limit2 = transform.position + Vector3.right * 5.5f;
             objetivo = limit2;
 
             if (limit1.x >= limit2.x)
@@ -264,77 +235,70 @@ public class ApallimayEscudo : CharactersBehaviour
                 limit2 = aux;
             }
         }
-
-        if (!collision.gameObject.name.Contains("Enemy"))
+        else if (!collision.gameObject.name.Contains("Enemy"))
         {
             collisionElementos_1_1_1(collision);
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            //rb.bodyType = RigidbodyType2D.Static;
-            //prueba = true;
-
-            //rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-            //rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
-        }
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            //prueba = false;
-            detectionTime = 0;
-
-            posY = transform.position.y;
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
-            objetivo = limit2;
-
-            if (limit1.x >= limit2.x)
-            {
-                Vector3 aux = limit1;
-                limit1 = limit2;
-                limit2 = aux;
-            }
-        }
-    }
-
-    public bool detectarPiso()
+    public bool detectarPiso(float option = 0, bool detectandoPlayer = false)
     {
         if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
         {
-            if (direction == -1)
+            speed = 0;
+            if (!detectandoPlayer)
             {
-                limit1 = transform.position + Vector3.right * 0.1f;
-            }
-            else if (direction == 1)
-            {
-                limit2 = transform.position - Vector3.right * 0.1f;
+                if (direction == -1)
+                {
+                    limit1 = transform.position + Vector3.right * 0.1f;
+                    limit2 = limit1 + Vector3.right * 11;
+                }
+                else if (direction == 1)
+                {
+                    limit2 = transform.position - Vector3.right * 0.1f;
+                    limit1 = limit2 - Vector3.right * 11;
+                }
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 0);
             }
             return false;
         }
+        speed = 4;
         return true;
     }
 
+
+    public void detectarPared()
+    {
+
+        if (transform.localScale.x == -1)
+        {
+            limit1 = transform.position + Vector3.right * 0.5f;
+            objetivo = limit1;
+            limit2 = limit1 + Vector3.right * 11;
+            direction = 1;
+        }
+        else
+        {
+            limit2 = transform.position - Vector3.right * 0.5f;
+            objetivo = limit2;
+            limit1 = limit2 - Vector3.right * 11;
+            direction = -1;
+        }
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 11)
         {
-            //jugadorDetectado = false;
-            detectionTime = 0;
-
+            escudo.SetActive(false);
+            distanciaPlayer = 0;
+            siguiendo = false;
+            speed = 4;
             if (transform.position.x > limit2.x)
             {
                 objetivo = limit1;
             }
-            if (transform.position.x < limit1.x)
+            else if (transform.position.x < limit1.x)
             {
                 objetivo = limit2;
             }
