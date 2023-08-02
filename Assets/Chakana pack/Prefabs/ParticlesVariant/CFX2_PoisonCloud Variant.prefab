@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CFX2_PoisonCloud Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e410ec8ad62ab3f46becd4fc37508a01, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e410ec8ad62ab3f46becd4fc37508a01, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -198,9 +202,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 200
+  MaxDistance: 35
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -233,7 +237,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.8
       inSlope: 0
       outSlope: 0
       tangentMode: 0

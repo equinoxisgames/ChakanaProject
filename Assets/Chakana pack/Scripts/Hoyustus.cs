@@ -614,7 +614,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator habilidadCondor()
     {
-
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         cargaHabilidadCondor = 0f;
         playable = false;
@@ -660,6 +660,8 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza()
     {
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
+
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
@@ -1037,6 +1039,7 @@ public class Hoyustus : CharactersBehaviour
         //TOCANDO PARED PERMITIRA QUE SE DETENGA EL PLAYER SI TRATA DE CAMINAR Y SE TOCA UNA PARED
         //LA AFECTACION DEL VIENTO REDUCIRA SU VELOCIDAD AL ESTAR EN EL AIRE
         rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
+        if (rb.velocity == Vector2.zero) playerAudio.Stop();
     }
 
 
