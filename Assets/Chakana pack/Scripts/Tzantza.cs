@@ -9,23 +9,21 @@ public class Tzantza : CharactersBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool siguiendo = false;
     [SerializeField] private GameObject bolaFuego;
-    //[SerializeField] private GameObject explosion;
     [SerializeField] private Vector3 objetivo;
     [SerializeField] private float rangoAtaque;
+    [SerializeField] private float rangoPreparacion;
+    [SerializeField] private float rangoVision;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private bool atacando;
+    [SerializeField] private float t1;
+    [SerializeField] private float t2;
     [SerializeField] private float cooldownAtaque;
     [SerializeField] GameObject deathFX;
     [SerializeField] AudioClip audioHurt;
+    [SerializeField] private float distanciaMinimaJugador;
 
     AudioSource charAudio;
 
-    /*
-    [SerializeField] protected GameObject combFX01;
-    [SerializeField] protected GameObject combFX02;
-    [SerializeField] protected GameObject combFX03;
-
-    protected GameObject combObj01, combObj02, combObj03;*/
     private void Muerte()
     {
         if (vida <= 0) {
@@ -69,13 +67,16 @@ public class Tzantza : CharactersBehaviour
 
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        ataqueDisponible = false;
-        Instantiate(bolaFuego, transform.position, Quaternion.identity).name += "Enemy";
-        atacando = true;
         playable = false;
         rb.velocity = Vector2.zero;
+        ataqueDisponible = false;
+        yield return new WaitForSeconds(t1);
+        Instantiate(bolaFuego, transform.position, Quaternion.identity).name += "Enemy";
+        atacando = true;
+        //TIEMPO ANIMACION
         yield return new WaitForSeconds(0.5f);
         atacando = false;
+        yield return new WaitForSeconds(t2);
         playable = true;
         yield return new WaitForSeconds(cooldownAtaque);
         ataqueDisponible = true;
@@ -169,7 +170,7 @@ public class Tzantza : CharactersBehaviour
             transform.localScale = Vector3.one;
         }
 
-        if (Vector3.Distance(transform.position, objetivo) > 3.2f)
+        if (Vector3.Distance(transform.position, objetivo) > distanciaMinimaJugador)
         {
             rb.velocity = direction.normalized * movementSpeed * (1 - afectacionViento);
         }
