@@ -147,7 +147,6 @@ public class Chontacuro1 : CharactersBehaviour
             }
             return false;
         }
-        Debug.Log("Testing piso chontacuro");
         return true;
     }
 
