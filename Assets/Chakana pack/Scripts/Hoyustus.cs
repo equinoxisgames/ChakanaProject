@@ -1148,7 +1148,7 @@ public class Hoyustus : CharactersBehaviour
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
-        body.isTrigger = true;
+        //body.isTrigger = true;
         cargaHabilidadSerpiente += aumentoBarraDash;
 
         IEnumerator movimientoDash()
@@ -1165,7 +1165,7 @@ public class Hoyustus : CharactersBehaviour
         isDashing = false;
         playable = true;
         yield return new WaitForEndOfFrame();
-        body.isTrigger = false;
+        //body.isTrigger = false;
         yield return new WaitForSeconds(0.1f);
         QuitarInvulnerabilidades(layerObject);
         //invulnerable = false;
