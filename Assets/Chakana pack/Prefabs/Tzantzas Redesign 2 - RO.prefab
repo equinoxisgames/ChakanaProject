@@ -11158,7 +11158,7 @@ Transform:
   - {fileID: 7018684029103400091}
   - {fileID: 7018684030287714238}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7018684030615050255
 Rigidbody2D:
@@ -11282,17 +11282,25 @@ MonoBehaviour:
   combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
-  fuerzaRecoil: 0
-  movementSpeed: 5
+  fuerzaRecoil: 1
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  rangoVision: 24
+  rangoAtaque: 8
+  rangoPreparacion: 8
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 5
   siguiendo: 0
   bolaFuego: {fileID: 7221523357360615285, guid: fbb9427d2ce9e6746bf1aa33832aacfb, type: 3}
-  objetivo: {x: 0, y: 0, z: 0}
-  rangoAtaque: 8
   ataqueDisponible: 0
   atacando: 0
-  cooldownAtaque: 2.5
-  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  t1: 0.3
+  t2: 0.4
+  cooldownAtaque: 2
   audioHurt: {fileID: 8300000, guid: 1e2b4682a57cc3a4ea6cd01402444720, type: 3}
+  distanciaMinimaJugador: 3.2
 --- !u!82 &5700480995368369420
 AudioSource:
   m_ObjectHideFlags: 0

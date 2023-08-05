@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class Boraro : CharactersBehaviour
+public class Boraro : Enemy
 {
 
     //[SerializeField] private bool applyForce;
-    [SerializeField] private Vector3 objetivo;
-    [SerializeField] private float rangoAtaque;
-    [SerializeField] private float rangoPreparacion;
-    [SerializeField] private float rangoVision;
     [SerializeField] private float tiempoVolteo;
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float t1;
@@ -33,14 +27,8 @@ public class Boraro : CharactersBehaviour
     //[SerializeField] private GameObject campoVision;
     [SerializeField] private GameObject hoyustus;
     [SerializeField] private LayerMask pared;
-    [SerializeField] private LayerMask piso;
     [SerializeField] private bool teletransportandose;
     [SerializeField] private List<GameObject> componentesBoraro = new List<GameObject>();
-
-
-
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private float distancia;
     [SerializeField] private Transform objetivoX;
 
 
@@ -122,8 +110,15 @@ public class Boraro : CharactersBehaviour
         {
             if(!siguiendo && maxTiempoVolteo < tiempoVolteo && !ataqueDisponible)
                 Flip();
-            if(siguiendo && !teletransportandose && playable)
-                Move();
+            if (detectarPiso())
+            {
+                if (siguiendo && !teletransportandose && playable)
+                    Move();
+            }
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
         }
     }
 
@@ -138,10 +133,19 @@ public class Boraro : CharactersBehaviour
         tiempoVolteo = 0;
     }
 
+    public bool detectarPiso()
+    {
+        if (!Physics2D.OverlapCircle(new Vector3(1.8f * transform.localScale.x, -2.75f, 0) + transform.position, 0.2f, groundLayer))
+        {
+            return false;
+        }
+        return true;
+    }
+
 
     void Move()
     {
-        rb.velocity = new Vector2(direction * movementSpeed * (1 - afectacionViento), rb.velocity.y);
+        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
 
         if (transform.position.x <= objetivo.x)
         {
@@ -255,7 +259,7 @@ public class Boraro : CharactersBehaviour
         detectorPiso.transform.position = detectorPared.transform.position + Vector3.down * 1f;
         if (!Physics2D.OverlapArea(detectorPared.transform.position + Vector3.left + Vector3.up,
             detectorPared.transform.position + Vector3.right + Vector3.down, pared) &&
-            Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, piso))
+            Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
         {
 
             //CAMBIO MI ORIENTACIÓN
@@ -330,7 +334,7 @@ public class Boraro : CharactersBehaviour
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
-            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, piso)) {
+            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer)) {
                 rb.velocity = Vector3.zero;
                 //rb.AddForce(new Vector2(-transform.localScale.x * 2f, 0f));
                 //objetivo = transform.position;

@@ -5212,7 +5212,7 @@ Transform:
   - {fileID: 1008283376704437955}
   - {fileID: 1546181713}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &6151585412992654578
 Rigidbody2D:
@@ -5337,10 +5337,18 @@ MonoBehaviour:
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   fuerzaRecoil: 0
-  objetivo: {x: 0, y: 0, z: 0}
+  deathFX: {fileID: 0}
+  rangoVision: 12
   rangoAtaque: 3
   rangoPreparacion: 2
-  rangoVision: 12
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 131136
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 10
   tiempoVolteo: 0
   maxTiempoVolteo: 3
   t1: 0.3
@@ -5357,16 +5365,13 @@ MonoBehaviour:
   garras: {fileID: 0}
   detectorPared: {fileID: 5295233952886841263}
   detectorPiso: {fileID: 4699220226996257333}
+  cuerpo: {fileID: 0}
   hoyustus: {fileID: 0}
   pared:
     serializedVersion: 2
     m_Bits: 65536
-  piso:
-    serializedVersion: 2
-    m_Bits: 131136
   teletransportandose: 0
-  movementSpeed: 10
-  distancia: 0
+  componentesBoraro: []
   objetivoX: {fileID: 0}
   anim: {fileID: 0}
   audioHurt: {fileID: 8300000, guid: 15917ccea2ca1c8408fea67abbf31b6b, type: 3}
