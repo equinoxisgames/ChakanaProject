@@ -1,33 +1,18 @@
-using StylizedWater2;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
-public class ApallimayEscudo : CharactersBehaviour
+public class ApallimayEscudo : Apallimay
 {
-    [SerializeField] private float speed;
-    [SerializeField] private bool ataqueDisponible;
-    [SerializeField] private Vector3 objetivo;
-    [SerializeField] private float rangoAtaque;
-    [SerializeField] private float rangoPreparacion;
     [SerializeField] private bool atacando;
     [SerializeField] private bool siguiendo;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
     [SerializeField] private float direction = 1;
     [SerializeField] private float posY = 0;
-    [SerializeField] Transform groundDetector;
-    [SerializeField] Transform wallDetector;
-    [SerializeField] LayerMask groundLayer;
-    [SerializeField] LayerMask wallLayer;
     [SerializeField] private BoxCollider2D daga;
-    [SerializeField] private float rangoVision;
     [SerializeField] private float cooldownAtaque;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
-    [SerializeField] GameObject deathFX;
-    [SerializeField] private float distanciaPlayer;
     [SerializeField] private GameObject escudo;
 
 
@@ -195,26 +180,6 @@ public class ApallimayEscudo : CharactersBehaviour
                 escudo.SetActive(false);
             }
         }
-    }
-
-    float orientacionDeteccionPlayer(float playerPositionX)
-    {
-        if (playerPositionX < transform.position.x)
-        {
-            return -1;
-        }
-        else if (playerPositionX > transform.position.x)
-        {
-            return 1;
-        }
-
-        return playerPositionX;
-    }
-
-
-    private bool Grounded()
-    {
-        return Physics2D.OverlapCircle(groundDetector.position - Vector3.right * transform.localScale.x, 0.2f, groundLayer);
     }
 
 

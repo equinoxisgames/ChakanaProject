@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3354432359483531859
 Transform:
   m_ObjectHideFlags: 0
@@ -196,32 +196,32 @@ MonoBehaviour:
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   fuerzaRecoil: 2
-  speed: 4
-  ataqueDisponible: 0
-  objetivo: {x: 0, y: 0, z: 0}
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  rangoVision: 10
   rangoAtaque: 1.5
   rangoPreparacion: 1.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 131136
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 4
+  groundDetector: {fileID: 8529676781732042558}
+  wallDetector: {fileID: 6293307691400626687}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 65536
+  distanciaPlayer: 0
+  ataqueDisponible: 0
   atacando: 0
   siguiendo: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
   direction: 1
   posY: 0
-  groundDetector: {fileID: 8529676781732042558}
-  wallDetector: {fileID: 6293307691400626687}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 131136
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 65536
   daga: {fileID: 0}
-  rangoVision: 10
   cooldownAtaque: 2
   t1: 0.6
   t2: 1.5
-  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
-  distanciaPlayer: 0
   escudo: {fileID: 0}
 --- !u!1 &3021502075065343536
 GameObject:

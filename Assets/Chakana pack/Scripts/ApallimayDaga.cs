@@ -1,32 +1,19 @@
 using System;
 using System.Collections;
 using UnityEngine;
-public class ApallimayDaga : CharactersBehaviour
-{
 
-    [SerializeField] private float speed;
-    [SerializeField] private bool ataqueDisponible;
-    [SerializeField] private Vector3 objetivo;
-    [SerializeField] private float rangoAtaque;
-    [SerializeField] private float rangoPreparacion;
+public class ApallimayDaga : Apallimay
+{
     [SerializeField] private bool atacando;
     [SerializeField] private bool siguiendo;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
     [SerializeField] private float direction = 1;
     [SerializeField] private float posY = 0;
-    [SerializeField] Transform groundDetector;
-    [SerializeField] Transform wallDetector;
-    [SerializeField] LayerMask groundLayer;
-    [SerializeField] LayerMask wallLayer;
     [SerializeField] private BoxCollider2D daga;
-    [SerializeField] private float rangoVision;
     [SerializeField] private float cooldownAtaque;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
-    [SerializeField] GameObject deathFX;
-    [SerializeField] private float distanciaPlayer;
-
 
     void Start()
     {
@@ -172,7 +159,7 @@ public class ApallimayDaga : CharactersBehaviour
             float orientacionDeteccion = orientacionDeteccionPlayer(collider.transform.position.x);
             distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
-            Debug.DrawLine(transform.position, collider.transform.position, Color.red) ;
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
             if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && /*detectarPiso(distanciaPlayer, true) &&*/ Grounded())
             {
                 objetivo = collider.transform.position;
@@ -185,23 +172,6 @@ public class ApallimayDaga : CharactersBehaviour
         }
     }
 
-    float orientacionDeteccionPlayer(float playerPositionX) {
-        if (playerPositionX < transform.position.x)
-        {
-            return  -1;
-        }
-        else if (playerPositionX > transform.position.x)
-        {
-            return 1;
-        }
-
-        return playerPositionX;
-    }
-
-
-    private bool Grounded() {
-        return Physics2D.OverlapCircle(groundDetector.position - Vector3.right * transform.localScale.x, 0.2f, groundLayer);
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

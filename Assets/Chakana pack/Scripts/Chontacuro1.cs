@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class Chontacuro1 : CharactersBehaviour
+
+public class Chontacuro1 : Enemy
 {
     private Hoyustus hoyustusPlayerCotroller;
 
@@ -13,27 +9,21 @@ public class Chontacuro1 : CharactersBehaviour
     [SerializeField] public float seguimientoSpeed;
     [SerializeField] public float detectionRadius = 3;
 
-    [SerializeField] private float speed;
     [SerializeField] private float direction = 1;
     [SerializeField] private bool siguiendo = false;
 
-    [SerializeField] private Vector3 limit1, limit2, objetivo;
+    [SerializeField] private Vector3 limit1, limit2;
     [SerializeField] private float posY;
     [SerializeField] int deteccion = 1;
-
-    int pasos = 0;
-
     [SerializeField] Animator anim;
 
     [SerializeField] Transform groundDetector;
-    [SerializeField] LayerMask groundLayer;
+    [SerializeField] Transform wallDetector;
     [SerializeField] bool hayPiso = true;
-    [SerializeField] GameObject deathFX;
     [SerializeField] AudioClip audioHurt;
 
     AudioSource charAudio;
-    //[SerializeField] private GameObject combFX01;
-    //private GameObject combObj01;
+
 
     private void Awake()
     {
@@ -59,10 +49,6 @@ public class Chontacuro1 : CharactersBehaviour
 
     private void ajustarLimites()
     {
-        /*if (transform.localPosition.y <= posY - 3) {
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
-        }*/
 
         if ((int)limit1.x == (int)limit2.x) {
             limit1 = gameObject.transform.position - Vector3.right;
@@ -86,7 +72,6 @@ public class Chontacuro1 : CharactersBehaviour
 
     private void Muerte() {
         Instantiate(deathFX, transform.position, Quaternion.identity);
-
         Destroy(this.gameObject);
     }
 
@@ -94,11 +79,14 @@ public class Chontacuro1 : CharactersBehaviour
     private void FixedUpdate()
     {
         //Move();
-        if (transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) {
+        if (detectarPiso() && (transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x)) {
             Flip();
         }
 
-        detectarPiso();
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x,
+            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
+            detectarPared();
+
         if (playable)
         {
             Move();            
@@ -118,20 +106,55 @@ public class Chontacuro1 : CharactersBehaviour
     }
 
 
+    private void detectarPared() {
+        if (transform.localScale.x == -1)
+        {
+            limit1 = transform.position + Vector3.right;
+            objetivo = limit1;
+            direction = 1;
+        }
+        else
+        {
+            limit2 = transform.position - Vector3.right;
+            objetivo = limit2;
+            direction = -1;
+        }
+
+
+        if (siguiendo)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            speed = 0;
+        }
+        else
+        {
+            speed = movementSpeed;
+        }
+    }
+
+
     private void OnTriggerStay2D(Collider2D collider)
     {
 
         if (collider.gameObject.tag == "Player")
         {
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
             if (!detectarPiso())
             {
                 speed = 0;
             }
-            else {
-
+            else if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
+            {
                 speed = seguimientoSpeed;
                 siguiendo = true;
                 objetivo = collider.transform.position;
+            }
+            else if (Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer)) {
+                siguiendo = false;
+                speed = movementSpeed;
+                deteccion = 1;
             }
         }
     }
@@ -147,7 +170,6 @@ public class Chontacuro1 : CharactersBehaviour
             }
             return false;
         }
-        Debug.Log("Testing piso chontacuro");
         return true;
     }
 
@@ -177,46 +199,26 @@ public class Chontacuro1 : CharactersBehaviour
                     objetivo = limit1;
                 }
             }
-
-
-            /*if (Vector3.Distance(transform.position, limit2) > Vector3.Distance(transform.position, limit1)) {
-                objetivo = limit1;
-            }
-            else
-            {
-                objetivo = limit2;
-            }*/
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 16)
+        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 3 < posY)
         {
-            if (objetivo == limit1) {
-                limit1 = transform.position + Vector3.right;
-                objetivo = limit1;
-                direction = 1;
-            }
-            else if(objetivo == limit2) 
-            {
-                limit2 = transform.position - Vector3.right;
-                objetivo = limit2;
-                direction = -1;
-            }
+            speed = movementSpeed;
+            posY = transform.position.y;
+            limit1 = transform.position + Vector3.left * 5.5f;
+            limit2 = transform.position + Vector3.right * 5.5f;
+            objetivo = limit2;
 
-
-            if (siguiendo)
+            if (limit1.x >= limit2.x)
             {
-                rb.velocity = new Vector2(0, rb.velocity.y);
-                speed = 0;
-            }
-            else {
-                speed = movementSpeed;
+                Vector3 aux = limit1;
+                limit1 = limit2;
+                limit2 = aux;
             }
         }
-
-
     }
 
 

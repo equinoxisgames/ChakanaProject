@@ -1,24 +1,15 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
-public class Tzantza : CharactersBehaviour
+public class Tzantza : Enemy
 {
-    [SerializeField] private float movementSpeed;
     [SerializeField] private bool siguiendo = false;
     [SerializeField] private GameObject bolaFuego;
-    [SerializeField] private Vector3 objetivo;
-    [SerializeField] private float rangoAtaque;
-    [SerializeField] private float rangoPreparacion;
-    [SerializeField] private float rangoVision;
     [SerializeField] private bool ataqueDisponible;
     [SerializeField] private bool atacando;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
     [SerializeField] private float cooldownAtaque;
-    [SerializeField] GameObject deathFX;
     [SerializeField] AudioClip audioHurt;
     [SerializeField] private float distanciaMinimaJugador;
 
@@ -172,7 +163,7 @@ public class Tzantza : CharactersBehaviour
 
         if (Vector3.Distance(transform.position, objetivo) > distanciaMinimaJugador)
         {
-            rb.velocity = direction.normalized * movementSpeed * (1 - afectacionViento);
+            rb.velocity = direction.normalized * speed * (1 - afectacionViento);
         }
         else {
             rb.velocity = Vector2.zero;

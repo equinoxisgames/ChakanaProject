@@ -35,10 +35,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask platformLayer;
     //[SerializeField] LayerMask enemyLayer;
-    [SerializeField] LayerMask transitionLayer;
-    [SerializeField] LayerMask transitionLayer1;
-    [SerializeField] LayerMask transitionLayer2;
-    [SerializeField] LayerMask transitionLayer3;
+    //[SerializeField] LayerMask transitionLayer;
+    //[SerializeField] LayerMask transitionLayer1;
+    //[SerializeField] LayerMask transitionLayer2;
+    //[SerializeField] LayerMask transitionLayer3;
     [Space(5)]
 
     [Header("Roof Checking")]
@@ -81,6 +81,10 @@ public class Hoyustus : CharactersBehaviour
 
 
     [SerializeField] private GameObject menuMuerte;
+
+    //TESTING DE ESCENAS
+    [SerializeField] private GameObject controladorTesting;
+    [SerializeField] private GameObject pantallaCanvas;
     private BoxCollider2D dashBodyTESTING;
 
 
@@ -163,11 +167,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] GameObject skillObj02;
     [SerializeField] GameObject skillObj03;
     [SerializeField] GameObject skillObj04;
-    /*[SerializeField] private GameObject combFX01;
-    [SerializeField] private GameObject combFX02;
-    [SerializeField] private GameObject combFX03;
 
-    private GameObject combObj01, combObj02, combObj03;*/
 
     public void isTocandoPared(int value)
     {
@@ -255,7 +255,7 @@ public class Hoyustus : CharactersBehaviour
     void Start()
     {
         //ESTABLECER FRAME RATE
-        Application.targetFrameRate = 70;
+        Application.targetFrameRate = 90;
 
         limitY = transform.position.y + 2;
 
@@ -289,10 +289,8 @@ public class Hoyustus : CharactersBehaviour
 
 
         //INICIALIZACION DE body Y bodyDash
-        //bodyHoyustus = this.transform.GetChild(0).gameObject;
         dashBody = this.transform.GetChild(0).gameObject;
         body = this.gameObject.GetComponent<CapsuleCollider2D>();
-        //dashBody.SetActive(false);
 
 
         //AudioWalking.Play();
@@ -323,16 +321,21 @@ public class Hoyustus : CharactersBehaviour
 
         SSTEPS = 65;
         //maxVida = vida;
+
+        //TESTING PARA CAMBIO DE NIVEL
+        try {
+            pantallaCanvas = GameObject.Find("-----CANVAS");
+            Instantiate(controladorTesting, pantallaCanvas.transform.position,
+            pantallaCanvas.transform.rotation).transform.SetParent(pantallaCanvas.transform);
+        }
+        catch (Exception e) {
+            Debug.Log("Corregir nombre del Objeto padre del canvas para las pruebas");
+        }
     }
 
 
     void Update()
     {
-        //AudioWalking.Play();
-        //GetInputs();
-        //WalkingControl();
-        //Flip();
-        //Walk(xAxis);
         tocarPared();
 
         if (transform.parent != null)
@@ -340,9 +343,6 @@ public class Hoyustus : CharactersBehaviour
             limitY = transform.position.y + 10f;
         }
 
-        //HABILIDADES ELEMENTALES
-        //Debug.Log(CSTEPS);
-        //Debug.Log(rb.velocity.y);
         if (botonCuracion >= 0.3f)
         {
             botonCuracion = 0f;
@@ -389,13 +389,10 @@ public class Hoyustus : CharactersBehaviour
 
         if (playable)
         {
-            //Walk();
             Falling();
             ataqueLanza();
             Dash();
         }
-        //Debug.Log("Prueba contador de escenas abiertas:" + SceneManager.sceneCount);
-
     }
 
 
@@ -535,11 +532,6 @@ public class Hoyustus : CharactersBehaviour
             StartCoroutine(Muerte());
         }
 
-        if (EventTransition())
-        {
-            //Debug.Log("Disparar Transici n");
-            LoadNextLevel();
-        }
 
         anim.SetBool("Walking", rb.velocity.x != 0);
         anim.SetBool("Grounded", Grounded());
@@ -550,7 +542,6 @@ public class Hoyustus : CharactersBehaviour
         anim.SetInteger("Gold", gold);
         anim.SetBool("Dashing", isDashing);
         anim.SetBool("Atacando", atacando);
-        //anim.SetBool("Curando", curando);
         anim.SetInteger("CA", codigoAtaque);
         anim.SetBool("SecondJump", secondJump);
         anim.SetBool("Jumping", isJumping);
@@ -903,14 +894,6 @@ public class Hoyustus : CharactersBehaviour
 
 
     //***************************************************************************************************
-    //EXIT DE TRIGGERS
-    //***************************************************************************************************
-    private void OnTriggerExit2D(Collider2D collider)
-    {
-    }
-
-
-    //***************************************************************************************************
     //DETECCION SUELO
     //***************************************************************************************************
     public bool Grounded()
@@ -1180,11 +1163,7 @@ public class Hoyustus : CharactersBehaviour
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
         anim.Play("Dash");
-        body.isTrigger = true;
-        //body.enabled = false; **********************************************
-        //dashBody.transform.position = transform.position + Vector3.up; *********************************
-        //dashBody.SetActive(true); **********************************************************************
-        //dashBodyTESTING.enabled = true; **************************************
+        //body.isTrigger = true;
         cargaHabilidadSerpiente += aumentoBarraDash;
 
         IEnumerator movimientoDash()
@@ -1199,13 +1178,9 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
         rb.gravityScale = 2;
         isDashing = false;
-        //dashBody.SetActive(false);**********************************************************************
-        //dashBodyTESTING.enabled = false; *********************************************
-        //body.enabled = true; *******************************************************
-        //bodyHoyustus.SetActive(true);
         playable = true;
         yield return new WaitForEndOfFrame();
-        body.isTrigger = false;
+        //body.isTrigger = false;
         yield return new WaitForSeconds(0.1f);
         QuitarInvulnerabilidades(layerObject);
         //invulnerable = false;
@@ -1225,85 +1200,20 @@ public class Hoyustus : CharactersBehaviour
     {
         if (rb.velocity.y < 0)
         {
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (3f - 1) * Time.deltaTime;
             rb.velocity += Vector2.up * Physics2D.gravity.y * (8f - 1) * Time.deltaTime;
-            //Debug.Log("_rigidbody.velocity.y<0");
         }
         else if (rb.velocity.y > 0 && !Input.GetButtonDown("Jump"))
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (11.5f - 1) * Time.deltaTime;
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (100.5f - 1) * Time.deltaTime;
-            //Debug.Log("_rigidbody.velocity.y >0 && !Input.GetButtonDown()");
         }
 
     }
 
-
-    public bool EventTransition()
-    {
-        //isGrounded = Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer);
-
-        //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
-        {
-            //Debug.Log("transitionLayer " + transitionLayer.ToString());
-            return true;
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer1))
-        {
-            //Debug.Log("transitionLayer1 " + transitionLayer1.ToString());
-            return true;
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
-        {
-            return true;
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
-        {
-            return true;
-
-        }
-        else return false;
-
-    }
 
     public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
         StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
     }
 
-
-    public void LoadNextLevel()
-    {
-
-        string transitionLayerExit;
-
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
-        {
-            transitionLayerExit = "Transition";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer1))
-        {
-            transitionLayerExit = "Transition1";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
-        {
-            transitionLayerExit = "Transition2";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
-        {
-            transitionLayerExit = "Transition3";
-
-        }
-        else transitionLayerExit = "";
-
-        escena = SceneManager.GetActiveScene().name;
-    }
 
     public bool Roofed()
     {

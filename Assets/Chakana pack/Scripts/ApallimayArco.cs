@@ -1,17 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ApallimayArco : CharactersBehaviour
-{
 
-    [SerializeField] private float speed;
+public class ApallimayArco : Apallimay
+{
     [SerializeField] private float rangoAtaqueEspecial;
     [SerializeField] private float cooldownAtaqueEspecial;
     [SerializeField] private float cooldownDisparoFlechas;
-    [SerializeField] private Vector3 objetivo;
-    [SerializeField] private float rangoAtaque;
-    [SerializeField] private bool ataqueDisponible = true;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
@@ -20,10 +15,7 @@ public class ApallimayArco : CharactersBehaviour
     [SerializeField] private bool jugadorDetectado;
     [SerializeField] private float direction = 1;
     [SerializeField] private float posY = 0;
-    [SerializeField] Transform groundDetector;
-    [SerializeField] LayerMask groundLayer;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
-    [SerializeField] GameObject deathFX;
     [SerializeField] private GameObject hoyustus;
 
 
@@ -49,11 +41,12 @@ public class ApallimayArco : CharactersBehaviour
     {
 
         Muerte();
-        Flip();
-        detectarPiso();
-
-        if (!jugadorDetectado && playable)
-            Move();
+        if (Grounded()) {
+            Flip();
+            detectarPiso();
+            if (!jugadorDetectado && playable)
+                Move();
+        }
     }
 
     private void Muerte()
@@ -72,12 +65,10 @@ public class ApallimayArco : CharactersBehaviour
         if (transform.position.x <= limit1.x)
         {
             objetivo = limit2;
-            //Flip();
         }
         else if (transform.position.x >= limit2.x)
         {
             objetivo = limit1;
-            //Flip();
         }
     }
 
@@ -138,8 +129,17 @@ public class ApallimayArco : CharactersBehaviour
         }
         else if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
-            rb.velocity = Vector2.zero;
+            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
+
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
+            if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
+            {
+                jugadorDetectado = true;
+                rb.velocity = Vector2.zero;
+            }
+            else {
+                jugadorDetectado = false;
+            }
             return;
         }
 
@@ -149,32 +149,46 @@ public class ApallimayArco : CharactersBehaviour
         }
     }
 
+
     private void OnTriggerStay2D(Collider2D collider)
     {
 
         if (collider.gameObject.layer == 11)
         {
-            jugadorDetectado = true;
+            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
-            if (collider.transform.position.x <= transform.position.x)
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
+            
+            if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-            else {
-                transform.localScale = new Vector3(1, 1, 1);
-            }
+                jugadorDetectado = true;
+                rb.velocity = Vector3.zero;
+                if (collider.transform.position.x <= transform.position.x)
+                {
+                    transform.localScale = new Vector3(-1, 1, 1);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(1, 1, 1);
+                }
 
 
-            if (Vector3.Distance(transform.position, collider.transform.position) <= rangoAtaqueEspecial && ataqueEspecialDisponible) {
-                atacando = true;
-                realizandoAtaqueEspecial = true;
-                StartCoroutine(AtaqueEspecial());
+                if (distanciaPlayer <= rangoAtaqueEspecial && ataqueEspecialDisponible)
+                {
+                    atacando = true;
+                    realizandoAtaqueEspecial = true;
+                    StartCoroutine(AtaqueEspecial());
+                }
+                else if (ataqueDisponible && !realizandoAtaqueEspecial)
+                {
+                    atacando = true;
+                    ataqueDisponible = false;
+                    StartCoroutine(Ataque(collider.transform.position));
+                }
             }
-            else if (ataqueDisponible && !realizandoAtaqueEspecial)
+            else
             {
-                atacando = true;
-                ataqueDisponible = false;
-                StartCoroutine(Ataque(collider.transform.position));
+                jugadorDetectado = false;
             }
         }
     }
@@ -191,6 +205,7 @@ public class ApallimayArco : CharactersBehaviour
         yield return new WaitForSeconds(0.4f);
         realizandoAtaqueEspecial = false;
         atacando = false;
+        playable = true;
         yield return new WaitForSeconds(cooldownAtaqueEspecial);
         ataqueEspecialDisponible = true;
     }
@@ -252,7 +267,6 @@ public class ApallimayArco : CharactersBehaviour
         }
         return true;
     }
-
 
     private void OnTriggerExit2D(Collider2D collision)
     {

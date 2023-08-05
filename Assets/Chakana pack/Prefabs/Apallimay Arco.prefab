@@ -187,13 +187,25 @@ MonoBehaviour:
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   fuerzaRecoil: 0
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  rangoVision: 0
+  rangoAtaque: 0
+  rangoPreparacion: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 131136
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 65600
+  objetivo: {x: 0, y: 0, z: 0}
   speed: 4
+  groundDetector: {fileID: 0}
+  wallDetector: {fileID: 0}
+  distanciaPlayer: 0
+  ataqueDisponible: 0
   rangoAtaqueEspecial: 3
   cooldownAtaqueEspecial: 5
   cooldownDisparoFlechas: 1
-  objetivo: {x: 0, y: 0, z: 0}
-  rangoAtaque: 0
-  ataqueDisponible: 0
   ataqueEspecialDisponible: 1
   flecha: {fileID: 8113373987107829549, guid: ef78fa7e08bf65248bb1631d875663d2, type: 3}
   atacando: 0
@@ -201,15 +213,8 @@ MonoBehaviour:
   limit2: {x: 0, y: 0, z: 0}
   jugadorDetectado: 0
   direction: 1
-  detectionTime: 0
   posY: 0
-  groundDetector: {fileID: 0}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 131136
-  timeNear: 0
   realizandoAtaqueEspecial: 0
-  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
   hoyustus: {fileID: 0}
 --- !u!212 &586347738180471964
 SpriteRenderer:

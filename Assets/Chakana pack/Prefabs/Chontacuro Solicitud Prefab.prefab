@@ -25516,7 +25516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7165638828952281755
 Transform:
   m_ObjectHideFlags: 0
@@ -25539,8 +25539,9 @@ Transform:
   - {fileID: 7165638829690821465}
   - {fileID: 8114245680163491980}
   - {fileID: 4086364227226373197}
+  - {fileID: 6215895332146038802}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7165638828952281732
 Rigidbody2D:
@@ -25630,24 +25631,31 @@ MonoBehaviour:
   combFX02: {fileID: 0}
   combFX03: {fileID: 0}
   fuerzaRecoil: 0
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
+  rangoVision: 0
+  rangoAtaque: 0
+  rangoPreparacion: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 131136
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 65536
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 0
   movementSpeed: 2
   seguimientoSpeed: 4.8
   detectionRadius: 3
-  speed: 0
   direction: 0
   siguiendo: 0
   limit1: {x: 0, y: 0, z: 0}
   limit2: {x: 0, y: 0, z: 0}
-  objetivo: {x: 0, y: 0, z: 0}
   posY: 0
   deteccion: 1
   anim: {fileID: 0}
   groundDetector: {fileID: 4086364227226373197}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  wallDetector: {fileID: 6215895332146038802}
   hayPiso: 1
-  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
   audioHurt: {fileID: 8300000, guid: 45c1f66e60215c4478a552a3fba5b249, type: 3}
 --- !u!68 &6461231520278799732
 EdgeCollider2D:
@@ -26007,3 +26015,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 20, y: 3}
   m_EdgeRadius: 0
+--- !u!1 &9117529093486942765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6215895332146038802}
+  m_Layer: 3
+  m_Name: wallPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6215895332146038802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9117529093486942765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.3, y: 0.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7165638828952281755}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
