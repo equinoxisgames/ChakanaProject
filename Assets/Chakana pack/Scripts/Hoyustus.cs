@@ -35,10 +35,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask platformLayer;
     //[SerializeField] LayerMask enemyLayer;
-    [SerializeField] LayerMask transitionLayer;
-    [SerializeField] LayerMask transitionLayer1;
-    [SerializeField] LayerMask transitionLayer2;
-    [SerializeField] LayerMask transitionLayer3;
+    //[SerializeField] LayerMask transitionLayer;
+    //[SerializeField] LayerMask transitionLayer1;
+    //[SerializeField] LayerMask transitionLayer2;
+    //[SerializeField] LayerMask transitionLayer3;
     [Space(5)]
 
     [Header("Roof Checking")]
@@ -81,6 +81,10 @@ public class Hoyustus : CharactersBehaviour
 
 
     [SerializeField] private GameObject menuMuerte;
+
+    //TESTING DE ESCENAS
+    [SerializeField] private GameObject controladorTesting;
+    [SerializeField] private GameObject pantallaCanvas;
     private BoxCollider2D dashBodyTESTING;
 
 
@@ -163,6 +167,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] GameObject skillObj02;
     [SerializeField] GameObject skillObj03;
     [SerializeField] GameObject skillObj04;
+
 
     public void isTocandoPared(int value)
     {
@@ -316,6 +321,16 @@ public class Hoyustus : CharactersBehaviour
 
         SSTEPS = 65;
         //maxVida = vida;
+
+        //TESTING PARA CAMBIO DE NIVEL
+        try {
+            pantallaCanvas = GameObject.Find("-----CANVAS");
+            Instantiate(controladorTesting, pantallaCanvas.transform.position,
+            pantallaCanvas.transform.rotation).transform.SetParent(pantallaCanvas.transform);
+        }
+        catch (Exception e) {
+            Debug.Log("Corregir nombre del Objeto padre del canvas para las pruebas");
+        }
     }
 
 
