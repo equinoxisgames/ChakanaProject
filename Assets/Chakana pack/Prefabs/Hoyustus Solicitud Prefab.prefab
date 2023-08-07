@@ -283,18 +283,6 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 131072
-  transitionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  transitionLayer1:
-    serializedVersion: 2
-    m_Bits: 256
-  transitionLayer2:
-    serializedVersion: 2
-    m_Bits: 512
-  transitionLayer3:
-    serializedVersion: 2
-    m_Bits: 1024
   roofTransform: {fileID: 1103388191273375783}
   roofCheckY: 0.2
   roofCheckX: 1
@@ -647,7 +635,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8219284701690621551}
-  - component: {fileID: 2573068212317161316}
   - component: {fileID: 4295587534955603985}
   - component: {fileID: 2998988625730628302}
   m_Layer: 14
@@ -672,18 +659,6 @@ Transform:
   m_Father: {fileID: 3246166418984944529}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2573068212317161316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4731999492176801590}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deaf4e5ba2b77ab4ea50d3933827a4ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &4295587534955603985
 AudioSource:
   m_ObjectHideFlags: 0

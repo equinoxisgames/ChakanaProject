@@ -654,6 +654,7 @@ public class Hoyustus : CharactersBehaviour
         EstablecerInvulnerabilidades(layerObject);
         invulnerable = true;
         cargaCuracion += 30;
+        //isDashing = true;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         atacando = true;
@@ -661,11 +662,9 @@ public class Hoyustus : CharactersBehaviour
         realizandoHabilidadLanza = true;
         cargaHabilidadLanza = 0f;
         playable = false;
-        body.enabled = false;
+        //body.enabled = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-
-        Physics2D.IgnoreLayerCollision(3, 11, true);
 
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
@@ -680,19 +679,20 @@ public class Hoyustus : CharactersBehaviour
             yield return new WaitForSeconds(1);
             rb.velocity = Vector2.zero;
             realizandoHabilidadLanza = false;
+            //isDashing = false;
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
-        Physics2D.IgnoreLayerCollision(3, 11, true);
         atacando = false;
         codigoAtaque = 0;
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
         invulnerable = false;
-        body.enabled = true;
+        //body.enabled = true;
         realizandoHabilidadLanza = false;
         playable = true;
+        //isDashing = false;
         rb.gravityScale = 2f;
         ataque = valorAtaqueNormal;
         ataque = ataqueMax;
@@ -815,7 +815,7 @@ public class Hoyustus : CharactersBehaviour
 
             try
             {
-                //DETECCION DE DEL CUERPO DEL ENEMIGO
+                //DETECCION DEL CUERPO DEL ENEMIGO
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
