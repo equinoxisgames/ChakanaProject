@@ -1,11 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cinemachine;
-using Unity.VisualScripting;
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 
 
@@ -1044,7 +1040,7 @@ public class Hoyustus : CharactersBehaviour
     private void ataqueLanza()
     {
 
-        if (ataqueAvailable && Input.GetButtonDown("Atacar"))
+        if (ataqueAvailable && Input.GetButtonDown("Atacar") && playable)
         {
             atacando = true;
             //playable = false;

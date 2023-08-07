@@ -62,7 +62,9 @@ public class Tzantza : Enemy
         rb.velocity = Vector2.zero;
         ataqueDisponible = false;
         yield return new WaitForSeconds(t1);
-        Instantiate(bolaFuego, transform.position, Quaternion.identity).name += "Enemy";
+        GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
+        bolaFuegoGenerada.name += "Enemy";
+        bolaFuegoGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
         atacando = true;
         //TIEMPO ANIMACION
         yield return new WaitForSeconds(0.5f);
