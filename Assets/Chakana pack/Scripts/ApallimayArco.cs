@@ -86,6 +86,7 @@ public class ApallimayArco : Apallimay
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
         flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
         flechaGenerada.name += "Enemy";
+        flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
         atacando = true;
         //TIEMPO DE ANIMACION/PREPARACION
         yield return new WaitForSeconds(0.4f);

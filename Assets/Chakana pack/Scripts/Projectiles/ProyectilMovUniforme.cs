@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BolaFuego : MonoBehaviour
+public class ProyectilMovUniforme : MonoBehaviour
 {
     private Vector3 hoyustus;
     private Rigidbody2D rb;
     private float tiempoEliminacion = 5f;
+    private float danio;
 
     void Start()
     {
@@ -32,13 +33,16 @@ public class BolaFuego : MonoBehaviour
         rb.velocity = direction.normalized * 20;
     }
 
+    public void setDanio(float danio) {
+        this.danio = danio;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == 6 || collision.gameObject.layer == 16)
         {
             if (collision.gameObject.CompareTag("Player") && !collision.gameObject.GetComponent<Hoyustus>().isInvulnerable()) {
-                collision.gameObject.GetComponent<Hoyustus>().recibirDanio(15);
+                collision.gameObject.GetComponent<Hoyustus>().recibirDanio(danio);
                 collision.gameObject.GetComponent<Hoyustus>().ejecucionCorrutinaPrueba((transform.position.x <= collision.transform.position.x) ? 1 : -1, 2f);
 
             }

@@ -36,7 +36,7 @@ Transform:
   - {fileID: 627248764119676890}
   - {fileID: 627248763571091568}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &627248762632895298
 SpriteRenderer:
@@ -130,16 +130,32 @@ MonoBehaviour:
   combFX02: {fileID: 0}
   combFX03: {fileID: 0}
   fuerzaRecoil: 0
+  deathFX: {fileID: 0}
+  rangoVision: 0
+  rangoAtaque: 0
+  rangoPreparacion: 6
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 0
   persiguiendo: 0
   atacando: 0
   cambiandoPlataforma: 0
-  rangoAtaqueCuerpo: 0
+  t1: 0.5
+  t2: 1
   tiempoDentroRango: 0
   tiempoFueraRango: 0
   minX: 0
   maxX: 0
   xObjetivo: 0
   ataqueDisponible: 0
+  ataqueCuerpo: {fileID: 0}
+  campoVision: {fileID: 0}
+  cuerpo: {fileID: 0}
   movementVelocity: 6
   valorAtaqueBasico: 20
   valorAtaqueEspecial: 30
@@ -148,6 +164,7 @@ MonoBehaviour:
   nuevaPlataforma: 0
   plataformaActual: 0
   charcoVeneno: {fileID: 8081575625336725374, guid: 3f708db572fd8254fbdd12681c730e63, type: 3}
+  plantaVeneno: {fileID: 180760010574049810, guid: 1ab353cd6d8b22649879576b95489255, type: 3}
   usandoAtaqueEspecial: 0
   ataqueEspecialDisponible: 1
   cambioPlataformaDisponible: 1
@@ -156,6 +173,12 @@ MonoBehaviour:
   audioHurt: {fileID: 8300000, guid: 7b4d9fb14f223de419b31e8a0b1aeee5, type: 3}
   audioAtk: {fileID: 8300000, guid: a7eca54cf13ef104a992e4112f217f78, type: 3}
   audioScream: {fileID: 8300000, guid: 46b7ef0821fb5004b8a4e74dc3b86619, type: 3}
+  danioPlantaVeneno: 80
+  xCharco: 10
+  yCharco: 1
+  escala: 3
+  rangoCercania: 12
+  reduccionTiempoAtaqueDistancia: 0
 --- !u!50 &627248762632895300
 Rigidbody2D:
   serializedVersion: 4
@@ -379,7 +402,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.25, y: -0.2}
+  m_Offset: {x: 1, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -390,7 +413,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.5, y: 1.5}
+  m_Size: {x: 2, y: 1.9}
   m_EdgeRadius: 0
 --- !u!50 &627248763571091566
 Rigidbody2D:
@@ -494,5 +517,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 2}
+  m_Size: {x: 30, y: 2}
   m_EdgeRadius: 0
