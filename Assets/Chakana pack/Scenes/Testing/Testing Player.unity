@@ -6623,7 +6623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595062070234725047, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1768239101035504340, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_RootOrder
@@ -9056,7 +9056,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 0
-  defensa: 0
   ataque: 0
   ataqueMax: 0
   estadoViento: 0
@@ -9071,7 +9070,6 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: ExplosionPlayer
-  inmuneDash: 0
   vientoFX: {fileID: 0}
   fuegoFX: {fileID: 0}
   venenoFX: {fileID: 0}
@@ -9092,8 +9090,6 @@ MonoBehaviour:
   secondJump: 0
   groundCheckRadius: 0.1
   groundTransform: {fileID: 98869706}
-  groundCheckY: 0.2
-  groundCheckX: 1
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -9103,9 +9099,6 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 0
-  roofTransform: {fileID: 98869706}
-  roofCheckY: 0.2
-  roofCheckX: 1
   anim: {fileID: 0}
   AudioWalking: {fileID: 0}
   AudioJump: {fileID: 0}
@@ -9134,9 +9127,6 @@ MonoBehaviour:
   tocandoPared: 1
   timeDashCooldown: 0.6
   dashAvailable: 1
-  bodyHoyustus: {fileID: 0}
-  dashBody: {fileID: 0}
-  body: {fileID: 0}
   isDashing: 0
   atacando: 0
   codigoAtaque: 0
@@ -9156,7 +9146,6 @@ MonoBehaviour:
   danioExplosionCombinacionFuego_Veneno: 35
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 0}
-  roofPoint: {fileID: 0}
   botonCuracion: 0
   aplastarBotonCuracion: 0
   realizandoHabilidadLanza: 0
@@ -10874,7 +10863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 180760010574049810, guid: 1ab353cd6d8b22649879576b95489255, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 532546741722964781, guid: 1ab353cd6d8b22649879576b95489255, type: 3}
       propertyPath: m_RootOrder

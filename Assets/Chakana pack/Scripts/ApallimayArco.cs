@@ -163,7 +163,8 @@ public class ApallimayArco : Apallimay
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
-                rb.velocity = Vector3.zero;
+                if(playable)
+                    rb.velocity = Vector3.zero;
                 if (collider.transform.position.x <= transform.position.x)
                 {
                     transform.localScale = new Vector3(-1, 1, 1);
@@ -229,6 +230,10 @@ public class ApallimayArco : Apallimay
                 direction = -1;
             }
 
+        }
+        else if(collision.gameObject.layer == 11)
+        {
+            rb.velocity = Vector2.zero;
         }
 
         if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)

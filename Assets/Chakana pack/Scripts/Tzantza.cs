@@ -30,7 +30,6 @@ public class Tzantza : Enemy
         rb = GetComponent<Rigidbody2D>();
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
-        //bolaFuego = Resources.Load<GameObject>("BolaVeneno");
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
@@ -53,7 +52,6 @@ public class Tzantza : Enemy
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 8, 0.5f), ForceMode2D.Impulse);
-        //EstablecerInvulnerabilidades(layerObject);
     }
 
 

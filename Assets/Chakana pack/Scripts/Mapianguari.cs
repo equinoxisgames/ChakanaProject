@@ -36,8 +36,6 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool ataqueEspecialDisponible = true;
-    [SerializeField] private bool cambioPlataformaDisponible = true;
-    //[SerializeField] private float timerAtaqueEspecial = 0f;
     [SerializeField] private LiquidBar lifeBar;
     [SerializeField] AudioClip audioHurt;
     [SerializeField] AudioClip audioAtk;
@@ -126,25 +124,9 @@ public class Mapianguari : Enemy
 
     void Update()
     {
-        //timerAtaqueEspecial += Time.deltaTime;
 
         if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
-            /*if (segundaEtapa && timerAtaqueEspecial > 5)
-            {
-                System.Random aux = new System.Random();
-                int posibilidadAtaqueEspecial = aux.Next(0, 2);
-                Debug.Log(posibilidadAtaqueEspecial);
-                if (posibilidadAtaqueEspecial == 1)
-                {
-                    //ATAQUE ESPECIAL
-                    StartCoroutine(ataqueEspecial());
-                }
-            }*/
-            //else if(cambioPlataformaDisponible){
-                cambioPlataformaDisponible = false;
-                StartCoroutine(cambioPlataforma());
-
-            //}           
+            StartCoroutine(cambioPlataforma());       
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (!usandoAtaqueEspecial && xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
@@ -191,7 +173,7 @@ public class Mapianguari : Enemy
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        if (collider.gameObject.tag == "Viento" && !collider.gameObject.name.Contains("Enemy"))
+        if (collider.gameObject.CompareTag("Viento") && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoViento)
             {
@@ -213,7 +195,7 @@ public class Mapianguari : Enemy
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego" && !collider.gameObject.name.Contains("Enemy"))
+        else if (collider.gameObject.CompareTag("Fuego") && !collider.gameObject.name.Contains("Enemy"))
         {
             if (estadoFuego)
             {
@@ -254,6 +236,7 @@ public class Mapianguari : Enemy
             counterEstados = 10;
             aumentoFuegoPotenciado = 3;
             ataque = ataqueMax * 0.75f;
+            StopCoroutine("afectacionEstadoViento");
             StopCoroutine("afectacionEstadoFuego");
             StartCoroutine("afectacionEstadoFuego");
         }
@@ -264,7 +247,7 @@ public class Mapianguari : Enemy
     private void OnTriggerStay2D(Collider2D collider){
 
         //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
-        if (!usandoAtaqueEspecial && collider.gameObject.tag == "Player")
+        if (!usandoAtaqueEspecial && collider.gameObject.CompareTag("Player"))
         {
             xObjetivo = collider.transform.position.x;
             float distanciaPlayer = 0;
@@ -311,7 +294,7 @@ public class Mapianguari : Enemy
 
     private void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Player") {
+        if (collider.gameObject.CompareTag("Player")) {
             //SIGNIFICARIA QUE EL PLAYER ESTA EN OTRA PLATAFORMA
             tiempoDentroRango = 0;
             tiempoFueraRango = 0;
@@ -522,23 +505,23 @@ public class Mapianguari : Enemy
             //POSICIONES ALEATORIAS
 
             //y -99 -72 x -58 -12
-            System.Random aux = new System.Random();
+            triggerProbabilidad = new System.Random();
             GameObject bolaVenenoGenerada = null;
 
             //EL VALOR CORRESPONDE A LA PLATAFORMA EN LA QUE SE GENERARA
-            switch (aux.Next(0, 4))
+            switch (triggerProbabilidad.Next(0, 4))
             {
                 case 0:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-36, -7), aux.Next(-99, -96), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-36, -7), triggerProbabilidad.Next(-99, -96), 0), Quaternion.identity);
                     break;
                 case 1:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-91, -88), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -10), triggerProbabilidad.Next(-91, -88), 0), Quaternion.identity);
                     break;
                 case 2:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-59, -31), aux.Next(-83, -80), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-59, -31), triggerProbabilidad.Next(-83, -80), 0), Quaternion.identity);
                     break;
                 case 3:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(aux.Next(-38, -10), aux.Next(-75, -72), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -10), triggerProbabilidad.Next(-75, -72), 0), Quaternion.identity);
                     break;
             }
             bolaVenenoGenerada.name += "Enemy";
@@ -617,8 +600,8 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
-        System.Random aux = new System.Random();
-        int posicionTeletransporteX = aux.Next((int)minX, (int)maxX) + 1;
+        triggerProbabilidad = new System.Random();
+        int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
         yield return new WaitForSeconds(0.5f); 
         //REAPARECE "SALE DE LOS ARBOLES"
@@ -627,10 +610,9 @@ public class Mapianguari : Enemy
         tiempoFueraRango = 0;
         ataqueDisponible = true;
         usandoAtaqueEspecial = false;
-        cambioPlataformaDisponible = true;
 
         //SEGUNDA ETAPA || PROBABILIDAD DE 50% en la primera etapa
-        if (segundaEtapa || aux.Next(0, 2) == 0) {
+        if (segundaEtapa || triggerProbabilidad.Next(0, 2) == 0) {
             StartCoroutine(ataqueDistancia());
         }
     }
