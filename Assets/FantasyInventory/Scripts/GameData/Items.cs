@@ -63,7 +63,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 {
                     Type = ItemType.Weapon,
                     Tags = new List<ItemTag> { ItemTag.Bow, ItemTag.TwoHanded },
-                    Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 15) },
+                    Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 15), new Property(PropertyId.RestoreHealth, 100) },
                     Price = 2000
                 }
             },
