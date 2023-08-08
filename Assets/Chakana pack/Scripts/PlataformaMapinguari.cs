@@ -26,7 +26,7 @@ public class PlataformaMapinguari : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player" && collision.gameObject.transform.position.y -0.1f > transform.position.y) {
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.transform.position.y -0.1f > transform.position.y) {
             boss.nuevaPlataforma = plataforma;
             boss.minX= minX;
             boss.maxX= maxX;

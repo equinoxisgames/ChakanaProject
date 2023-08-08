@@ -3,23 +3,18 @@ using UnityEngine;
 
 public class Chontacuro1 : Enemy
 {
-    private Hoyustus hoyustusPlayerCotroller;
-
     [SerializeField] public float movementSpeed;
     [SerializeField] public float seguimientoSpeed;
-    [SerializeField] public float detectionRadius = 3;
 
     [SerializeField] private float direction = 1;
     [SerializeField] private bool siguiendo = false;
 
     [SerializeField] private Vector3 limit1, limit2;
     [SerializeField] private float posY;
-    [SerializeField] int deteccion = 1;
     [SerializeField] Animator anim;
 
     [SerializeField] Transform groundDetector;
     [SerializeField] Transform wallDetector;
-    [SerializeField] bool hayPiso = true;
     [SerializeField] AudioClip audioHurt;
 
     AudioSource charAudio;
@@ -35,9 +30,7 @@ public class Chontacuro1 : Enemy
     void Start()
     {
         fuerzaRecoil = 1;
-        inmuneDash = true;
         explosionInvulnerable = "ExplosionEnemy";
-        hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
         speed = movementSpeed;
 
         limit1 = transform.GetChild(0).gameObject.transform.position;
@@ -46,25 +39,6 @@ public class Chontacuro1 : Enemy
         layerObject = transform.gameObject.layer;
         posY = transform.localPosition.y;
     }
-
-    private void ajustarLimites()
-    {
-
-        if ((int)limit1.x == (int)limit2.x) {
-            limit1 = gameObject.transform.position - Vector3.right;
-            limit2 = gameObject.transform.position + Vector3.right;
-        }
-
-        if (limit1.x > limit2.x){
-            limit1 = gameObject.transform.position - Vector3.right;
-            limit2 = gameObject.transform.position + Vector3.right;
-            Vector3 aux = limit1;
-            limit1 = limit2;
-            limit2 = aux;
-        }
-
-    }
-
 
     private void Falling() {
         rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
@@ -78,8 +52,8 @@ public class Chontacuro1 : Enemy
 
     private void FixedUpdate()
     {
-        //Move();
-        if (detectarPiso() && (transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x)) {
+        detectarPiso();
+        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) && detectarPiso()) {
             Flip();
         }
 
@@ -101,8 +75,6 @@ public class Chontacuro1 : Enemy
         {
             Muerte();
         }
-
-        ajustarLimites();
     }
 
 
@@ -136,10 +108,11 @@ public class Chontacuro1 : Enemy
     private void OnTriggerStay2D(Collider2D collider)
     {
 
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.CompareTag("Player"))
         {
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!detectarPiso())
+            if (!detectarPiso() && !Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
             {
                 speed = 0;
             }
@@ -154,7 +127,6 @@ public class Chontacuro1 : Enemy
                 Vector3.Distance(transform.position, collider.transform.position), wallLayer)) {
                 siguiendo = false;
                 speed = movementSpeed;
-                deteccion = 1;
             }
         }
     }
@@ -175,10 +147,9 @@ public class Chontacuro1 : Enemy
 
     private void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Player") {
+        if (collider.gameObject.CompareTag("Player")) {
             siguiendo = false;
             speed = movementSpeed;
-            deteccion = 1;
             if (transform.position.x >= collider.transform.position.x) {
                 if (transform.position.x < limit1.x)
                 {
@@ -225,36 +196,24 @@ public class Chontacuro1 : Enemy
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-        //EstablecerInvulnerabilidades(layerObject);
+        rb.AddForce(new Vector2(-direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
     }
 
 
     private void Move()
     {
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento) * deteccion, rb.velocity.y);
+        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
 
         if (!siguiendo) { 
-            if (transform.position.x <= limit1.x)
-            {
-                objetivo = limit2;
-            }
-            else if (transform.position.x >= limit2.x)
-            {
-                objetivo = limit1;
-            }
+            if (transform.position.x <= limit1.x) objetivo = limit2;
+            else if (transform.position.x >= limit2.x) objetivo = limit1;
         }
     }
 
     private void Flip() {
-        if (transform.position.x < objetivo.x)
-        {
-            direction = 1;
-        }
-        else if (transform.position.x > objetivo.x)
-        {
-            direction = -1;
-        }
+        if (transform.position.x < objetivo.x) direction = 1;
+        else if (transform.position.x > objetivo.x) direction = -1;
+
         transform.localScale = new Vector3(direction, 1, 0);
     }
 
@@ -265,40 +224,21 @@ public class Chontacuro1 : Enemy
 
         if (collider.gameObject.layer == 14 && playable)
         {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-               direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
-
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
-            if (collider.transform.parent != null)
-            {
-                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
-                charAudio.loop = false;
-                charAudio.Stop();
-                charAudio.clip = audioHurt;
-                charAudio.Play();
-            }
+            StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
+            collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+            recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            charAudio.loop = false;
+            charAudio.Stop();
+            charAudio.clip = audioHurt;
+            charAudio.Play();
         }
 
-
-
-        if (collider.gameObject.tag == "Viento" && !collider.gameObject.name.Contains("Enemy"))
+        if (collider.gameObject.CompareTag("Viento") && !collider.gameObject.name.Contains("Enemy"))
         {
-            if (estadoViento)
-            {
-                StopCoroutine("afectacionEstadoViento");
-            }
+            if (estadoViento) StopCoroutine("afectacionEstadoViento");
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
-                //StartCoroutine("combinacionesElementales");
                 this.combinacionesElementales();
                 return;
             }
@@ -306,17 +246,12 @@ public class Chontacuro1 : Enemy
             counterEstados = 1;
             StartCoroutine("afectacionEstadoViento");
         }
-        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego" && !collider.gameObject.name.Contains("Enemy"))
+        else if (collider.gameObject.CompareTag("Fuego") && !collider.gameObject.name.Contains("Enemy"))
         {
-            if (estadoFuego)
-            {
-                StopCoroutine("afectacionEstadoFuego");
-            }
+            if (estadoFuego) StopCoroutine("afectacionEstadoFuego");
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
-                //StartCoroutine("combinacionesElementales");
                 combinacionesElementales();
                 return;
             }
@@ -331,9 +266,7 @@ public class Chontacuro1 : Enemy
     {
         if (counterEstados == 11)
         {
-            //VIENTO - FUEGO
-
-            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+             if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
 
             estadoViento = false;
             afectacionViento = 0;
@@ -344,7 +277,5 @@ public class Chontacuro1 : Enemy
             estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
         }
-        //yield return new WaitForEndOfFrame();
     }
-
 }

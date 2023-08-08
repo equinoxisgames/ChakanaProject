@@ -101,13 +101,13 @@ public class ApallimayEscudo : Apallimay
         daga.enabled = true;
         //ATAQUE
         yield return new WaitForSeconds(0.4f);
-        atacando = false;
         rb.velocity = new Vector2(0, rb.velocity.y);
         daga.enabled = false;
         //DESCANSO DEL ATAQUE
         yield return new WaitForSeconds(t2);
         escudo.SetActive(true);
         playable = true;
+        atacando = false;
         //ATAQUE DISPONIBLE NUEVAMENTE
         yield return new WaitForSeconds(cooldownAtaque);
         ataqueDisponible = true;
@@ -116,7 +116,7 @@ public class ApallimayEscudo : Apallimay
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 4, rb.gravityScale * 2), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
     }
 
 
@@ -168,7 +168,8 @@ public class ApallimayEscudo : Apallimay
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
             if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && /*detectarPiso(distanciaPlayer, true) &&*/ Grounded())
             {
-                escudo.SetActive(true);
+                if(playable)
+                    escudo.SetActive(true);
                 objetivo = collider.transform.position;
                 siguiendo = true;
                 if (distanciaPlayer <= rangoPreparacion && ataqueDisponible && !atacando && playable)

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Boraro : Enemy
 {
-
-    //[SerializeField] private bool applyForce;
     [SerializeField] private float tiempoVolteo;
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float t1;
@@ -24,20 +22,15 @@ public class Boraro : Enemy
     [SerializeField] private GameObject detectorPared;
     [SerializeField] private GameObject detectorPiso;
     [SerializeField] private CapsuleCollider2D cuerpo;
-    //[SerializeField] private GameObject campoVision;
     [SerializeField] private GameObject hoyustus;
     [SerializeField] private LayerMask pared;
     [SerializeField] private bool teletransportandose;
     [SerializeField] private List<GameObject> componentesBoraro = new List<GameObject>();
     [SerializeField] private Transform objetivoX;
-
-
-
     [SerializeField] Animator anim;
     [SerializeField] AudioClip audioHurt;
 
     AudioSource charAudio;
-    Transform player;
 
     private void Awake()
     {
@@ -55,10 +48,8 @@ public class Boraro : Enemy
         explosion = Resources.Load<GameObject>("Explosion");
         detectorPared = transform.GetChild(transform.childCount - 3).GameObject();
         garras = transform.GetChild(transform.childCount - 2).GameObject();
-        //campoVision = transform.GetChild(transform.childCount - 1).GameObject();
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         objetivo = transform.position;
-        //player = GameObject.FindGameObjectWithTag("Player").transform;
         rangoVision += 1;
         rangoPreparacion += 1;
         rangoAtaque += 1;
@@ -76,7 +67,6 @@ public class Boraro : Enemy
     {
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 5.5f, rb.gravityScale * 2), ForceMode2D.Impulse);
-        //EstablecerInvulnerabilidades(layerObject);
     }
 
 
@@ -262,7 +252,7 @@ public class Boraro : Enemy
             Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
         {
 
-            //CAMBIO MI ORIENTACIÓN
+            //CAMBIO LA ORIENTACIÓN
             //ANALIZO LA ORIENTACIÓN
             float aux = hoyustus.transform.localScale.x;
             transform.position = objetivo - Vector3.right * aux;
@@ -290,7 +280,6 @@ public class Boraro : Enemy
     {
         visible = false;
         teletransportandose = true;
-        //campoVision.SetActive(false);
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;
         cuerpo.enabled = false;
@@ -304,7 +293,6 @@ public class Boraro : Enemy
     {
         visible = true;
         teletransportandose = false;
-        //campoVision.SetActive(true);
         this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
         foreach (GameObject g in componentesBoraro)
         {
@@ -336,9 +324,6 @@ public class Boraro : Enemy
         for (int i = 0; i < 4; i++) {
             if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer)) {
                 rb.velocity = Vector3.zero;
-                //rb.AddForce(new Vector2(-transform.localScale.x * 2f, 0f));
-                //objetivo = transform.position;
-                i = 4;
                 break;
             }
             rb.AddForce(new Vector2(6f * direction, 0), ForceMode2D.Impulse);

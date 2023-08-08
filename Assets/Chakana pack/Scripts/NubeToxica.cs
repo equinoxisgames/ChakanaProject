@@ -63,7 +63,6 @@ public class NubeToxica : MonoBehaviour
     }
 
     private IEnumerator daniarPlayer() {
-        Debug.Log("c");
         hoyustus.recibirDanio(25);
         yield return new WaitForSeconds(1f);
         danioPlayerDisponible = true;
@@ -72,7 +71,7 @@ public class NubeToxica : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             signoVisibilidad = 1;        
         }
@@ -80,7 +79,7 @@ public class NubeToxica : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             signoVisibilidad = -1;
         }

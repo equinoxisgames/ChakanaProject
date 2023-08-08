@@ -7,7 +7,6 @@ public class CharactersBehaviour : MonoBehaviour
     [Header("Atributos Basicos")]
     [SerializeField] protected int gold;
     [SerializeField] protected float vida;
-    [SerializeField] protected float defensa;
     [SerializeField] protected float ataque;
     [SerializeField] protected float ataqueMax;
     [Space(5)]
@@ -28,7 +27,6 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected bool invulnerable = false;
     [SerializeField] protected bool playable = true;
     [SerializeField] protected string explosionInvulnerable;
-    [SerializeField] protected bool inmuneDash = false;
 
     [SerializeField] protected GameObject vientoFX;
     [SerializeField] protected GameObject fuegoFX;
@@ -73,7 +71,6 @@ public class CharactersBehaviour : MonoBehaviour
         //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
         yield return new WaitForSeconds(0.5f);
         QuitarInvulnerabilidades(layerObject);
-        //this.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
 
@@ -117,21 +114,10 @@ public class CharactersBehaviour : MonoBehaviour
         //LAYER EXPLOSION
         if ((collider.gameObject.layer == 12 && !invulnerable && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
         {
-            //direccion nos dara la orientacion de recoil al sufrir danio
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
             triggerElementos_1_1_1(collider);
             recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
             return;
-            //StartCoroutine(cooldownInvulnerabilidadExplosiones());
         }
 
     }
@@ -168,7 +154,8 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoFuego()
     {
-        if (transform.tag == "Player")
+        estadoFuego = true;
+        if (transform.CompareTag("Player"))
         {
             Vector3 newPos = transform.position;
             newPos.y -= 0.75f;
@@ -284,7 +271,7 @@ public class CharactersBehaviour : MonoBehaviour
     protected void collisionElementos_1_1_1(Collision2D collider)
     {
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        if (collider.gameObject.tag == "Viento")
+        if (collider.gameObject.CompareTag("Viento"))
         {
             //REINICIO ESTADO VIENTO
             if (estadoViento)
@@ -310,7 +297,7 @@ public class CharactersBehaviour : MonoBehaviour
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
+        else if (collider.gameObject.CompareTag("Fuego"))
         {
             //REINICIO ESTADO FUEGO
             if (estadoFuego)
@@ -335,7 +322,7 @@ public class CharactersBehaviour : MonoBehaviour
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
-        else if (collider.gameObject.tag == "Veneno")
+        else if (collider.gameObject.CompareTag("Veneno"))
         {
             //REINICIO ESTADO VENENO
             if (estadoVeneno)
@@ -364,7 +351,7 @@ public class CharactersBehaviour : MonoBehaviour
     protected void triggerElementos_1_1_1(Collider2D collider)
     {
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
-        if (collider.gameObject.tag == "Viento")
+        if (collider.gameObject.CompareTag("Viento"))
         {
             //REINICIO ESTADO VIENTO
             if (estadoViento)
@@ -390,7 +377,7 @@ public class CharactersBehaviour : MonoBehaviour
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
-        else if (collider.gameObject.tag == "Fuego")
+        else if (collider.gameObject.CompareTag("Fuego"))
         {
             //REINICIO ESTADO FUEGO
             if (estadoFuego)
@@ -415,7 +402,7 @@ public class CharactersBehaviour : MonoBehaviour
         }
 
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VENENO
-        else if (collider.gameObject.tag == "Veneno")
+        else if (collider.gameObject.CompareTag("Veneno"))
         {
             //REINICIO ESTADO VENENO
             if (estadoVeneno)
