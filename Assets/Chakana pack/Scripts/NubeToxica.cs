@@ -21,7 +21,7 @@ public class NubeToxica : MonoBehaviour
 
     private void Update()
     {
-        if (visibilidadNube >= 0 && visibilidadNube <= 10)
+        if (visibilidadNube >= -0.2f && visibilidadNube <= 10)
         {
             if (mapinguariDerrotado)
             {

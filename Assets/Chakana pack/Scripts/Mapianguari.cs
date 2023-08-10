@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static System.Random;
 
 public class Mapianguari : Enemy
@@ -37,7 +38,7 @@ public class Mapianguari : Enemy
     System.Random triggerProbabilidad = new System.Random();
 
     AudioSource charAudio;
-    [SerializeField] private float escala = 3f;
+    //[SerializeField] private float escala = 3f;
     [SerializeField] private float rangoCercania = 12f;
     [SerializeField] private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
@@ -247,11 +248,12 @@ public class Mapianguari : Enemy
                 //CAMBIO DE ORIENTACION
                 if (xObjetivo < transform.position.x)
                 {
-                    transform.localScale = new Vector3(-escala, escala, 1);
+                    //transform.localScale = new Vector3(-escala, escala, 1);
+                    transform.localScale = new Vector3(-1, 1, 1);
                 }
                 else if (xObjetivo > transform.position.x)
                 {
-                    transform.localScale = new Vector3(escala, escala, 1);
+                    transform.localScale = Vector3.one;
                 }
 
                 distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
@@ -516,7 +518,8 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.3f);
 
         //EMBESTIDAS
-        transform.localScale = new Vector3(-escala, escala, 1);
+        //transform.localScale = new Vector3(-escala, escala, 1);
+        transform.localScale = new Vector3(-1, 1, 1);
         for (int i = 1; i <= 3; i++) {
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
