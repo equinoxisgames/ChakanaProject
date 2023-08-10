@@ -449,7 +449,7 @@ public class Mapianguari : Enemy
                 switch (aux.Next(0, 4))
                 {
                     case 0:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-36, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
                         break;
                     case 1:
                         Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -92, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
@@ -497,7 +497,7 @@ public class Mapianguari : Enemy
             switch (triggerProbabilidad.Next(0, 4))
             {
                 case 0:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-36, -7), triggerProbabilidad.Next(-99, -96), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -7), triggerProbabilidad.Next(-99, -96), 0), Quaternion.identity);
                     break;
                 case 1:
                     bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -10), triggerProbabilidad.Next(-91, -88), 0), Quaternion.identity);
