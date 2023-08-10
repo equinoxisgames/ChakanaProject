@@ -18,7 +18,7 @@ public class PlataformaMapinguari : MonoBehaviour
         maxX = this.gameObject.transform.GetChild(1).position.x;
         nubeVeneno = this.gameObject.transform.GetChild(2).gameObject;
 
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i < 5; i++) {
             nubeVeneno.transform.GetChild(i).gameObject.SetActive(false);
         }
     }

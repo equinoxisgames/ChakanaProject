@@ -1,13 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using TMPro;
-using Unity.VisualScripting;
+using System.Threading.Tasks;
 using UnityEngine;
-using System.Text.RegularExpressions;
-using System;
+using UnityEngine.UIElements;
 using static System.Random;
-using static Unity.Burst.Intrinsics.X86;
 
 public class Mapianguari : Enemy
 {
@@ -18,22 +13,21 @@ public class Mapianguari : Enemy
     [SerializeField] private float tiempoDentroRango, tiempoFueraRango;
     [SerializeField] public float minX, maxX;
     [SerializeField] private float xObjetivo;
-    [SerializeField] private bool ataqueDisponible;
+    [SerializeField] private bool ataqueDisponible = true;
     [SerializeField] private BoxCollider2D ataqueCuerpo, campoVision;
     [SerializeField] private CapsuleCollider2D cuerpo;
     [SerializeField] private float movementVelocity = 6;
     [SerializeField] private float valorAtaqueBasico;
     [SerializeField] private float valorAtaqueEspecial;
     [SerializeField] private float coolDownAtaque;
-    //private float maxVida;
     private bool segundaEtapa = false;
 
     [SerializeField] private GameObject bolaVeneno;
-    //[SerializeField] private GameObject explosion;
     [SerializeField] public int nuevaPlataforma;
     [SerializeField] public int plataformaActual;
     [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private GameObject plantaVeneno;
+    [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private LiquidBar lifeBar;
@@ -41,16 +35,10 @@ public class Mapianguari : Enemy
     [SerializeField] AudioClip audioAtk;
     [SerializeField] AudioClip audioScream;
     [SerializeField] private float danioPlantaVeneno = 0f;
-    [SerializeField] System.Random triggerProbabilidad = new System.Random();
+    System.Random triggerProbabilidad = new System.Random();
 
     AudioSource charAudio;
-    //[SerializeField] private GameObject combFX01;
-
-    //private GameObject combObj01;
-
-    [SerializeField] private float xCharco = 10f;
-    [SerializeField] private float yCharco = 1.0f;
-    [SerializeField] private float escala = 3f;
+    //[SerializeField] private float escala = 3f;
     [SerializeField] private float rangoCercania = 12f;
     [SerializeField] private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
@@ -64,31 +52,34 @@ public class Mapianguari : Enemy
 
         //INICIALIZACION VARIABLES
         explosionInvulnerable = "ExplosionEnemy";
-        //vida = 200;
         vidaMax = vida;
         ataqueMax = valorAtaqueBasico;
         ataque = ataqueMax;
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         counterEstados = 0;
         layerObject = transform.gameObject.layer;
-        ataqueDisponible = true;
         cuerpo = transform.GetComponent<CapsuleCollider2D>();
         campoVision = transform.GetChild(0).GetComponent<BoxCollider2D>();
         ataqueCuerpo = transform.GetChild(1).GetComponent<BoxCollider2D>();
-
+        //StartCoroutine(habilitarAtaqueInicial());
         ataqueCuerpo.enabled = false;
         layerObject = transform.gameObject.layer;
-
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
         Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
         explosion = Resources.Load<GameObject>("Explosion");
 
-        GameObject.FindWithTag("GameController").GetComponent<GameManager>().SuscribirEnemigo(this);
+        //GameObject.FindWithTag("GameController").GetComponent<GameManager>().SuscribirEnemigo(this);
     }
 
     private void UpdateLife()
     {
         lifeBar.targetFillAmount = (vida / vidaMax);
+    }
+
+    private IEnumerator habilitarAtaqueInicial() {
+        yield return new WaitForSeconds(3f);
+        ataqueDisponible = true;
+        usandoAtaqueEspecial = false;
     }
 
     private void FixedUpdate()
@@ -116,6 +107,9 @@ public class Mapianguari : Enemy
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
+        atacando = true;
+        ataqueDisponible = false;
+        levelController.EliminarLogicaPlataformas();
         //TIEMPO ANIMACION DEL Boss
         yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
@@ -204,7 +198,6 @@ public class Mapianguari : Enemy
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
-                //StartCoroutine("combinacionesElementales");
                 combinacionesElementales();
                 return;
 
@@ -240,7 +233,6 @@ public class Mapianguari : Enemy
             StopCoroutine("afectacionEstadoFuego");
             StartCoroutine("afectacionEstadoFuego");
         }
-        //yield return new WaitForEndOfFrame();
     }
 
 
@@ -256,11 +248,12 @@ public class Mapianguari : Enemy
                 //CAMBIO DE ORIENTACION
                 if (xObjetivo < transform.position.x)
                 {
-                    transform.localScale = new Vector3(-escala, escala, 1);
+                    //transform.localScale = new Vector3(-escala, escala, 1);
+                    transform.localScale = new Vector3(-1, 1, 1);
                 }
                 else if (xObjetivo > transform.position.x)
                 {
-                    transform.localScale = new Vector3(escala, escala, 1);
+                    transform.localScale = Vector3.one;
                 }
 
                 distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
@@ -295,10 +288,8 @@ public class Mapianguari : Enemy
     private void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.gameObject.CompareTag("Player")) {
-            //SIGNIFICARIA QUE EL PLAYER ESTA EN OTRA PLATAFORMA
             tiempoDentroRango = 0;
             tiempoFueraRango = 0;
-            //cambio de plataforma
         }
     }
 
@@ -314,7 +305,6 @@ public class Mapianguari : Enemy
         charAudio.Play();
         atacando = true;
         ataqueDisponible = false;
-        //GameObject Hoyustus = GameObject.
         //TIEMPO PARA LA ANIMACION
         Debug.Log("Preparando ataque inmovilizador");
         yield return new WaitForSeconds(1.5f);
@@ -323,7 +313,6 @@ public class Mapianguari : Enemy
         if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
             charcoGenerado.name = "CharcoVenenoEnemy";
-            //charcoGenerado.layer = 3;
             StartCoroutine(destruirCharco(charcoGenerado));
         }
 
@@ -385,7 +374,6 @@ public class Mapianguari : Enemy
 
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
-            //transform.position = transform.position + Vector3.up * 0.1f;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
             yield return new WaitForSeconds(0.25f);
@@ -461,7 +449,7 @@ public class Mapianguari : Enemy
                 switch (aux.Next(0, 4))
                 {
                     case 0:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-36, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
                         break;
                     case 1:
                         Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -92, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
@@ -502,9 +490,6 @@ public class Mapianguari : Enemy
 
         //LANZAMIENTO BOLAS DE VENENO
         for (int i = 1; i <= 8; i++) {
-            //POSICIONES ALEATORIAS
-
-            //y -99 -72 x -58 -12
             triggerProbabilidad = new System.Random();
             GameObject bolaVenenoGenerada = null;
 
@@ -512,7 +497,7 @@ public class Mapianguari : Enemy
             switch (triggerProbabilidad.Next(0, 4))
             {
                 case 0:
-                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-36, -7), triggerProbabilidad.Next(-99, -96), 0), Quaternion.identity);
+                    bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -7), triggerProbabilidad.Next(-99, -96), 0), Quaternion.identity);
                     break;
                 case 1:
                     bolaVenenoGenerada = Instantiate(bolaVeneno, new Vector3(triggerProbabilidad.Next(-38, -10), triggerProbabilidad.Next(-91, -88), 0), Quaternion.identity);
@@ -533,7 +518,8 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.3f);
 
         //EMBESTIDAS
-        transform.localScale = new Vector3(-escala, escala, 1);
+        //transform.localScale = new Vector3(-escala, escala, 1);
+        transform.localScale = new Vector3(-1, 1, 1);
         for (int i = 1; i <= 3; i++) {
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
@@ -581,10 +567,7 @@ public class Mapianguari : Enemy
         ataqueMax = ataque;
         //RETORNO A VALORES DE JUEGO NORMAL
         campoVision.enabled = true;
-        //plataformaActual = nuevaPlataforma;
         usandoAtaqueEspecial = false;
-        //timerAtaqueEspecial = 0f;
-
     }
 
 

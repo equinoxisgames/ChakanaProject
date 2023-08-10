@@ -50,7 +50,7 @@ public class Tzantza : Enemy
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
-        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+        playable = false;
         rb.AddForce(new Vector2(direccion * 8, 0.5f), ForceMode2D.Impulse);
     }
 
