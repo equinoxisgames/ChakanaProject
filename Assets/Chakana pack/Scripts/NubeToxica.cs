@@ -7,28 +7,39 @@ public class NubeToxica : MonoBehaviour
     [SerializeField] private float visibilidadNube = 0;
     [SerializeField] private float signoVisibilidad = 0;
     [SerializeField] private bool danioPlayerDisponible = true;
+    [SerializeField] private bool mapinguariDerrotado = false;
     [SerializeField] private Hoyustus hoyustus;
     void Start()
     {
         hoyustus = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
     }
 
+    public void IsMapinguariDerrotado(bool mapinguariDerrotado){
+        this.mapinguariDerrotado = mapinguariDerrotado;
+    }
+
+
     private void Update()
     {
-        if (visibilidadNube >= 0 || visibilidadNube <= 10)
+        if (visibilidadNube >= -0.2f && visibilidadNube <= 10)
         {
+            if (mapinguariDerrotado)
+            {
+                if (visibilidadNube > 0)
+                    signoVisibilidad = -1;
+                else
+                    Destroy(gameObject);
+            }
+
             visibilidadNube += Time.deltaTime * signoVisibilidad;
             if (visibilidadNube >= 10)
             {
-                Debug.Log("a");
                 if (danioPlayerDisponible)
                 {
-                    Debug.Log("b");
                     danioPlayerDisponible = false;
                     StartCoroutine(daniarPlayer());
                 }
                 visibilidadNube = 10;
-                //booleano para herir al player con el gas
             }
             else if (visibilidadNube > 8)
             {
