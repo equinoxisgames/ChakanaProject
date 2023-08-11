@@ -8,6 +8,9 @@ public class WeaponCollect : MonoBehaviour
     [SerializeField] GameObject door;
     [SerializeField] Transform des;
     [SerializeField] GameObject tuto;
+    [SerializeField] GameObject weaponPref;
+    [SerializeField] GameObject timeLine;
+    [SerializeField] GameObject weaponTxt;
 
     bool isMove, isActive, isOn;
     Vector3 destination;
@@ -16,6 +19,7 @@ public class WeaponCollect : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("arma"))
         {
+            Destroy(timeLine);
             Destroy(gameObject);
         }
 
@@ -30,6 +34,11 @@ public class WeaponCollect : MonoBehaviour
             txtUse.SetActive(false);
             PlayerPrefs.SetInt("arma", 1);
             isMove = true;
+
+            Destroy(timeLine);
+            Destroy(weaponPref);
+
+            StartCoroutine(ShowText());
 
             tuto.SetActive(true);
         }
@@ -62,5 +71,12 @@ public class WeaponCollect : MonoBehaviour
             isActive = false;
             txtUse.SetActive(false);
         }
+    }
+
+    IEnumerator ShowText()
+    {
+        weaponTxt.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        weaponTxt.SetActive(false);
     }
 }

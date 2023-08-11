@@ -10,7 +10,7 @@ public class ConversationInteract : MonoBehaviour
 
     void Start()
     {
-        if(PlayerPrefs.GetInt("ukukuM") == 4) data.conversation = "Ukuku02";
+        if(PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2) data.conversation = "Ukuku02";
         else if(PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if(PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
     }
@@ -32,7 +32,8 @@ public class ConversationInteract : MonoBehaviour
         {
             PlayerPrefs.SetInt("conv01", 1);
         }
-        else if (PlayerPrefs.GetInt("ukukuM") == 4)
+        
+        if (PlayerPrefs.GetInt("ukukuM") == 4)
         {
             PlayerPrefs.SetInt("conv01", 2);
         }
@@ -45,7 +46,7 @@ public class ConversationInteract : MonoBehaviour
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         player.GetComponent<AudioSource>().Stop();
 
-        if (PlayerPrefs.GetInt("ukukuM") == 4) data.conversation = "Ukuku02";
+        if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2) data.conversation = "Ukuku02";
         else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if (PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
     }
