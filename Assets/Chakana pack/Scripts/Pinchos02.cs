@@ -31,6 +31,8 @@ public class Pinchos02 : MonoBehaviour
 
         GetComponent<AudioSource>().Play();
 
+        Instantiate(exVFX, transform.position, Quaternion.identity);
+
         if(player.getVida() <= 0)
         {
             //Instantiate(exVFX, transform.position, Quaternion.identity);
