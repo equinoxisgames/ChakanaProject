@@ -14,9 +14,11 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Salto")]
     [SerializeField] private bool isJumping = false;
+    [SerializeField] private bool isSecondJump = false;
     [SerializeField] private float correctorSalto = 19;
     [SerializeField] private bool firstJump = true;
     [SerializeField] private bool secondJump = false;
+    [SerializeField] private bool saltoEspecial = false;
     [Space(5)]
 
     [Header("Ground Checking")]
@@ -120,8 +122,6 @@ public class Hoyustus : CharactersBehaviour
     float limitY = 0f;
 
     [SerializeField] GameObject dashVfx;
-
-    private bool saltoEspecial = false;
 
     [SerializeField] GameObject skillObj01;
     [SerializeField] GameObject skillObj02;
@@ -261,6 +261,9 @@ public class Hoyustus : CharactersBehaviour
     {
         tocarPared();
 
+        if (Mathf.Abs(rb.velocity.y) < 0.1f)
+            Grounded();
+
         if (transform.parent != null)
         {
             limitY = transform.position.y + 10f;
@@ -315,46 +318,79 @@ public class Hoyustus : CharactersBehaviour
         }
     }
 
+    //***************************************************************************************************
+    //DETECCION SUELO
+    //***************************************************************************************************
+    public bool Grounded()
+    {
+
+        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
+            Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
+        {
+            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f)
+                return false;
+
+            anim.SetBool("Grounded", true);
+            firstJump = true;
+            secondJump = false;
+            walkSpeed = walkSpeedGround;
+            CSTEPS = 0;
+            //isJumping = false;
+            isSecondJump = true;
+            return true;
+        }
+        else
+        {
+            anim.SetBool("Grounded", false);
+            //isJumping = true;
+            walkSpeed = walkSpeedGround * (1 - resistenciaAire);
+            return false;
+
+        }
+    }
+
 
     private void jump()
     {
-        if (Input.GetButtonUp("Jump"))
+        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
         {
             if (!atacando)
                 anim.Play("Caer");
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            isJumping = false;
-            CSTEPS = 0;
 
             if (firstJump)
             {
                 secondJump = true;
                 firstJump = false;
-                currentTimeAir = 0;
-                return;
+                isSecondJump = true;
             }
-            else
+            else if(isSecondJump)
             {
                 secondJump = false;
-                return;
+                isSecondJump = false;
             }
+            if(isJumping)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            isJumping = false;
+            CSTEPS = 0;
+            return;
+
         }
 
-        if (firstJump && !secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
+        if (firstJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
-            if (Input.GetButtonUp("Jump") || /*currentTimeAir > timeAir ||*/ CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())
+            isSecondJump = false;
+            if (Input.GetButtonUp("Jump") ||  CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())
             {
                 anim.Play("Caer");
                 secondJump = true;
-                isJumping = false;
                 firstJump = false;
+                isJumping = false;
                 CSTEPS = 0;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-                currentTimeAir = 0;
                 return;
             }
 
-            if (Input.GetButtonDown("Jump") && Grounded())
+            if (Input.GetButtonDown("Jump") && !isJumping)
             {
                 playerAudio.Stop();
                 playerAudio.loop = false;
@@ -362,28 +398,24 @@ public class Hoyustus : CharactersBehaviour
                 playerAudio.Play();
 
                 anim.Play("Saltar");
-                saltoEspecial = false;
                 isJumping = true;
                 secondJump = false;
                 rb.AddForce(new Vector2(0, 12f), ForceMode2D.Impulse);
-                isJumping = true;
                 cargaHabilidadCondor += aumentoBarraSalto;
                 CSTEPS++;
                 limitY = transform.position.y + 10f;
             }
-            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir*/)//&&  transform.position.y - posYAntesSalto <= limitSaltoUno)
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY)
             {
-                isJumping = true;
-                rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
-                currentTimeAir += Time.fixedDeltaTime;
+                //rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, (SSTEPS - CSTEPS)/1.1f));
                 CSTEPS++;
             }
 
         }
         //DOBLE SALTO
-        else if (!firstJump && secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
+        else if (secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
-
             if (Input.GetButtonDown("Jump") && CSTEPS == 0)
             {
                 playerAudio.loop = false;
@@ -393,24 +425,22 @@ public class Hoyustus : CharactersBehaviour
 
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
-                rb.velocity = new Vector2(rb.velocity.x, 0.0f);
+                rb.velocity = new Vector2(rb.velocity.x, 0);
                 rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
-                Debug.Log("Salto 2");
                 isJumping = true;
                 secondJump = true;
                 limitY = transform.position.y + 10f;
                 cargaHabilidadCondor += aumentoBarraSalto;
+                isSecondJump = true;
             }
-            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY/*&& currentTimeAir <= timeAir - 0.2f*/)// && transform.position.y - posYAntesSalto <= limitSaltoDos)
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY && isSecondJump)
             {
                 CSTEPS++;
                 rb.AddForce(new Vector2(0, 1.15f - (limitY - transform.position.y) / 10), ForceMode2D.Impulse);
-                currentTimeAir += Time.fixedDeltaTime;
-                isJumping = true;
             }
 
 
-            if (Input.GetButtonUp("Jump") || transform.position.y >= limitY/*|| currentTimeAir > timeAir - 0.2f */ || CSTEPS > SSTEPS || isTouchingRoof())// || transform.position.y - posYAntesSalto > limitSaltoUno)
+            if ((Input.GetButtonUp("Jump") || transform.position.y >= limitY || CSTEPS > SSTEPS || isTouchingRoof()) && isSecondJump)
             {
                 if (!atacando)
                     anim.Play("Caer");
@@ -466,7 +496,7 @@ public class Hoyustus : CharactersBehaviour
     {
         playable = false;
 
-        if (!Grounded())
+        if (isJumping)
         {
             rb.velocity = Vector3.zero;
             rb.gravityScale = 2f;
@@ -765,43 +795,6 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    //***************************************************************************************************
-    //DETECCION SUELO
-    //***************************************************************************************************
-    public bool Grounded()
-    {
-
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
-            Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
-        {
-            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f) {
-                return false;
-            }
-
-            anim.SetBool("Grounded", true);
-            //isJumping = false;
-            firstJump = true;
-            secondJump = false;
-            walkSpeed = walkSpeedGround;
-            currentTimeAir = 0;
-            saltoEspecial = false;
-            CSTEPS = 0;
-            isJumping = false;
-            return true;
-        }
-        else
-        {
-            anim.SetBool("Grounded", false);
-            isJumping = true;
-            walkSpeed = walkSpeedGround * (1 - resistenciaAire);
-            saltoEspecial = true;
-            return false;
-
-        }
-
-    }
-
-
     private bool isTouchingRoof()
     {
         if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer))
@@ -880,7 +873,7 @@ public class Hoyustus : CharactersBehaviour
         {
             if(playerAudio.clip == AudioWalking) playerAudio.Stop();
         }
-        else if (Grounded() && !isJumping)
+        else if (!isJumping)
         {
             if (!playerAudio.isPlaying)
             {
@@ -933,12 +926,12 @@ public class Hoyustus : CharactersBehaviour
                     index = 1;
                     codigoAtaque = 5;
                 }
-                else if (v <= 0 && !Grounded())
+                else if (v <= 0 && isJumping)
                 {
                     index = 2;
                     codigoAtaque = 6;
                 }
-                else if (v <= 0 && Grounded())
+                else if (v <= 0 && !isJumping)
                 {
                     anim.Play("Lanza Lateral");
                     codigoAtaque = 4;
@@ -954,12 +947,12 @@ public class Hoyustus : CharactersBehaviour
                         index = 1;
                         codigoAtaque = 5;
                     }
-                    else if (v <= 0 && !Grounded())
+                    else if (v <= 0 && isJumping)
                     {
                         index = 2;
                         codigoAtaque = 6;
                     }
-                    else if (v <= 0 && Grounded())
+                    else if (v <= 0 && !isJumping)
                     {
                         anim.Play("Lanza Lateral");
                         codigoAtaque = 4;
