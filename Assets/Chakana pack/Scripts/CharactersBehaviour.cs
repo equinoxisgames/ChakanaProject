@@ -138,7 +138,11 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoViento()
     {
-        if (vientoObj == null) vientoObj = Instantiate(vientoFX, transform.position, Quaternion.identity, transform);
+        if (vientoObj == null)
+        {
+            vientoObj = Instantiate(vientoFX, transform.position, Quaternion.identity);
+            vientoObj.transform.parent = transform;
+        }
         afectacionViento = 0.10f;
         print(gameObject.name);
         yield return new WaitForSeconds(10f);
@@ -159,11 +163,19 @@ public class CharactersBehaviour : MonoBehaviour
         {
             Vector3 newPos = transform.position;
             newPos.y -= 0.75f;
-            if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, newPos, Quaternion.identity, transform);
+            if (fuegoObj == null)
+            {
+                fuegoObj = Instantiate(fuegoFX, newPos, Quaternion.identity);
+                fuegoObj.transform.parent = transform;
+            }
         }
         else
         {
-            if (fuegoObj == null) fuegoObj = Instantiate(fuegoFX, transform.position, Quaternion.identity, transform);
+            if (fuegoObj == null)
+            {
+                fuegoObj = Instantiate(fuegoFX, transform.position, Quaternion.identity);
+                fuegoObj.transform.parent = transform;
+            }
         }
 
         for (int i = 0; i < 6; i++)
@@ -184,7 +196,11 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected IEnumerator afectacionEstadoVeneno()
     {
-        if (venenoObj == null) venenoObj = Instantiate(venenoFX, transform.position, venenoFX.transform.rotation, transform);
+        if (venenoObj == null)
+        {
+            venenoObj = Instantiate(venenoFX, transform.position, venenoFX.transform.rotation);
+            venenoObj.transform.parent = transform;
+        }
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(2f);
