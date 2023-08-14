@@ -337,6 +337,7 @@ public class Hoyustus : CharactersBehaviour
             CSTEPS = 0;
             //isJumping = false;
             isSecondJump = true;
+            limitY = transform.position.y + 10;
             return true;
         }
         else
@@ -352,29 +353,6 @@ public class Hoyustus : CharactersBehaviour
 
     private void jump()
     {
-        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
-        {
-            if (!atacando)
-                anim.Play("Caer");
-
-            if (firstJump)
-            {
-                secondJump = true;
-                firstJump = false;
-                isSecondJump = true;
-            }
-            else if(isSecondJump)
-            {
-                secondJump = false;
-                isSecondJump = false;
-            }
-            if(isJumping)
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-            isJumping = false;
-            CSTEPS = 0;
-            return;
-
-        }
 
         if (firstJump && !isTouchingRoof() && CSTEPS < SSTEPS)
         {
@@ -390,7 +368,7 @@ public class Hoyustus : CharactersBehaviour
                 return;
             }
 
-            if (Input.GetButtonDown("Jump") && !isJumping)
+            if (Input.GetButtonDown("Jump") && Grounded())
             {
                 playerAudio.Stop();
                 playerAudio.loop = false;
@@ -450,6 +428,30 @@ public class Hoyustus : CharactersBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 return;
             }
+
+        }
+
+        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
+        {
+            if (!atacando)
+                anim.Play("Caer");
+
+            if (firstJump)
+            {
+                secondJump = true;
+                firstJump = false;
+                isSecondJump = true;
+            }
+            else if (isSecondJump)
+            {
+                secondJump = false;
+                isSecondJump = false;
+            }
+            if (!isJumping)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            isJumping = false;
+            CSTEPS = 0;
+            return;
 
         }
 
@@ -926,12 +928,12 @@ public class Hoyustus : CharactersBehaviour
                     index = 1;
                     codigoAtaque = 5;
                 }
-                else if (v <= 0 && isJumping)
+                else if (v <= 0 && !Grounded())
                 {
                     index = 2;
                     codigoAtaque = 6;
                 }
-                else if (v <= 0 && !isJumping)
+                else if (v <= 0 && Grounded())
                 {
                     anim.Play("Lanza Lateral");
                     codigoAtaque = 4;
@@ -947,12 +949,12 @@ public class Hoyustus : CharactersBehaviour
                         index = 1;
                         codigoAtaque = 5;
                     }
-                    else if (v <= 0 && isJumping)
+                    else if (v <= 0 && !Grounded())
                     {
                         index = 2;
                         codigoAtaque = 6;
                     }
-                    else if (v <= 0 && !isJumping)
+                    else if (v <= 0 && Grounded())
                     {
                         anim.Play("Lanza Lateral");
                         codigoAtaque = 4;
