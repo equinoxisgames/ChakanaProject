@@ -53,7 +53,7 @@ public class Chontacuro1 : Enemy
     private void FixedUpdate()
     {
         detectarPiso();
-        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) && detectarPiso()) {
+        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) && Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, 0.2f, groundLayer)) {
             Flip();
         }
 
