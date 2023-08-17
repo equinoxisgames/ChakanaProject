@@ -545,12 +545,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator habilidadCondor()
     {
-        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
+        anim.SetInteger("Skill", 2);
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         cargaHabilidadCondor = 0f;
         playable = false;
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0f;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
@@ -558,17 +557,21 @@ public class Hoyustus : CharactersBehaviour
         GameObject extraExplosion = Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
         extraExplosion.name += "Player";
 
+        yield return new WaitForSeconds(0.05f);
+        anim.SetInteger("Skill", 0);
+        yield return new WaitForSeconds(0.15f);
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(1.2f);
-
+        yield return new WaitForSeconds(1f);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
-        rb.gravityScale = 2;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
 
     private IEnumerator habilidadSerpiente()
     {
+        anim.SetInteger("Skill", 1);
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
         dashAvailable = false;
@@ -580,7 +583,7 @@ public class Hoyustus : CharactersBehaviour
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
-
+        anim.SetInteger("Skill", 0);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         dashAvailable = true;
         playable = true;
@@ -591,6 +594,8 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza()
     {
+        anim.SetInteger("Skill", 3);
+
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
@@ -625,6 +630,9 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || !realizandoHabilidadLanza));
+
+        anim.SetInteger("Skill", 0);
+
         atacando = false;
         codigoAtaque = 0;
 
