@@ -11,7 +11,6 @@ public class Chontacuro1 : Enemy
 
     [SerializeField] private Vector3 limit1, limit2;
     [SerializeField] private float posY;
-    [SerializeField] Animator anim;
 
     [SerializeField] Transform groundDetector;
     [SerializeField] Transform wallDetector;

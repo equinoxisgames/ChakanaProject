@@ -34,13 +34,14 @@ public class Tzantza : Enemy
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
         vidaMax = vida;
+        anim = GetComponent<Animator>();
     }
 
 
     void Update()
     {
         Muerte();
-
+        anim.SetBool("Atacando", atacando);
         if (siguiendo && playable) {
             Move();
         }

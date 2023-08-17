@@ -27,7 +27,6 @@ public class Boraro : Enemy
     [SerializeField] private bool teletransportandose;
     [SerializeField] private List<GameObject> componentesBoraro = new List<GameObject>();
     [SerializeField] private Transform objetivoX;
-    [SerializeField] Animator anim;
     [SerializeField] AudioClip audioHurt;
 
     AudioSource charAudio;
