@@ -37,7 +37,7 @@ public class NubeToxica : MonoBehaviour
                 if (danioPlayerDisponible)
                 {
                     danioPlayerDisponible = false;
-                    StartCoroutine(daniarPlayer());
+                    StartCoroutine(DaniarPlayer());
                 }
                 visibilidadNube = 10;
             }
@@ -73,8 +73,8 @@ public class NubeToxica : MonoBehaviour
         }
     }
 
-    private IEnumerator daniarPlayer() {
-        hoyustus.recibirDanio(25);
+    private IEnumerator DaniarPlayer() {
+        hoyustus.RecibirDanio(25);
         yield return new WaitForSeconds(1f);
         danioPlayerDisponible = true;
     }

@@ -259,7 +259,7 @@ public class Hoyustus : CharactersBehaviour
 
     void Update()
     {
-        tocarPared();
+        TocarPared();
 
         if (Mathf.Abs(rb.velocity.y) < 0.1f)
             Grounded();
@@ -313,7 +313,7 @@ public class Hoyustus : CharactersBehaviour
         if (playable)
         {
             Falling();
-            ataqueLanza();
+            AtaqueLanza();
             Dash();
         }
     }
@@ -580,7 +580,7 @@ public class Hoyustus : CharactersBehaviour
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
-        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, 11);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
@@ -677,10 +677,10 @@ public class Hoyustus : CharactersBehaviour
                 {
                     //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
                     invulnerable = true;
-                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    RecibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
                         collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
-                    collisionElementos_1_1_1(collision);
+                    CollisionElementos_1_1_1(collision);
                     return;
                 }
 
@@ -688,7 +688,7 @@ public class Hoyustus : CharactersBehaviour
             catch (Exception){}
 
             if (!invulnerable)
-                collisionElementos_1_1_1(collision);
+                CollisionElementos_1_1_1(collision);
 
         }
     }
@@ -737,10 +737,10 @@ public class Hoyustus : CharactersBehaviour
                 //DETECCION DEL CUERPO DEL ENEMIGO
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
-                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    RecibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
                         collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
-                    collisionElementos_1_1_1(collision);
+                    CollisionElementos_1_1_1(collision);
                 }
 
             }
@@ -773,22 +773,22 @@ public class Hoyustus : CharactersBehaviour
                 //PROYECTILES
                 if (collider.gameObject.transform.parent == null)
                 {
-                    triggerElementos_1_1_1(collider);
+                    TriggerElementos_1_1_1(collider);
                 }
                 //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
                 else if (!invulnerable && (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && (collider.gameObject.layer == 3 || collider.gameObject.layer == 19)))
                 {
-                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    RecibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
-                    triggerElementos_1_1_1(collider);
+                    TriggerElementos_1_1_1(collider);
                 }
                 else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
                 {
                     Debug.Log("imposible dashear");
                     invulnerable = true;
-                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    RecibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
-                    triggerElementos_1_1_1(collider);
+                    TriggerElementos_1_1_1(collider);
                 }
                 return;
 
@@ -796,7 +796,7 @@ public class Hoyustus : CharactersBehaviour
             catch (Exception){}
         }
         if (!invulnerable && !collider.gameObject.name.Contains("Player"))
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
 
     }
 
@@ -811,7 +811,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    private void tocarPared()
+    private void TocarPared()
     {
         tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x * 0.5f +
             Vector3.up * 1.25f, wallPoint.position + Vector3.right * transform.localScale.x * 0.1f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
@@ -906,7 +906,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     //Ataque Lanza
     //***************************************************************************************************
-    private void ataqueLanza()
+    private void AtaqueLanza()
     {
 
         if (ataqueAvailable && Input.GetButtonDown("Atacar") && playable)

@@ -166,12 +166,12 @@ public class Boraro : Enemy
                 direccion = 1;
             }
 
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
                 charAudio.loop = false;
                 charAudio.Stop();
                 charAudio.clip = audioHurt;
@@ -196,7 +196,7 @@ public class Boraro : Enemy
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
         }
     }
 
@@ -308,7 +308,7 @@ public class Boraro : Enemy
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.name.Contains("Enemy"))
-            collisionElementos_1_1_1(collision);
+            CollisionElementos_1_1_1(collision);
     }
 
 
