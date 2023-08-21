@@ -31,16 +31,16 @@ namespace Assets.FantasyInventory.Scripts.Interface
             {
                 new Item(ItemId.Scroll, 1),
                 new Item(ItemId.Gold, 2000),
-                new Item(ItemId.HealthPotion, 10),
-                new Item(ItemId.Sword, 1),
-                new Item(ItemId.Bow, 1),
+                new Item(ItemId.HealthPotion, 1),
+                //new Item(ItemId.Sword, 1),
+                //new Item(ItemId.Bow, 1),
                 new Item(ItemId.Armor, 1),
                 new Item(ItemId.Helmet, 1),
                 new Item(ItemId.ManaPotion, 2),
                 new Item(ItemId.Shield, 1),
-                new Item(ItemId.Spear, 1),
-                new Item(ItemId.TwoHandedSword, 1),
-                new Item(ItemId.Axe, 2)
+                //new Item(ItemId.Spear, 1),
+                //new Item(ItemId.TwoHandedSword, 1),
+                new Item(ItemId.Axe, 1)
             };
 
             var equipped = new List<Item>();
