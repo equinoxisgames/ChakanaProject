@@ -276,25 +276,28 @@ public class Hoyustus : CharactersBehaviour
             aplastarBotonCuracion = false;
         }
 
-        if (aplastarBotonCuracion)
+        if (aplastarBotonCuracion && playable)
         {
             botonCuracion += Time.deltaTime;
 
             if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadCondor");
+                return;
             }
             if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadSerpiente");
+                return;
             }
             if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadLanza");
+                return;
             }
         }
 
-        if (Input.GetButtonDown("Activador_Habilidades"))
+        if (Input.GetButtonDown("Activador_Habilidades") && playable)
         {
             aplastarBotonCuracion = true;
             //ACTIVACION DE LA CURACION
@@ -889,7 +892,7 @@ public class Hoyustus : CharactersBehaviour
         }
         else if (!isJumping)
         {
-            if (!playerAudio.isPlaying)
+            if (!playerAudio.isPlaying && Grounded())
             {
                 playerAudio.loop = true;
                 playerAudio.clip = AudioWalking;
