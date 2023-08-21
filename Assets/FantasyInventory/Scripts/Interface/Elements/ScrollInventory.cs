@@ -27,12 +27,12 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             ItemType.Currency,
             ItemType.Loot,
             ItemType.Potion,
-            ItemType.Scroll,
+            ItemType.Mask,
             ItemType.Ring,
             ItemType.Necklace,
             ItemType.Helmet,
             ItemType.Armor,
-            ItemType.Shield,
+            ItemType.Amulet,
             ItemType.Weapon
         };
         private readonly List<InventoryItem> _items = new List<InventoryItem>();

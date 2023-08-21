@@ -29,18 +29,18 @@ namespace Assets.FantasyInventory.Scripts.Interface
         {
             var inventory = new List<Item>
             {
-                new Item(ItemId.Scroll, 1),
-                new Item(ItemId.Gold, 2000),
-                new Item(ItemId.HealthPotion, 1),
+                new Item(ItemId.SupayMask, 1),
+                new Item(ItemId.GoldPieces, 2000),
+                new Item(ItemId.KunkaKuchuna, 1),
                 //new Item(ItemId.Sword, 1),
                 //new Item(ItemId.Bow, 1),
-                new Item(ItemId.Armor, 1),
-                new Item(ItemId.Helmet, 1),
-                new Item(ItemId.ManaPotion, 2),
-                new Item(ItemId.Shield, 1),
+                new Item(ItemId.KunturMask, 1),
+                new Item(ItemId.AyahuascaRoot, 1),
+                new Item(ItemId.LuminousMushroom, 2),
+                new Item(ItemId.PachamamaAmulet, 1),
                 //new Item(ItemId.Spear, 1),
                 //new Item(ItemId.TwoHandedSword, 1),
-                new Item(ItemId.Axe, 1)
+                new Item(ItemId.WarriorTearAmulet, 1)
             };
 
             var equipped = new List<Item>();
@@ -84,14 +84,14 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (SelectedItemParams.Tags.Contains(ItemTag.TwoHanded))
             {
-                var shield = Equipment.Items.SingleOrDefault(i => i.Params.Type == ItemType.Shield);
+                var shield = Equipment.Items.SingleOrDefault(i => i.Params.Type == ItemType.Amulet);
 
                 if (shield != null)
                 {
                     MoveItem(shield, Equipment, Bag);
                 }
             }
-            else if (SelectedItemParams.Type == ItemType.Shield)
+            else if (SelectedItemParams.Type == ItemType.Amulet)
             {
                 var weapon2H = Equipment.Items.SingleOrDefault(i => i.Params.Tags.Contains(ItemTag.TwoHanded));
 

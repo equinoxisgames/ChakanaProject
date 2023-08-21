@@ -31,23 +31,23 @@ namespace Assets.FantasyInventory.Scripts.Interface
         {
             var inventory = new List<Item>
             {
-                new Item(ItemId.Gold, 10000)
+                new Item(ItemId.GoldPieces, 10000)
             };
 
             var shop = new List<Item>
             {
                 new Item(ItemId.Sword, 1),
                 new Item(ItemId.Bow, 1),
-                new Item(ItemId.Armor, 1),
-                new Item(ItemId.Helmet, 1),
-                new Item(ItemId.HealthPotion, 10),
-                new Item(ItemId.Shield, 1),
+                new Item(ItemId.KunturMask, 1),
+                new Item(ItemId.AyahuascaRoot, 1),
+                new Item(ItemId.KunkaKuchuna, 10),
+                new Item(ItemId.PachamamaAmulet, 1),
                 new Item(ItemId.Spear, 1),
                 new Item(ItemId.TwoHandedSword, 1),
-                new Item(ItemId.Axe, 10),
-                new Item(ItemId.ManaPotion, 10),
-                new Item(ItemId.Scroll, 10),
-                new Item(ItemId.Gold, 5000)
+                new Item(ItemId.WarriorTearAmulet, 10),
+                new Item(ItemId.LuminousMushroom, 10),
+                new Item(ItemId.SupayMask, 10),
+                new Item(ItemId.GoldPieces, 5000)
             };
 
             Trader.Initialize(ref shop);
@@ -80,30 +80,30 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         public void Buy()
         {
-            if (GetCurrency(Bag, ItemId.Gold) < SelectedItemParams.Price)
+            if (GetCurrency(Bag, ItemId.GoldPieces) < SelectedItemParams.Price)
             {
                 AudioSource.PlayOneShot(NoMoney);
                 Debug.LogWarning("You haven't enough gold!");
                 return;
             }
 
-            AddMoney(Bag, -SelectedItemParams.Price, ItemId.Gold);
-            AddMoney(Trader, SelectedItemParams.Price, ItemId.Gold);
+            AddMoney(Bag, -SelectedItemParams.Price, ItemId.GoldPieces);
+            AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);
             MoveItem(SelectedItem, Trader, Bag);
             AudioSource.PlayOneShot(TradeSound);
         }
 
         public void Sell()
         {
-            if (GetCurrency(Trader, ItemId.Gold) < SelectedItemParams.Price / SellRatio)
+            if (GetCurrency(Trader, ItemId.GoldPieces) < SelectedItemParams.Price / SellRatio)
             {
                 AudioSource.PlayOneShot(NoMoney);
                 Debug.LogWarning("Trader hasn't enough gold!");
                 return;
             }
 
-            AddMoney(Bag, SelectedItemParams.Price / SellRatio, ItemId.Gold);
-            AddMoney(Trader, -SelectedItemParams.Price / SellRatio, ItemId.Gold);
+            AddMoney(Bag, SelectedItemParams.Price / SellRatio, ItemId.GoldPieces);
+            AddMoney(Trader, -SelectedItemParams.Price / SellRatio, ItemId.GoldPieces);
             MoveItem(SelectedItem, Bag, Trader);
             AudioSource.PlayOneShot(TradeSound);
         }
@@ -121,8 +121,8 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
                 if (!item.Tags.Contains(ItemTag.NotForSale))
                 {
-                    BuyButton.interactable = Trader.Items.Any(i => i.Id == SelectedItem) && GetCurrency(Bag, ItemId.Gold) >= item.Price;
-                    SellButton.interactable = Bag.Items.Any(i => i.Id == SelectedItem) && GetCurrency(Trader, ItemId.Gold) >= item.Price / SellRatio;
+                    BuyButton.interactable = Trader.Items.Any(i => i.Id == SelectedItem) && GetCurrency(Bag, ItemId.GoldPieces) >= item.Price;
+                    SellButton.interactable = Bag.Items.Any(i => i.Id == SelectedItem) && GetCurrency(Trader, ItemId.GoldPieces) >= item.Price / SellRatio;
                 }
                 else
                 {

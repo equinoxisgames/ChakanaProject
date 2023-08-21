@@ -14,10 +14,10 @@ namespace Assets.FantasyInventory.Scripts.GameData
         public static readonly Dictionary<ItemId, ItemParams> Params = new Dictionary<ItemId, ItemParams>
         {
             {
-                ItemId.Scroll,
+                ItemId.SupayMask,
                 new ItemParams
                 {
-                    Type = ItemType.Scroll,
+                    Type = ItemType.Mask,
                     Properties = new List<Property> { new Property(PropertyId.MagicDamage, 100) },
                     Price = 1000
                 }
@@ -31,7 +31,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.Gold,
+                ItemId.GoldPieces,
                 new ItemParams
                 {
                     Type = ItemType.Currency,
@@ -39,10 +39,10 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.HealthPotion,
+                ItemId.KunkaKuchuna,
                 new ItemParams
                 {
-                    Type = ItemType.Potion,
+                    Type = ItemType.Weapon,
                     Properties = new List<Property> { new Property(PropertyId.RestoreHealth, 50) },
                     Price = 200
                 }
@@ -68,25 +68,25 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.Armor,
+                ItemId.KunturMask,
                 new ItemParams
                 {
-                    Type = ItemType.Armor,
+                    Type = ItemType.Mask,
                     Properties = new List<Property> { new Property(PropertyId.PhysicDefense, 10) },
                     Price = 1000
                 }
             },
             {
-                ItemId.Helmet,
+                ItemId.AyahuascaRoot,
                 new ItemParams
                 {
-                    Type = ItemType.Helmet,
+                    Type = ItemType.Potion,
                     Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 5) },
                     Price = 500
                 }
             },
             {
-                ItemId.ManaPotion,
+                ItemId.LuminousMushroom,
                 new ItemParams
                 {
                     Type = ItemType.Potion,
@@ -95,10 +95,10 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.Shield,
+                ItemId.PachamamaAmulet,
                 new ItemParams
                 {
-                    Type = ItemType.Shield,
+                    Type = ItemType.Amulet,
                     Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 10) },
                     Price = 1000
                 }
@@ -142,11 +142,11 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.Axe,
+                ItemId.WarriorTearAmulet,
                 new ItemParams
                 {
-                    Type = ItemType.Weapon,
-                    Tags = new List<ItemTag> { ItemTag.Axe },
+                    Type = ItemType.Amulet,
+                    //Tags = new List<ItemTag> { ItemTag.Axe },
                     Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 5) },
                     Price = 100
                 }

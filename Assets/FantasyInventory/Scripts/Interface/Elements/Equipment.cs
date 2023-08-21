@@ -70,7 +70,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
         private Item FindItem(ItemSlot slot)
         {
-            if (slot.ItemType == ItemType.Shield)
+            if (slot.ItemType == ItemType.Amulet)
             {
                 var twoHandedWeapon = Items.SingleOrDefault(i => i.Params.Type == ItemType.Weapon && i.Params.Tags.Contains(ItemTag.TwoHanded));
 

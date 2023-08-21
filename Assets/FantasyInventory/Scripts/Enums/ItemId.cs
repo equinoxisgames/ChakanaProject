@@ -7,20 +7,20 @@
     public enum ItemId
     {
         Undefined		= 0,
-        Scroll			= 1,
+        SupayMask		= 1,
         Flute           = 2,
-        Gold            = 3,
-        HealthPotion    = 4,
+        GoldPieces      = 3,
+        KunkaKuchuna    = 4,
         Sword       	= 5,
         Bow          	= 6,
-        Armor    		= 7,
-        Helmet   		= 8,
-        ManaPotion      = 9,
-        Shield     		= 10,
+        KunturMask 		= 7,
+        AyahuascaRoot   = 8,
+        LuminousMushroom= 9,
+        PachamamaAmulet	= 10,
         SilverRing      = 11,
         Spear           = 12,
         StoneAmulet     = 13,
         TwoHandedSword  = 14,
-        Axe   			= 15
+        WarriorTearAmulet = 15
     }
 }
