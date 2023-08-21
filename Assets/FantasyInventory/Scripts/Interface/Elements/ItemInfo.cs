@@ -37,12 +37,17 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             }
             else if (shop)
             {
-                Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
+                // Se comenta esta parte ya que no se implementara la venta de objetos
+                //Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
+
+                Price.text = $"Buy price: {itemParams.Price}G";
             }
-            else
-            {
-                Price.text = $"Sell price: {itemParams.Price / Shop.SellRatio}G";
-            }
+
+            // Se comenta esta parte ya que no se implementara la venta de objetos
+            //else
+            //{
+            //    Price.text = $"Sell price: {itemParams.Price / Shop.SellRatio}G";
+            //}
 
             var description = new List<string> {$"Type: {itemParams.Type}"};
 
