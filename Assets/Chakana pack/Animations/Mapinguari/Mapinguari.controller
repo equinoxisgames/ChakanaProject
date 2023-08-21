@@ -23,14 +23,14 @@ AnimatorStateMachine:
     m_Position: {x: 730, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6843680522326947814}
-    m_Position: {x: 340, y: 420, z: 0}
+    m_Position: {x: 430, y: 430, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 190, y: 110, z: 0}
-  m_EntryPosition: {x: 160, y: 260, z: 0}
+  m_AnyStatePosition: {x: 140, y: 430, z: 0}
+  m_EntryPosition: {x: 130, y: 260, z: 0}
   m_ExitPosition: {x: 990, y: 100, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 2585787337925586222}
@@ -170,6 +170,12 @@ AnimatorController:
   m_Name: Mapinguari
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: Vida
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: AB
     m_Type: 4
     m_DefaultFloat: 0
@@ -183,6 +189,12 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: AE
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Muerto
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0

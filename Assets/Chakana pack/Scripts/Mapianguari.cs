@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -101,6 +102,7 @@ public class Mapianguari : Enemy
     private IEnumerator Muerte() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        anim.enabled = true;
         anim.Play("Muerte");
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
@@ -115,7 +117,9 @@ public class Mapianguari : Enemy
 
     void Update()
     {
+        anim.SetFloat("Vida", vida);
         anim.SetBool("AB", realizandoAB);
+        anim.SetBool("Muerto", isDead);
         anim.SetBool("AT", realizandoAT);
         anim.SetBool("AE", pruebaAtaqueEspecial);
 
@@ -239,7 +243,7 @@ public class Mapianguari : Enemy
     private void OnTriggerStay2D(Collider2D collider){
 
         //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
-        if (!usandoAtaqueEspecial && collider.gameObject.CompareTag("Player"))
+        if (!usandoAtaqueEspecial && collider.gameObject.CompareTag("Player") && ataqueDisponible) 
         {
             xObjetivo = collider.transform.position.x;
             float distanciaPlayer = 0;
@@ -269,15 +273,15 @@ public class Mapianguari : Enemy
                 }
             }
 
-            if (ataqueDisponible && distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
+            if (distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
             {
                 StartCoroutine(AtaqueCuerpoCuerpo());
             }
-            else if (ataqueDisponible && distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
+            else if (distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
             {
                 StartCoroutine(AtaqueAturdimiento());
             }
-            else if (ataqueDisponible && distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia){
+            else if (distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia){
                 StartCoroutine(AtaqueDistancia());
             }
         }
@@ -359,22 +363,25 @@ public class Mapianguari : Enemy
     //CORRUTINA DE ATAQUE CUERPO A CUERPO
     //***************************************************************************************************
     private IEnumerator AtaqueCuerpoCuerpo(){
-        realizandoAB = true;
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         charAudio.Stop();
         charAudio.clip = audioAtk;
         charAudio.Play();
 
         ataqueDisponible = false;
-        ataqueCuerpo.enabled = true;
         atacando = true;
-        
+        anim.enabled = false;
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
-        ataqueCuerpo.enabled = false;
-
+        anim.enabled = true;
+        realizandoAB = true;
+        yield return new WaitForSecondsRealtime(0.45f);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
+        ataqueCuerpo.enabled = false;
+        realizandoAB = false;
+        anim.enabled = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
+            anim.enabled = false;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
             yield return new WaitForSeconds(0.25f);
@@ -382,10 +389,11 @@ public class Mapianguari : Enemy
             rb.velocity = Vector2.zero;
         }
 
-        atacando = false;
-        realizandoAB = false;
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
+        anim.enabled = true;
+        atacando = false;
+        yield return new WaitForSeconds(0.5f);
         ataqueDisponible = true;
     }
 
@@ -611,11 +619,26 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
-        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && collision.gameObject.name.StartsWith("Plataforma")) {
-            minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
-            maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
-            plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
+        try
+        {
+            //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
+            if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && collision.gameObject.name.StartsWith("Plataforma"))
+            {
+                minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
+                maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
+                plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
+            }
+        }
+        catch (Exception e) { 
         }
     }
+
+
+    public void ActivacionGarras(int estado) {
+        if (estado == 0)
+            ataqueCuerpo.enabled = false;
+        else
+            ataqueCuerpo.enabled = true;
+    }
+
 }
