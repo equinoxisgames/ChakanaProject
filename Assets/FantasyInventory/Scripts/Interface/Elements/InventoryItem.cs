@@ -53,58 +53,67 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (DragTarget != null || Item.Params.Tags.Contains(ItemTag.NotForSale)) return;
+            return;
+            //Se comenta ya que no se va a realizar la funcionalidad de Drag And Drop
 
-            var canvas = FindInParents<Canvas>(gameObject);
+            //if (DragTarget != null || Item.Params.Tags.Contains(ItemTag.NotForSale)) return;
 
-            _phantom = Instantiate(gameObject);
-            _phantom.transform.SetParent(canvas.transform, true);
-            _phantom.transform.SetAsLastSibling();
-            _phantom.transform.localScale = transform.localScale;
-            _phantom.GetComponent<RectTransform>().sizeDelta = GetComponent<RectTransform>().sizeDelta;
-            _phantom.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            _phantom.GetComponent<InventoryItem>().Count.text = "1";
-            _rect = canvas.GetComponent<RectTransform>();
-            SetDraggedPosition(eventData);
-            DragTarget = this;
-            OnDragStarted?.Invoke(Item);
+            //var canvas = FindInParents<Canvas>(gameObject);
+
+            //_phantom = Instantiate(gameObject);
+            //_phantom.transform.SetParent(canvas.transform, true);
+            //_phantom.transform.SetAsLastSibling();
+            //_phantom.transform.localScale = transform.localScale;
+            //_phantom.GetComponent<RectTransform>().sizeDelta = GetComponent<RectTransform>().sizeDelta;
+            //_phantom.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            //_phantom.GetComponent<InventoryItem>().Count.text = "1";
+            //_rect = canvas.GetComponent<RectTransform>();
+            //SetDraggedPosition(eventData);
+            //DragTarget = this;
+            //OnDragStarted?.Invoke(Item);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (DragTarget == null) return;
+            return;
+            //Se comenta ya que no se va a realizar la funcionalidad de Drag And Drop
+            //if (DragTarget == null) return;
 
-            SetDraggedPosition(eventData);
+            //SetDraggedPosition(eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (DragTarget == null) return;
+            return;
+            //Se comenta ya que no se va a realizar la funcionalidad de Drag And Drop
+            //if (DragTarget == null) return;
 
-            if (DragReceiver.DropReady)
-            {
-                OnDragCompleted?.Invoke(Item);
-            }
+            //if (DragReceiver.DropReady)
+            //{
+            //    OnDragCompleted?.Invoke(Item);
+            //}
 
-            DragTarget = null;
-            DragReceiver.DropReady = false;
-            Destroy(_phantom, 0.25f);
+            //DragTarget = null;
+            //DragReceiver.DropReady = false;
+            //Destroy(_phantom, 0.25f);
 
-            foreach (var graphic in _phantom.GetComponentsInChildren<Graphic>())
-            {
-                graphic.CrossFadeAlpha(0f, 0.25f, true);
-            }
+            //foreach (var graphic in _phantom.GetComponentsInChildren<Graphic>())
+            //{
+            //    graphic.CrossFadeAlpha(0f, 0.25f, true);
+            //}
         }
 
         private void SetDraggedPosition(PointerEventData data)
         {
-            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(_rect, data.position, data.pressEventCamera, out var mouse))
-            {
-                var rect = _phantom.GetComponent<RectTransform>();
+            return;
+            //Se comenta ya que no se va a realizar la funcionalidad de Drag And Drop
+            //if (RectTransformUtility.ScreenPointToWorldPointInRectangle(_rect, data.position, data.pressEventCamera, out var mouse))
+            //{
+            //    var rect = _phantom.GetComponent<RectTransform>();
 
-                rect.position = mouse;
-                rect.rotation = _rect.rotation;
-            }
+            //    rect.position = mouse;
+            //    rect.rotation = _rect.rotation;
+            //}
         }
 
         private static T FindInParents<T>(GameObject go) where T : Component
