@@ -276,25 +276,28 @@ public class Hoyustus : CharactersBehaviour
             aplastarBotonCuracion = false;
         }
 
-        if (aplastarBotonCuracion)
+        if (aplastarBotonCuracion && playable)
         {
             botonCuracion += Time.deltaTime;
 
             if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadCondor");
+                return;
             }
             if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadSerpiente");
+                return;
             }
             if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadLanza");
+                return;
             }
         }
 
-        if (Input.GetButtonDown("Activador_Habilidades"))
+        if (Input.GetButtonDown("Activador_Habilidades") && playable)
         {
             aplastarBotonCuracion = true;
             //ACTIVACION DE LA CURACION
@@ -559,10 +562,10 @@ public class Hoyustus : CharactersBehaviour
 
         yield return new WaitForSeconds(0.05f);
         anim.SetInteger("Skill", 0);
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.35f);
         Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -577,18 +580,18 @@ public class Hoyustus : CharactersBehaviour
         dashAvailable = false;
         cargaHabilidadSerpiente = 0f;
         cargaCuracion += 30;
-
+        yield return new WaitForSeconds(0.05f);
+        anim.SetInteger("Skill", 0);
+        yield return new WaitForSeconds(0.25f);
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 11);
         yield return new WaitForEndOfFrame();
-        anim.SetInteger("Skill", 0);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         dashAvailable = true;
         playable = true;
         vidaMax = 1000;
-
     }
 
 
@@ -601,7 +604,6 @@ public class Hoyustus : CharactersBehaviour
         EstablecerInvulnerabilidades(layerObject);
         realizandoHabilidadLanza = true;
         playable = false;
-        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
 
         invulnerable = true;
         cargaCuracion += 30;
@@ -613,6 +615,9 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
 
+        yield return new WaitForSeconds(0.05f);
+        anim.SetInteger("Skill", 0);
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1f);
         //ACTIVACION Y MODIFICACION DE LA LANZA
         lanzas[0].tag = "Fuego";
         ataque = valorAtaqueHabilidadLanza;
@@ -622,8 +627,8 @@ public class Hoyustus : CharactersBehaviour
 
         IEnumerator movimientoHabilidadLanza()
         {
-            rb.AddForce(new Vector2(transform.localScale.x * 20, 0), ForceMode2D.Impulse);
-            yield return new WaitForSeconds(1);
+            rb.AddForce(new Vector2(transform.localScale.x * 30, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.5f);
             rb.velocity = Vector2.zero;
             realizandoHabilidadLanza = false;
             //isDashing = false;
@@ -887,7 +892,7 @@ public class Hoyustus : CharactersBehaviour
         }
         else if (!isJumping)
         {
-            if (!playerAudio.isPlaying)
+            if (!playerAudio.isPlaying && Grounded())
             {
                 playerAudio.loop = true;
                 playerAudio.clip = AudioWalking;
