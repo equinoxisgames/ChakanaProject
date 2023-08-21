@@ -43,10 +43,11 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (OnDoubleClick != null && Mathf.Abs(eventData.clickTime - _clickTime) < 0.5f) // If double click
-            {
-                OnDoubleClick(Item);
-            }
+            //Se comenta este código por que no se implementa doble click
+            //if (OnDoubleClick != null && Mathf.Abs(eventData.clickTime - _clickTime) < 0.5f) // If double click
+            //{
+            //    OnDoubleClick(Item);
+            //}
 
             _clickTime = eventData.clickTime;
         }
