@@ -388,7 +388,6 @@ public class Mapianguari : Enemy
             rb.gravityScale = 5;
             rb.velocity = Vector2.zero;
         }
-
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
         anim.enabled = true;
