@@ -24,6 +24,7 @@ public class LevelLoader : MonoBehaviour
             if (PlayerPrefs.GetInt("scenePos") == actualPos)
             {
                 player.position = appearPos.position;
+                player.localScale = transform.localScale;
             }
         }
     }
