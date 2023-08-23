@@ -27,6 +27,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
         public static Action<Item> OnDragStarted;
         public static Action<Item> OnDragCompleted;
         public static Action<Item> OnItemSelected;
+        public static Action<Item> OnItemChange;
 
         public void Start()
         {
@@ -39,6 +40,8 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
         public void OnPress()
         {
             OnItemSelected?.Invoke(Item);
+
+            Debug.Log("Item: "+Item.ToString());
         }
 
         public void OnPointerClick(PointerEventData eventData)

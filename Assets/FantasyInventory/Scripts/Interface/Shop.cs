@@ -12,7 +12,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
     /// <summary>
     /// High-level shop interface.
     /// </summary>
-    public class Shop : ItemWorkspace
+    public class Shop : ItemWorkspaceShop
     {
         public ScrollInventory Trader;
         public ScrollInventory Bag;
