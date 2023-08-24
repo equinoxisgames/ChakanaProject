@@ -50,7 +50,7 @@ public class PlantaVeneno : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.layer == 14)
+        if (collider.gameObject.layer == 14 && collider.gameObject.CompareTag("Untagged"))
         {
             Destroy(this.gameObject);
         }
