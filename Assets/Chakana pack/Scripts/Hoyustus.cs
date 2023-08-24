@@ -120,6 +120,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private int CSTEPS = 0;
     private float maxHabilidad_Curacion = 100f;
 
+    private IEnumerator recoil;
+
     float limitY = 0f;
 
     [SerializeField] GameObject dashVfx;
@@ -260,6 +262,7 @@ public class Hoyustus : CharactersBehaviour
 
     void Update()
     {
+        cargaLanzaTest();
         TocarPared();
 
         if (Mathf.Abs(rb.velocity.y) < 0.1f)
@@ -290,9 +293,13 @@ public class Hoyustus : CharactersBehaviour
                 StartCoroutine("habilidadSerpiente");
                 return;
             }
-            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
+            if (!curando && !atacando && Input.GetButtonDown("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
             {
-                StartCoroutine("habilidadLanza");
+                cargaHabilidadLanza = 0;
+                transform.parent = null;
+                invulnerable = true;
+                playable = false;
+                StartCoroutine(habilidadLanza());
                 return;
             }
         }
@@ -619,10 +626,8 @@ public class Hoyustus : CharactersBehaviour
         anim.SetInteger("Skill", 0);
         Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1f);
         //ACTIVACION Y MODIFICACION DE LA LANZA
-        lanzas[0].tag = "Fuego";
         ataque = valorAtaqueHabilidadLanza;
-        ataque = 150;
-        lanzas[0].SetActive(true);
+        lanzas[3].SetActive(true);
 
 
         IEnumerator movimientoHabilidadLanza()
@@ -631,7 +636,6 @@ public class Hoyustus : CharactersBehaviour
             yield return new WaitForSeconds(0.5f);
             rb.velocity = Vector2.zero;
             realizandoHabilidadLanza = false;
-            //isDashing = false;
         }
         StartCoroutine(movimientoHabilidadLanza());
         yield return new WaitUntil(() => (tocandoPared == 0 || !realizandoHabilidadLanza));
@@ -650,11 +654,14 @@ public class Hoyustus : CharactersBehaviour
         ataque = ataqueMax;
 
         //DESACTIVACION Y MODIFICACION DE LA LANZA
-        lanzas[0].SetActive(false);
-        lanzas[0].tag = "Untagged";
-        lanzas[0].layer = 14;
+        lanzas[3].SetActive(false);
     }
 
+    public void cargaLanzaTest() {
+        if (Input.GetKeyDown(KeyCode.N)) {
+            cargaHabilidadLanza = 100f;
+        }
+    }
 
     public void setPlayable(bool state)
     {
@@ -689,8 +696,9 @@ public class Hoyustus : CharactersBehaviour
                     //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
                     invulnerable = true;
                     RecibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
-                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    recoil = cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
+                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil);
+                    StartCoroutine(recoil);
                     CollisionElementos_1_1_1(collision);
                     return;
                 }
@@ -707,6 +715,7 @@ public class Hoyustus : CharactersBehaviour
     protected override sealed IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
         Recoil(direccion, fuerzaRecoil);
+        
         if (vida <= 0)
         {
             yield break;
@@ -719,18 +728,9 @@ public class Hoyustus : CharactersBehaviour
 
         //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.5f);
-        if(!realizandoHabilidadLanza)
-        {
-            //SE DETIENE EL RECOIL
-            rb.velocity = Vector2.zero;
-            yield return new WaitForEndOfFrame();
-            //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
-            playable = true;
-        }
+        playable = true;
         yield return new WaitForSeconds(0.7f);
         QuitarInvulnerabilidades(layerObject);
-        if(realizandoHabilidadLanza)
-            invulnerable = true;
     }
 
 
@@ -749,8 +749,9 @@ public class Hoyustus : CharactersBehaviour
                 if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
                 {
                     RecibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
-                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    recoil = cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
+                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil);
+                    StartCoroutine(recoil);
                     CollisionElementos_1_1_1(collision);
                 }
 
@@ -790,7 +791,8 @@ public class Hoyustus : CharactersBehaviour
                 else if (!invulnerable && (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && (collider.gameObject.layer == 3 || collider.gameObject.layer == 19)))
                 {
                     RecibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    recoil = cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil);
+                    StartCoroutine(recoil);
                     TriggerElementos_1_1_1(collider);
                 }
                 else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
@@ -798,7 +800,8 @@ public class Hoyustus : CharactersBehaviour
                     Debug.Log("imposible dashear");
                     invulnerable = true;
                     RecibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
-                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    recoil = cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil);
+                    StartCoroutine(recoil);
                     TriggerElementos_1_1_1(collider);
                 }
                 return;
@@ -1069,8 +1072,11 @@ public class Hoyustus : CharactersBehaviour
 
 
     public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
-        if(!realizandoHabilidadLanza) 
-            StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
+        if (!realizandoHabilidadLanza)
+        {
+            recoil = cooldownRecibirDanio(direccion, fuerza);
+            StartCoroutine(recoil);
+        }
     }
 
 
