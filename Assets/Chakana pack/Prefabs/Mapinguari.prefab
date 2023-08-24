@@ -141,12 +141,12 @@ MonoBehaviour:
     m_Bits: 0
   objetivo: {x: 0, y: 0, z: 0}
   speed: 0
+  anim: {fileID: 0}
   persiguiendo: 0
   atacando: 0
   cambiandoPlataforma: 0
   t1: 0.5
   t2: 1
-  anim: {fileID: 0}
   tiempoDentroRango: 0
   tiempoFueraRango: 0
   minX: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   audioAtk: {fileID: 8300000, guid: a7eca54cf13ef104a992e4112f217f78, type: 3}
   audioScream: {fileID: 8300000, guid: 46b7ef0821fb5004b8a4e74dc3b86619, type: 3}
   danioPlantaVeneno: 80
+  spriteStatic: {fileID: 21300000, guid: 4292aee0872aa4940a24b1d45b7738ba, type: 3}
   rangoCercania: 12
   reduccionTiempoAtaqueDistancia: 0
 --- !u!50 &627248762632895300
@@ -347,7 +348,7 @@ Animator:
   m_GameObject: {fileID: 627248762632895303}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f87a0679adceabe4bb250d5cb96a3c93, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -398,7 +399,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627248763571091569}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

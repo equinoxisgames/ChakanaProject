@@ -37,6 +37,7 @@ public class Mapianguari : Enemy
     [SerializeField] AudioClip audioAtk;
     [SerializeField] AudioClip audioScream;
     [SerializeField] private float danioPlantaVeneno = 0f;
+    [SerializeField] private Sprite spriteStatic;
     System.Random triggerProbabilidad = new System.Random();
 
     AudioSource charAudio;
@@ -251,13 +252,9 @@ public class Mapianguari : Enemy
             if (!atacando) { 
                 //CAMBIO DE ORIENTACION
                 if (xObjetivo < transform.position.x)
-                {
                     transform.localScale = new Vector3(-1, 1, 1);
-                }
                 else if (xObjetivo > transform.position.x)
-                {
                     transform.localScale = Vector3.one;
-                }
 
                 distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
 
@@ -274,16 +271,11 @@ public class Mapianguari : Enemy
             }
 
             if (distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
-            {
                 StartCoroutine(AtaqueCuerpoCuerpo());
-            }
             else if (distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
-            {
                 StartCoroutine(AtaqueAturdimiento());
-            }
-            else if (distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia){
+            else if (distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia)
                 StartCoroutine(AtaqueDistancia());
-            }
         }
     }
 
@@ -400,51 +392,6 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE A DISTANCIA
     //***************************************************************************************************
-    /*private IEnumerator ataqueDistancia() {
-        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
-        atacando = true;
-        ataqueDisponible = false;
-        //CORREGIR POR EL TIEMPO DE LA ANIMACION
-        yield return new WaitForSeconds(1f);
-        if (!segundaEtapa)
-        {
-            float auxDisparo = -10f;
-            for (int i = 0; i < 10; i++)
-            {
-                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
-                bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                bolaVenenoGenerada.name += "Enemy";
-                yield return new WaitForEndOfFrame();
-                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
-                auxDisparo++; 
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-        else {
-            for (int i = 0; i < 10; i++)
-            {
-                System.Random aux = new System.Random();
-                int direccion = aux.Next(0,2);
-                Debug.Log(direccion);
-                if (direccion == 0) {
-                    direccion = -1;
-                }
-                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
-                bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                bolaVenenoGenerada.name += "Enemy";
-                yield return new WaitForEndOfFrame();
-                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-
-
-        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
-        atacando = false;
-        ataqueDisponible = true;
-        tiempoDentroRango = 0f;
-        tiempoFueraRango = 0f;
-    }*/
     private IEnumerator AtaqueDistancia() {
         atacando = true;
         ataqueDisponible = false;
@@ -571,12 +518,15 @@ public class Mapianguari : Enemy
             }
             atacando = false;
         }
+        anim.enabled = false;
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         ataque = valorAtaqueBasico;
         ataqueMax = ataque;
         pruebaAtaqueEspecial = false;
+        GetComponent<SpriteRenderer>().sprite = spriteStatic;
         //STUN
         yield return new WaitForSeconds(5f);
+        anim.enabled = true;
         //RETORNO A VALORES DE JUEGO NORMAL
         usandoAtaqueEspecial = false;
         campoVision.enabled = true;
@@ -592,14 +542,19 @@ public class Mapianguari : Enemy
         tiempoFueraRango = 0;
         ataqueDisponible = false;
         usandoAtaqueEspecial = true;
+        //anim.enabled = false;
+        //GetComponent<SpriteRenderer>().sprite = spriteStatic;
+        //GetComponent<SpriteRenderer>().sortingOrder = -6;
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
         triggerProbabilidad = new System.Random();
         int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
+        //GetComponent<SpriteRenderer>().sortingOrder = 8;
+        //anim.enabled = true;
         //SE REACTIVA SU MOVIMIENTO
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
@@ -628,8 +583,8 @@ public class Mapianguari : Enemy
                 plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
             }
         }
-        catch (Exception e) { 
-        }
+        catch (Exception) { }
+
     }
 
 
