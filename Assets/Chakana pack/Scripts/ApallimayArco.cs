@@ -17,7 +17,6 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float posY = 0;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
     [SerializeField] private GameObject hoyustus;
-    [SerializeField] private bool grounded = false;
 
 
     void Start()
@@ -88,7 +87,7 @@ public class ApallimayArco : Apallimay
         yield return new WaitForSeconds(0.2f);
         //ROTAR SPRITE
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
-        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
+        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
         flechaGenerada.name += "Enemy";
         flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
         atacando = true;
@@ -167,7 +166,7 @@ public class ApallimayArco : Apallimay
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
-                if (grounded) {
+                if (Grounded()) {
                     rb.velocity = Vector2.zero;
                 }
                 if (collider.transform.position.x <= transform.position.x)
@@ -211,7 +210,7 @@ public class ApallimayArco : Apallimay
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
         Instantiate(explosion, transform.position, Quaternion.identity);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(1.4f);
         realizandoAtaqueEspecial = false;
         atacando = false;
         playable = true;
@@ -276,10 +275,8 @@ public class ApallimayArco : Apallimay
             {
                 limit2 = transform.position - Vector3.right * 0.1f;
             }
-            grounded = false;
             return false;
         }
-        grounded = true;
         return true;
     }
 
