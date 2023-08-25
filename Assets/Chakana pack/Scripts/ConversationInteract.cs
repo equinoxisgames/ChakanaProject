@@ -9,6 +9,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] DialogueSystemTrigger data;
     [SerializeField] GameObject interactBtn;
     [SerializeField] GameObject shop;
+    [SerializeField] GameObject canvas;
 
     private GameObject keyObj, joyObj;
     private bool joystick;
@@ -105,6 +106,7 @@ public class ConversationInteract : MonoBehaviour
         {
             shop.SetActive(true);
             shopping = true;
+            canvas.SetActive(false);
             return;
         }
 
@@ -126,6 +128,7 @@ public class ConversationInteract : MonoBehaviour
 
     public void CloseShop()
     {
+        canvas.SetActive(true);
         shop.SetActive(false);
         shopping = false;
         player.enabled = true;

@@ -323,6 +323,8 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(LoadAsyncScene(1));
         //corutinaIniciada = true;
         //}
+
+        GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>().Stop();
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)
