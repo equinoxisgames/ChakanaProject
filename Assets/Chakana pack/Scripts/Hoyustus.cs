@@ -279,21 +279,21 @@ public class Hoyustus : CharactersBehaviour
             aplastarBotonCuracion = false;
         }
 
-        if (aplastarBotonCuracion)
+        if (aplastarBotonCuracion && playable)
         {
             botonCuracion += Time.deltaTime;
 
-            if (!curando && Input.GetButtonDown("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
+            if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadCondor");
                 return;
             }
-            if (!curando && Input.GetButtonDown("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable)
+            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
             {
                 StartCoroutine("habilidadSerpiente");
                 return;
             }
-            if (!curando && !atacando && Input.GetButtonDown("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion && playable)
+            if (!curando && !atacando && Input.GetButtonDown("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
             {
                 cargaHabilidadLanza = 0;
                 transform.parent = null;
@@ -616,7 +616,7 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 30;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
-        //atacando = true;
+        atacando = true;
         codigoAtaque = 3;
         cargaHabilidadLanza = 0f;
         rb.velocity = Vector2.zero;
@@ -642,7 +642,7 @@ public class Hoyustus : CharactersBehaviour
 
         anim.SetInteger("Skill", 0);
 
-        //atacando = false;
+        atacando = false;
         codigoAtaque = 0;
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
@@ -1000,10 +1000,8 @@ public class Hoyustus : CharactersBehaviour
     {
         lanzas[index].SetActive(true);
         atacando = true;
-        playable = false;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         atacando = false;
-        yield return new WaitForSeconds(0.1f);
         playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(false);
