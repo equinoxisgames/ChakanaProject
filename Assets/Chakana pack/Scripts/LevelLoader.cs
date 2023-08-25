@@ -29,6 +29,20 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        int escena = SceneManager.GetActiveScene().buildIndex;
+        AudioSource audio = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+        if (escena == 15)
+        {
+            audio.Stop();
+        }
+        else if(!audio.isPlaying)
+        {
+            audio.Play();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player")
