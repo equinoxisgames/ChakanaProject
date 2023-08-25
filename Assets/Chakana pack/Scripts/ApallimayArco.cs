@@ -17,6 +17,7 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float posY = 0;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
     [SerializeField] private GameObject hoyustus;
+    [SerializeField] private bool grounded = false;
 
 
     void Start()
@@ -82,6 +83,9 @@ public class ApallimayArco : Apallimay
 
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
+        //PREPARACION
+        atacando = true;
+        yield return new WaitForSeconds(0.2f);
         //ROTAR SPRITE
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
         flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(objetivoAtaque - transform.position, transform.right)));
@@ -159,17 +163,22 @@ public class ApallimayArco : Apallimay
             distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            
+
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
+                if (grounded) {
+                    rb.velocity = Vector2.zero;
+                }
                 if (collider.transform.position.x <= transform.position.x)
                 {
                     transform.localScale = new Vector3(-1, 1, 1);
+                    objetivo = limit1;
                 }
                 else
                 {
                     transform.localScale = new Vector3(1, 1, 1);
+                    objetivo = limit2;
                 }
 
 
@@ -267,8 +276,10 @@ public class ApallimayArco : Apallimay
             {
                 limit2 = transform.position - Vector3.right * 0.1f;
             }
+            grounded = false;
             return false;
         }
+        grounded = true;
         return true;
     }
 
