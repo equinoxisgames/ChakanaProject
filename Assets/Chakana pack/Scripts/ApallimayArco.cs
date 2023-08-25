@@ -182,7 +182,7 @@ public class ApallimayArco : Apallimay
                 }
 
 
-                if (distanciaPlayer <= rangoAtaqueEspecial && ataqueEspecialDisponible)
+                if (distanciaPlayer <= rangoAtaqueEspecial && ataqueEspecialDisponible && !atacando)
                 {
                     atacando = true;
                     realizandoAtaqueEspecial = true;
