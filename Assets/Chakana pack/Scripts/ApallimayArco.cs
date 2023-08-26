@@ -7,6 +7,7 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float rangoAtaqueEspecial;
     [SerializeField] private float cooldownAtaqueEspecial;
     [SerializeField] private float cooldownDisparoFlechas;
+    [SerializeField] private float normalSpeed;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private GameObject flecha;
     [SerializeField] private bool atacando;
@@ -17,6 +18,7 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float posY = 0;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
     [SerializeField] private GameObject hoyustus;
+    [SerializeField] private int framesDetenimiento;
 
 
     void Start()
@@ -34,6 +36,7 @@ public class ApallimayArco : Apallimay
         groundDetector = transform.GetChild(3).gameObject.transform;
         vidaMax = vida;
         hoyustus = GameObject.FindGameObjectWithTag("Player");
+        normalSpeed = speed;
     }
 
 
@@ -101,6 +104,7 @@ public class ApallimayArco : Apallimay
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
+        framesDetenimiento = 0;
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
     }
@@ -123,6 +127,7 @@ public class ApallimayArco : Apallimay
             }
 
             TriggerElementos_1_1_1(collider);
+            playable = false;
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
@@ -139,10 +144,13 @@ public class ApallimayArco : Apallimay
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
-                rb.velocity = Vector2.zero;
+                if(Grounded())
+                    rb.velocity = Vector2.zero;
+                speed = 0;
             }
             else {
                 jugadorDetectado = false;
+                speed = normalSpeed;
             }
             return;
         }
@@ -166,8 +174,9 @@ public class ApallimayArco : Apallimay
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
-                if (Grounded()) {
+                if (Grounded() && playable) {
                     rb.velocity = Vector2.zero;
+                    framesDetenimiento++;
                 }
                 if (collider.transform.position.x <= transform.position.x)
                 {
@@ -197,6 +206,7 @@ public class ApallimayArco : Apallimay
             else
             {
                 jugadorDetectado = false;
+                speed = normalSpeed;
             }
         }
     }
@@ -282,6 +292,10 @@ public class ApallimayArco : Apallimay
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 11) jugadorDetectado = false;
+        if (collision.gameObject.layer == 11)
+        {
+            jugadorDetectado = false;
+            speed = normalSpeed;
+        }
     }
 }
