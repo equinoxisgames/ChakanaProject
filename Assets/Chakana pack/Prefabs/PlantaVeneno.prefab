@@ -120,7 +120,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.8}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -131,7 +131,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 2.5}
   m_EdgeRadius: 0
 --- !u!50 &766298477289679003
 Rigidbody2D:
@@ -172,10 +172,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c22bae450dbc1418bf1793fbde9279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hoyustus: {fileID: 0}
   ataqueDisponible: 1
-  explosion: {fileID: 0}
+  atacando: 0
   bolaVeneno: {fileID: 3988393829037458745, guid: c761468e5f4db0b46ab63295081c2160, type: 3}
   danio: 0
+  anguloCambioVista: 35
+  anim: {fileID: 0}
+  codigoAtaque: 0
 --- !u!1001 &4745453183229050769
 PrefabInstance:
   m_ObjectHideFlags: 0
