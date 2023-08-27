@@ -24,7 +24,22 @@ public class LevelLoader : MonoBehaviour
             if (PlayerPrefs.GetInt("scenePos") == actualPos)
             {
                 player.position = appearPos.position;
+                player.localScale = transform.localScale;
             }
+        }
+    }
+
+    private void Start()
+    {
+        int escena = SceneManager.GetActiveScene().buildIndex;
+        AudioSource audio = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+        if (escena == 15)
+        {
+            audio.Stop();
+        }
+        else if(!audio.isPlaying)
+        {
+            audio.Play();
         }
     }
 

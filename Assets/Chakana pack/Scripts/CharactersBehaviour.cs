@@ -73,6 +73,26 @@ public class CharactersBehaviour : MonoBehaviour
     }
 
 
+    protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil, float tiempoInvulnerabilidad)
+    {
+        Recoil(direccion, fuerzaRecoil);
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
+        yield return new WaitForSeconds(0.4f);
+        //SE DETIENE EL RECOIL
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(0.4f);
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
+        playable = true;
+        //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
+        yield return new WaitForSeconds(0.5f);
+        QuitarInvulnerabilidades(layerObject);
+    }
+
+
     //***************************************************************************************************
     //LOGICA DE RECOIL
     //***************************************************************************************************
@@ -113,8 +133,8 @@ public class CharactersBehaviour : MonoBehaviour
         //LAYER EXPLOSION
         if ((collider.gameObject.layer == 12 && !invulnerable && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
         {
-            triggerElementos_1_1_1(collider);
-            recibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
+            TriggerElementos_1_1_1(collider);
+            RecibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
             return;
         }
@@ -216,7 +236,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     //RECIBIR DANIO ATAQUE ENEMIGO
     //***************************************************************************************************
-    public void recibirDanio(float danio)
+    public void RecibirDanio(float danio)
     {
 
         if (vidaMax == 0) vidaMax = vida;
@@ -245,7 +265,7 @@ public class CharactersBehaviour : MonoBehaviour
         GetComponent<SpriteRenderer>().material = playerMat;
     }
 
-    public void setParalisis()
+    public void SetParalisis()
     {
         rb.velocity = Vector3.zero;
         playable = false;
@@ -253,7 +273,7 @@ public class CharactersBehaviour : MonoBehaviour
         paralizadoPorAtaque = true;
     }
 
-    public void quitarParalisis()
+    public void QuitarParalisis()
     {
         playable = true;
         aumentoDanioParalizacion = 1f;
@@ -283,7 +303,7 @@ public class CharactersBehaviour : MonoBehaviour
     }
 
 
-    protected void collisionElementos_1_1_1(Collision2D collider)
+    protected void CollisionElementos_1_1_1(Collision2D collider)
     {
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.CompareTag("Viento"))
@@ -363,7 +383,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     }
 
-    protected void triggerElementos_1_1_1(Collider2D collider)
+    protected void TriggerElementos_1_1_1(Collider2D collider)
     {
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
         if (collider.gameObject.CompareTag("Viento"))

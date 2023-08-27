@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -29,20 +30,22 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
+    [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private LiquidBar lifeBar;
     [SerializeField] AudioClip audioHurt;
     [SerializeField] AudioClip audioAtk;
     [SerializeField] AudioClip audioScream;
     [SerializeField] private float danioPlantaVeneno = 0f;
+    [SerializeField] private Sprite spriteStatic;
     System.Random triggerProbabilidad = new System.Random();
 
     AudioSource charAudio;
-    //[SerializeField] private float escala = 3f;
     [SerializeField] private float rangoCercania = 12f;
     [SerializeField] private float reduccionTiempoAtaqueDistancia = 0;
     void Start()
     {
+        anim = GetComponent<Animator>();
         rangoPreparacion = 6f;
         fuerzaRecoil = 4f;
         plataformaActual = 1;
@@ -61,14 +64,11 @@ public class Mapianguari : Enemy
         cuerpo = transform.GetComponent<CapsuleCollider2D>();
         campoVision = transform.GetChild(0).GetComponent<BoxCollider2D>();
         ataqueCuerpo = transform.GetChild(1).GetComponent<BoxCollider2D>();
-        //StartCoroutine(habilitarAtaqueInicial());
         ataqueCuerpo.enabled = false;
         layerObject = transform.gameObject.layer;
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
         Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
         explosion = Resources.Load<GameObject>("Explosion");
-
-        //GameObject.FindWithTag("GameController").GetComponent<GameManager>().SuscribirEnemigo(this);
     }
 
     private void UpdateLife()
@@ -76,11 +76,6 @@ public class Mapianguari : Enemy
         lifeBar.targetFillAmount = (vida / vidaMax);
     }
 
-    private IEnumerator habilitarAtaqueInicial() {
-        yield return new WaitForSeconds(3f);
-        ataqueDisponible = true;
-        usandoAtaqueEspecial = false;
-    }
 
     private void FixedUpdate()
     {
@@ -93,7 +88,10 @@ public class Mapianguari : Enemy
             rangoCercania = 15;
             danioPlantaVeneno = 100;
         }
-        if (vida <= 0) {
+        if (vida <= 0 && !isDead) {
+            isDead = true;
+            GameObject.FindObjectOfType<Hoyustus>().QuitarParalisis();
+            StopAllCoroutines();
             StartCoroutine(Muerte());
         }
     }
@@ -105,6 +103,8 @@ public class Mapianguari : Enemy
     private IEnumerator Muerte() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        anim.enabled = true;
+        anim.Play("Muerte");
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
         atacando = true;
@@ -118,9 +118,14 @@ public class Mapianguari : Enemy
 
     void Update()
     {
+        anim.SetFloat("Vida", vida);
+        anim.SetBool("AB", realizandoAB);
+        anim.SetBool("Muerto", isDead);
+        anim.SetBool("AT", realizandoAT);
+        anim.SetBool("AE", pruebaAtaqueEspecial);
 
         if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
-            StartCoroutine(cambioPlataforma());       
+            StartCoroutine(CambioPlataforma());       
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (!usandoAtaqueEspecial && xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
@@ -157,7 +162,7 @@ public class Mapianguari : Enemy
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
                 charAudio.loop = false;
                 charAudio.Stop();
                 charAudio.clip = audioHurt;
@@ -176,7 +181,7 @@ public class Mapianguari : Enemy
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
-                combinacionesElementales();
+                CombinacionesElementales();
                 return;
 
             }
@@ -185,7 +190,7 @@ public class Mapianguari : Enemy
             StartCoroutine("afectacionEstadoViento");
             if(segundaEtapa && triggerProbabilidad.Next(0, 2) == 0)
             {
-                StartCoroutine(ataqueEspecial());
+                StartCoroutine(AtaqueEspecial());
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO FUEGO
@@ -198,7 +203,7 @@ public class Mapianguari : Enemy
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
-                combinacionesElementales();
+                CombinacionesElementales();
                 return;
 
             }
@@ -207,7 +212,7 @@ public class Mapianguari : Enemy
             StartCoroutine("afectacionEstadoFuego");
             if (segundaEtapa && triggerProbabilidad.Next(0, 2) == 0)
             {
-                StartCoroutine(ataqueEspecial());
+                StartCoroutine(AtaqueEspecial());
             }
         }
     }
@@ -216,7 +221,7 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //COMBINACIONES ELEMENTALES
     //***************************************************************************************************
-    private new void combinacionesElementales()
+    private void CombinacionesElementales()
     {
         if (counterEstados == 11)
         {
@@ -239,7 +244,7 @@ public class Mapianguari : Enemy
     private void OnTriggerStay2D(Collider2D collider){
 
         //SE EJECUTA SOLO SI MAPINGUARI NO SE ENCUENTRA REALIZANDO EL ATAQUE ESPECIAL
-        if (!usandoAtaqueEspecial && collider.gameObject.CompareTag("Player"))
+        if (!usandoAtaqueEspecial && collider.gameObject.CompareTag("Player") && ataqueDisponible) 
         {
             xObjetivo = collider.transform.position.x;
             float distanciaPlayer = 0;
@@ -247,14 +252,9 @@ public class Mapianguari : Enemy
             if (!atacando) { 
                 //CAMBIO DE ORIENTACION
                 if (xObjetivo < transform.position.x)
-                {
-                    //transform.localScale = new Vector3(-escala, escala, 1);
                     transform.localScale = new Vector3(-1, 1, 1);
-                }
                 else if (xObjetivo > transform.position.x)
-                {
                     transform.localScale = Vector3.one;
-                }
 
                 distanciaPlayer = Mathf.Abs(transform.position.x - collider.transform.position.x);
 
@@ -270,17 +270,12 @@ public class Mapianguari : Enemy
                 }
             }
 
-            if (ataqueDisponible && distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
-            {
-                StartCoroutine(ataqueCuerpoCuerpo());
-            }
-            else if (ataqueDisponible && distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
-            {
-                StartCoroutine(ataqueAturdimiento());
-            }
-            else if (ataqueDisponible && distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia){
-                StartCoroutine(ataqueDistancia());
-            }
+            if (distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
+                StartCoroutine(AtaqueCuerpoCuerpo());
+            else if (distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
+                StartCoroutine(AtaqueAturdimiento());
+            else if (distanciaPlayer > rangoCercania && tiempoFueraRango >= 10 - reduccionTiempoAtaqueDistancia)
+                StartCoroutine(AtaqueDistancia());
         }
     }
 
@@ -297,13 +292,14 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE DE ATURDIMIENTO
     //***************************************************************************************************
-    private IEnumerator ataqueAturdimiento() {
+    private IEnumerator AtaqueAturdimiento() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         charAudio.Stop();
         charAudio.clip = audioScream;
         charAudio.Play();
         atacando = true;
+        realizandoAT = true;
         ataqueDisponible = false;
         //TIEMPO PARA LA ANIMACION
         Debug.Log("Preparando ataque inmovilizador");
@@ -313,13 +309,13 @@ public class Mapianguari : Enemy
         if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
             charcoGenerado.name = "CharcoVenenoEnemy";
-            StartCoroutine(destruirCharco(charcoGenerado));
+            StartCoroutine(DestruirCharco(charcoGenerado));
         }
 
         //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
         if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
 
-            StartCoroutine(aturdirPlayer());
+            StartCoroutine(AturdirPlayer());
             Debug.Log("Te inmovilizo");
             yield return new WaitForSeconds(0.5f);
             tiempoDentroRango = 0;
@@ -328,6 +324,7 @@ public class Mapianguari : Enemy
         //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
+        realizandoAT = false;
         ataqueDisponible = true;
         atacando = false;
     }
@@ -336,18 +333,18 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA EN LA QUE SE PARALIZA Y SE QUITA LA PARALISIS DE HOYUSTUS
     //***************************************************************************************************
-    private IEnumerator aturdirPlayer() {
-        GameObject.FindObjectOfType<Hoyustus>().setParalisis();
+    private IEnumerator AturdirPlayer() {
+        GameObject.FindObjectOfType<Hoyustus>().SetParalisis();
         tiempoDentroRango = 0;
         yield return new WaitForSeconds(3f);
-        GameObject.FindObjectOfType<Hoyustus>().quitarParalisis();
+        GameObject.FindObjectOfType<Hoyustus>().QuitarParalisis();
     }
 
 
     //***************************************************************************************************
     //CORRUTINA DE DESTRUCCION DE CHARCO DE VENENO
     //***************************************************************************************************
-    private IEnumerator destruirCharco(GameObject charco) {
+    private IEnumerator DestruirCharco(GameObject charco) {
         charco.SetActive(true);
         yield return new WaitForSeconds(4f);
         Destroy(charco);
@@ -357,33 +354,37 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE CUERPO A CUERPO
     //***************************************************************************************************
-    private IEnumerator ataqueCuerpoCuerpo(){
-
+    private IEnumerator AtaqueCuerpoCuerpo(){
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         charAudio.Stop();
         charAudio.clip = audioAtk;
         charAudio.Play();
 
         ataqueDisponible = false;
-        ataqueCuerpo.enabled = true;
         atacando = true;
-        
+        anim.enabled = false;
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
-        ataqueCuerpo.enabled = false;
-
+        anim.enabled = true;
+        realizandoAB = true;
+        yield return new WaitForSecondsRealtime(0.45f);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
+        ataqueCuerpo.enabled = false;
+        realizandoAB = false;
+        anim.enabled = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
+            anim.enabled = false;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
             yield return new WaitForSeconds(0.25f);
             rb.gravityScale = 5;
             rb.velocity = Vector2.zero;
         }
-
-        atacando = false;
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
+        anim.enabled = true;
+        atacando = false;
+        yield return new WaitForSeconds(0.5f);
         ataqueDisponible = true;
     }
 
@@ -391,54 +392,10 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE A DISTANCIA
     //***************************************************************************************************
-    /*private IEnumerator ataqueDistancia() {
-        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
+    private IEnumerator AtaqueDistancia() {
         atacando = true;
         ataqueDisponible = false;
-        //CORREGIR POR EL TIEMPO DE LA ANIMACION
-        yield return new WaitForSeconds(1f);
-        if (!segundaEtapa)
-        {
-            float auxDisparo = -10f;
-            for (int i = 0; i < 10; i++)
-            {
-                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
-                bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                bolaVenenoGenerada.name += "Enemy";
-                yield return new WaitForEndOfFrame();
-                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, layerObject, 5, 20 + auxDisparo * 1.5f, explosion);
-                auxDisparo++; 
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-        else {
-            for (int i = 0; i < 10; i++)
-            {
-                System.Random aux = new System.Random();
-                int direccion = aux.Next(0,2);
-                Debug.Log(direccion);
-                if (direccion == 0) {
-                    direccion = -1;
-                }
-                GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position, Quaternion.identity);
-                bolaVenenoGenerada.AddComponent<BolaVeneno>();
-                bolaVenenoGenerada.name += "Enemy";
-                yield return new WaitForEndOfFrame();
-                bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x * direccion, layerObject, 8, aux.Next(5, 22), explosion);
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-
-
-        //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
-        atacando = false;
-        ataqueDisponible = true;
-        tiempoDentroRango = 0f;
-        tiempoFueraRango = 0f;
-    }*/
-    private IEnumerator ataqueDistancia() {
-        atacando = true;
-        ataqueDisponible = false;
+        realizandoAT = true;
         //TIEMPO ANIMACION
         yield return new WaitForSeconds(1f);
         if (segundaEtapa)
@@ -467,6 +424,7 @@ public class Mapianguari : Enemy
             Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
         }
         yield return new WaitForEndOfFrame();
+        realizandoAT = false;
         atacando = false;
         ataqueDisponible = true;
         tiempoDentroRango = 0f;
@@ -476,7 +434,7 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     //CORRUTINA DE ATAQUE ESPECIAL
     //***************************************************************************************************
-    private IEnumerator ataqueEspecial() {
+    private IEnumerator AtaqueEspecial() {
         usandoAtaqueEspecial = true;
         ataque = valorAtaqueEspecial;
         ataqueMax = ataque;
@@ -487,7 +445,7 @@ public class Mapianguari : Enemy
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         campoVision.enabled = false;
         transform.position = transform.position + Vector3.right * 100;
-
+        
         //LANZAMIENTO BOLAS DE VENENO
         for (int i = 1; i <= 8; i++) {
             triggerProbabilidad = new System.Random();
@@ -512,11 +470,11 @@ public class Mapianguari : Enemy
             bolaVenenoGenerada.name += "Enemy";
             bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
             yield return new WaitForEndOfFrame();
-            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().instanciarValores(explosion);
+            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().InstanciarValores(explosion);
             yield return new WaitForSeconds(1f);
         }
         yield return new WaitForSeconds(0.3f);
-
+        pruebaAtaqueEspecial = true;
         //EMBESTIDAS
         //transform.localScale = new Vector3(-escala, escala, 1);
         transform.localScale = new Vector3(-1, 1, 1);
@@ -560,34 +518,43 @@ public class Mapianguari : Enemy
             }
             atacando = false;
         }
+        anim.enabled = false;
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
-        //STUN
-        yield return new WaitForSeconds(5f);
         ataque = valorAtaqueBasico;
         ataqueMax = ataque;
+        pruebaAtaqueEspecial = false;
+        GetComponent<SpriteRenderer>().sprite = spriteStatic;
+        //STUN
+        yield return new WaitForSeconds(5f);
+        anim.enabled = true;
         //RETORNO A VALORES DE JUEGO NORMAL
-        campoVision.enabled = true;
         usandoAtaqueEspecial = false;
+        campoVision.enabled = true;
     }
 
 
     //***************************************************************************************************
     //CORRUTINA DE CAMBIO DE PLATAFORMA
     //***************************************************************************************************
-    private IEnumerator cambioPlataforma() {
+    private IEnumerator CambioPlataforma() {
         //SE ESCONDE
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
         ataqueDisponible = false;
         usandoAtaqueEspecial = true;
+        //anim.enabled = false;
+        //GetComponent<SpriteRenderer>().sprite = spriteStatic;
+        //GetComponent<SpriteRenderer>().sortingOrder = -6;
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
         triggerProbabilidad = new System.Random();
         int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
+        //GetComponent<SpriteRenderer>().sortingOrder = 8;
+        //anim.enabled = true;
         //SE REACTIVA SU MOVIMIENTO
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
@@ -596,7 +563,7 @@ public class Mapianguari : Enemy
 
         //SEGUNDA ETAPA || PROBABILIDAD DE 50% en la primera etapa
         if (segundaEtapa || triggerProbabilidad.Next(0, 2) == 0) {
-            StartCoroutine(ataqueDistancia());
+            StartCoroutine(AtaqueDistancia());
         }
     }
 
@@ -606,11 +573,26 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
-        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && collision.gameObject.name.StartsWith("Plataforma")) {
-            minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
-            maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
-            plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
+        try
+        {
+            //AL TOCAR UNA PLATAFORMA SE ESTABLECEN SUS LIMITES DE MOVIMIENTO EN X
+            if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && collision.gameObject.name.StartsWith("Plataforma"))
+            {
+                minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
+                maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
+                plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
+            }
         }
+        catch (Exception) { }
+
     }
+
+
+    public void ActivacionGarras(int estado) {
+        if (estado == 0)
+            ataqueCuerpo.enabled = false;
+        else
+            ataqueCuerpo.enabled = true;
+    }
+
 }
