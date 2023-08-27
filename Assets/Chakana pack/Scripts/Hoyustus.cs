@@ -1105,7 +1105,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    void PlayAudioStep1()
+    /*void PlayAudioStep1()
     {
         AudioStep1.Play();
     }
@@ -1136,7 +1136,7 @@ public class Hoyustus : CharactersBehaviour
     void PlayAudioStep8()
     {
         AudioStep8.Play();
-    }
+    }*/
     public void PlayParticles()
     {
         ParticleTestParticleTest.Play();
