@@ -268,7 +268,7 @@ public class Hoyustus : CharactersBehaviour
         if (Mathf.Abs(rb.velocity.y) < 0.1f)
             Grounded();
 
-        if (transform.parent != null)
+        if (transform.parent != null && !isJumping)
         {
             limitY = transform.position.y + extraSalto;
         }
@@ -416,7 +416,7 @@ public class Hoyustus : CharactersBehaviour
                 CSTEPS++;
                 limitY = transform.position.y + extraSalto;
             }
-            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY)
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY && !Grounded())
             {
                 rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
                 //rb.AddForce(new Vector2(0, (SSTEPS - CSTEPS) /150f), ForceMode2D.Impulse);
@@ -456,6 +456,7 @@ public class Hoyustus : CharactersBehaviour
                 if (!atacando)
                     anim.Play("Caer");
                 CSTEPS = 0;
+                secondJump = false;
                 isJumping = false;
                 secondJump = false;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
@@ -817,8 +818,9 @@ public class Hoyustus : CharactersBehaviour
 
     private bool isTouchingRoof()
     {
-        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer))
+        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.75f, groundCheckRadius, groundLayer) || Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.75f, groundCheckRadius, wallLayer))
         {
+            isJumping = false;
             return true;
         }
         return false;
