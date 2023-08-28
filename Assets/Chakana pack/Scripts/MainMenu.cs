@@ -306,6 +306,7 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
+        PlayerPrefs.DeleteAll();
 
         loadPanel.SetActive(true);
 
@@ -325,6 +326,7 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(LoadAsyncScene(1));
         //corutinaIniciada = true;
         //}
+        GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>().Stop();
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)
