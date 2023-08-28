@@ -42,6 +42,8 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        //versión 27
+
         btContinue.Select();
         Time.timeScale = 1f;
 
