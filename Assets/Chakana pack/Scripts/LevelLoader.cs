@@ -32,7 +32,14 @@ public class LevelLoader : MonoBehaviour
     private void Start()
     {
         int escena = SceneManager.GetActiveScene().buildIndex;
-        AudioSource audio = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+        AudioSource audio = null;
+
+        if (GameObject.FindGameObjectWithTag("Music"))
+        {
+            audio = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+        }
+        else return;
+
         if (escena == 15)
         {
             audio.Stop();
