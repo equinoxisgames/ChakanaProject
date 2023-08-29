@@ -48,8 +48,8 @@ public class Mapianguari : Enemy
         anim = GetComponent<Animator>();
         rangoPreparacion = 6f;
         fuerzaRecoil = 4f;
-        plataformaActual = 1;
-        nuevaPlataforma = 1;
+        plataformaActual = 0;
+        nuevaPlataforma = 0;
 
         charAudio = GetComponent<AudioSource>();
 
@@ -69,6 +69,7 @@ public class Mapianguari : Enemy
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
         Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
         explosion = Resources.Load<GameObject>("Explosion");
+        ataqueDisponible = true;
     }
 
     private void UpdateLife()
@@ -476,7 +477,6 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.3f);
         pruebaAtaqueEspecial = true;
         //EMBESTIDAS
-        //transform.localScale = new Vector3(-escala, escala, 1);
         transform.localScale = new Vector3(-1, 1, 1);
         for (int i = 1; i <= 3; i++) {
             //DESPLAZAMIENTO A LA PLATAFORMA
@@ -542,9 +542,8 @@ public class Mapianguari : Enemy
         tiempoFueraRango = 0;
         ataqueDisponible = false;
         usandoAtaqueEspecial = true;
-        //anim.enabled = false;
-        //GetComponent<SpriteRenderer>().sprite = spriteStatic;
-        //GetComponent<SpriteRenderer>().sortingOrder = -6;
+        anim.enabled = false;
+        GetComponent<SpriteRenderer>().sortingOrder = -6;
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
@@ -553,8 +552,8 @@ public class Mapianguari : Enemy
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
         yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
-        //GetComponent<SpriteRenderer>().sortingOrder = 8;
-        //anim.enabled = true;
+        GetComponent<SpriteRenderer>().sortingOrder = 8;
+        anim.enabled = true;
         //SE REACTIVA SU MOVIMIENTO
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
