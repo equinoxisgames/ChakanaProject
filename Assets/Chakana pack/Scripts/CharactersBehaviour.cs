@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharactersBehaviour : MonoBehaviour
 {
@@ -477,6 +478,7 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoFuego");
             estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
+            StartCoroutine(StartVibration(0.7f, 0.4f));
         }
         else if (counterEstados == 101)
         {
@@ -507,7 +509,29 @@ public class CharactersBehaviour : MonoBehaviour
             Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
+
+            StartCoroutine(StartVibration(1f, 1f));
         }
         yield return new WaitForEndOfFrame();
+    }
+
+    IEnumerator StartVibration(float e, float i)
+    {
+        int playerIndex = 0;
+        float vibrationDuration = e;
+        float intensity = i;
+
+        var gamepads = Gamepad.all;
+
+        if (gamepads.Count > 0)
+        {
+            Gamepad gamepad = Gamepad.all[playerIndex];
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(intensity, intensity);
+                yield return new WaitForSeconds(vibrationDuration);
+                gamepad.SetMotorSpeeds(0f, 0f);
+            }
+        }
     }
 }
