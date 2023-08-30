@@ -40,6 +40,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject loadPanel;
     [SerializeField] Slider loadBar;
 
+
+    [Header("Map Spot Player")]
+    public GameObject mapSpotHoyustus;
+    //public Hoyustus player;     
+
+    //public string tagObjetoAMover = "EtiquetaDelObjeto";
+    //public Vector3 nuevaPosicion = new Vector3(100f, 100f, 0f);
+
     void Start()
     {
         btContinue.Select();
@@ -53,7 +61,8 @@ public class MainMenu : MonoBehaviour
             mouseMovido = true;
 
         //mouseMovido = true;
-
+        LocateMapScene();
+        
     }
 
     void OnGUI()
@@ -157,6 +166,8 @@ public class MainMenu : MonoBehaviour
 
         Escape();
         Inventory();
+        LocateMapScene();
+
     }
     public void Inventory()
     {
@@ -167,6 +178,153 @@ public class MainMenu : MonoBehaviour
             
         }
     }
+
+    public void LocateMapScene()
+    {
+        escena = SceneManager.GetActiveScene().name;
+
+
+
+        //Vector3 position = player.transform.position;
+
+        if (escena != "00- Main Menu 0")
+        {
+            if (escena == "14-Boss Room")
+            {
+                UpdateMapSpotPosition(330f, -203f, 0f);
+                return;
+            }
+
+            Vector3 position = new Vector3(0f, 0f, 0f);
+
+            if (GameObject.FindGameObjectWithTag("Player") != null)
+            {
+                position = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().position;
+            }
+            
+                
+
+            //Debug.Log("La posición de " + player.name + " es: " + position.ToString());
+
+            switch (escena)
+            {
+            case "00- StartRoom 1":
+                    UpdateMapSpotPosition(-80f, 80f, 0f);
+                    //UpdateMapSpotPosition(-80f, 180f, 0f);
+                    break;
+
+            case "01-Level 1":
+                UpdateMapSpotPosition((position.x-108f)*1.35f, (position.y+80f)*1.15f, 0f);
+                break;
+
+            case "03-Room 3":
+                UpdateMapSpotPosition(-160f, 125f, 0f);
+                break;
+
+            case "04-Level 2":
+                    UpdateMapSpotPosition((position.x - 245f), (position.y + 80f) * 1.3f, 0f);
+                    //UpdateMapSpotPosition(-400f, 125f, 0f);
+                break;
+
+            case "05-Room GA1":
+                UpdateMapSpotPosition(-475f, 80f, 0f);
+                break;
+
+            case "06- Room 6":
+                    UpdateMapSpotPosition((position.x - 35f) * 1.35f, (position.y + 80f) * 1.1f, 0f);
+                    //UpdateMapSpotPosition(44f, 100f, 0f);
+                break;
+
+            case "07-Room 7":
+                    UpdateMapSpotPosition((position.x + 148f) * 1.35f, (position.y + 10f), 0f);
+                    //UpdateMapSpotPosition(210f, 30f, 0f);
+                break; 
+
+            case "08-Room 8":
+                    if (position.y<-16)
+                        UpdateMapSpotPosition((position.x + 181f) * 1.35f, (position.y - 40f), 0f);
+                    else
+                        UpdateMapSpotPosition((position.x + 181f) * 1.35f, (position.y - 15f), 0f);
+
+                    //UpdateMapSpotPosition(420f, -40f, 0f);
+                    break;
+
+            case "09-Room 9":
+                UpdateMapSpotPosition(290f, -110f, 0f);
+                break;
+
+            case "10-Room 10 - 11":
+                    //UpdateMapSpotPosition((position.x + 70f) * 1.35f, (position.y - 55f), 0f);
+
+                    if (position.y < -56)
+                        UpdateMapSpotPosition((position.x + 30f) * 1.35f, (position.y - 100f), 0f);
+                    else
+                        UpdateMapSpotPosition((position.x + 30f) * 1.35f, (position.y - 55f), 0f);
+
+                    //UpdateMapSpotPosition(-30f, -155f, 0f);
+                    break;
+                case "12-Room 12":
+                UpdateMapSpotPosition(90f, -155f, 0f);
+                break;
+
+            case "13- SaveRoom":
+                UpdateMapSpotPosition(232f, -203f, 0f);
+                break;
+
+            case "13-Room 13":
+                UpdateMapSpotPosition(500f, -85f, 0f);
+                break;
+
+            case "14-Boss Room":
+                UpdateMapSpotPosition(330f, -203f, 0f);
+                break;
+
+            default:
+                UpdateMapSpotPosition(0f, 0f, 0f);
+                break;
+            }
+        }
+    }
+
+
+    public void UpdateMapSpotPosition(float x, float y, float z)
+    {
+
+
+        Vector3 nuevaPosicion = new Vector3(x, y, z);
+
+
+
+        // Busca el objeto .
+        GameObject objetoAMover = mapSpotHoyustus;
+
+        //GameObject objetoAMover = GameObject.FindGameObjectWithTag("Spot").GetComponent<Transform>().gameObject;
+
+
+
+        // Verifica si se encontró el objeto.
+        if (objetoAMover != null)
+        {
+            // Asegúrate de que el objeto sea de tipo Image.
+            Image imagen = objetoAMover.GetComponent<Image>();
+
+            if (imagen != null)
+            {
+                // Cambia la posición de la imagen.
+                imagen.rectTransform.localPosition = nuevaPosicion;
+            }
+            else
+            {
+                Debug.LogError("El objeto con la etiqueta no es una imagen de UI.");
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontró ningún objeto con la etiqueta especificada.");
+        }
+
+    }
+
     public void Escape()
     {
         escena = SceneManager.GetActiveScene().name;
