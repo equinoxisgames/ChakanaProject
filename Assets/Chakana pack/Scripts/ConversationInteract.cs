@@ -9,7 +9,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] DialogueSystemTrigger data;
     [SerializeField] GameObject interactBtn;
     [SerializeField] GameObject shop;
-    [SerializeField] GameObject canvas;
+    GameObject canvas;
 
     private GameObject keyObj, joyObj;
     private bool joystick;
@@ -19,7 +19,9 @@ public class ConversationInteract : MonoBehaviour
     
     void Start()
     {
-        if(PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2)
+        canvas = GameObject.Find("Dialogue Manager").transform.GetChild(0).gameObject;
+
+        if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2)
         {
             data.conversation = "Ukuku02";
             shopEnable = true;

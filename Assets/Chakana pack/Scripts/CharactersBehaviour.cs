@@ -49,8 +49,6 @@ public class CharactersBehaviour : MonoBehaviour
     private GameObject vientoObj, fuegoObj, venenoObj;
     protected float vidaMax = 0;
 
-
-
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
@@ -478,7 +476,7 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoFuego");
             estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
-            StartCoroutine(StartVibration(0.7f, 0.4f));
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         else if (counterEstados == 101)
         {
@@ -510,28 +508,8 @@ public class CharactersBehaviour : MonoBehaviour
             estadoVeneno = false;
             estadoFuego = false;
 
-            StartCoroutine(StartVibration(1f, 1f));
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         yield return new WaitForEndOfFrame();
-    }
-
-    IEnumerator StartVibration(float e, float i)
-    {
-        int playerIndex = 0;
-        float vibrationDuration = e;
-        float intensity = i;
-
-        var gamepads = Gamepad.all;
-
-        if (gamepads.Count > 0)
-        {
-            Gamepad gamepad = Gamepad.all[playerIndex];
-            if (gamepad != null)
-            {
-                gamepad.SetMotorSpeeds(intensity, intensity);
-                yield return new WaitForSeconds(vibrationDuration);
-                gamepad.SetMotorSpeeds(0f, 0f);
-            }
-        }
     }
 }
