@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
       propertyPath: m_LocalPosition.x
@@ -75,6 +75,10 @@ PrefabInstance:
     - target: {fileID: -7552582706839291426, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7004522265036176735, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -7004522265036176735, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -120,6 +124,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 2024259471885243270, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2024259471885243270, guid: 2823b4f7227e1a0459122e98bdd7c804, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -305,13 +313,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2aa686e83f2e4f48a21c7640c6dba69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 3
-  detectionRadius: 3
-  playerLayer:
+  gold: 0
+  vida: 0
+  ataque: 0
+  ataqueMax: 0
+  estadoViento: 0
+  estadoFuego: 0
+  estadoVeneno: 0
+  counterEstados: 0
+  afectacionViento: 0
+  afectacionFuego: 15
+  afectacionVeneno: 0.05
+  aumentoFuegoPotenciado: 1
+  aumentoDanioParalizacion: 1
+  invulnerable: 0
+  playable: 1
+  explosionInvulnerable: 
+  vientoFX: {fileID: 0}
+  fuegoFX: {fileID: 0}
+  venenoFX: {fileID: 0}
+  recieveDmgFX: {fileID: 0}
+  receiveDmgMat: {fileID: 0}
+  explosion: {fileID: 0}
+  combFX01: {fileID: 0}
+  combFX02: {fileID: 0}
+  combFX03: {fileID: 0}
+  fuerzaRecoil: 0
+  deathFX: {fileID: 0}
+  rangoVision: 0
+  rangoAtaque: 0
+  rangoPreparacion: 0
+  groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  ApallimayHeadPossition: {x: 0, y: 0}
-  inApallimayHead: 0
-  ApallimayLives: 0
-  ApallimayName: 
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 0
   anim: {fileID: 0}
+  groundDetector: {fileID: 0}
+  wallDetector: {fileID: 0}
+  distanciaPlayer: 0
+  ataqueDisponible: 0
