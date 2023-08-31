@@ -167,7 +167,7 @@ public class MainMenu : MonoBehaviour
 
         Escape();
         Inventory();
-        LocateMapScene();
+        //LocateMapScene();
 
     }
     public void Inventory()
