@@ -90,7 +90,13 @@ public class ApallimayArco : Apallimay
         yield return new WaitForSeconds(0.2f);
         //ROTAR SPRITE
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
-        flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
+        if (hoyustus.transform.position.y < transform.position.y)
+        {
+            flechaGenerada.transform.Rotate(new Vector3(0, 0f, -Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
+        }
+        else {
+            flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
+        }
         flechaGenerada.name += "Enemy";
         flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
         atacando = true;

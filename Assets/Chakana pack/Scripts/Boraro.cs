@@ -91,6 +91,9 @@ public class Boraro : Enemy
 
     void Update()
     {
+        anim.SetBool("Atacando", atacando);
+        anim.SetBool("Siguiendo", siguiendo);
+        anim.SetBool("Playable", playable);
         comportamiento();
         tiempoVolteo += Time.deltaTime;
         Muerte();
@@ -321,6 +324,13 @@ public class Boraro : Enemy
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
+            if (i % 2 == 0)
+            {
+                anim.Play("Boraro Attack Left");
+            }
+            else {
+                anim.Play("Boraro Attack Right");
+            }
             if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer)) {
                 rb.velocity = Vector3.zero;
                 break;

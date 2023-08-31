@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharactersBehaviour : MonoBehaviour
 {
@@ -47,8 +48,6 @@ public class CharactersBehaviour : MonoBehaviour
     public float fuerzaRecoil;
     private GameObject vientoObj, fuegoObj, venenoObj;
     protected float vidaMax = 0;
-
-
 
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
@@ -477,6 +476,7 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoFuego");
             estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         else if (counterEstados == 101)
         {
@@ -507,6 +507,8 @@ public class CharactersBehaviour : MonoBehaviour
             Instantiate(explosion, transform.position, Quaternion.identity);
             estadoVeneno = false;
             estadoFuego = false;
+
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         yield return new WaitForEndOfFrame();
     }
