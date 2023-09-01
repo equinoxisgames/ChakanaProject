@@ -43,7 +43,7 @@ public class ApallimayDaga : Apallimay
         if(Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
             wallDetector.position + Vector3.down * 0.5f,wallLayer) && playable)
             DetectarPared();
-        if (Grounded() && !atacando) {
+        if (Grounded() && playable) {
             DetectarPiso(distanciaPlayer, siguiendo);
             if (CambioOrientacionDisponible(0.6f) && siguiendo)
                 Flip();
