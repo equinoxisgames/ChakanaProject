@@ -131,6 +131,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] GameObject skillObj03;
     [SerializeField] GameObject skillObj04;
 
+    private bool playerDie = false;
+
 
     public void isTocandoPared(int value)
     {
@@ -245,6 +247,10 @@ public class Hoyustus : CharactersBehaviour
         explosion = Resources.Load<GameObject>("Explosion");
         bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
 
+        if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0)
+        {
+            StartCoroutine(ResurectPlayer());
+        }
 
         SSTEPS = 65;
 
@@ -482,9 +488,10 @@ public class Hoyustus : CharactersBehaviour
             Walk();
         }
 
-        if (vida <= 0)
+        if (vida <= 0 && !playerDie)
         {
             StartCoroutine(Muerte());
+            playerDie = true;
         }
 
         anim.SetBool("Walking", rb.velocity.x != 0);
@@ -840,7 +847,6 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator Muerte()
     {
-
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         playable = false;
         //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
@@ -850,6 +856,13 @@ public class Hoyustus : CharactersBehaviour
         this.gameObject.tag = "Untagged";
         this.gameObject.layer = 0;
         Physics2D.IgnoreLayerCollision(0, 3, true);
+
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        anim.SetBool("Dead", true);
+        print("holaasdfsadf");
+        yield return new WaitForSeconds(0.1f);
+        anim.SetBool("Dead", false);
         //GUARDADO DE INFORMACION
         //gold = 100;
         //SaveManager.SavePlayerData(maxVida, gold, SceneManager.GetActiveScene().name);
@@ -1097,13 +1110,19 @@ public class Hoyustus : CharactersBehaviour
         return maxVida;
     }
 
-
-
     IEnumerator PlayGamePlayLoop()
     {
         yield return new WaitForSeconds(59.2f);
         GameplayIntro.Stop();
         GameplayLoop.Play();
+    }
+
+    IEnumerator ResurectPlayer()
+    {
+        anim.SetBool("Resurect", true);
+        yield return new WaitForSeconds(0.1f);
+        anim.SetBool("Resurect", false);
+        print("resusito");
     }
 
 
