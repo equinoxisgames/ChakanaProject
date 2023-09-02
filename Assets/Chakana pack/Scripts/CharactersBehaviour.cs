@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class CharactersBehaviour : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject combFX01;
     [SerializeField] protected GameObject combFX02;
     [SerializeField] protected GameObject combFX03;
+    [SerializeField] protected GameObject damageTxt;
 
     protected GameObject combObj01, combObj02, combObj03;
     protected Material playerMat = null;
@@ -244,6 +246,10 @@ public class CharactersBehaviour : MonoBehaviour
 
         StartCoroutine(RecibirDanioBrillo());
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
+
+        Transform dmgTxt = Instantiate(damageTxt, transform.position, Quaternion.identity).transform;
+        dmgTxt.GetChild(0).GetComponent<TextMeshPro>().text = danio.ToString();
+        Destroy(dmgTxt.gameObject, 0.5f);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)

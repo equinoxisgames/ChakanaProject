@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -104,17 +105,21 @@ public class Boraro : Enemy
                 Flip();
             if (detectarPiso())
             {
-                if (siguiendo && !teletransportandose && playable)
+                if (siguiendo && !teletransportandose && playable && !entroRangoAtaque)
                     Move();
             }
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                if (hoyustus.transform.position.x < transform.position.x)
+                    transform.localScale = new Vector3(-1, 1, 1);
+                else if (hoyustus.transform.position.x > transform.position.x)
+                        transform.localScale = Vector3.one;
             }
         }
     }
 
-
+    
     void Flip() {
         if (transform.position.x <= objetivo.x)
             direction = -direction;
@@ -324,16 +329,22 @@ public class Boraro : Enemy
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
+            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
+            {
+                anim.Play("BoraroIdle");
+                rb.velocity = Vector3.zero;
+                atacando = false;
+                tiempoVolteo = 0;
+                yield return new WaitForSeconds(t2);
+                ataqueDisponible = true;
+                yield break;
+            }
             if (i % 2 == 0)
             {
                 anim.Play("Boraro Attack Left");
             }
             else {
                 anim.Play("Boraro Attack Right");
-            }
-            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer)) {
-                rb.velocity = Vector3.zero;
-                break;
             }
             rb.AddForce(new Vector2(6f * direction, 0), ForceMode2D.Impulse);
             garras.SetActive(true);
