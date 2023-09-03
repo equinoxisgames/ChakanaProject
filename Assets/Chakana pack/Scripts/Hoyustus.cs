@@ -13,6 +13,8 @@ public class Hoyustus : CharactersBehaviour
     [Space(5)]
 
     [Header("Salto")]
+    [SerializeField] private float fuerzaPrimerSalto = 0f;
+    [SerializeField] private float fuerzaDobleSalto = 0f;
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isSecondJump = false;
     [SerializeField] private float correctorSalto = 19;
@@ -20,6 +22,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool secondJump = false;
     [SerializeField] private bool saltoEspecial = false;
     [SerializeField] private float extraSalto = 10;
+    [Space(5)]
+
+    [Header("Falling")]
+    [SerializeField] private float fuerzaCaida = 0f;
     [Space(5)]
 
     [Header("Ground Checking")]
@@ -76,6 +82,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Dash")]
     [SerializeField] private float timeDashCooldown = 0.6f;
+    [SerializeField] private float velocidadDash = 45f;
     [SerializeField] private bool dashAvailable = true;
     [SerializeField] private bool isDashing = false;
     [Space(5)]
@@ -346,7 +353,6 @@ public class Hoyustus : CharactersBehaviour
             secondJump = false;
             walkSpeed = walkSpeedGround;
             CSTEPS = 0;
-            //isJumping = false;
             isSecondJump = true;
             limitY = transform.position.y + extraSalto;
             return true;
@@ -354,7 +360,6 @@ public class Hoyustus : CharactersBehaviour
         else
         {
             anim.SetBool("Grounded", false);
-            //isJumping = true;
             walkSpeed = walkSpeedGround * (1 - resistenciaAire);
             return false;
 
@@ -411,15 +416,14 @@ public class Hoyustus : CharactersBehaviour
                 anim.Play("Saltar");
                 isJumping = true;
                 secondJump = false;
-                rb.AddForce(new Vector2(0, 12f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, fuerzaPrimerSalto), ForceMode2D.Impulse);
                 cargaHabilidadCondor += aumentoBarraSalto;
                 CSTEPS++;
                 limitY = transform.position.y + extraSalto;
             }
             else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY && !Grounded())
             {
-                rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
-                //rb.AddForce(new Vector2(0, (SSTEPS - CSTEPS) /150f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, ((6f + correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
                 CSTEPS++;
             }
 
@@ -437,7 +441,7 @@ public class Hoyustus : CharactersBehaviour
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-                rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, -rb.velocity.y + fuerzaDobleSalto), ForceMode2D.Impulse);
                 isJumping = true;
                 secondJump = true;
                 limitY = transform.position.y + extraSalto;
@@ -622,14 +626,13 @@ public class Hoyustus : CharactersBehaviour
         cargaHabilidadLanza = 0f;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-
-        yield return new WaitForSeconds(0.05f);
-        anim.SetInteger("Skill", 0);
-        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1f);
         //ACTIVACION Y MODIFICACION DE LA LANZA
         ataque = valorAtaqueHabilidadLanza;
         lanzas[3].SetActive(true);
 
+        yield return new WaitForSeconds(0.05f);
+        anim.SetInteger("Skill", 0);
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1f);
 
         IEnumerator movimientoHabilidadLanza()
         {
@@ -651,6 +654,7 @@ public class Hoyustus : CharactersBehaviour
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
+        rb.velocity = Vector2.zero;
         ataque = valorAtaqueNormal;
         ataque = ataqueMax;
 
@@ -888,7 +892,7 @@ public class Hoyustus : CharactersBehaviour
         }
         else if (h > 0.10)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = Vector3.one;
         }
         isWalking = true;
         if (isJumping)
@@ -915,7 +919,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     void Falling()
     {
-        if (rb.velocity.y < 0) rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 9f;
+        if (rb.velocity.y < 0) rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * fuerzaCaida;
     }
 
 
@@ -936,7 +940,6 @@ public class Hoyustus : CharactersBehaviour
 
             if (v == 0)
             {
-                //Aniadir el pequenio impulso de movimiento
                 anim.Play("Lanza Lateral");
                 codigoAtaque = 4;
             }
@@ -1048,15 +1051,15 @@ public class Hoyustus : CharactersBehaviour
 
         IEnumerator movimientoDash()
         {
-            rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(transform.localScale.x * velocidadDash, 0), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.2f);
-            //rb.velocity = Vector2.zero;
             rb.gravityScale = 2;
             isDashing = false;
         }
         StartCoroutine(movimientoDash());
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
         rb.gravityScale = 2;
+        rb.velocity = Vector2.zero;
         isDashing = false;
         playable = true;
         yield return new WaitForEndOfFrame();
@@ -1073,7 +1076,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
 
-    public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
+    public void danioExterno(int direccion, float fuerza) {
         if (!realizandoHabilidadLanza)
         {
             recoil = cooldownRecibirDanio(direccion, fuerza);

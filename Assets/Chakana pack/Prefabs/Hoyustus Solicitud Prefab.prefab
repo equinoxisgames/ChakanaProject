@@ -184,7 +184,7 @@ Transform:
   - {fileID: 9010123227811289174}
   - {fileID: 3246166418984944529}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1093184461581749154
 Rigidbody2D:
@@ -341,6 +341,8 @@ MonoBehaviour:
   resistenciaAire: 0.3
   walkSpeed: 12
   isWalking: 0
+  fuerzaPrimerSalto: 12
+  fuerzaDobleSalto: 18
   isJumping: 0
   isSecondJump: 0
   correctorSalto: 50
@@ -348,6 +350,7 @@ MonoBehaviour:
   secondJump: 0
   saltoEspecial: 0
   extraSalto: 10
+  fuerzaCaida: 9
   groundCheckRadius: 0.15
   groundTransform: {fileID: 1103388191273375783}
   groundLayer:
@@ -360,8 +363,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 131072
   anim: {fileID: 0}
-  AudioWalking: {fileID: 8300000, guid: ec8a8eea452af4e4f989295441d2792e, type: 3}
-  AudioJump: {fileID: 8300000, guid: 44e95e59e433d3f4fbf76a2ab43a62a4, type: 3}
+  AudioWalking: {fileID: 0}
+  AudioJump: {fileID: 0}
   AudioHurt: {fileID: 8300000, guid: 613c70cff18e78445b9c8b380c18f1d1, type: 3}
   AudioSkill01: {fileID: 0}
   AudioSkill02: {fileID: 0}
