@@ -269,7 +269,7 @@ public class Hoyustus : CharactersBehaviour
 
     void Update()
     {
-        cargaLanzaTest();
+        cargaHabilidades();
         TocarPared();
 
         if (Mathf.Abs(rb.velocity.y) < 0.1f)
@@ -568,8 +568,8 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable);
         GameObject extraExplosion = Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
+        extraExplosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable, false);
         extraExplosion.name += "Player";
 
         yield return new WaitForSeconds(0.05f);
@@ -662,9 +662,11 @@ public class Hoyustus : CharactersBehaviour
         lanzas[3].SetActive(false);
     }
 
-    public void cargaLanzaTest() {
+    public void cargaHabilidades() {
         if (Input.GetKeyDown(KeyCode.N)) {
             cargaHabilidadLanza = 100f;
+            cargaHabilidadSerpiente = 100f;
+            cargaHabilidadCondor = 100f;
         }
     }
 
