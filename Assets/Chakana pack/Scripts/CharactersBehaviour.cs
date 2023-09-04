@@ -402,9 +402,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
-                if (venenoObj != null) Destroy(venenoObj);
-                if (fuegoObj != null) Destroy(fuegoObj);
-                if (vientoObj != null) Destroy(vientoObj);
+                //if (venenoObj != null) Destroy(venenoObj);
+                //if (fuegoObj != null) Destroy(fuegoObj);
+                //if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
 
@@ -468,7 +468,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     }
 
-    protected virtual IEnumerator combinacionesElementales()
+    protected IEnumerator combinacionesElementales()
     {
         if (counterEstados == 11)
         {
@@ -509,8 +509,9 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
+            GameObject explosionGenerada = Instantiate(explosion, transform.position, Quaternion.identity);
+            string tipoExplosion = (layerObject != 11) ? "ExplosionPlayer" : "ExplosionEnemy";
+            explosionGenerada.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", tipoExplosion);
             estadoVeneno = false;
             estadoFuego = false;
 
