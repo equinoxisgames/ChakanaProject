@@ -130,6 +130,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] GameObject skillObj02;
     [SerializeField] GameObject skillObj03;
     [SerializeField] GameObject skillObj04;
+    [SerializeField] GameObject deathFX;
 
     private bool playerDie = false;
 
@@ -849,6 +850,7 @@ public class Hoyustus : CharactersBehaviour
     {
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         playable = false;
+        GetComponent<AudioSource>().enabled = false;
         //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
         yield return new WaitForSeconds(0.5f);
 
@@ -863,6 +865,8 @@ public class Hoyustus : CharactersBehaviour
         print("holaasdfsadf");
         yield return new WaitForSeconds(0.1f);
         anim.SetBool("Dead", false);
+        yield return new WaitForSeconds(0.4f);
+        Instantiate(deathFX, transform.position, Quaternion.identity);
         //GUARDADO DE INFORMACION
         //gold = 100;
         //SaveManager.SavePlayerData(maxVida, gold, SceneManager.GetActiveScene().name);
