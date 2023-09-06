@@ -879,6 +879,7 @@ public class Hoyustus : CharactersBehaviour
         //Da inicio a la animacion
         //WaitForSeconds deberia tener el tiempo de la animacion para desplegar el menu
         yield return new WaitForSeconds(1f);
+        GetComponent<SpriteRenderer>().enabled = false;
         //Desplegar el menu
 
         SavePlayerData();

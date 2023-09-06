@@ -218,7 +218,7 @@ public class CharactersBehaviour : MonoBehaviour
     {
         if (venenoObj == null)
         {
-            venenoObj = Instantiate(venenoFX, transform.position, venenoFX.transform.rotation);
+            venenoObj = Instantiate(venenoFX, transform.position, Quaternion.identity);
             venenoObj.transform.parent = transform;
         }
         for (int i = 0; i < 5; i++)
