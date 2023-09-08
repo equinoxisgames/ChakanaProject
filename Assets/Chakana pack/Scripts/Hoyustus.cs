@@ -868,7 +868,6 @@ public class Hoyustus : CharactersBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
         anim.SetBool("Dead", true);
-        print("holaasdfsadf");
         yield return new WaitForSeconds(0.1f);
         anim.SetBool("Dead", false);
         yield return new WaitForSeconds(0.4f);
