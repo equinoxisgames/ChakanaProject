@@ -10,7 +10,9 @@ public class Boraro : Enemy
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
-    [SerializeField] private float enfriamientoAtaque;
+    [SerializeField] private float enfriamientoAtaque; 
+    [SerializeField] private float tiempoAtaque;
+    [SerializeField] private float fuerzaDesplazamientoAtaque;
     [SerializeField] private float enfriamientoCombo;
     [SerializeField] private float direction;
     [SerializeField] private bool siguiendo;
@@ -332,6 +334,7 @@ public class Boraro : Enemy
             if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
             {
                 anim.Play("BoraroIdle");
+                anim.speed = 1;
                 rb.velocity = Vector3.zero;
                 atacando = false;
                 tiempoVolteo = 0;
@@ -341,19 +344,20 @@ public class Boraro : Enemy
             }
             if (i % 2 == 0)
             {
-                anim.Play("Boraro Attack Left");
+                anim.Play("Attack", -1, 0);
             }
-            else {
-                anim.Play("Boraro Attack Right");
-            }
-            rb.AddForce(new Vector2(6f * direction, 0), ForceMode2D.Impulse);
+            anim.speed = 1;
+            rb.AddForce(new Vector2(fuerzaDesplazamientoAtaque * direction, 0), ForceMode2D.Impulse);
             garras.SetActive(true);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(tiempoAtaque);
+            anim.speed = 0;
             rb.velocity = new Vector2(0f, rb.velocity.y);
             garras.SetActive(false);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(enfriamientoAtaque);
         }
+        anim.Play("BoraroIdle");
         atacando = false;
+        anim.speed = 1;
         tiempoVolteo = 0;
         //TIEMPO POSTERIOR AL ATAQUE
         yield return new WaitForSeconds(t2);
