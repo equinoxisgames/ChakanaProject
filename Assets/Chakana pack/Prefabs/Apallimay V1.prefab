@@ -246,7 +246,7 @@ Transform:
   - {fileID: 1952380801760477359}
   - {fileID: 6152293515105692875}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9173855722021107925
 SpriteRenderer:
@@ -413,7 +413,7 @@ MonoBehaviour:
     m_Bits: 65536
   objetivo: {x: 0, y: 0, z: 0}
   speed: 5
-  anim: {fileID: 0}
+  anim: {fileID: 7734803350476662421}
   groundDetector: {fileID: 0}
   wallDetector: {fileID: 0}
   distanciaPlayer: 0
@@ -615,5 +615,10 @@ PrefabInstance:
 --- !u!4 &6152293515105692875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1839230813254503526, guid: 0d27ebfd7b8bfe14681f931617bf838f, type: 3}
+  m_PrefabInstance: {fileID: 5541420909038706861}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7734803350476662421 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2859959896965973560, guid: 0d27ebfd7b8bfe14681f931617bf838f, type: 3}
   m_PrefabInstance: {fileID: 5541420909038706861}
   m_PrefabAsset: {fileID: 0}
