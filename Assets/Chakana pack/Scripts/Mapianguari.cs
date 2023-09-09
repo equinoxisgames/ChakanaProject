@@ -37,6 +37,7 @@ public class Mapianguari : Enemy
     [SerializeField] AudioClip audioAtk;
     [SerializeField] AudioClip audioScream;
     [SerializeField] private float danioPlantaVeneno = 0f;
+    [SerializeField] private float tiempoAnimacionAtaqueNormal = 0.4f;
     [SerializeField] private Sprite spriteStatic;
     System.Random triggerProbabilidad = new System.Random();
 
@@ -367,14 +368,14 @@ public class Mapianguari : Enemy
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
         anim.enabled = true;
+        anim.Play("Ataque Normal Mapinguari", -1, 0);
         realizandoAB = true;
-        yield return new WaitForSecondsRealtime(0.45f);
+        yield return new WaitForSecondsRealtime(tiempoAnimacionAtaqueNormal);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
         ataqueCuerpo.enabled = false;
         realizandoAB = false;
         anim.enabled = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
-            anim.enabled = false;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
             yield return new WaitForSeconds(0.25f);

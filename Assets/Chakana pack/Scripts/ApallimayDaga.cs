@@ -39,6 +39,7 @@ public class ApallimayDaga : Apallimay
 
     void Update()
     {
+        anim.SetBool("Atacando", atacando);
         Muerte();
         if(Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
             wallDetector.position + Vector3.down * 0.5f,wallLayer) && playable)
@@ -90,18 +91,25 @@ public class ApallimayDaga : Apallimay
         rb.velocity = new Vector2(0, rb.velocity.y);
         playable = false;
         ataqueDisponible = false;
+        anim.speed = 0;
         //PREPARACION
         yield return new WaitForSeconds(t1);
         atacando = true;
+        anim.Play("Apallimay Daga Attack", -1, 0);
+        anim.speed = 1;
         //rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
         daga.enabled = true;
         //ATAQUE
+        //TIEMPO ANIMACION ATAQUE
         yield return new WaitForSeconds(0.4f);
         atacando = false;
+        anim.speed = 0;
         rb.velocity = new Vector2(0, rb.velocity.y);
         daga.enabled = false;
         //DESCANSO DEL ATAQUE
+        anim.speed = 0;
         yield return new WaitForSeconds(t2);
+        anim.speed = 1;
         playable = true;
         //ATAQUE DISPONIBLE NUEVAMENTE
         yield return new WaitForSeconds(cooldownAtaque);
