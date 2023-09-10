@@ -97,6 +97,7 @@ public class Boraro : Enemy
         anim.SetBool("Atacando", atacando);
         anim.SetBool("Siguiendo", siguiendo);
         anim.SetBool("Playable", playable);
+        anim.SetBool("Dentro Rango", entroRangoAtaque);
         comportamiento();
         tiempoVolteo += Time.deltaTime;
         Muerte();
