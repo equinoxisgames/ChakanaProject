@@ -104,7 +104,7 @@ public class Boraro : Enemy
 
         if (!atacando)
         {
-            if(!siguiendo && maxTiempoVolteo < tiempoVolteo && !ataqueDisponible)
+            if(!siguiendo && maxTiempoVolteo < tiempoVolteo && (!entroRangoAtaque || ataqueDisponible))
                 Flip();
             if (detectarPiso())
             {
