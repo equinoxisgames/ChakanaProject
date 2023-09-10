@@ -473,6 +473,19 @@ public class MainMenu : MonoBehaviour
         //}
         //SceneManager.LoadScene("00- StartRoom 1");
     }
+    public void PlayAnimatedIntro()
+    {
+        PlayerPrefs.DeleteAll();
+
+        loadPanel.SetActive(true);
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(17));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- StartRoom 1");
+    }
     public void OpenMainMenu()
     {
         loadPanel.SetActive(true);
