@@ -30,7 +30,7 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
-    [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead;
+    [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead, iddel;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private LiquidBar lifeBar;
     [SerializeField] AudioClip audioHurt;
@@ -125,6 +125,7 @@ public class Mapianguari : Enemy
         anim.SetBool("Muerto", isDead);
         anim.SetBool("AT", realizandoAT);
         anim.SetBool("AE", pruebaAtaqueEspecial);
+        anim.SetBool("Iddel", iddel);
 
         if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
             StartCoroutine(CambioPlataforma());       
@@ -364,17 +365,18 @@ public class Mapianguari : Enemy
 
         ataqueDisponible = false;
         atacando = true;
-        anim.enabled = false;
+        iddel = true;
+        anim.Play("Iddel Mapinguari");
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
-        anim.enabled = true;
+        iddel = false;
         anim.Play("Ataque Normal Mapinguari", -1, 0);
         realizandoAB = true;
         yield return new WaitForSecondsRealtime(tiempoAnimacionAtaqueNormal);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
         ataqueCuerpo.enabled = false;
+        iddel = true;
         realizandoAB = false;
-        anim.enabled = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
             rb.gravityScale = 0;
             rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
@@ -384,8 +386,8 @@ public class Mapianguari : Enemy
         }
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
-        anim.enabled = true;
         atacando = false;
+        iddel = false;
         yield return new WaitForSeconds(0.5f);
         ataqueDisponible = true;
     }
@@ -519,15 +521,14 @@ public class Mapianguari : Enemy
             }
             atacando = false;
         }
-        anim.enabled = false;
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         ataque = valorAtaqueBasico;
         ataqueMax = ataque;
         pruebaAtaqueEspecial = false;
-        GetComponent<SpriteRenderer>().sprite = spriteStatic;
+        iddel = true;
         //STUN
         yield return new WaitForSeconds(5f);
-        anim.enabled = true;
+        iddel = false;
         //RETORNO A VALORES DE JUEGO NORMAL
         usandoAtaqueEspecial = false;
         campoVision.enabled = true;

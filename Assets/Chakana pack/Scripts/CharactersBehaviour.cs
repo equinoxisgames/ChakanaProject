@@ -56,21 +56,7 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
     {
-        Recoil(direccion, fuerzaRecoil);
-        if (vida <= 0)
-        {
-            yield break;
-        }
-
-        yield return new WaitForSeconds(0.2f);
-        //SE DETIENE EL RECOIL
-        rb.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.2f);
-        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
-        playable = true;
-        //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
-        yield return new WaitForSeconds(0.5f);
-        QuitarInvulnerabilidades(layerObject);
+        yield return null;
     }
 
 
