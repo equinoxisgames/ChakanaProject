@@ -18,6 +18,7 @@ public class ApallimayEscudo : Apallimay
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         explosionInvulnerable = "ExplosionEnemy";
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
@@ -35,25 +36,26 @@ public class ApallimayEscudo : Apallimay
         rangoVision += 1;
         rangoPreparacion += 1;
         rangoAtaque += 1;
-        escudo.SetActive(false);
     }
 
 
     void Update()
     {
+        anim.SetBool("Atacando", atacando);
+        anim.SetBool("Playable", playable);
+
         Muerte();
         if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
             wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
             DetectarPared();
-        if (Grounded() && !atacando)
+        if (Grounded() && playable)
         {
             DetectarPiso(distanciaPlayer, siguiendo);
             if (CambioOrientacionDisponible(0.6f) && siguiendo)
                 Flip();
             else if (CambioOrientacionDisponible(0.1f) && !siguiendo)
                 Flip();
-            if (playable)
-                Move();
+            Move();
         }
     }
 
@@ -97,19 +99,20 @@ public class ApallimayEscudo : Apallimay
         ataqueDisponible = false;
         //PREPARACION
         escudo.SetActive(false);
+        anim.Play("Apallimay Escudo Iddel");
         yield return new WaitForSeconds(t1);
+        anim.Play("Apallimay Escudo Attack", -1 , 0);
         atacando = true;
-        //rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
         daga.enabled = true;
         //ATAQUE
         yield return new WaitForSeconds(0.4f);
         rb.velocity = new Vector2(0, rb.velocity.y);
         daga.enabled = false;
+        atacando = false;
         //DESCANSO DEL ATAQUE
         yield return new WaitForSeconds(t2);
         escudo.SetActive(true);
         playable = true;
-        atacando = false;
         //ATAQUE DISPONIBLE NUEVAMENTE
         yield return new WaitForSeconds(cooldownAtaque);
         ataqueDisponible = true;
@@ -128,18 +131,16 @@ public class ApallimayEscudo : Apallimay
 
         if (collider.gameObject.layer == 14 && !escudo.activeInHierarchy)
         {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
+            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 
             TriggerElementos_1_1_1(collider);
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            if (playable) {
+                StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            }
+            else{
+                Recoil(direccion, fuerzaRecoil * 0.8f);
+            }
+
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
@@ -149,7 +150,6 @@ public class ApallimayEscudo : Apallimay
         }
         else if (collider.gameObject.layer == 11)
         {
-            //rb.velocity = Vector2.zero;
             return;
         }
 
@@ -168,19 +168,14 @@ public class ApallimayEscudo : Apallimay
             distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && /*detectarPiso(distanciaPlayer, true) &&*/ Grounded())
+            if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && Grounded())
             {
-                if(playable)
-                    escudo.SetActive(true);
                 objetivo = collider.transform.position;
                 siguiendo = true;
-                if (distanciaPlayer <= rangoPreparacion && ataqueDisponible && !atacando && playable)
+                if (distanciaPlayer <= rangoPreparacion && ataqueDisponible && playable)
                 {
                     StartCoroutine(Ataque(direction));
                 }
-            }
-            else {
-                escudo.SetActive(false);
             }
         }
     }
@@ -258,7 +253,6 @@ public class ApallimayEscudo : Apallimay
     {
         if (collision.gameObject.layer == 11)
         {
-            escudo.SetActive(false);
             distanciaPlayer = 0;
             siguiendo = false;
             speed = 4;
