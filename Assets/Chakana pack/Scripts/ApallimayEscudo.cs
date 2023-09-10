@@ -120,8 +120,9 @@ public class ApallimayEscudo : Apallimay
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
+        rb.velocity = Vector2.zero;
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccion, rb.gravityScale) * fuerzaRecoil, ForceMode2D.Impulse);
     }
 
 
@@ -134,12 +135,7 @@ public class ApallimayEscudo : Apallimay
             int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 
             TriggerElementos_1_1_1(collider);
-            if (playable) {
-                StartCoroutine(cooldownRecibirDanio(direccion, 1));
-            }
-            else{
-                Recoil(direccion, fuerzaRecoil * 0.8f);
-            }
+            Recoil(direccion, fuerzaRecoil);
 
             if (collider.transform.parent != null)
             {
@@ -153,7 +149,7 @@ public class ApallimayEscudo : Apallimay
             return;
         }
 
-        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18 && collider.gameObject.layer != 14)
         {
             TriggerElementos_1_1_1(collider);
         }
