@@ -140,7 +140,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] GameObject deathFX;
 
     private bool playerDie = false;
-
+    private bool weaponEquip = false;
 
     public void isTocandoPared(int value)
     {
@@ -184,6 +184,10 @@ public class Hoyustus : CharactersBehaviour
         LoadData();
     }
 
+    public void EnableWeapon()
+    {
+        weaponEquip = true;
+    }
 
     private void LoadData()
     {
@@ -209,6 +213,8 @@ public class Hoyustus : CharactersBehaviour
         {
             SaveManager.SavePlayerData(GetComponent<Hoyustus>());
         }
+
+        if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
     }
 
     public void SavePlayerData()
@@ -338,7 +344,7 @@ public class Hoyustus : CharactersBehaviour
         if (playable)
         {
             Falling();
-            AtaqueLanza();
+            if(weaponEquip) AtaqueLanza();
             Dash();
         }
     }
@@ -868,8 +874,6 @@ public class Hoyustus : CharactersBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
         anim.SetBool("Dead", true);
-        yield return new WaitForSeconds(0.1f);
-        anim.SetBool("Dead", false);
         yield return new WaitForSeconds(0.4f);
         Instantiate(deathFX, transform.position, Quaternion.identity);
         //GUARDADO DE INFORMACION

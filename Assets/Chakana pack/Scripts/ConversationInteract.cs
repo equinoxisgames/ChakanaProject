@@ -142,7 +142,7 @@ public class ConversationInteract : MonoBehaviour
         if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2) data.conversation = "Ukuku02";
         else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if (PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
-
+        
         EnableBtn(true);
     }
 }
