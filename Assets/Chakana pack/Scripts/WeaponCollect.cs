@@ -11,6 +11,7 @@ public class WeaponCollect : MonoBehaviour
     [SerializeField] GameObject weaponPref;
     [SerializeField] GameObject timeLine;
     [SerializeField] GameObject weaponTxt;
+    [SerializeField] Hoyustus player;
 
     bool isMove, isActive, isOn;
     Vector3 destination;
@@ -37,7 +38,8 @@ public class WeaponCollect : MonoBehaviour
 
             Destroy(timeLine);
             Destroy(weaponPref);
-
+            PlayerPrefs.SetInt("WeaponEquip", 1);
+            player.EnableWeapon();
             StartCoroutine(ShowText());
 
             tuto.SetActive(true);
