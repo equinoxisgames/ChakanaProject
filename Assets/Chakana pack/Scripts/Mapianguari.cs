@@ -151,15 +151,8 @@ public class Mapianguari : Enemy
     {
         base.OnTriggerEnter2D(collider);
         if (collider.gameObject.layer == 14) {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
+
+            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
@@ -372,10 +365,10 @@ public class Mapianguari : Enemy
         iddel = false;
         anim.Play("Ataque Normal Mapinguari", -1, 0);
         realizandoAB = true;
-        yield return new WaitForSecondsRealtime(tiempoAnimacionAtaqueNormal);
+        yield return new WaitUntil(() => iddel);
+        //yield return new WaitForSecondsRealtime(tiempoAnimacionAtaqueNormal);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
-        ataqueCuerpo.enabled = false;
-        iddel = true;
+        //iddel = true;
         realizandoAB = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
             rb.gravityScale = 0;
@@ -390,6 +383,10 @@ public class Mapianguari : Enemy
         iddel = false;
         yield return new WaitForSeconds(0.5f);
         ataqueDisponible = true;
+    }
+
+    private void setIddel() {
+        iddel = true;
     }
 
 

@@ -166,20 +166,13 @@ public class Boraro : Enemy
 
         if (collider.gameObject.layer == 14)
         {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
+
+            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 
             TriggerElementos_1_1_1(collider);
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
+                StartCoroutine(cooldownRecibirDanio(direccion, 1));
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
                 charAudio.loop = false;
@@ -189,22 +182,17 @@ public class Boraro : Enemy
             }
             return;
         }
-        else if (collider.gameObject.layer == 11)
+        else if (collider.gameObject.layer == 11 && collider.gameObject.CompareTag("Untagged"))
         {
             rb.velocity = Vector2.zero;
-            //objetivo = hoyustus.transform.position;
             if (objetivo.x < transform.position.x)
-            {
                 transform.localScale = new Vector3(-1, 1, 1);
-            }
             else
-            {
                 transform.localScale = new Vector3(1, 1, 1);
-            }
             return;
         }
 
-        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18 && collider.gameObject.layer != 19)
         {
             TriggerElementos_1_1_1(collider);
         }

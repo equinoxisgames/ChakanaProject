@@ -46,4 +46,9 @@ public class Enemy : CharactersBehaviour
         playable = true;
     }
 
+    protected void PlayAnimation(string animation)
+    {
+        anim.Play(animation);
+    }
+
 }

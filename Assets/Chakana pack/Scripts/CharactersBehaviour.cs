@@ -187,7 +187,7 @@ public class CharactersBehaviour : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(2f);
-            vida -= (afectacionFuego * aumentoFuegoPotenciado);
+            RecibirDanio(afectacionFuego * aumentoFuegoPotenciado);
         }
         aumentoFuegoPotenciado = 1;
         estadoFuego = false;
@@ -210,9 +210,7 @@ public class CharactersBehaviour : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(2f);
-            float dmg = vidaMax * afectacionVeneno;
-            vida -= dmg;
-            print(vidaMax);
+            RecibirDanio(vidaMax * afectacionVeneno);
         }
         estadoVeneno = false;
         counterEstados = 0;
