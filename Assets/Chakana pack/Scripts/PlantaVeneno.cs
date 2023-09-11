@@ -75,11 +75,13 @@ public class PlantaVeneno : MonoBehaviour
         ataqueDisponible = false;
         atacando = true;
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
+        bolaVenenoGenerada.SetActive(false);
         bolaVenenoGenerada.name += "Enemy";
         bolaVenenoGenerada.AddComponent<ProyectilMovUniforme>();
-        bolaVeneno.GetComponent<Rigidbody2D>().gravityScale = 0;
+        bolaVenenoGenerada.GetComponent<Rigidbody2D>().gravityScale = 0;
         yield return new WaitForEndOfFrame();
         bolaVenenoGenerada.GetComponent<ProyectilMovUniforme>().setDanio(danio);
+        bolaVenenoGenerada.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         atacando = false;
         yield return new WaitForSeconds(2);
