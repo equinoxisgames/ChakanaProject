@@ -18,7 +18,7 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float posY = 0;
     [SerializeField] private bool realizandoAtaqueEspecial = false;
     [SerializeField] private GameObject hoyustus;
-    [SerializeField] private int framesDetenimiento;
+    [SerializeField] private int codigoAtaque;
 
 
     void Start()
@@ -42,6 +42,10 @@ public class ApallimayArco : Apallimay
 
     void Update()
     {
+        anim.SetBool("Jugador Detectado", jugadorDetectado);
+        anim.SetBool("Realizando Ataque Especial", realizandoAtaqueEspecial);
+        anim.SetBool("Atacando", atacando);
+        anim.SetInteger("CA", codigoAtaque);
 
         Muerte();
         if (Grounded()) {
@@ -100,9 +104,13 @@ public class ApallimayArco : Apallimay
         flechaGenerada.name += "Enemy";
         flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
         atacando = true;
+        if (flechaGenerada.transform.rotation.z < 0.20f) codigoAtaque = 0;
+        else if (flechaGenerada.transform.rotation.z >= 0.20f && flechaGenerada.transform.rotation.z < 0.5f) codigoAtaque = 1;
+        else codigoAtaque = 2;
         //TIEMPO DE ANIMACION/PREPARACION
         yield return new WaitForSeconds(0.4f);
         atacando = false;
+        codigoAtaque = -1;
         yield return new WaitForSeconds(cooldownDisparoFlechas);
         ataqueDisponible = true;
     }
@@ -110,7 +118,6 @@ public class ApallimayArco : Apallimay
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
-        framesDetenimiento = 0;
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
     }
@@ -174,7 +181,6 @@ public class ApallimayArco : Apallimay
                 jugadorDetectado = true;
                 if (Grounded() && playable) {
                     rb.velocity = Vector2.zero;
-                    framesDetenimiento++;
                 }
                 if (collider.transform.position.x <= transform.position.x)
                 {
@@ -198,6 +204,7 @@ public class ApallimayArco : Apallimay
                 {
                     atacando = true;
                     ataqueDisponible = false;
+                    codigoAtaque = -1;
                     StartCoroutine(Ataque(collider.transform.position));
                 }
             }
@@ -218,6 +225,7 @@ public class ApallimayArco : Apallimay
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
         Instantiate(explosion, transform.position, Quaternion.identity);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
+        //yield return new WaitUntil(() => !realizandoAtaqueEspecial);
         yield return new WaitForSeconds(1.4f);
         realizandoAtaqueEspecial = false;
         atacando = false;
@@ -295,5 +303,9 @@ public class ApallimayArco : Apallimay
             jugadorDetectado = false;
             speed = normalSpeed;
         }
+    }
+
+    private void finalizarAtaqueEspecial() {
+        realizandoAtaqueEspecial = false;
     }
 }
