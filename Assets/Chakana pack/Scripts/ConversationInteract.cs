@@ -104,6 +104,17 @@ public class ConversationInteract : MonoBehaviour
         }
     }
 
+    public void SelectFirstItem()
+    {
+        StartCoroutine(SelectItem());
+    }
+
+    IEnumerator SelectItem()
+    {
+        yield return new WaitForSeconds(0.5f);
+        shopList.GetChild(0).GetComponent<Button>().Select();
+    }
+
     public void StopConversation()
     {
         if (shopEnable)
@@ -112,6 +123,7 @@ public class ConversationInteract : MonoBehaviour
             shopping = true;
             canvas.SetActive(false);
             shopList.GetChild(0).GetComponent<Button>().Select();
+            GetComponent<Usable>().enabled = false;
             return;
         }
 
@@ -140,7 +152,7 @@ public class ConversationInteract : MonoBehaviour
         shopping = false;
         player.enabled = true;
         cam.SetActive(false);
-        
+        GetComponent<Usable>().enabled = true;
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         player.GetComponent<AudioSource>().Stop();
 
