@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.UI;
 
 public class ConversationInteract : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] DialogueSystemTrigger data;
     [SerializeField] GameObject interactBtn;
     [SerializeField] GameObject shop;
+    [SerializeField] Transform shopList;
     GameObject canvas;
 
     private GameObject keyObj, joyObj;
@@ -102,6 +104,17 @@ public class ConversationInteract : MonoBehaviour
         }
     }
 
+    public void SelectFirstItem()
+    {
+        StartCoroutine(SelectItem());
+    }
+
+    IEnumerator SelectItem()
+    {
+        yield return new WaitForSeconds(0.5f);
+        shopList.GetChild(0).GetComponent<Button>().Select();
+    }
+
     public void StopConversation()
     {
         if (shopEnable)
@@ -109,6 +122,8 @@ public class ConversationInteract : MonoBehaviour
             shop.SetActive(true);
             shopping = true;
             canvas.SetActive(false);
+            shopList.GetChild(0).GetComponent<Button>().Select();
+            GetComponent<Usable>().enabled = false;
             return;
         }
 
@@ -130,12 +145,14 @@ public class ConversationInteract : MonoBehaviour
 
     public void CloseShop()
     {
+        if (!shopping) return;
+
         canvas.SetActive(true);
         shop.SetActive(false);
         shopping = false;
         player.enabled = true;
         cam.SetActive(false);
-
+        GetComponent<Usable>().enabled = true;
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         player.GetComponent<AudioSource>().Stop();
 

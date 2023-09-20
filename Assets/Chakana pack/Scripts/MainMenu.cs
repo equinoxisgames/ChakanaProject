@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("Map Spot Player")]
     public GameObject mapSpotHoyustus;
-    //public Hoyustus player;     
+    private Hoyustus player;     
 
     //public string tagObjetoAMover = "EtiquetaDelObjeto";
     //public Vector3 nuevaPosicion = new Vector3(100f, 100f, 0f);
@@ -63,7 +63,7 @@ public class MainMenu : MonoBehaviour
 
         //mouseMovido = true;
         LocateMapScene();
-
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
     }
 
     void OnGUI()
@@ -166,18 +166,13 @@ public class MainMenu : MonoBehaviour
 
 
         Escape();
-        Inventory();
+        //Inventory();
         //LocateMapScene();
 
     }
     public void Inventory()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            inventoryMenu.gameObject.SetActive(true);
-            Debug.Log("Se ha presionado la tecla 'I'.");
-
-        }
+        inventoryMenu.transform.GetChild(0).GetComponent<Button>().Select();
     }
 
     public void LocateMapScene()
@@ -338,7 +333,7 @@ public class MainMenu : MonoBehaviour
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
                     Time.timeScale = 0f;
-
+                    ActivePlayer(false);
                 }
                 else
                 {
@@ -351,7 +346,7 @@ public class MainMenu : MonoBehaviour
                     {
                         confirmQuitMenu.gameObject.SetActive(false);
                     }
-
+                    ActivePlayer(true);
                 }
 
             }
@@ -377,8 +372,6 @@ public class MainMenu : MonoBehaviour
         {
             if (Input.GetButtonDown("Fire2"))
             {
-                //Debug.Log("FIRE2 O ALT: joystickIzquierdoMovido>"+ joystickIzquierdoMovido+ " altKeyPress>"+ altKeyPress);
-
                 if (escena != "00- Main Menu 0")
                 {
                     Debug.Log("escena != 00 - Main Menu 0");
@@ -393,7 +386,7 @@ public class MainMenu : MonoBehaviour
             }
             else
             {
-                Debug.Log("Algun booleano en false BT FIRE, joystickIzquierdoMovido-->" + joystickIzquierdoMovido);
+                
             }
 
 
@@ -548,7 +541,7 @@ public class MainMenu : MonoBehaviour
     public void ActivePlayer(bool active)
     {
 
-        //hoyustusGameObject.gameObject.SetActive(active);
+        player.enabled = active;
         if (active)
             Time.timeScale = 1f;
         else

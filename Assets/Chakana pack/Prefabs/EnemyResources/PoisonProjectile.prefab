@@ -104,6 +104,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3988393829037458747}
     m_Modifications:
+    - target: {fileID: 100000, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: m_Name
       value: CFX3_Fireball_A (Green)
@@ -153,6 +157,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: InitialModule.startRotationX.minMaxState
       value: 3
       objectReference: {fileID: 0}
@@ -177,16 +185,32 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900002, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 19900002, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19900004, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900004, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900006, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 19900006, guid: 85904928ec0c0c64192f67ab7429ca66, type: 3}
       propertyPath: m_Materials.Array.size

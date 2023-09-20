@@ -28,6 +28,7 @@ public class Mapianguari : Enemy
     [SerializeField] public int plataformaActual;
     [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private GameObject plantaVeneno;
+    [SerializeField] private GameObject humo;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead, iddel;
@@ -542,6 +543,7 @@ public class Mapianguari : Enemy
         ataqueDisponible = false;
         usandoAtaqueEspecial = true;
         anim.enabled = false;
+        Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
         GetComponent<SpriteRenderer>().sortingOrder = -6;
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
@@ -549,6 +551,7 @@ public class Mapianguari : Enemy
         triggerProbabilidad = new System.Random();
         int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
         transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
+        Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
         yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
         GetComponent<SpriteRenderer>().sortingOrder = 8;

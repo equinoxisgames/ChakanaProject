@@ -23,7 +23,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
         public AudioClip NoMoney;
 
         public const int SellRatio = 2;
-
+        public ConversationInteract conv;
         /// <summary>
         /// Initialize owned items and trader items (just for example).
         /// </summary>
@@ -91,6 +91,16 @@ namespace Assets.FantasyInventory.Scripts.Interface
             AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);
             MoveItem(SelectedItem, Trader, Bag);
             AudioSource.PlayOneShot(TradeSound);
+
+            conv.SelectFirstItem();
+        }
+
+        private void Update()
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                Buy();
+            }
         }
 
         public void Sell()
