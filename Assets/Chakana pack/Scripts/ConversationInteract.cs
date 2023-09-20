@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.UI;
 
 public class ConversationInteract : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] DialogueSystemTrigger data;
     [SerializeField] GameObject interactBtn;
     [SerializeField] GameObject shop;
+    [SerializeField] Transform shopList;
     GameObject canvas;
 
     private GameObject keyObj, joyObj;
@@ -109,6 +111,7 @@ public class ConversationInteract : MonoBehaviour
             shop.SetActive(true);
             shopping = true;
             canvas.SetActive(false);
+            shopList.GetChild(0).GetComponent<Button>().Select();
             return;
         }
 
@@ -130,12 +133,14 @@ public class ConversationInteract : MonoBehaviour
 
     public void CloseShop()
     {
+        if (!shopping) return;
+
         canvas.SetActive(true);
         shop.SetActive(false);
         shopping = false;
         player.enabled = true;
         cam.SetActive(false);
-
+        
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         player.GetComponent<AudioSource>().Stop();
 

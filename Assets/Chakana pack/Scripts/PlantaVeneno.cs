@@ -30,6 +30,7 @@ public class PlantaVeneno : MonoBehaviour
         {
             Flip();
         }
+
         if (ataqueDisponible)
         {
             ataqueDisponible = false;
@@ -84,7 +85,8 @@ public class PlantaVeneno : MonoBehaviour
         bolaVenenoGenerada.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         atacando = false;
-        yield return new WaitForSeconds(2);
+        int timer = Random.Range(4, 6);
+        yield return new WaitForSeconds(timer);
         ataqueDisponible = true;
     }
 

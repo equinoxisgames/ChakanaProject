@@ -167,18 +167,21 @@ MonoBehaviour:
   plataformaActual: 0
   charcoVeneno: {fileID: 8081575625336725374, guid: 3f708db572fd8254fbdd12681c730e63, type: 3}
   plantaVeneno: {fileID: 180760010574049810, guid: 1ab353cd6d8b22649879576b95489255, type: 3}
+  humo: {fileID: 7433347208218945765, guid: b204c0c9f9081b649a72c4c58cdff736, type: 3}
   levelController: {fileID: 0}
   usandoAtaqueEspecial: 0
   realizandoAB: 0
   realizandoAT: 0
   pruebaAtaqueEspecial: 0
   isDead: 0
+  iddel: 0
   ataqueEspecialDisponible: 1
   lifeBar: {fileID: 0}
   audioHurt: {fileID: 8300000, guid: 7b4d9fb14f223de419b31e8a0b1aeee5, type: 3}
   audioAtk: {fileID: 8300000, guid: a7eca54cf13ef104a992e4112f217f78, type: 3}
   audioScream: {fileID: 8300000, guid: 46b7ef0821fb5004b8a4e74dc3b86619, type: 3}
   danioPlantaVeneno: 80
+  tiempoAnimacionAtaqueNormal: 0.4
   spriteStatic: {fileID: 21300000, guid: 4292aee0872aa4940a24b1d45b7738ba, type: 3}
   rangoCercania: 12
   reduccionTiempoAtaqueDistancia: 0
@@ -241,8 +244,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 6, y: 6}
+  m_Offset: {x: 0, y: -0.24231696}
+  m_Size: {x: 6, y: 6.484634}
   m_Direction: 0
 --- !u!82 &7218420099408483804
 AudioSource:
