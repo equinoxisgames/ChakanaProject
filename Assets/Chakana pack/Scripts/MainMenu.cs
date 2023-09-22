@@ -63,6 +63,7 @@ public class MainMenu : MonoBehaviour
 
         //mouseMovido = true;
         LocateMapScene();
+        if (escena != "00- Main Menu 0")
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
     }
 
