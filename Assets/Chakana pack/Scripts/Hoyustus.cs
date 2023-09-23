@@ -582,16 +582,15 @@ public class Hoyustus : CharactersBehaviour
         cargaCuracion += 30;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
+        yield return new WaitForSeconds(0.35f);
+
         GameObject extraExplosion = Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
         extraExplosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable, false);
         extraExplosion.name += "Player";
 
-        yield return new WaitForSeconds(0.05f);
-        anim.SetInteger("Skill", 0);
-        yield return new WaitForSeconds(0.35f);
-        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1f);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         playable = true;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;

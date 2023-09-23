@@ -10,6 +10,7 @@ public class ApallimayArco : Apallimay
     [SerializeField] private float normalSpeed;
     [SerializeField] private bool ataqueEspecialDisponible = true;
     [SerializeField] private GameObject flecha;
+    [SerializeField] private GameObject vientoFX02;
     [SerializeField] private bool atacando;
     [SerializeField] private Vector3 limit1;
     [SerializeField] private Vector3 limit2;
@@ -224,6 +225,7 @@ public class ApallimayArco : Apallimay
         yield return new WaitForSeconds(1);
         explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
         Instantiate(explosion, transform.position, Quaternion.identity);
+        Destroy(Instantiate(vientoFX02, transform.position, Quaternion.identity), 1);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
         //yield return new WaitUntil(() => !realizandoAtaqueEspecial);
         yield return new WaitForSeconds(1.4f);
