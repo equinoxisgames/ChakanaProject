@@ -15,16 +15,17 @@ public class UkukuMision : MonoBehaviour
     {
         //PlayerPrefs.DeleteAll();
 
+        if (PlayerPrefs.HasKey("ukukuM" + "01"))
+        {
+            print("holaaaaa");
+        }
+
         if (!PlayerPrefs.HasKey("ukukuM"))
         {
             PlayerPrefs.SetInt("ukukuM", 0);
         }
 
-        if (!PlayerPrefs.HasKey("ukukuM" + num))
-        {
-            PlayerPrefs.SetInt("ukukuM"  + num, 0);
-        }
-        else if (PlayerPrefs.GetInt("ukukuM" + num) == 1)
+        if (PlayerPrefs.GetInt("ukukuM" + num) == 1)
         {
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
@@ -67,6 +68,7 @@ public class UkukuMision : MonoBehaviour
         if (PlayerPrefs.HasKey("ukukuM" + "01"))
         {
             ukukuInv.transform.GetChild(0).gameObject.SetActive(true);
+            print("holaaaaa");
             misionCount++;
         }
 

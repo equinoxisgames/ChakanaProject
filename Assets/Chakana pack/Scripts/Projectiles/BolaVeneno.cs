@@ -14,7 +14,7 @@ public class BolaVeneno : MonoBehaviour
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();;
-        rb.Sleep();
+        //rb.Sleep();
     }
 
     private void Update()
