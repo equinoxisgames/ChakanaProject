@@ -6,6 +6,7 @@ using UnityEngine;
 public class BolaVenenoArbolMapinguari : BolaVeneno
 {
     private Vector3 hoyustus;
+    private GameObject explosion2;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
 
         if (transform.position == hoyustus) {
             Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(Instantiate(explosion2, transform.position, Quaternion.identity), 1);
             Destroy(gameObject);
         }
         if (tiempoEliminacion <= 0)
@@ -30,8 +32,9 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     }
 
 
-    public void InstanciarValores(GameObject explosion) {
+    public void InstanciarValores(GameObject explosion, GameObject explosion2) {
         this.explosion = explosion;
+        this.explosion2 = explosion2;
         this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(6, 25, 6, 12, "Veneno", "ExplosionEnemy");
     }
 
@@ -41,6 +44,7 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
         if (collision.gameObject.tag == "Player" || collision.gameObject.layer == 6 || collision.gameObject.layer == 16)
         {
             Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(Instantiate(explosion2, transform.position, Quaternion.identity), 1);
             Destroy(gameObject);
         }
     }

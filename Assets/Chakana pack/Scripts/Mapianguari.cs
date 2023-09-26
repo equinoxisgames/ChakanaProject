@@ -29,6 +29,7 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private GameObject humo;
+    [SerializeField] private GameObject explosion2;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead, iddel;
@@ -107,7 +108,7 @@ public class Mapianguari : Enemy
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         anim.enabled = true;
-        anim.Play("Muerte");
+        anim.SetBool("Muerto", true);
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
         atacando = true;
@@ -115,7 +116,7 @@ public class Mapianguari : Enemy
         levelController.EliminarLogicaPlataformas();
         //TIEMPO ANIMACION DEL Boss
         yield return new WaitForSeconds(2f);
-        Destroy(this.gameObject);
+        GetComponent<Mapianguari>().enabled = false;
     }
 
 
@@ -303,11 +304,11 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(1.5f);
 
         //GENERACION DEL CHARCO DE VENENO
-        if (segundaEtapa) {
+        /*if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
             charcoGenerado.name = "CharcoVenenoEnemy";
             StartCoroutine(DestruirCharco(charcoGenerado));
-        }
+        }*/
 
         //SE EVALUA SI HOYUSTUS ESTA EN EL RANGO DEL ATAQUE
         if (Mathf.Abs(transform.position.x - GameObject.FindObjectOfType<Hoyustus>().GetComponent<Transform>().position.x) <= 15) {
@@ -472,7 +473,7 @@ public class Mapianguari : Enemy
             bolaVenenoGenerada.name += "Enemy";
             bolaVenenoGenerada.AddComponent<BolaVenenoArbolMapinguari>();
             yield return new WaitForEndOfFrame();
-            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().InstanciarValores(explosion);
+            bolaVenenoGenerada.GetComponent<BolaVenenoArbolMapinguari>().InstanciarValores(explosion, explosion2);
             yield return new WaitForSeconds(1f);
         }
         yield return new WaitForSeconds(0.3f);
@@ -499,7 +500,7 @@ public class Mapianguari : Enemy
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-26.5f, 0f);
+            this.rb.velocity = new Vector2(-40f, 0f);
             ataqueCuerpo.enabled = true;
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
