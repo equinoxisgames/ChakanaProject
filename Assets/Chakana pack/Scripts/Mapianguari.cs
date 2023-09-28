@@ -30,6 +30,7 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private GameObject humo;
     [SerializeField] private GameObject explosion2;
+    [SerializeField] private GameObject bloqueoDash;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead, iddel;
@@ -44,8 +45,11 @@ public class Mapianguari : Enemy
     System.Random triggerProbabilidad = new System.Random();
 
     AudioSource charAudio;
-    [SerializeField] private float rangoCercania = 12f;
+    [SerializeField] private float rangoCercania = 15f;
     [SerializeField] private float reduccionTiempoAtaqueDistancia = 0;
+
+    private int totalPlants = 0;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -89,7 +93,7 @@ public class Mapianguari : Enemy
             movementVelocity = 12;
             segundaEtapa = true;
             reduccionTiempoAtaqueDistancia = 5;
-            rangoCercania = 15;
+            rangoCercania = 17;
             danioPlantaVeneno = 100;
         }
         if (vida <= 0 && !isDead) {
@@ -264,11 +268,12 @@ public class Mapianguari : Enemy
                 else
                 {
                     tiempoDentroRango = 0;
+                    print(distanciaPlayer);
                     tiempoFueraRango += Time.deltaTime;
                 }
             }
 
-            if (distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 1.2 && tiempoDentroRango <= 5)
+            if (distanciaPlayer <= rangoPreparacion && tiempoDentroRango > 0.75 && tiempoDentroRango <= 5)
                 StartCoroutine(AtaqueCuerpoCuerpo());
             else if (distanciaPlayer <= rangoCercania && tiempoDentroRango > 5)
                 StartCoroutine(AtaqueAturdimiento());
@@ -300,9 +305,10 @@ public class Mapianguari : Enemy
         realizandoAT = true;
         ataqueDisponible = false;
         //TIEMPO PARA LA ANIMACION
+        yield return new WaitForSeconds(0.5f);
+        realizandoAT = false;
         Debug.Log("Preparando ataque inmovilizador");
-        yield return new WaitForSeconds(1.5f);
-
+        yield return new WaitForSeconds(0.4f);
         //GENERACION DEL CHARCO DE VENENO
         /*if (segundaEtapa) {
             GameObject charcoGenerado = Instantiate(charcoVeneno, transform.position + Vector3.down * 2.8f, Quaternion.identity);
@@ -315,14 +321,13 @@ public class Mapianguari : Enemy
 
             StartCoroutine(AturdirPlayer());
             Debug.Log("Te inmovilizo");
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             tiempoDentroRango = 0;
         }
 
         //REINICIO DE VARIABLES RELACIONADAS A LA DETECCION Y EL ATAQUE
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
-        realizandoAT = false;
         ataqueDisponible = true;
         atacando = false;
     }
@@ -362,6 +367,7 @@ public class Mapianguari : Enemy
         atacando = true;
         iddel = true;
         anim.Play("Iddel Mapinguari");
+        bloqueoDash.SetActive(false);
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
         iddel = false;
@@ -381,6 +387,7 @@ public class Mapianguari : Enemy
         }
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
+        bloqueoDash.SetActive(true);
         atacando = false;
         iddel = false;
         yield return new WaitForSeconds(0.5f);
@@ -406,25 +413,28 @@ public class Mapianguari : Enemy
             for (int i = 0; i < 3; i++) {
                 System.Random aux = new System.Random();
 
+                if (totalPlants == 3) break;
+                else totalPlants++;
+
                 switch (aux.Next(0, 4))
                 {
                     case 0:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
                         break;
                     case 1:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -92, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -92, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
                         break;
                     case 2:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-59, -31), -84, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-59, -31), -84, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
                         break;
                     case 3:
-                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -76, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -76, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
                         break;
                 }
             }
         }
         else {
-            Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno);
+            Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
         }
         yield return new WaitForEndOfFrame();
         realizandoAT = false;
@@ -432,6 +442,12 @@ public class Mapianguari : Enemy
         ataqueDisponible = true;
         tiempoDentroRango = 0f;
         tiempoFueraRango = 0f;
+    }
+
+    public void PlantDestroy()
+    {
+        totalPlants--;
+        if (totalPlants < 0) totalPlants = 0;
     }
 
     //***************************************************************************************************
@@ -479,6 +495,7 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.3f);
         pruebaAtaqueEspecial = true;
         //EMBESTIDAS
+        bloqueoDash.SetActive(false);
         transform.localScale = new Vector3(-1, 1, 1);
         for (int i = 1; i <= 3; i++) {
             //DESPLAZAMIENTO A LA PLATAFORMA
@@ -525,6 +542,7 @@ public class Mapianguari : Enemy
         ataqueMax = ataque;
         pruebaAtaqueEspecial = false;
         iddel = true;
+        bloqueoDash.SetActive(false);
         //STUN
         yield return new WaitForSeconds(5f);
         iddel = false;
