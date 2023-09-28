@@ -7,6 +7,7 @@ using static Unity.Burst.Intrinsics.X86;
 public class PlantaVeneno : MonoBehaviour
 {
     [SerializeField] private Transform hoyustus;
+    [SerializeField] private Mapianguari boss;
     [SerializeField] private bool ataqueDisponible = false;
     [SerializeField] private bool atacando = false;
     [SerializeField] private GameObject bolaVeneno;
@@ -90,14 +91,16 @@ public class PlantaVeneno : MonoBehaviour
         ataqueDisponible = true;
     }
 
-    public void setDanio(float danio) {
+    public void setDanio(float danio, GameObject boss) {
         this.danio = danio;
+        this.boss = boss.GetComponent<Mapianguari>();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.layer == 14 && collider.gameObject.CompareTag("Untagged"))
         {
+            boss.PlantDestroy();
             Destroy(this.gameObject);
         }
     }
