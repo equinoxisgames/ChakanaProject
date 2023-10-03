@@ -11,6 +11,7 @@ public class Tzantza : Enemy
     [SerializeField] private float t2;
     [SerializeField] private float cooldownAtaque;
     [SerializeField] AudioClip audioHurt;
+    [SerializeField] AudioClip audioAttack;
     [SerializeField] private float distanciaMinimaJugador;
 
     AudioSource charAudio;
@@ -60,6 +61,10 @@ public class Tzantza : Enemy
         playable = false;
         rb.velocity = Vector2.zero;
         ataqueDisponible = false;
+
+        charAudio.Stop();
+        charAudio.clip = audioAttack;
+        charAudio.Play();
         yield return new WaitForSeconds(t1);
         GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
         bolaFuegoGenerada.name += "Enemy";

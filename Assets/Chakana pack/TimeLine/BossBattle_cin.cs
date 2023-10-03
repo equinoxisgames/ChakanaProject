@@ -23,17 +23,17 @@ public class BossBattle_cin : MonoBehaviour
 
     IEnumerator PlayScene()
     {
-        GetComponent<AudioSource>().Play();
+        //GetComponent<AudioSource>().Play();
         yield return new WaitForSeconds(1.51f);
         roca.Play();
-        
+        //GetComponent<AudioSource>().Play();
         yield return new WaitForSeconds(0.6f);
-
+        GetComponent<AudioSource>().Play();
         player.GetComponent<Hoyustus>().enabled = true;
         boss.enabled = true;
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.4f);
 
         Destroy(gameObject);
     }

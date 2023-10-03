@@ -20,7 +20,8 @@ public class ApallimayArco : Apallimay
     [SerializeField] private bool realizandoAtaqueEspecial = false;
     [SerializeField] private GameObject hoyustus;
     [SerializeField] private int codigoAtaque;
-
+    [SerializeField] private AudioClip hurtSound;
+    private AudioSource aud;
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class ApallimayArco : Apallimay
         vidaMax = vida;
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         normalSpeed = speed;
+        aud = GetComponent<AudioSource>();
     }
 
 
@@ -93,6 +95,8 @@ public class ApallimayArco : Apallimay
         //PREPARACION
         atacando = true;
         yield return new WaitForSeconds(0.2f);
+        atacando = false;
+        yield return new WaitForSeconds(0.55f);
         //ROTAR SPRITE
         GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
         if (hoyustus.transform.position.y < transform.position.y)
@@ -104,13 +108,11 @@ public class ApallimayArco : Apallimay
         }
         flechaGenerada.name += "Enemy";
         flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
-        atacando = true;
         if (flechaGenerada.transform.rotation.z < 0.20f) codigoAtaque = 0;
         else if (flechaGenerada.transform.rotation.z >= 0.20f && flechaGenerada.transform.rotation.z < 0.5f) codigoAtaque = 1;
         else codigoAtaque = 2;
         //TIEMPO DE ANIMACION/PREPARACION
-        yield return new WaitForSeconds(0.4f);
-        atacando = false;
+        yield return new WaitForSeconds(0.2f);
         codigoAtaque = -1;
         yield return new WaitForSeconds(cooldownDisparoFlechas);
         ataqueDisponible = true;
@@ -139,6 +141,10 @@ public class ApallimayArco : Apallimay
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+
+                aud.Stop();
+                aud.clip = hurtSound;
+                aud.Play();
             }
             return;
         }

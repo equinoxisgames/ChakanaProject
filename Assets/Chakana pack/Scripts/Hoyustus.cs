@@ -923,11 +923,17 @@ public class Hoyustus : CharactersBehaviour
         }
         else if (!isJumping)
         {
+            if (playerAudio.clip != AudioWalking) playerAudio.Stop();
+
             if (!playerAudio.isPlaying && Grounded())
             {
                 playerAudio.loop = true;
                 playerAudio.clip = AudioWalking;
                 playerAudio.Play();
+            }
+            else if (!Grounded())
+            {
+                playerAudio.Stop();
             }
         }
 
