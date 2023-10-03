@@ -14,6 +14,9 @@ public class ApallimayDaga : Apallimay
     [SerializeField] private float cooldownAtaque;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip attackSound;
+    private AudioSource aud;
 
     void Start()
     {
@@ -34,6 +37,7 @@ public class ApallimayDaga : Apallimay
         rangoPreparacion += 1;
         rangoAtaque += 1;
         ataqueDisponible = true;
+        aud = GetComponent<AudioSource>();
     }
 
 
@@ -67,7 +71,7 @@ public class ApallimayDaga : Apallimay
     private void Move() {
 
         rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
-
+        
         if (transform.position.x <= limit1.x) objetivo = limit2;
         else if (transform.position.x >= limit2.x) objetivo = limit1;
     }
@@ -91,25 +95,23 @@ public class ApallimayDaga : Apallimay
         rb.velocity = new Vector2(0, rb.velocity.y);
         playable = false;
         ataqueDisponible = false;
-        anim.speed = 0;
+        atacando = true;
         //PREPARACION
         yield return new WaitForSeconds(t1);
-        atacando = true;
-        anim.Play("Apallimay Daga Attack", -1, 0);
-        anim.speed = 1;
-        //rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
+        aud.Stop();
+        aud.clip = attackSound;
+        aud.Play();
+        atacando = false;
+
+        rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
         daga.enabled = true;
         //ATAQUE
         //TIEMPO ANIMACION ATAQUE
         yield return new WaitForSeconds(0.4f);
-        atacando = false;
-        anim.speed = 0;
         rb.velocity = new Vector2(0, rb.velocity.y);
         daga.enabled = false;
         //DESCANSO DEL ATAQUE
-        anim.speed = 0;
         yield return new WaitForSeconds(t2);
-        anim.speed = 1;
         playable = true;
         //ATAQUE DISPONIBLE NUEVAMENTE
         yield return new WaitForSeconds(cooldownAtaque);
@@ -139,6 +141,10 @@ public class ApallimayDaga : Apallimay
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+
+                aud.Stop();
+                aud.clip = hurtSound;
+                aud.Play();
             }
             return;
         }
@@ -220,7 +226,7 @@ public class ApallimayDaga : Apallimay
             }
             return false;
         }
-        speed = 5;
+        speed = 7;
         return true;
     }
 

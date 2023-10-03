@@ -12,6 +12,7 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] GameObject details;
     [SerializeField] TextMeshProUGUI detailTxt;
     [SerializeField] GameObject explodeFx;
+    [SerializeField] AudioClip audioComplete;
 
     private bool isIn, isOn;
     private string altarName;
@@ -74,14 +75,17 @@ public class ElementalAltar : MonoBehaviour
         if(e == 2)
         {
             detailTxt.text = e + " MORE" + " ALTARS";
+            GetComponent<AudioSource>().Play();
         }
         else if(e == 1)
         {
             detailTxt.text = e + " MORE" + " ALTAR";
+            GetComponent<AudioSource>().Play();
         }
         else
         {
             detailTxt.text = "THE DOOR HAS OPENED";
+            GetComponent<AudioSource>().clip = audioComplete;
             GetComponent<AudioSource>().Play();
             Instantiate(explodeFx);
         }

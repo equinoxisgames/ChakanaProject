@@ -120,7 +120,8 @@ public class Mapianguari : Enemy
         levelController.EliminarLogicaPlataformas();
         //TIEMPO ANIMACION DEL Boss
         yield return new WaitForSeconds(2f);
-        GetComponent<Mapianguari>().enabled = false;
+        //anim.enabled = false;
+        Destroy(GetComponent<Mapianguari>());
     }
 
 
@@ -128,7 +129,6 @@ public class Mapianguari : Enemy
     {
         anim.SetFloat("Vida", vida);
         anim.SetBool("AB", realizandoAB);
-        anim.SetBool("Muerto", isDead);
         anim.SetBool("AT", realizandoAT);
         anim.SetBool("AE", pruebaAtaqueEspecial);
         anim.SetBool("Iddel", iddel);
@@ -406,8 +406,10 @@ public class Mapianguari : Enemy
         atacando = true;
         ataqueDisponible = false;
         realizandoAT = true;
+        yield return new WaitForSeconds(0.1f);
+        realizandoAT = false;
         //TIEMPO ANIMACION
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.7f);
         if (segundaEtapa)
         {
             for (int i = 0; i < 3; i++) {
@@ -437,7 +439,6 @@ public class Mapianguari : Enemy
             Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
         }
         yield return new WaitForEndOfFrame();
-        realizandoAT = false;
         atacando = false;
         ataqueDisponible = true;
         tiempoDentroRango = 0f;
@@ -501,16 +502,16 @@ public class Mapianguari : Enemy
             //DESPLAZAMIENTO A LA PLATAFORMA
             switch (nuevaPlataforma) {
                 case 0:
-                    transform.position = new Vector3(-14, -99.8f, 0);
+                    transform.position = new Vector3(-14, -99.5f, 0);
                     break;
                 case 1:
-                    transform.position = new Vector3(-14, -91.5f, 0);
+                    transform.position = new Vector3(-14, -91.2f, 0);
                     break;
                 case 2:
-                    transform.position = new Vector3(-30, -83.2f, 0);
+                    transform.position = new Vector3(-30, -83f, 0);
                     break;
                 case 3:
-                    transform.position = new Vector3(-14, -74.9f, 0);
+                    transform.position = new Vector3(-14, -74.7f, 0);
                     break;
             }
             this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
