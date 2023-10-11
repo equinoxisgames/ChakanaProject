@@ -14,6 +14,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
     /// </summary>
     public class Shop : ItemWorkspaceShop
     {
+        [SerializeField] Hoyustus player;
         public ScrollInventory Trader;
         public ScrollInventory Bag;
         public Button BuyButton;
@@ -34,24 +35,22 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 new Item(ItemId.GoldPieces, 10000)
             };
 
-            var shop = new List<Item>
-            {
-                new Item(ItemId.Sword, 1),
-                new Item(ItemId.Bow, 1),
-                new Item(ItemId.KunturMask, 1),
-                new Item(ItemId.AyahuascaRoot, 1),
-                new Item(ItemId.KunkaKuchuna, 10),
-                new Item(ItemId.PachamamaAmulet, 1),
-                new Item(ItemId.Spear, 1),
-                new Item(ItemId.TwoHandedSword, 1),
-                new Item(ItemId.WarriorTearAmulet, 10),
-                new Item(ItemId.LuminousMushroom, 10),
-                new Item(ItemId.SupayMask, 10),
-                new Item(ItemId.GoldPieces, 5000)
-            };
+            NewShop();
+
+            Bag.Initialize(ref inventory);
+        }
+
+        public void NewShop()
+        {
+            var shop = new List<Item>();
+
+            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.KunturMask, 1));
+
+            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+
+            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
 
             Trader.Initialize(ref shop);
-            Bag.Initialize(ref inventory);
         }
 
         protected void Start()
@@ -80,15 +79,36 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         public void Buy()
         {
-            if (GetCurrency(Bag, ItemId.GoldPieces) < SelectedItemParams.Price)
+            if (player.getGold() < SelectedItemParams.Price)
             {
                 AudioSource.PlayOneShot(NoMoney);
                 Debug.LogWarning("You haven't enough gold!");
                 return;
             }
 
-            AddMoney(Bag, -SelectedItemParams.Price, ItemId.GoldPieces);
-            AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);
+            if(SelectedItem.ToString() == "KunturMask")
+            {
+                PlayerPrefs.SetInt("Boost01", 1);
+            }
+            else if (SelectedItem.ToString() == "PachamamaAmulet")
+            {
+                PlayerPrefs.SetInt("Boost02", 1);
+            }
+            else if (SelectedItem.ToString() == "WarriorTearAmulet")
+            {
+                PlayerPrefs.SetInt("Boost03", 1);
+            }
+
+            if(PlayerPrefs.HasKey("Boost03") && PlayerPrefs.HasKey("Boost02") && PlayerPrefs.HasKey("Boost01"))
+            {
+                PlayerPrefs.SetInt("TiendaVacia",1);
+            }
+
+            /*AddMoney(Bag, -SelectedItemParams.Price, ItemId.GoldPieces);
+            AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);*/
+
+            player.setGold(-SelectedItemParams.Price);
+
             MoveItem(SelectedItem, Trader, Bag);
             AudioSource.PlayOneShot(TradeSound);
 

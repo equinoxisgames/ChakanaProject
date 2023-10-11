@@ -43,7 +43,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] AudioClip AudioWalking;
     [SerializeField] AudioClip AudioJump;
     [SerializeField] AudioClip AudioHurt;
-    [SerializeField] AudioClip AudioSkill01;
+    [SerializeField] AudioClip AudioDashVariant;
     [SerializeField] AudioClip AudioSkill02;
     [SerializeField] AudioClip AudioSkill03;
 
@@ -109,6 +109,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float aumentoBarraDash = 15;
     [SerializeField] float aumentoBarraAtaque = 15;
     [SerializeField] float danioExplosionCombinacionFuego_Veneno = 35;
+    private float skillPlus = 1;
     [Space(5)]
 
 
@@ -180,6 +181,9 @@ public class Hoyustus : CharactersBehaviour
 
     private void Awake()
     {
+        if (PlayerPrefs.HasKey("Boost01")) skillPlus = 1.25f;
+
+        if (PlayerPrefs.HasKey("Boost02")) maxVida *= 1.5f;
 
         LoadData();
     }
@@ -213,6 +217,8 @@ public class Hoyustus : CharactersBehaviour
         {
             SaveManager.SavePlayerData(GetComponent<Hoyustus>());
         }
+
+        if (PlayerPrefs.HasKey("Boost03")) ataque *= 1.25f;
 
         if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
     }
@@ -693,6 +699,11 @@ public class Hoyustus : CharactersBehaviour
         gold += e;
     }
 
+    public int GetGold()
+    {
+        return gold;
+    }
+
     public void setAumentoDanioParalizacion(float value)
     {
         aumentoDanioParalizacion = value;
@@ -1068,7 +1079,17 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
-        Destroy(Instantiate(dashVfx, transform.position, Quaternion.identity, transform), 0.5f);
+        GameObject dashObj = Instantiate(dashVfx, transform.position, Quaternion.identity, transform);
+
+        int numeroRandom = UnityEngine.Random.Range(1, 101);
+
+        if(numeroRandom >= 50)
+        {
+            dashObj.GetComponent<AudioSource>().clip = AudioDashVariant;
+            dashObj.GetComponent<AudioSource>().Play();
+        }
+
+        Destroy(dashObj, 0.5f);
 
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);

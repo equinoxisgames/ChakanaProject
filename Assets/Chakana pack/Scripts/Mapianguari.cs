@@ -39,6 +39,7 @@ public class Mapianguari : Enemy
     [SerializeField] AudioClip audioHurt;
     [SerializeField] AudioClip audioAtk;
     [SerializeField] AudioClip audioScream;
+    [SerializeField] AudioClip audioWalk;
     [SerializeField] private float danioPlantaVeneno = 0f;
     [SerializeField] private float tiempoAnimacionAtaqueNormal = 0.4f;
     [SerializeField] private Sprite spriteStatic;
@@ -139,6 +140,17 @@ public class Mapianguari : Enemy
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
         if (!usandoAtaqueEspecial && xObjetivo >= minX && xObjetivo <= maxX && !atacando) {
             transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(xObjetivo, transform.position.y, transform.position.z)/*Vector3.right * xObjetivo*/, movementVelocity * (1 - afectacionViento) * Time.deltaTime);
+            if(charAudio.clip != audioWalk)
+            {
+                charAudio.clip = audioWalk;
+                charAudio.loop = true;
+                charAudio.Play();
+            }
+            else if (!charAudio.isPlaying)
+            {
+                charAudio.loop = true;
+                charAudio.Play();
+            }
         }
     }
 
@@ -298,6 +310,7 @@ public class Mapianguari : Enemy
     private IEnumerator AtaqueAturdimiento() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        charAudio.loop = false;
         charAudio.Stop();
         charAudio.clip = audioScream;
         charAudio.Play();
@@ -361,7 +374,6 @@ public class Mapianguari : Enemy
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         charAudio.Stop();
         charAudio.clip = audioAtk;
-        charAudio.Play();
 
         ataqueDisponible = false;
         atacando = true;
@@ -374,6 +386,7 @@ public class Mapianguari : Enemy
         anim.Play("Ataque Normal Mapinguari", -1, 0);
         realizandoAB = true;
         yield return new WaitUntil(() => iddel);
+        charAudio.Play();
         //yield return new WaitForSecondsRealtime(tiempoAnimacionAtaqueNormal);
         //DASH TRAS ATAQUE EN LA SEGUNDA ETAPA
         //iddel = true;
@@ -406,6 +419,12 @@ public class Mapianguari : Enemy
         atacando = true;
         ataqueDisponible = false;
         realizandoAT = true;
+
+        charAudio.loop = false;
+        charAudio.Stop();
+        charAudio.clip = audioScream;
+        charAudio.Play();
+
         yield return new WaitForSeconds(0.1f);
         realizandoAT = false;
         //TIEMPO ANIMACION
@@ -558,6 +577,7 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     private IEnumerator CambioPlataforma() {
         //SE ESCONDE
+        charAudio.Stop();
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;
         ataqueDisponible = false;

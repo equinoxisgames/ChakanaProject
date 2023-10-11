@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.FantasyInventory.Scripts.Interface;
 
 public class WeaponCollect : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class WeaponCollect : MonoBehaviour
     [SerializeField] GameObject timeLine;
     [SerializeField] GameObject weaponTxt;
     [SerializeField] Hoyustus player;
+    [SerializeField] Inventory inventory;
 
     bool isMove, isActive, isOn;
     Vector3 destination;
@@ -42,6 +44,9 @@ public class WeaponCollect : MonoBehaviour
             player.EnableWeapon();
             StartCoroutine(ShowText());
 
+            inventory.NewInventory();
+            GetComponent<AudioSource>().Play();
+            
             tuto.SetActive(true);
         }
     }

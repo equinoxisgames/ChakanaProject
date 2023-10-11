@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.FantasyInventory.Scripts.Interface;
 
 public class UkukuMision : MonoBehaviour
 {
@@ -8,17 +9,13 @@ public class UkukuMision : MonoBehaviour
     [SerializeField] private GameObject txt;
     [SerializeField] private bool isDestroyed;
     [SerializeField] private GameObject ukukuInv;
+    [SerializeField] private Inventory inventory;
 
     private bool isActive;
 
     private void Awake()
     {
         //PlayerPrefs.DeleteAll();
-
-        if (PlayerPrefs.HasKey("ukukuM" + "01"))
-        {
-            print("holaaaaa");
-        }
 
         if (!PlayerPrefs.HasKey("ukukuM"))
         {
@@ -47,7 +44,7 @@ public class UkukuMision : MonoBehaviour
 
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
-
+            inventory.NewInventory();
             GetComponent<AudioSource>().Play();
 
             if (isDestroyed)

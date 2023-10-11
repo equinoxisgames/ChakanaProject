@@ -20,6 +20,7 @@ public class ControladorTesting : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.T)) {
+            Cursor.visible = !canvas.activeSelf;
             canvas.SetActive(!canvas.activeSelf);
         }
     }
