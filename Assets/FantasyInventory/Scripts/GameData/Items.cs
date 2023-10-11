@@ -73,7 +73,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 {
                     Type = ItemType.Mask,
                     Properties = new List<Property> { new Property(PropertyId.MagicDamage, 10) },
-                    Price = 1000
+                    Price = 65
                 }
             },
             {
@@ -100,7 +100,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 {
                     Type = ItemType.Amulet,
                     Properties = new List<Property> { new Property(PropertyId.RestoreHealth, 50) },
-                    Price = 1000
+                    Price = 80
                 }
             },
             {

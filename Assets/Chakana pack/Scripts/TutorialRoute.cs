@@ -222,7 +222,6 @@ public class TutorialRoute : MonoBehaviour
         tutoObj.SetActive(true);
 
         yield return new WaitForSecondsRealtime(1f);
-        print("asfas");
         tutoObj.transform.GetChild(5).gameObject.SetActive(true);
         isActive = true;
     }

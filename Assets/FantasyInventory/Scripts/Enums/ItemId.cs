@@ -7,10 +7,10 @@
     public enum ItemId
     {
         Undefined		= 0,
-        SupayMask		= 1,
+        KunkaKuchuna    = 1,
         Flute           = 2,
         GoldPieces      = 3,
-        KunkaKuchuna    = 4,
+        SupayMask       = 4,
         Sword       	= 5,
         Bow          	= 6,
         KunturMask 		= 7,

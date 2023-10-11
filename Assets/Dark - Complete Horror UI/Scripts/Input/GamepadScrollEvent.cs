@@ -40,10 +40,10 @@ namespace Michsky.UI.Dark
         {
             if (gamepadManager == null)
             {
-                var tempManager = (GamepadChecker)GameObject.FindObjectsOfType(typeof(GamepadChecker))[0];
+                /*var tempManager = (GamepadChecker)GameObject.FindObjectsOfType(typeof(GamepadChecker))[0];
                
                 if (tempManager != null)
-                    gamepadManager = tempManager;
+                    gamepadManager = tempManager;*/
             }
 
             if (optimizeUpdates == true)

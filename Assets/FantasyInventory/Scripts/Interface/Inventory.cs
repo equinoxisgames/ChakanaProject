@@ -27,26 +27,42 @@ namespace Assets.FantasyInventory.Scripts.Interface
         /// </summary>
         public void Awake()
         {
-            var inventory = new List<Item>
-            {
-                new Item(ItemId.SupayMask, 1),
-                new Item(ItemId.GoldPieces, 2000),
-                new Item(ItemId.KunkaKuchuna, 1),
-                //new Item(ItemId.Sword, 1),
-                //new Item(ItemId.Bow, 1),
-                new Item(ItemId.KunturMask, 1),
-                new Item(ItemId.AyahuascaRoot, 1),
-                new Item(ItemId.LuminousMushroom, 2),
-                new Item(ItemId.PachamamaAmulet, 1),
-                //new Item(ItemId.Spear, 1),
-                //new Item(ItemId.TwoHandedSword, 1),
-                new Item(ItemId.WarriorTearAmulet, 1)
-            };
+            NewInventory();
 
             var equipped = new List<Item>();
 
-            Bag.Initialize(ref inventory);
             Equipment.Initialize(ref equipped);
+        }
+
+        public void NewInventory()
+        {
+            var inventory = new List<Item>();
+
+            if (PlayerPrefs.GetInt("conv01") != 2)
+            {
+                if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
+                {
+                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
+                }
+                else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
+                {
+                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
+                }
+
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
+
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+            }
+
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
+
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
+
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
+
+            if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+
+            Bag.Initialize(ref inventory);
         }
 
         protected void Start()

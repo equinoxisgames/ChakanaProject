@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
 using UnityEngine.UI;
+using Assets.FantasyInventory.Scripts.Enums;
+using Assets.FantasyInventory.Scripts.GameData;
+using Assets.FantasyInventory.Scripts.Interface.Elements;
+using Assets.FantasyInventory.Scripts.Interface;
 
 public class ConversationInteract : MonoBehaviour
 {
@@ -11,6 +15,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] GameObject interactBtn;
     [SerializeField] GameObject shop;
     [SerializeField] Transform shopList;
+    public Inventory inventory;
     GameObject canvas;
 
     private GameObject keyObj, joyObj;
@@ -101,6 +106,7 @@ public class ConversationInteract : MonoBehaviour
         if (PlayerPrefs.GetInt("ukukuM") == 4)
         {
             PlayerPrefs.SetInt("conv01", 2);
+            inventory.NewInventory();
         }
     }
 
@@ -117,7 +123,7 @@ public class ConversationInteract : MonoBehaviour
 
     public void StopConversation()
     {
-        if (shopEnable)
+        if (shopEnable && !PlayerPrefs.HasKey("TiendaVacia"))
         {
             shop.SetActive(true);
             shopping = true;
