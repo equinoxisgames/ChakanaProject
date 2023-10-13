@@ -594,7 +594,7 @@ public class Hoyustus : CharactersBehaviour
         extraExplosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable, false);
         extraExplosion.name += "Player";
 
-        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1f);
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 2f);
         //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
         yield return new WaitForSeconds(0.5f);
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
@@ -1111,6 +1111,7 @@ public class Hoyustus : CharactersBehaviour
         rb.velocity = Vector2.zero;
         isDashing = false;
         playable = true;
+        isJumping = false;
         yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(0.1f);
         QuitarInvulnerabilidades(layerObject);
