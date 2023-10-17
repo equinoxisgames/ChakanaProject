@@ -26,6 +26,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6592512439014633493}
   - {fileID: 6592512438420601435}
@@ -66,6 +67,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6592512438168598819}
   m_RootOrder: 2
@@ -98,6 +100,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -105,8 +108,7 @@ MonoBehaviour:
   m_text: SAVE SLOT NAME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d452d52c272ff8442a3fce75bd39af55, type: 2}
-  m_sharedMaterial: {fileID: 21513131424051102, guid: d452d52c272ff8442a3fce75bd39af55,
-    type: 2}
+  m_sharedMaterial: {fileID: 21513131424051102, guid: d452d52c272ff8442a3fce75bd39af55, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -218,6 +220,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6592512438464090043}
   - {fileID: 6592512437624341709}
@@ -245,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 0
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -288,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   hoverSound: {fileID: 8300000, guid: d7cfd9f6afac6a24794f9a95c6aebcbb, type: 3}
-  clickSound: {fileID: 8300000, guid: b399b083c59f6d240bcad9b7dc52b7d3, type: 3}
+  clickSound: {fileID: 8300000, guid: d33c7913723f7344ea80a94e6e8b2c10, type: 3}
   enableHoverSound: 1
   enableClickSound: 1
 --- !u!1 &6592512438420601434
@@ -320,6 +324,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6592512437624341709}
   m_RootOrder: 1
@@ -352,6 +357,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.043137256, g: 0.050980393, b: 0.07450981, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -412,6 +418,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6592512438168598819}
   m_RootOrder: 0
@@ -444,6 +451,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -504,6 +512,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6592512438168598819}
   m_RootOrder: 3
@@ -536,6 +545,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -543,8 +553,7 @@ MonoBehaviour:
   m_text: CHAPTER 5 - 78% COMPLETED - 01.01.2019, 12:00 PM
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8b565b16fc86ee347943107f3b9f2da4, type: 2}
-  m_sharedMaterial: {fileID: 21990264018669758, guid: 8b565b16fc86ee347943107f3b9f2da4,
-    type: 2}
+  m_sharedMaterial: {fileID: 21990264018669758, guid: 8b565b16fc86ee347943107f3b9f2da4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -656,6 +665,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6592512437624341709}
   m_RootOrder: 0
@@ -688,6 +698,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
