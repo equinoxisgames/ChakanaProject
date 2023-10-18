@@ -6,6 +6,7 @@ using Assets.FantasyInventory.Scripts.GameData;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.FantasyInventory.Scripts.Interface
 {
@@ -15,6 +16,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
     public class Shop : ItemWorkspaceShop
     {
         [SerializeField] Hoyustus player;
+        [SerializeField] Text goldTxt;
         public ScrollInventory Trader;
         public ScrollInventory Bag;
         public Button BuyButton;
@@ -44,11 +46,27 @@ namespace Assets.FantasyInventory.Scripts.Interface
         {
             var shop = new List<Item>();
 
-            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.KunturMask, 1));
+            if (PlayerPrefs.GetInt("Boost01") != 1)
+            {
+                shop.Add(new Item(ItemId.KunturMask, 1));
+                print("hola1");
+            }
 
-            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+            if (PlayerPrefs.GetInt("Boost02") != 1)
+            {
+                shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+                print("hola2");
+            }
 
-            if(!PlayerPrefs.HasKey("Boost01")) shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
+            if (PlayerPrefs.GetInt("Boost03") != 1)
+            {
+                shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
+                print("hola3");
+            }
+
+            print(PlayerPrefs.GetInt("Boost01"));
+            print(PlayerPrefs.GetInt("Boost02"));
+            print(PlayerPrefs.GetInt("Boost03"));
 
             Trader.Initialize(ref shop);
         }
@@ -57,7 +75,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
         {
             Reset();
             BuyButton.interactable = SellButton.interactable = false;
-
+            goldTxt.text = player.getGold().ToString();
             // TODO: Assigning static callbacks. Don't forget to set null values when UI will be closed. You can also use events instead.
             InventoryItem.OnItemSelected = SelectItem;
             InventoryItem.OnDragStarted = SelectItem;
@@ -108,6 +126,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
             AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);*/
 
             player.setGold(-SelectedItemParams.Price);
+            goldTxt.text = player.getGold().ToString();
 
             MoveItem(SelectedItem, Trader, Bag);
             AudioSource.PlayOneShot(TradeSound);
