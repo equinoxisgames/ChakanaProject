@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using Assets.FantasyInventory.Scripts.Interface.Elements;
 
 
 public class MainMenu : MonoBehaviour
@@ -14,6 +15,7 @@ public class MainMenu : MonoBehaviour
     public RectTransform confirmQuitMenu;
 
     public RectTransform inventoryMenu;
+    private GameObject canvasUI;
 
 
     //public RectTransform exitMenu;
@@ -65,6 +67,8 @@ public class MainMenu : MonoBehaviour
         LocateMapScene();
         if (escena != "00- Main Menu 0")
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+
+        canvasUI = GameObject.Find("HUDMenu");
     }
 
     void OnGUI()
@@ -77,6 +81,11 @@ public class MainMenu : MonoBehaviour
 
             //Debug.Log("Se ha presionado una tecla en el teclado: " + e.keyCode);
         }
+    }
+
+    public void DisableUI(bool e)
+    {
+        canvasUI.SetActive(e);
     }
 
     void Update()
@@ -174,6 +183,14 @@ public class MainMenu : MonoBehaviour
     public void Inventory()
     {
         inventoryMenu.transform.GetChild(0).GetComponent<Button>().Select();
+        StartCoroutine(ButtonSelect());
+    }
+
+    IEnumerator ButtonSelect()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        inventoryMenu.transform.GetChild(0).GetComponent<InventoryItem>().OnPress();
     }
 
     public void LocateMapScene()
@@ -334,10 +351,12 @@ public class MainMenu : MonoBehaviour
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
                     Time.timeScale = 0f;
+                    DisableUI(false);
                     ActivePlayer(false);
                 }
                 else
                 {
+                    DisableUI(true);
                     Time.timeScale = 1f;
                     if (pauseMenu.gameObject.activeSelf)
                     {
@@ -541,7 +560,7 @@ public class MainMenu : MonoBehaviour
     }
     public void ActivePlayer(bool active)
     {
-
+        DisableUI(active);
         player.enabled = active;
         if (active)
             Time.timeScale = 1f;

@@ -18,6 +18,7 @@ public class ConversationInteract : MonoBehaviour
     public Inventory inventory;
     GameObject canvas;
 
+    private GameObject canvasUI;
     private GameObject keyObj, joyObj;
     private bool joystick;
     private GameObject cam;
@@ -27,6 +28,8 @@ public class ConversationInteract : MonoBehaviour
     void Start()
     {
         canvas = GameObject.Find("Dialogue Manager").transform.GetChild(0).gameObject;
+
+        canvasUI = GameObject.Find("HUDMenu");
 
         if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2)
         {
@@ -126,9 +129,11 @@ public class ConversationInteract : MonoBehaviour
         if (shopEnable && !PlayerPrefs.HasKey("TiendaVacia"))
         {
             shop.SetActive(true);
+            canvasUI.SetActive(false);
             shopping = true;
             canvas.SetActive(false);
             shopList.GetChild(0).GetComponent<Button>().Select();
+            shopList.GetChild(0).GetComponent<InventoryItem>().OnPress();
             GetComponent<Usable>().enabled = false;
             return;
         }
@@ -155,6 +160,7 @@ public class ConversationInteract : MonoBehaviour
 
         canvas.SetActive(true);
         shop.SetActive(false);
+        canvasUI.SetActive(true);
         shopping = false;
         player.enabled = true;
         cam.SetActive(false);
