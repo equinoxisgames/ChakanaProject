@@ -23,8 +23,11 @@ public class MainMenu : MonoBehaviour
     public Button btContinue;
     public Button btCancelExitGame;
     public Button btExitGame;
+    public Button btSettingsResolution;
+    public Button btSettingsWindowMode;
     public Button btLoadSlot;
-
+    public Slider sliderMaster;
+    public Dropdown dropDownResolution;
 
     string escena;
     bool boolHomeMenuActive = true;
@@ -390,7 +393,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire4"))
             {
                 if (escena != "00- Main Menu 0")
                 {
@@ -449,6 +452,13 @@ public class MainMenu : MonoBehaviour
     public void ActivateCancelExitGame()
     {
         btCancelExitGame.Select();
+
+    }
+    public void ActivateSettings()
+    {
+        
+        sliderMaster.Select();
+        
 
     }
     public void ActivateHomeMenu()
