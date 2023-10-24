@@ -322,8 +322,8 @@ public class Boraro : Enemy
         for (int i = 0; i < 4; i++) {
             if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
             {
-                anim.Play("BoraroIdle");
-                anim.speed = 1;
+                /*anim.Play("BoraroIdle");
+                anim.speed = 1;*/
                 rb.velocity = Vector3.zero;
                 atacando = false;
                 tiempoVolteo = 0;
@@ -333,20 +333,32 @@ public class Boraro : Enemy
             }
             if (i % 2 == 0)
             {
-                anim.Play("Attack", -1, 0);
+                //anim.Play("Attack", -1, 0);
             }
-            anim.speed = 1;
+
+            if (hoyustus.transform.position.x < transform.position.x)
+            {
+                direction = -1;
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                direction = 1;
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+
+            //anim.speed = 1;
             rb.AddForce(new Vector2(fuerzaDesplazamientoAtaque * direction, 0), ForceMode2D.Impulse);
             garras.SetActive(true);
             yield return new WaitForSeconds(tiempoAtaque);
-            anim.speed = 0;
+            //anim.speed = 0;
             rb.velocity = new Vector2(0f, rb.velocity.y);
             garras.SetActive(false);
             yield return new WaitForSeconds(enfriamientoAtaque);
         }
-        anim.Play("BoraroIdle");
+        //anim.Play("BoraroIdle");
         atacando = false;
-        anim.speed = 1;
+        //anim.speed = 1;
         tiempoVolteo = 0;
         //TIEMPO POSTERIOR AL ATAQUE
         yield return new WaitForSeconds(t2);

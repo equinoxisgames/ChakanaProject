@@ -11,6 +11,9 @@
         PhysicDefense   = 2,
         MagicDefense    = 3,
         RestoreHealth   = 4,
-        RestoreMana     = 5
+        RestoreMana     = 5,
+        MagicObject     = 6,
+        AbilityDamage   = 7,
+        MaxHealth       = 8,
     }
 }

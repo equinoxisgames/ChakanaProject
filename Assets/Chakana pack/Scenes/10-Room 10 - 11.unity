@@ -308,8 +308,8 @@ AudioSource:
   m_GameObject: {fileID: 11304434}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -1067,8 +1067,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.13109994, y: -0.76175, z: 0}
-    m_Extent: {x: 5.0308, y: 4.26355, z: 0}
+    m_Center: {x: 0.13040018, y: -0.76014996, z: 0}
+    m_Extent: {x: 5.0284, y: 4.27775, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -2130,8 +2130,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 1.1678, y: 2.0877, z: 0}
-    m_Extent: {x: 2.7909, y: 2.6812, z: 0}
+    m_Center: {x: 1.1659999, y: 2.0807, z: 0}
+    m_Extent: {x: 2.7946, y: 2.6845999, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -3342,8 +3342,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.006099999, y: -0.0079, z: 0}
-    m_Extent: {x: 1.4305, y: 1.52, z: 0}
+    m_Center: {x: 0.005199969, y: -0.009899974, z: 0}
+    m_Extent: {x: 1.4326999, y: 1.5158, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -4213,6 +4213,47 @@ Transform:
   m_Father: {fileID: 587104309}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &253275610
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/Bar
+  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1 &257366243
 GameObject:
   m_ObjectHideFlags: 0
@@ -5329,8 +5370,8 @@ AudioSource:
   m_GameObject: {fileID: 295820956}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -5416,72 +5457,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1001 &299910593
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1367820276}
-    m_Modifications:
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -30.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1755838
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_Name
-      value: Apallimay V1 (2)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
---- !u!4 &299910594 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-  m_PrefabInstance: {fileID: 299910593}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &301983608
 GameObject:
   m_ObjectHideFlags: 0
@@ -5968,8 +5943,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12280011, y: -0.77069986, z: 0}
-    m_Extent: {x: 5.4419003, y: 4.6793, z: 0}
+    m_Center: {x: 0.120599985, y: -0.77199996, z: 0}
+    m_Extent: {x: 5.4329996, y: 4.6805, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -6605,8 +6580,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -5.76105, y: -0.704, z: 0}
-    m_Extent: {x: 3.18225, y: 2.9903, z: 0}
+    m_Center: {x: -5.76185, y: -0.7026, z: 0}
+    m_Extent: {x: 3.18405, y: 2.9869, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -6737,7 +6712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -30.7
+      value: -30.10001
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7331,8 +7306,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12825012, y: -0.7630999, z: 0}
-    m_Extent: {x: 5.02245, y: 4.2702, z: 0}
+    m_Center: {x: 0.13269997, y: -0.7674501, z: 0}
+    m_Extent: {x: 5.025, y: 4.2754498, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -7845,8 +7820,8 @@ AudioSource:
   m_GameObject: {fileID: 431375588}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -8080,7 +8055,7 @@ Transform:
   m_GameObject: {fileID: 441125080}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 96.98, y: -91.64, z: 0}
-  m_LocalScale: {x: -2, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 334228639}
@@ -8343,8 +8318,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.4108, y: -1.21605, z: 0}
-    m_Extent: {x: 1.8740001, y: 2.44555, z: 0}
+    m_Center: {x: -1.41835, y: -1.22245, z: 0}
+    m_Extent: {x: 1.87625, y: 2.44885, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -9110,8 +9085,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12855005, y: -0.7621001, z: 0}
-    m_Extent: {x: 4.66295, y: 3.9146, z: 0}
+    m_Center: {x: 0.12689996, y: -0.76105, z: 0}
+    m_Extent: {x: 4.6734, y: 3.91065, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -9211,8 +9186,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.90964997, y: 0.34070003, z: 0}
-    m_Extent: {x: 2.0525498, y: 1.2867, z: 0}
+    m_Center: {x: -0.90915, y: 0.35314998, z: 0}
+    m_Extent: {x: 2.0599499, y: 1.28685, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -9293,8 +9268,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0009499788, y: -0.00080001354, z: 0}
-    m_Extent: {x: 1.43795, y: 1.4339, z: 0}
+    m_Center: {x: -0.00055003166, y: 0.00054997206, z: 0}
+    m_Extent: {x: 1.42915, y: 1.43385, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -14726,8 +14701,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -5.7642, y: -0.70289993, z: 0}
-    m_Extent: {x: 3.1966, y: 2.9807, z: 0}
+    m_Center: {x: -5.762, y: -0.6970999, z: 0}
+    m_Extent: {x: 3.1892998, y: 2.9865, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -15092,7 +15067,7 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.9001, y: 0.3519, z: 0}
+    m_Center: {x: -0.90650004, y: 0.33850002, z: 0}
     m_Extent: {x: 2.056, y: 1.2853, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
@@ -15226,8 +15201,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12844992, y: -0.7641001, z: 0}
-    m_Extent: {x: 5.44205, y: 4.6855, z: 0}
+    m_Center: {x: 0.12884998, y: -0.7666999, z: 0}
+    m_Extent: {x: 5.43175, y: 4.6784, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -15799,8 +15774,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12229991, y: -0.76989996, z: 0}
-    m_Extent: {x: 4.6640997, y: 3.9115, z: 0}
+    m_Center: {x: 0.121799946, y: -0.76574993, z: 0}
+    m_Extent: {x: 4.669, y: 3.91535, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -16019,8 +15994,8 @@ AudioSource:
   m_GameObject: {fileID: 630720823}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -16554,8 +16529,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.00090003014, y: -0.0019999743, z: 0}
-    m_Extent: {x: 1.4317, y: 1.4276, z: 0}
+    m_Center: {x: -0.0058999658, y: 0.0050500035, z: 0}
+    m_Extent: {x: 1.4336, y: 1.43275, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -16792,8 +16767,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.90620005, y: 0.344, z: 0}
-    m_Extent: {x: 2.0519, y: 1.2848, z: 0}
+    m_Center: {x: -0.90525, y: 0.35064998, z: 0}
+    m_Extent: {x: 2.05685, y: 1.28865, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -17508,8 +17483,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.1264, y: -0.7594999, z: 0}
-    m_Extent: {x: 4.5533, y: 3.8014998, z: 0}
+    m_Center: {x: 0.119100094, y: -0.7603501, z: 0}
+    m_Extent: {x: 4.5597, y: 3.80225, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -18148,8 +18123,8 @@ AudioSource:
   m_GameObject: {fileID: 759333084}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -23940,8 +23915,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 16.590899, y: -0.3389001, z: 0}
-    m_Extent: {x: 18.4457, y: 3.7827, z: 0}
+    m_Center: {x: 16.59295, y: -0.3368001, z: 0}
+    m_Extent: {x: 18.45075, y: 3.7806, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -24476,8 +24451,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0049000382, y: -0.001850009, z: 0}
-    m_Extent: {x: 1.4322, y: 1.51255, z: 0}
+    m_Center: {x: 0.003700018, y: -0.0053499937, z: 0}
+    m_Extent: {x: 1.4274, y: 1.51265, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -25742,8 +25717,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.9081, y: 0.3417, z: 0}
-    m_Extent: {x: 2.0507002, y: 1.2873, z: 0}
+    m_Center: {x: -0.9041, y: 0.3528, z: 0}
+    m_Extent: {x: 2.046, y: 1.2837, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -25824,8 +25799,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0023500323, y: -0.007550001, z: 0}
-    m_Extent: {x: 1.4237499, y: 1.42815, z: 0}
+    m_Center: {x: -0.0062499642, y: -0.0052999854, z: 0}
+    m_Extent: {x: 1.43315, y: 1.4319, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -25983,47 +25958,6 @@ Transform:
   m_Father: {fileID: 287766755}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &938890083
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/Bar
-  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1 &939141027
 GameObject:
   m_ObjectHideFlags: 0
@@ -26209,8 +26143,8 @@ AudioSource:
   m_GameObject: {fileID: 939141027}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -27038,8 +26972,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12374997, y: -0.76090014, z: 0}
-    m_Extent: {x: 5.43655, y: 4.6841, z: 0}
+    m_Center: {x: 0.12945008, y: -0.7632501, z: 0}
+    m_Extent: {x: 5.43305, y: 4.6838503, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -27139,8 +27073,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12170005, y: -0.99045, z: 0}
-    m_Extent: {x: 4.6677, y: 3.6876502, z: 0}
+    m_Center: {x: 0.12674999, y: -0.98515, z: 0}
+    m_Extent: {x: 4.66455, y: 3.68475, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -27240,8 +27174,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12529993, y: -0.7601999, z: 0}
-    m_Extent: {x: 4.6658, y: 3.9113998, z: 0}
+    m_Center: {x: 0.12759995, y: -0.76550007, z: 0}
+    m_Extent: {x: 4.6692, y: 3.9031, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -27425,8 +27359,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.120899916, y: -0.76110005, z: 0}
-    m_Extent: {x: 4.5522003, y: 3.8015, z: 0}
+    m_Center: {x: 0.12695003, y: -0.75915, z: 0}
+    m_Extent: {x: 4.5548496, y: 3.80415, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -27526,8 +27460,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.1302998, y: -0.7658, z: 0}
-    m_Extent: {x: 4.5566998, y: 3.8027, z: 0}
+    m_Center: {x: 0.11949992, y: -0.7606499, z: 0}
+    m_Extent: {x: 4.5587997, y: 3.80775, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -27795,8 +27729,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.91354996, y: 0.3493, z: 0}
-    m_Extent: {x: 2.05305, y: 1.2833999, z: 0}
+    m_Center: {x: -0.91085005, y: 0.34510002, z: 0}
+    m_Extent: {x: 2.05215, y: 1.2814, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -42166,6 +42100,72 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &1178839288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1367820276}
+    m_Modifications:
+    - target: {fileID: 575727464603290693, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_Name
+      value: Apallimay Escudo (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -30.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.17558378
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+--- !u!4 &1178839289 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+  m_PrefabInstance: {fileID: 1178839288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1183576345
 GameObject:
   m_ObjectHideFlags: 0
@@ -48147,8 +48147,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -5.7626, y: -0.69694996, z: 0}
-    m_Extent: {x: 3.1906002, y: 2.98545, z: 0}
+    m_Center: {x: -5.7605, y: -0.69510007, z: 0}
+    m_Extent: {x: 3.1947002, y: 2.9893, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -49096,6 +49096,47 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!21 &1337176837
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/Bar
+  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1 &1339296452
 GameObject:
   m_ObjectHideFlags: 0
@@ -64454,8 +64495,8 @@ AudioSource:
   m_GameObject: {fileID: 1362232504}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -64657,14 +64698,14 @@ Transform:
   - {fileID: 1392382522}
   - {fileID: 2066619882}
   - {fileID: 1308860230}
-  - {fileID: 1686442286}
   - {fileID: 1431386807}
   - {fileID: 1837732294}
   - {fileID: 1786558644}
-  - {fileID: 299910594}
   - {fileID: 1930691391}
   - {fileID: 358877161}
   - {fileID: 1472492591}
+  - {fileID: 1415525119}
+  - {fileID: 1178839289}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -70095,6 +70136,113 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7018684030615050250, guid: f1a2a42e18d65654aaa685a6c8fb3538, type: 3}
   m_PrefabInstance: {fileID: 1392382521}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1415525118
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1367820276}
+    m_Modifications:
+    - target: {fileID: 575727464603290693, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_Name
+      value: Apallimay Escudo
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 49.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.875286
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.17558378
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+--- !u!4 &1415525119 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3354432359483531859, guid: 15218c532a47ce2499c3f09f19333cf0, type: 3}
+  m_PrefabInstance: {fileID: 1415525118}
+  m_PrefabAsset: {fileID: 0}
+--- !u!21 &1422381225
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/Bar
+  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1 &1429829047
 GameObject:
   m_ObjectHideFlags: 0
@@ -70197,11 +70345,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.41
+      value: 35.67
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.34
+      value: 14.91
       objectReference: {fileID: 0}
     - target: {fileID: 8059498668322056468, guid: 2f25b33519eec8d42948eac2a87b220f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -70645,47 +70793,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!21 &1501102536
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/Bar
-  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1 &1501677065
 GameObject:
   m_ObjectHideFlags: 0
@@ -71455,8 +71562,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.9068, y: 0.34340003, z: 0}
-    m_Extent: {x: 2.0512, y: 1.2833, z: 0}
+    m_Center: {x: -0.9028, y: 0.3498, z: 0}
+    m_Extent: {x: 2.0528, y: 1.2793, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -71660,8 +71767,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.9017, y: 0.35179996, z: 0}
-    m_Extent: {x: 2.049, y: 1.2887, z: 0}
+    m_Center: {x: -0.90735006, y: 0.3478, z: 0}
+    m_Extent: {x: 2.06305, y: 1.2843, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -71754,47 +71861,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9010123227811289174, guid: 392ed689aaf0bd14aaecda12807d9567, type: 3}
   m_PrefabInstance: {fileID: 1586750433}
   m_PrefabAsset: {fileID: 0}
---- !u!21 &1588042204
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/Bar
-  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1 &1590459692
 GameObject:
   m_ObjectHideFlags: 0
@@ -72397,8 +72463,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 1.1703999, y: 2.07345, z: 0}
-    m_Extent: {x: 2.7885, y: 2.67915, z: 0}
+    m_Center: {x: 1.1672499, y: 2.07485, z: 0}
+    m_Extent: {x: 2.78725, y: 2.68465, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -72991,72 +73057,6 @@ Transform:
   m_Father: {fileID: 287766755}
   m_RootOrder: 41
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1686442285
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1367820276}
-    m_Modifications:
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 40.56
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 14.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1755838
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7325704355504072842, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-      propertyPath: m_Name
-      value: Apallimay V1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
---- !u!4 &1686442286 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
-  m_PrefabInstance: {fileID: 1686442285}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1700680578
 GameObject:
   m_ObjectHideFlags: 0
@@ -96549,47 +96549,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!21 &1748587480
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/Bar
-  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1 &1755538385
 GameObject:
   m_ObjectHideFlags: 0
@@ -97217,7 +97176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595062070234725047, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1768239101035504340, guid: bb1aa4550153a7542ba174c9661841bd, type: 3}
       propertyPath: m_RootOrder
@@ -97738,8 +97697,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12605, y: -0.76265, z: 0}
-    m_Extent: {x: 4.66455, y: 3.91395, z: 0}
+    m_Center: {x: 0.12415004, y: -0.76180005, z: 0}
+    m_Extent: {x: 4.66545, y: 3.9188, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -98181,8 +98140,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0010499954, y: 0.0029500127, z: 0}
-    m_Extent: {x: 1.43705, y: 1.43325, z: 0}
+    m_Center: {x: 0.005799949, y: -0.0064000487, z: 0}
+    m_Extent: {x: 1.4264, y: 1.4314001, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -98225,47 +98184,6 @@ MonoBehaviour:
   - {x: 0.4157348, y: -0.27778515, z: 0}
   - {x: 0.46193978, y: -0.19134171, z: 0}
   - {x: 0.49039266, y: -0.09754512, z: 0}
---- !u!21 &1834051674
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/Bar
-  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1001 &1837732293
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98284,7 +98202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.29
+      value: 14.86
       objectReference: {fileID: 0}
     - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -98878,6 +98796,47 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!21 &1876858418
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/Bar
+  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1 &1881644036
 GameObject:
   m_ObjectHideFlags: 0
@@ -99439,7 +99398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -30.8
+      value: -30.200008
       objectReference: {fileID: 0}
     - target: {fileID: 1777270745979198813, guid: fdf2f62458303054ebc76fc3f9ebb76d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -100087,8 +100046,8 @@ AudioSource:
   m_GameObject: {fileID: 1973003861}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80e0857f0fe71f542a24fe5f0ffc9349, type: 3}
+  OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
+  m_audioClip: {fileID: 8300000, guid: a76b6a542b6920847a903fa9caac96fb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.75
   m_Pitch: 1
@@ -100678,8 +100637,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12779999, y: -0.7644, z: 0}
-    m_Extent: {x: 4.5561, y: 3.7963, z: 0}
+    m_Center: {x: 0.1264, y: -0.7636001, z: 0}
+    m_Extent: {x: 4.5497, y: 3.8092, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -102220,8 +102179,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.4205, y: -1.22085, z: 0}
-    m_Extent: {x: 1.8813, y: 2.44985, z: 0}
+    m_Center: {x: -1.41595, y: -1.2046499, z: 0}
+    m_Extent: {x: 1.87055, y: 2.45035, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -102574,8 +102533,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.9079, y: 0.34675, z: 0}
-    m_Extent: {x: 2.0512, y: 1.28455, z: 0}
+    m_Center: {x: -0.9157001, y: 0.3482, z: 0}
+    m_Extent: {x: 2.0533, y: 1.284, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -102590,6 +102549,47 @@ MonoBehaviour:
   - {x: 0.23033524, y: 0.05858612, z: 0}
   - {x: 0.1725502, y: 0.6733551, z: 0}
   - {x: -2.0409355, y: 0.71187973, z: 0}
+--- !u!21 &2044260850
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/Bar
+  m_Shader: {fileID: -6465566751694194690, guid: 166de8412842f9e4fb6615836f6a14d0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1 &2046555681
 GameObject:
   m_ObjectHideFlags: 0
@@ -102740,8 +102740,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 0.12010002, y: -0.75675, z: 0}
-    m_Extent: {x: 4.5612, y: 3.8018498, z: 0}
+    m_Center: {x: 0.1326499, y: -0.7585499, z: 0}
+    m_Extent: {x: 4.56005, y: 3.80665, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -103717,8 +103717,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.008300006, y: -0.009800017, z: 0}
-    m_Extent: {x: 1.4279001, y: 1.5106001, z: 0}
+    m_Center: {x: 0.008949995, y: -0.0053499937, z: 0}
+    m_Extent: {x: 1.42625, y: 1.51115, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0

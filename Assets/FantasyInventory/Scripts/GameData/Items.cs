@@ -17,8 +17,8 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.SupayMask,
                 new ItemParams
                 {
-                    Type = ItemType.Mask,
-                    Properties = new List<Property> { new Property(PropertyId.MagicDamage, 100) },
+                    Type = ItemType.Ukuku_Object,
+                    //Properties = new List<Property> { new Property(PropertyId.MagicDamage, 100) },
                     Price = 1000
                 }
             },
@@ -43,7 +43,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 new ItemParams
                 {
                     Type = ItemType.Weapon,
-                    Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 100) },
+                    Properties = new List<Property> { new Property(PropertyId.PhysicDamage,50) },
                     Price = 200
                 }
             },
@@ -71,8 +71,8 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.KunturMask,
                 new ItemParams
                 {
-                    Type = ItemType.Mask,
-                    Properties = new List<Property> { new Property(PropertyId.MagicDamage, 10) },
+                    Type = ItemType.Talisman,
+                    Properties = new List<Property> { new Property(PropertyId.AbilityDamage, 25) },
                     Price = 65
                 }
             },
@@ -80,8 +80,8 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.AyahuascaRoot,
                 new ItemParams
                 {
-                    Type = ItemType.Potion,
-                    Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 5) },
+                    Type = ItemType.Ukuku_Object,
+                    //Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 5) },
                     Price = 500
                 }
             },
@@ -89,8 +89,8 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.LuminousMushroom,
                 new ItemParams
                 {
-                    Type = ItemType.Potion,
-                    Properties = new List<Property> { new Property(PropertyId.RestoreMana, 50) },
+                    Type = ItemType.Ukuku_Object,
+                    //Properties = new List<Property> { new Property(PropertyId.RestoreMana, 50) },
                     Price = 200
                 }
             },
@@ -98,8 +98,8 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.PachamamaAmulet,
                 new ItemParams
                 {
-                    Type = ItemType.Amulet,
-                    Properties = new List<Property> { new Property(PropertyId.RestoreHealth, 50) },
+                    Type = ItemType.Talisman,
+                    Properties = new List<Property> { new Property(PropertyId.MaxHealth, 50) },
                     Price = 80
                 }
             },
@@ -145,7 +145,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 ItemId.WarriorTearAmulet,
                 new ItemParams
                 {
-                    Type = ItemType.Amulet,
+                    Type = ItemType.Talisman,
                     //Tags = new List<ItemTag> { ItemTag.Axe },
                     Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 25) },
                     Price = 100

@@ -10,12 +10,14 @@
         Currency    = 1,
         Loot        = 2,
         Potion      = 3,
-        Mask      = 4,
+        Mask        = 4,
         Helmet      = 5,
         Armor       = 6,
         Ring        = 7,
         Necklace    = 8,
         Amulet      = 9,
-        Weapon      = 10
+        Weapon      = 10,
+        Ukuku_Object      = 11,
+        Talisman      = 12
     }
 }
