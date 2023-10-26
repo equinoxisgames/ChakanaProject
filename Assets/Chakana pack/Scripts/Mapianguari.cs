@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static System.Random;
+using UnityEngine.SceneManagement;
 
 public class Mapianguari : Enemy
 {
@@ -114,6 +115,7 @@ public class Mapianguari : Enemy
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         anim.enabled = true;
         anim.SetBool("Muerto", true);
+        GetComponent<SpriteRenderer>().material = playerMat;
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
         atacando = true;
@@ -122,6 +124,8 @@ public class Mapianguari : Enemy
         //TIEMPO ANIMACION DEL Boss
         yield return new WaitForSeconds(2f);
         //anim.enabled = false;
+
+        SceneManager.LoadSceneAsync(18);
         Destroy(GetComponent<Mapianguari>());
     }
 
