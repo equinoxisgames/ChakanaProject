@@ -16,6 +16,7 @@ public class CreditsMenu : MonoBehaviour
     public Button btExit;
 
     private bool corutinaIniciada = false;
+    private bool sceneChange = false;
     string escena;
 
     void Start()
@@ -54,6 +55,8 @@ public class CreditsMenu : MonoBehaviour
     }
     public void OpenMainMenu()
     {
+        if (sceneChange) return;
+        sceneChange = true;
 
         loadPanel.SetActive(true);
 
@@ -68,6 +71,8 @@ public class CreditsMenu : MonoBehaviour
 
     public void OpenStartRoom()
     {
+        if (sceneChange) return;
+        sceneChange = true;
 
         loadPanel.SetActive(true);
 
@@ -78,6 +83,16 @@ public class CreditsMenu : MonoBehaviour
         //}
 
 
+    }
+
+    public void OpenMainRoom()
+    {
+        if (sceneChange) return;
+        sceneChange = true;
+
+        loadPanel.SetActive(true);
+
+        StartCoroutine(LoadAsyncScene(1));
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)

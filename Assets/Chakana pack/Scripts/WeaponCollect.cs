@@ -37,6 +37,7 @@ public class WeaponCollect : MonoBehaviour
             txtUse.SetActive(false);
             PlayerPrefs.SetInt("arma", 1);
             isMove = true;
+            door.GetComponent<AudioSource>().Play();
 
             Destroy(timeLine);
             Destroy(weaponPref);
