@@ -14,7 +14,7 @@ AnimatorStateMachine:
     m_Position: {x: 330, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5830157698644534812}
-    m_Position: {x: 340, y: 60, z: 0}
+    m_Position: {x: 350, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4019136201138076979}
     m_Position: {x: 350, y: 120, z: 0}
@@ -23,7 +23,7 @@ AnimatorStateMachine:
     m_Position: {x: 350, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5898462808873966935}
-    m_Position: {x: 360, y: 240, z: 0}
+    m_Position: {x: 350, y: 240, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 8347972175958417321}
@@ -148,7 +148,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Normal
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -158,7 +158,8 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -186,7 +187,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -214,7 +217,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -242,7 +247,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -270,6 +277,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -285,6 +293,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 640249298
       attribute: 1574349066
@@ -292,6 +302,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2788345602
       attribute: 1574349066
@@ -299,6 +311,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 304273561
@@ -306,6 +320,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -328,7 +344,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -356,7 +373,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -384,7 +403,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -412,7 +433,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -440,6 +463,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -503,7 +527,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Disabled
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -513,7 +537,8 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -532,7 +557,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -551,7 +578,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -570,7 +599,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -598,6 +629,7 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -613,6 +645,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 304273561
@@ -620,6 +654,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 3063383489
@@ -627,6 +663,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2788345602
       attribute: 1574349066
@@ -634,6 +672,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -656,7 +696,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -675,7 +716,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -694,7 +737,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -713,7 +758,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -741,6 +788,7 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -752,7 +800,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Selected
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -762,7 +810,8 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -781,7 +830,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -818,7 +869,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -846,7 +899,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -874,6 +929,7 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -889,6 +945,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2788345602
       attribute: 1574349066
@@ -896,6 +954,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 640249298
       attribute: 1574349066
@@ -903,6 +963,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 304273561
@@ -910,6 +972,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -932,7 +996,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -951,7 +1016,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -988,7 +1055,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1016,7 +1085,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1044,6 +1115,7 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -1081,7 +1153,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Pressed
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -1091,7 +1163,8 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1110,7 +1183,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1129,7 +1204,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1148,7 +1225,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1167,6 +1246,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -1182,6 +1262,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2788345602
       attribute: 1574349066
@@ -1189,6 +1271,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 3063383489
@@ -1196,6 +1280,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 304273561
@@ -1203,6 +1289,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -1225,7 +1313,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1244,7 +1333,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1263,7 +1354,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1282,7 +1375,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1301,6 +1396,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -1364,7 +1460,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Highlighted
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -1374,7 +1470,8 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1402,7 +1499,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1430,7 +1529,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1467,7 +1568,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1486,6 +1589,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -1501,6 +1605,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 640249298
       attribute: 1574349066
@@ -1508,6 +1614,8 @@ AnimationClip:
       typeID: 225
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 3063383489
@@ -1515,6 +1623,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4080383872
       attribute: 304273561
@@ -1522,6 +1632,8 @@ AnimationClip:
       typeID: 114
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -1544,7 +1656,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1572,7 +1685,9 @@ AnimationClip:
     path: Highlighted
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1600,7 +1715,9 @@ AnimationClip:
     path: Normal
     classID: 225
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1637,7 +1754,9 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1656,6 +1775,7 @@ AnimationClip:
     path: Background
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0

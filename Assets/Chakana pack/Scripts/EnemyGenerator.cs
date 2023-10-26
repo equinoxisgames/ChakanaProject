@@ -9,6 +9,9 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField] GameObject invokeFX;
     [SerializeField] GameObject treasure;
 
+    [SerializeField] AudioClip doorAu;
+    [SerializeField] AudioClip enemyAu;
+
     bool isOn, isMove, isOnBattle, finishSpawn, treasureCollect;
     private Vector3 destination1, destination2;
     private Vector3 originalPos1, originalPos2;
@@ -75,6 +78,10 @@ public class EnemyGenerator : MonoBehaviour
         if (treasureCollect && !treasure.GetComponent<SpriteRenderer>().enabled)
         {
             isOnBattle = false;
+
+            GetComponent<AudioSource>().clip = doorAu;
+            GetComponent<AudioSource>().Play();
+
             isMove = true;
 
             PlayerPrefs.SetInt("combat", 1);
@@ -92,6 +99,9 @@ public class EnemyGenerator : MonoBehaviour
                 isOnBattle = true;
                 isMove = true;
 
+                GetComponent<AudioSource>().clip = doorAu;
+                GetComponent<AudioSource>().Play();
+
                 StartCoroutine(StartCombat());
 
                 isOn = true;
@@ -105,6 +115,8 @@ public class EnemyGenerator : MonoBehaviour
         {
             yield return new WaitForSeconds(2f);
             Destroy(Instantiate(invokeFX, enemies[i].transform.position, Quaternion.identity), 2);
+            GetComponent<AudioSource>().clip = enemyAu;
+            GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.2f);
             enemies[i].SetActive(true);
         }
