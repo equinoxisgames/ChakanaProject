@@ -27,6 +27,9 @@ public class MainMenu : MonoBehaviour
     public Button btSettingsWindowMode;
     public Button btLoadSlot;
     public Slider sliderMaster;
+    public Slider sliderMusic;
+    public Slider sliderSFX;
+
     public Dropdown dropDownResolution;
 
     string escena;
@@ -72,6 +75,8 @@ public class MainMenu : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
 
         canvasUI = GameObject.Find("HUDMenu");
+
+        LoadSettings();
     }
 
     void OnGUI()
@@ -485,7 +490,8 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
+        DeletePLayerPrefs();
 
         loadPanel.SetActive(true);
 
@@ -498,7 +504,8 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayAnimatedIntro()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
+        DeletePLayerPrefs();
 
         loadPanel.SetActive(true);
 
@@ -576,6 +583,34 @@ public class MainMenu : MonoBehaviour
             Time.timeScale = 1f;
         else
             Time.timeScale = 0f;
+    }
+    public void LoadSettings()
+    {
+        float masterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float musicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float SFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+
+        sliderMaster.value = masterAudioKeyValue;
+        sliderMusic.value = musicAudioKeyValue;
+        sliderSFX.value = SFXAudioKeyValue;
+
+
+
+    }
+
+    public void DeletePLayerPrefs()
+    {
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+
+        PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+
     }
 
 }
