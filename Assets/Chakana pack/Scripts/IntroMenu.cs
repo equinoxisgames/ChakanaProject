@@ -19,7 +19,14 @@ public class IntroMenu : MonoBehaviour
 
     void Start()
     {
-        
+        PlayerPrefs.DeleteAll();
+        Screen.fullScreen = true;
+    }
+
+    private void Awake()
+    {
+        PlayerPrefs.DeleteAll();
+        Screen.fullScreen = true;
     }
 
     // Update is called once per frame
@@ -35,7 +42,8 @@ public class IntroMenu : MonoBehaviour
     }
     public void OpenMainMenu()
     {
-
+        PlayerPrefs.DeleteAll();
+        Screen.fullScreen = true;
         loadPanel.SetActive(true);
 
         //if (!corutinaIniciada)

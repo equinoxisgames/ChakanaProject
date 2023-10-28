@@ -8,6 +8,7 @@ public class AudioController : MonoBehaviour
 {
     [SerializeField] private AudioMixer soundAudioMixer;
     public Slider sliderSelected;
+    public Slider sliderMasterSelected;
 
 
     public void MasterController(float masterSlider)
@@ -26,5 +27,13 @@ public class AudioController : MonoBehaviour
     {
         soundAudioMixer.SetFloat("SFXVolume", Mathf.Log10(SFXSlider) * 20);
         sliderSelected.Select();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            sliderMasterSelected.Select();
+        }
     }
 }
