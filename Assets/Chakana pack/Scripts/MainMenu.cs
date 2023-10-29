@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
@@ -30,7 +31,7 @@ public class MainMenu : MonoBehaviour
     public Slider sliderMusic;
     public Slider sliderSFX;
 
-    public Dropdown dropDownResolution;
+    public TMP_Dropdown dropdownWindowMode;
 
     string escena;
     bool boolHomeMenuActive = true;
@@ -563,13 +564,8 @@ public class MainMenu : MonoBehaviour
     public void OpenCredits()
     {
         loadPanel.SetActive(true);
-
-        //if (!corutinaIniciada)
-        //{
         StartCoroutine(LoadAsyncScene(16));
-        //corutinaIniciada = true;
-        //}
-        //SceneManager.LoadScene("00- Credits 0");
+        
     }
     public void QuitGame()
     {
@@ -589,13 +585,15 @@ public class MainMenu : MonoBehaviour
         float masterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
         float musicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float SFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int FullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+        
 
         sliderMaster.value = masterAudioKeyValue;
         sliderMusic.value = musicAudioKeyValue;
         sliderSFX.value = SFXAudioKeyValue;
+        dropdownWindowMode.value = FullScreenKeyValue;
 
-
-
+        
     }
 
     public void DeletePLayerPrefs()
@@ -604,13 +602,15 @@ public class MainMenu : MonoBehaviour
         float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
         float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 1);
 
         PlayerPrefs.DeleteAll();
 
         PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
         PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
         PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
-
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+        
     }
 
 }

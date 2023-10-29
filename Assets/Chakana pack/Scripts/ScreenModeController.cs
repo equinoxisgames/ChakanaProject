@@ -35,13 +35,21 @@ public class ScreenModeController : MonoBehaviour
             Debug.Log("maxWidthResolution: " + maxWidthResolution + " / maxHeightResolution: " + maxHeightResolution + " / maxResolution.refreshRate :"+ maxResolution.refreshRateRatio.ToString());
 
             Screen.fullScreen = true;
+
+            PlayerPrefs.SetInt("FullScreenKeyValue", 0);
+            PlayerPrefs.Save();
         }
         
 
         if (dropdownWindowMode.value == 1)
         {
             Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
-            
+
+            PlayerPrefs.SetInt("FullScreenKeyValue", 1);
+            PlayerPrefs.Save();
+
+            Debug.Log("maxWidthResolution: " + 1280 + " / maxHeightResolution: " + 720);
+
             //Screen.fullScreen = false;
         }
 
