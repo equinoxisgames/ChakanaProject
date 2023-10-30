@@ -19,8 +19,23 @@ public class IntroMenu : MonoBehaviour
 
     void Start()
     {
+        Screen.fullScreen = true;
+
         PlayerPrefs.DeleteAll();
-        
+        Resolution[] resolutions = Screen.resolutions;
+        Resolution maxResolution = resolutions[resolutions.Length - 1];
+        int maxWidthResolution = maxResolution.width;
+        int maxHeightResolution = maxResolution.height;
+
+        Screen.SetResolution(maxWidthResolution, maxHeightResolution, FullScreenMode.ExclusiveFullScreen, maxResolution.refreshRateRatio);
+
+        Debug.Log("maxWidthResolution: " + maxWidthResolution + " / maxHeightResolution: " + maxHeightResolution + " / maxResolution.refreshRate :" + maxResolution.refreshRateRatio.ToString());
+
+        //Screen.fullScreen = true;
+
+        PlayerPrefs.SetInt("FullScreenKeyValue", 0);
+        //PlayerPrefs.Save();
+
     }
 
     private void Awake()

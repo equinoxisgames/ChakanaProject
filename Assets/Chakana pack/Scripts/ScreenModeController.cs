@@ -30,14 +30,14 @@ public class ScreenModeController : MonoBehaviour
             int maxWidthResolution = maxResolution.width;
             int maxHeightResolution = maxResolution.height;
 
-            Screen.SetResolution(maxWidthResolution, maxHeightResolution, FullScreenMode.FullScreenWindow, maxResolution.refreshRateRatio);
+            Screen.SetResolution(maxWidthResolution, maxHeightResolution, FullScreenMode.ExclusiveFullScreen, maxResolution.refreshRateRatio);
 
             Debug.Log("maxWidthResolution: " + maxWidthResolution + " / maxHeightResolution: " + maxHeightResolution + " / maxResolution.refreshRate :"+ maxResolution.refreshRateRatio.ToString());
 
-            Screen.fullScreen = true;
+            //Screen.fullScreen = true;
 
             PlayerPrefs.SetInt("FullScreenKeyValue", 0);
-            PlayerPrefs.Save();
+            //PlayerPrefs.Save();
         }
         
 
@@ -46,7 +46,7 @@ public class ScreenModeController : MonoBehaviour
             Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
 
             PlayerPrefs.SetInt("FullScreenKeyValue", 1);
-            PlayerPrefs.Save();
+            //PlayerPrefs.Save();
 
             Debug.Log("maxWidthResolution: " + 1280 + " / maxHeightResolution: " + 720);
 

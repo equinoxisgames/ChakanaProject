@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine;s
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
@@ -593,7 +593,7 @@ public class MainMenu : MonoBehaviour
         sliderSFX.value = SFXAudioKeyValue;
         dropdownWindowMode.value = FullScreenKeyValue;
 
-        
+        btContinue.Select();
     }
 
     public void DeletePLayerPrefs()
@@ -602,7 +602,7 @@ public class MainMenu : MonoBehaviour
         float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
         float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
-        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 1);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
 
         PlayerPrefs.DeleteAll();
 

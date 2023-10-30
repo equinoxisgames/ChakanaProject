@@ -32,7 +32,7 @@ public class CreditsMenu : MonoBehaviour
 
         if (escena == "00- Intro Start Game")
         {
-            Invoke("OpenStartRoom", 45f);
+            Invoke("OpenStartRoom", 22f);
         }
 
     }
@@ -40,8 +40,10 @@ public class CreditsMenu : MonoBehaviour
     public void LoadSettings()
     {
         int FullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
-        Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+        dropdownWindowMode.value = FullScreenKeyValue;
 
+        //Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+        //return;
         //Debug.Log("LoadSettings() : FullScreenKeyValue> "+ FullScreenKeyValue);
 
         //if (FullScreenKeyValue == 0)
