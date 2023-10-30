@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
@@ -27,7 +28,10 @@ public class MainMenu : MonoBehaviour
     public Button btSettingsWindowMode;
     public Button btLoadSlot;
     public Slider sliderMaster;
-    public Dropdown dropDownResolution;
+    public Slider sliderMusic;
+    public Slider sliderSFX;
+
+    public TMP_Dropdown dropdownWindowMode;
 
     string escena;
     bool boolHomeMenuActive = true;
@@ -72,6 +76,8 @@ public class MainMenu : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
 
         canvasUI = GameObject.Find("HUDMenu");
+
+        LoadSettings();
     }
 
     void OnGUI()
@@ -485,7 +491,8 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
+        DeletePLayerPrefs();
 
         loadPanel.SetActive(true);
 
@@ -498,7 +505,8 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayAnimatedIntro()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
+        DeletePLayerPrefs();
 
         loadPanel.SetActive(true);
 
@@ -556,13 +564,8 @@ public class MainMenu : MonoBehaviour
     public void OpenCredits()
     {
         loadPanel.SetActive(true);
-
-        //if (!corutinaIniciada)
-        //{
         StartCoroutine(LoadAsyncScene(16));
-        //corutinaIniciada = true;
-        //}
-        //SceneManager.LoadScene("00- Credits 0");
+        
     }
     public void QuitGame()
     {
@@ -576,6 +579,38 @@ public class MainMenu : MonoBehaviour
             Time.timeScale = 1f;
         else
             Time.timeScale = 0f;
+    }
+    public void LoadSettings()
+    {
+        float masterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float musicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float SFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int FullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+        
+
+        sliderMaster.value = masterAudioKeyValue;
+        sliderMusic.value = musicAudioKeyValue;
+        sliderSFX.value = SFXAudioKeyValue;
+        dropdownWindowMode.value = FullScreenKeyValue;
+
+        btContinue.Select();
+    }
+
+    public void DeletePLayerPrefs()
+    {
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+
+        PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+        
     }
 
 }
