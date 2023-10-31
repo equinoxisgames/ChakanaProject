@@ -41,5 +41,18 @@ public class AudioController : MonoBehaviour
         {
             sliderMasterSelected.Select();
         }
+
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q))
+        {
+            sliderMasterSelected.Select();
+        }
+
+        if (Input.GetButtonDown("Activador_Habilidades") || Input.GetButtonDown("Activador_Habilidades1"))
+        {
+            sliderMasterSelected.Select();
+        }
+        
+
     }
+    
 }
