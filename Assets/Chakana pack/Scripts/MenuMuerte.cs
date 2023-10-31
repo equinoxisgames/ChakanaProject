@@ -17,9 +17,10 @@ public class MenuMuerte : MonoBehaviour
 
     private void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && isDead)
         {
             RespawnContinue();
+            isDead = false;
         }
     }
 

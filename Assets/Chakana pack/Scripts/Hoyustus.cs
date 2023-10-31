@@ -883,7 +883,13 @@ public class Hoyustus : CharactersBehaviour
 
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
-        anim.SetBool("Dead", true);
+        anim.SetBool("Grounded", false);
+        anim.SetBool("Dashing", false);
+        anim.SetBool("Atacando", false);
+        anim.SetBool("SecondJump", false);
+        anim.SetBool("Jumping", false);
+
+        anim.Play("MuerteHoyustus");
         yield return new WaitForSeconds(0.4f);
         Instantiate(deathFX, transform.position, Quaternion.identity);
         //GUARDADO DE INFORMACION
@@ -967,6 +973,10 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void AtaqueLanza()
     {
+        if (vida <= 0)
+        {
+            return;
+        }
 
         if (ataqueAvailable && Input.GetButtonDown("Atacar") && playable)
         {
@@ -1079,6 +1089,11 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator dashCooldown()
     {
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
         GameObject dashObj = Instantiate(dashVfx, transform.position, Quaternion.identity, transform);
 
         int numeroRandom = UnityEngine.Random.Range(1, 101);
