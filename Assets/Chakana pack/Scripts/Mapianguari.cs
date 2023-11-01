@@ -594,7 +594,7 @@ public class Mapianguari : Enemy
         plataformaActual = nuevaPlataforma;
         triggerProbabilidad = new System.Random();
         int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
-        transform.position = new Vector3(posicionTeletransporteX, -99.8f + plataformaActual * 8.3f, 0);
+        transform.position = new Vector3(posicionTeletransporteX, -99f + plataformaActual * 8.3f, 0);
         Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
         yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
