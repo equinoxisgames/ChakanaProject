@@ -106,8 +106,8 @@ namespace Assets.FantasyInventory.Scripts.Interface
             print(PlayerPrefs.GetInt("Boost03"));
 
             Trader.Initialize(ref shop);
-
-            SelectItem(shop[0].Id);
+            if (shop.Count > 0)
+                SelectItem(shop[0].Id);
 
 
         }

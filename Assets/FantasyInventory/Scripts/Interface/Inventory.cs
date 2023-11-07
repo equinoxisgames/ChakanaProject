@@ -103,9 +103,11 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
 
+
             Bag.Initialize(ref inventory);
 
-            SelectItem(inventory[0].Id);
+            if (inventory.Count>0)
+                SelectItem(inventory[0].Id);
 
         }
 
