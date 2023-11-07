@@ -80,6 +80,36 @@ namespace Assets.FantasyInventory.Scripts.Interface
             InventoryItem.OnItemSelected = SelectItem;
             InventoryItem.OnDragStarted = SelectItem;
             InventoryItem.OnDragCompleted = InventoryItem.OnDoubleClick = item => { if (Trader.Items.Contains(item)) Buy(); else Sell(); };
+
+            var shop = new List<Item>();
+
+            if (PlayerPrefs.GetInt("Boost01") != 1)
+            {
+                shop.Add(new Item(ItemId.KunturMask, 1));
+                print("hola1");
+            }
+
+            if (PlayerPrefs.GetInt("Boost02") != 1)
+            {
+                shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+                print("hola2");
+            }
+
+            if (PlayerPrefs.GetInt("Boost03") != 1)
+            {
+                shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
+                print("hola3");
+            }
+
+            print(PlayerPrefs.GetInt("Boost01"));
+            print(PlayerPrefs.GetInt("Boost02"));
+            print(PlayerPrefs.GetInt("Boost03"));
+
+            Trader.Initialize(ref shop);
+
+            SelectItem(shop[0].Id);
+
+
         }
 
         public void SelectItem(Item item)
