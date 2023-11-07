@@ -74,6 +74,39 @@ namespace Assets.FantasyInventory.Scripts.Interface
             InventoryItem.OnItemSelected = SelectItem;
             InventoryItem.OnDragStarted = SelectItem;
             InventoryItem.OnDragCompleted = InventoryItem.OnDoubleClick = item => { if (Bag.Items.Contains(item)) Equip(); else Remove(); };
+
+            //
+
+            var inventory = new List<Item>();
+
+            if (PlayerPrefs.GetInt("conv01") != 2)
+            {
+                if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
+                {
+                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
+                }
+                else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
+                {
+                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
+                }
+
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
+
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+            }
+
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
+
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
+
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
+
+            if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+
+            Bag.Initialize(ref inventory);
+
+            SelectItem(inventory[0].Id);
+
         }
 
         public void SelectItem(Item item)
