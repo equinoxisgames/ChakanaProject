@@ -30,6 +30,7 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject charcoVeneno;
     [SerializeField] private GameObject plantaVeneno;
     [SerializeField] private GameObject humo;
+    [SerializeField] private GameObject gotg;
     [SerializeField] private GameObject explosion2;
     [SerializeField] private GameObject bloqueoDash;
     [SerializeField] private ManagerPeleaMapinguari levelController;
@@ -113,19 +114,20 @@ public class Mapianguari : Enemy
     private IEnumerator Muerte() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         anim.enabled = true;
         anim.SetBool("Muerto", true);
-        GetComponent<SpriteRenderer>().material = playerMat;
         campoVision.enabled = false;
         xObjetivo = transform.position.x;
         atacando = true;
         ataqueDisponible = false;
         levelController.EliminarLogicaPlataformas();
+        GetComponent<SpriteRenderer>().material = playerMat;
         //TIEMPO ANIMACION DEL Boss
-        yield return new WaitForSeconds(2f);
-        //anim.enabled = false;
+        yield return new WaitForSeconds(3f);
 
-        SceneManager.LoadSceneAsync(18);
+        Instantiate(gotg, transform.position, Quaternion.identity);
+
         Destroy(GetComponent<Mapianguari>());
     }
 
@@ -383,7 +385,7 @@ public class Mapianguari : Enemy
         atacando = true;
         iddel = true;
         anim.Play("Iddel Mapinguari");
-        bloqueoDash.SetActive(false);
+        //bloqueoDash.SetActive(false);
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
         iddel = false;
@@ -404,7 +406,7 @@ public class Mapianguari : Enemy
         }
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
-        bloqueoDash.SetActive(true);
+        //bloqueoDash.SetActive(true);
         atacando = false;
         iddel = false;
         yield return new WaitForSeconds(0.5f);

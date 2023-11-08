@@ -41,7 +41,12 @@ public class HudManager : MonoBehaviour
         }
         else
         {
-            lifeMax = PlayerPrefs.GetFloat("vidaM");
+            lifeMax = player.getMaxVida();
+        }
+        print(lifeMax);
+        if (lifeMax == 1500)
+        {
+            LifePlus();
         }
 
         life = player.getVida();
@@ -66,13 +71,6 @@ public class HudManager : MonoBehaviour
         weaponBar.currentFillAmount = (weapon / maxValue);
         weaponBar.targetFillAmount = (weapon / maxValue);
         goldTxt.text = player.getGold().ToString();
-
-        string[] joystickNames = Input.GetJoystickNames();
-
-        if (joystickNames.Length > 0 && !string.IsNullOrEmpty(joystickNames[0]))
-        {
-            Debug.Log("Hay un mando conectado.");
-        }
     }
 
     void Update()
@@ -125,6 +123,13 @@ public class HudManager : MonoBehaviour
 
             weaponBar.targetFillAmount = (weapon / maxValue);
         }
+    }
+
+    public void LifePlus()
+    {
+        lifeBar.GetComponent<RectTransform>().localPosition = new Vector3(62, -45, 0);
+        lifeBar.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 650);
+
     }
 
     public float GetCondor()
