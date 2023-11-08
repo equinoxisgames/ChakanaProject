@@ -109,7 +109,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] float aumentoBarraDash = 15;
     [SerializeField] float aumentoBarraAtaque = 15;
     [SerializeField] float danioExplosionCombinacionFuego_Veneno = 35;
-    private float skillPlus = 1;
     [Space(5)]
 
 
@@ -181,9 +180,17 @@ public class Hoyustus : CharactersBehaviour
 
     private void Awake()
     {
-        if (PlayerPrefs.HasKey("Boost01")) skillPlus = 1.25f;
+        if (PlayerPrefs.HasKey("Boost01"))
+        {
+            valorAtaqueHabilidadCondor *= 1.25f;
+            valorAtaqueHabilidadLanza *= 1.25f;
+        }
 
-        if (PlayerPrefs.HasKey("Boost02")) maxVida *= 1.5f;
+        if (PlayerPrefs.HasKey("Boost02"))
+        {
+            maxVida *= 1.5f;
+            
+        }
 
         LoadData();
     }
@@ -218,7 +225,12 @@ public class Hoyustus : CharactersBehaviour
             SaveManager.SavePlayerData(GetComponent<Hoyustus>());
         }
 
-        if (PlayerPrefs.HasKey("Boost03")) ataque *= 1.25f;
+        if (PlayerPrefs.HasKey("Boost03"))
+        {
+            ataqueMax *= 1.25f;
+            ataque *= 1.25f;
+            print(ataque);
+        }
 
         if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
     }

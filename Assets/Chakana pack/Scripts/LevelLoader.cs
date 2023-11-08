@@ -60,6 +60,13 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    public void ManualChangeScene()
+    {
+        player.GetComponent<Hoyustus>().SavePlayerData();
+        PlayerPrefs.SetInt("scenePos", scenePos);
+        StartCoroutine(LoadNextScene());
+    }
+
     IEnumerator LoadNextScene()
     {
         player.gameObject.GetComponent<AudioSource>().enabled = false;
