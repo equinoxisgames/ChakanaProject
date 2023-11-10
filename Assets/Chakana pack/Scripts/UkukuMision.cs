@@ -65,7 +65,6 @@ public class UkukuMision : MonoBehaviour
         if (PlayerPrefs.HasKey("ukukuM" + "01"))
         {
             ukukuInv.transform.GetChild(0).gameObject.SetActive(true);
-            print("holaaaaa");
             misionCount++;
         }
 
