@@ -153,6 +153,7 @@ public class MainMenu : MonoBehaviour
         {
             mouseMovido = true;
             joystickIzquierdoMovido = false;
+            Cursor.visible = true;
         }
 
         //// Validar movimiento del joystick izquierdo del gamepad
