@@ -17,6 +17,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
     {
         [SerializeField] Hoyustus player;
         [SerializeField] Text goldTxt;
+        [SerializeField] HudManager hud;
         public ScrollInventory Trader;
         public ScrollInventory Bag;
         public Button BuyButton;
@@ -49,19 +50,16 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
                 shop.Add(new Item(ItemId.KunturMask, 1));
-                print("hola1");
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
                 shop.Add(new Item(ItemId.PachamamaAmulet, 1));
-                print("hola2");
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
             {
                 shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
-                print("hola3");
             }
 
             print(PlayerPrefs.GetInt("Boost01"));
@@ -86,24 +84,17 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
                 shop.Add(new Item(ItemId.KunturMask, 1));
-                print("hola1");
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
                 shop.Add(new Item(ItemId.PachamamaAmulet, 1));
-                print("hola2");
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
             {
                 shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
-                print("hola3");
             }
-
-            print(PlayerPrefs.GetInt("Boost01"));
-            print(PlayerPrefs.GetInt("Boost02"));
-            print(PlayerPrefs.GetInt("Boost03"));
 
             Trader.Initialize(ref shop);
             if (shop.Count > 0)
@@ -137,14 +128,20 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if(SelectedItem.ToString() == "KunturMask")
             {
                 PlayerPrefs.SetInt("Boost01", 1);
+
+                player.UpdatePU(1);
             }
             else if (SelectedItem.ToString() == "PachamamaAmulet")
             {
                 PlayerPrefs.SetInt("Boost02", 1);
+
+                hud.LifePlus();
+                player.UpdatePU(2);
             }
             else if (SelectedItem.ToString() == "WarriorTearAmulet")
             {
                 PlayerPrefs.SetInt("Boost03", 1);
+                player.UpdatePU(3);
             }
 
             if(PlayerPrefs.HasKey("Boost03") && PlayerPrefs.HasKey("Boost02") && PlayerPrefs.HasKey("Boost01"))
