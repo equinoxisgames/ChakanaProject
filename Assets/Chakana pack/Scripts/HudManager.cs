@@ -76,8 +76,6 @@ public class HudManager : MonoBehaviour
     void Update()
     {
         UpdateData();
-
-        //print(player.getCargaHabilidadSerpiente());
     }
 
     private void UpdateData()

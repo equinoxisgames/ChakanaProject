@@ -178,6 +178,24 @@ public class Hoyustus : CharactersBehaviour
         vida = maxVida;
     }
 
+    public void UpdatePU(int e)
+    {
+        if(e == 1)
+        {
+            valorAtaqueHabilidadCondor *= 1.25f;
+            valorAtaqueHabilidadLanza *= 1.25f;
+        }
+        else if(e == 2)
+        {
+            maxVida *= 1.5f;
+        }
+        else
+        {
+            ataqueMax *= 1.25f;
+            ataque *= 1.25f;
+        }
+    }
+
     private void Awake()
     {
         if (PlayerPrefs.HasKey("Boost01"))
@@ -229,7 +247,6 @@ public class Hoyustus : CharactersBehaviour
         {
             ataqueMax *= 1.25f;
             ataque *= 1.25f;
-            print(ataque);
         }
 
         if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
