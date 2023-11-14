@@ -18,6 +18,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
         [SerializeField] Hoyustus player;
         [SerializeField] Text goldTxt;
         [SerializeField] HudManager hud;
+        [SerializeField] PowerUPManager managerPU;
         public ScrollInventory Trader;
         public ScrollInventory Bag;
         public Button BuyButton;
@@ -130,6 +131,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 PlayerPrefs.SetInt("Boost01", 1);
 
                 player.UpdatePU(1);
+                managerPU.ShowVFX(1);
             }
             else if (SelectedItem.ToString() == "PachamamaAmulet")
             {
@@ -137,11 +139,13 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
                 hud.LifePlus();
                 player.UpdatePU(2);
+                managerPU.ShowVFX(2);
             }
             else if (SelectedItem.ToString() == "WarriorTearAmulet")
             {
                 PlayerPrefs.SetInt("Boost03", 1);
                 player.UpdatePU(3);
+                managerPU.ShowVFX(3);
             }
 
             if(PlayerPrefs.HasKey("Boost03") && PlayerPrefs.HasKey("Boost02") && PlayerPrefs.HasKey("Boost01"))
