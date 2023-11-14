@@ -192,8 +192,13 @@ public class MainMenu : MonoBehaviour
     }
     public void Inventory()
     {
-        inventoryMenu.transform.GetChild(0).GetComponent<Button>().Select();
-        StartCoroutine(ButtonSelect());
+
+        if (inventoryMenu.transform.GetChild(0).GetComponent<Button>() != null)
+        {
+            inventoryMenu.transform.GetChild(0).GetComponent<Button>().Select();
+            StartCoroutine(ButtonSelect());
+        }
+        
     }
 
     IEnumerator ButtonSelect()
