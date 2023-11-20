@@ -32,7 +32,7 @@ public class CreditsMenu : MonoBehaviour
 
         if (escena == "00- Intro Start Game")
         {
-            Invoke("OpenStartRoom", 22f);
+            Invoke("OpenStartRoom", 41f);
         }
 
     }
