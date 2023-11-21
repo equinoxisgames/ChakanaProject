@@ -19,6 +19,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
         [SerializeField] Text goldTxt;
         [SerializeField] HudManager hud;
         [SerializeField] PowerUPManager managerPU;
+        [SerializeField] Inventory inventory;
         public ScrollInventory Trader;
         public ScrollInventory Bag;
         public Button BuyButton;
@@ -155,6 +156,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             /*AddMoney(Bag, -SelectedItemParams.Price, ItemId.GoldPieces);
             AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);*/
+            inventory.NewInventory();
 
             player.setGold(-SelectedItemParams.Price);
             goldTxt.text = player.getGold().ToString();
