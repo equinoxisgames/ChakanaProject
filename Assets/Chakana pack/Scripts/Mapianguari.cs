@@ -140,7 +140,7 @@ public class Mapianguari : Enemy
         anim.SetBool("AE", pruebaAtaqueEspecial);
         anim.SetBool("Iddel", iddel);
 
-        if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual) {
+        if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual && !isDead) {
             StartCoroutine(CambioPlataforma());       
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
@@ -583,6 +583,7 @@ public class Mapianguari : Enemy
     //***************************************************************************************************
     private IEnumerator CambioPlataforma() {
         //SE ESCONDE
+
         charAudio.Stop();
         tiempoDentroRango = 0;
         tiempoFueraRango = 0;

@@ -76,6 +76,7 @@ public class Boraro : Enemy
     {
         if (vida <= 0)
         {
+            Instantiate(deathFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }

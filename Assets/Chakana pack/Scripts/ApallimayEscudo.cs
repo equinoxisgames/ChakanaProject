@@ -14,7 +14,8 @@ public class ApallimayEscudo : Apallimay
     [SerializeField] private float t1;
     [SerializeField] private float t2;
     [SerializeField] private GameObject escudo;
-
+    [SerializeField] private AudioClip hurtSound;
+    private AudioSource aud;
 
     void Start()
     {
@@ -36,6 +37,7 @@ public class ApallimayEscudo : Apallimay
         rangoVision += 1;
         rangoPreparacion += 1;
         rangoAtaque += 1;
+        aud = GetComponent<AudioSource>();
     }
 
 
@@ -141,6 +143,10 @@ public class ApallimayEscudo : Apallimay
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+
+                aud.Stop();
+                aud.clip = hurtSound;
+                aud.Play();
             }
             return;
         }
