@@ -73,6 +73,10 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         protected void Start()
         {
+            /*PlayerPrefs.DeleteKey("Boost01");
+            PlayerPrefs.DeleteKey("Boost02");
+            PlayerPrefs.DeleteKey("Boost03");*/
+
             Reset();
             BuyButton.interactable = SellButton.interactable = false;
             goldTxt.text = player.getGold().ToString();
@@ -105,6 +109,11 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         }
 
+        private void OnEnable()
+        {
+            goldTxt.text = player.getGold().ToString();
+        }
+
         public void SelectItem(Item item)
         {
             SelectItem(item.Id);
@@ -120,6 +129,8 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         public void Buy()
         {
+            if (PlayerPrefs.HasKey("TiendaVacia")) return;
+
             if (player.getGold() < SelectedItemParams.Price)
             {
                 AudioSource.PlayOneShot(NoMoney);
@@ -148,11 +159,17 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 player.UpdatePU(3);
                 managerPU.ShowVFX(3);
             }
+            else
+            {
+                return;
+            }
 
             if(PlayerPrefs.HasKey("Boost03") && PlayerPrefs.HasKey("Boost02") && PlayerPrefs.HasKey("Boost01"))
             {
                 PlayerPrefs.SetInt("TiendaVacia",1);
             }
+
+            print(SelectedItem.ToString());
 
             /*AddMoney(Bag, -SelectedItemParams.Price, ItemId.GoldPieces);
             AddMoney(Trader, SelectedItemParams.Price, ItemId.GoldPieces);*/
