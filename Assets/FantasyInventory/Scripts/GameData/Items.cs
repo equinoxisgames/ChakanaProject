@@ -73,7 +73,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 {
                     Type = ItemType.Talisman,
                     Properties = new List<Property> { new Property(PropertyId.AbilityDamage, 25) },
-                    Price = 65
+                    Price = 150
                 }
             },
             {
@@ -100,7 +100,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 {
                     Type = ItemType.Talisman,
                     Properties = new List<Property> { new Property(PropertyId.MaxHealth, 50) },
-                    Price = 80
+                    Price = 180
                 }
             },
             {
@@ -148,7 +148,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                     Type = ItemType.Talisman,
                     //Tags = new List<ItemTag> { ItemTag.Axe },
                     Properties = new List<Property> { new Property(PropertyId.PhysicDamage, 25) },
-                    Price = 100
+                    Price = 200
                 }
             }
         };
