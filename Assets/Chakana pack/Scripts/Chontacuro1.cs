@@ -15,6 +15,7 @@ public class Chontacuro1 : Enemy
     [SerializeField] Transform groundDetector;
     [SerializeField] Transform wallDetector;
     [SerializeField] AudioClip audioHurt;
+    [SerializeField] GameObject goldObj;
 
     AudioSource charAudio;
 
@@ -45,6 +46,23 @@ public class Chontacuro1 : Enemy
 
     private void Muerte() {
         Instantiate(deathFX, transform.position, Quaternion.identity);
+
+        Instantiate(goldObj, transform.position, Quaternion.identity);
+
+        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+
+        foreach (Collider2D collider in objetos)
+        {
+            Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
+            if (rb2D != null)
+            {
+                Vector2 direccion = collider.transform.position - transform.position;
+                float distancia = 1 + direccion.magnitude;
+                float fuerza = 200 / distancia;
+                rb2D.AddForce(direccion * fuerza);
+            }
+        }
+
         Destroy(this.gameObject);
     }
 
