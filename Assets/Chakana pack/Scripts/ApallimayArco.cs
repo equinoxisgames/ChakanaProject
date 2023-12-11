@@ -46,10 +46,17 @@ public class ApallimayArco : Apallimay
 
     void Update()
     {
+        float angulo = Vector3.Angle(hoyustus.transform.position - transform.position, transform.right);
+        if (transform.position.y >= hoyustus.transform.position.y) angulo *= -1;
+
+        if (angulo < 35f) codigoAtaque = 2;
+        else if (angulo >= 35f && angulo < -35f) codigoAtaque = 0;
+        else codigoAtaque = 1;
+
         anim.SetBool("Jugador Detectado", jugadorDetectado);
         anim.SetBool("Realizando Ataque Especial", realizandoAtaqueEspecial);
         anim.SetBool("Atacando", atacando);
-        anim.SetInteger("CA", codigoAtaque);
+        anim.SetFloat("CA1", codigoAtaque);
 
         Muerte();
         if (Grounded()) {
@@ -126,12 +133,14 @@ public class ApallimayArco : Apallimay
         }
         flechaGenerada.name += "Enemy";
         flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
-        if (flechaGenerada.transform.rotation.z < 0.20f) codigoAtaque = 0;
+
+        /*if (flechaGenerada.transform.rotation.z < 0.20f) codigoAtaque = 0;
         else if (flechaGenerada.transform.rotation.z >= 0.20f && flechaGenerada.transform.rotation.z < 0.5f) codigoAtaque = 1;
-        else codigoAtaque = 2;
+        else codigoAtaque = 2;*/
+
         //TIEMPO DE ANIMACION/PREPARACION
         yield return new WaitForSeconds(0.2f);
-        codigoAtaque = -1;
+        //codigoAtaque = -1;
         yield return new WaitForSeconds(cooldownDisparoFlechas);
         ataqueDisponible = true;
     }
@@ -229,7 +238,7 @@ public class ApallimayArco : Apallimay
                 {
                     atacando = true;
                     ataqueDisponible = false;
-                    codigoAtaque = -1;
+                    //codigoAtaque = -1;
                     StartCoroutine(Ataque(collider.transform.position));
                 }
             }
