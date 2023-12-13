@@ -19,6 +19,12 @@ public class IntroMenu : MonoBehaviour
 
     void Start()
     {
+        
+
+    }
+
+    private void Awake()
+    {
         Screen.fullScreen = true;
 
         PlayerPrefs.DeleteAll();
@@ -36,12 +42,6 @@ public class IntroMenu : MonoBehaviour
         PlayerPrefs.SetInt("FullScreenKeyValue", 0);
         //PlayerPrefs.Save();
 
-    }
-
-    private void Awake()
-    {
-        PlayerPrefs.DeleteAll();
-        
     }
 
     // Update is called once per frame
