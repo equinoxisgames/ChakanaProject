@@ -32,6 +32,7 @@ public class Boraro : Enemy
     [SerializeField] private Transform objetivoX;
     [SerializeField] AudioClip audioHurt;
     [SerializeField] GameObject goldObj;
+    [SerializeField] GameObject disapearVFX;
 
     AudioSource charAudio;
 
@@ -258,7 +259,6 @@ public class Boraro : Enemy
             Desaparecer();
             //TIEMPO DE DESAPARICIÓN/TELETRANSPORTACIÓN
             yield return new WaitForSeconds(1);
-
         }
 
         detectorPared.transform.position = hoyustus.transform.position - Vector3.right * hoyustus.transform.localScale.x * 2.5f;
@@ -295,6 +295,8 @@ public class Boraro : Enemy
 
     private void Desaparecer()
     {
+        Instantiate(disapearVFX, transform.position, Quaternion.identity);
+
         visible = false;
         teletransportandose = true;
         rb.velocity = Vector3.zero;
