@@ -208,7 +208,7 @@ public class Mapianguari : Enemy
             estadoViento = true;
             counterEstados = 1;
             StartCoroutine("afectacionEstadoViento");
-            if(segundaEtapa && triggerProbabilidad.Next(0, 2) == 0)
+            if(segundaEtapa && triggerProbabilidad.Next(0, 2) == 0 && vida >= 250)
             {
                 StartCoroutine(AtaqueEspecial());
             }
@@ -230,7 +230,7 @@ public class Mapianguari : Enemy
             estadoFuego = true;
             counterEstados = 10;
             StartCoroutine("afectacionEstadoFuego");
-            if (segundaEtapa && triggerProbabilidad.Next(0, 2) == 0)
+            if (segundaEtapa && triggerProbabilidad.Next(0, 2) == 0 && vida >= 250)
             {
                 StartCoroutine(AtaqueEspecial());
             }
@@ -591,7 +591,7 @@ public class Mapianguari : Enemy
         usandoAtaqueEspecial = true;
         anim.enabled = false;
         Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
-        GetComponent<SpriteRenderer>().sortingOrder = -6;
+        //GetComponent<SpriteRenderer>().sortingOrder = -6;
         yield return new WaitForSeconds(0.5f);
         //SE DESPLAZA 
         plataformaActual = nuevaPlataforma;
@@ -601,7 +601,7 @@ public class Mapianguari : Enemy
         Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
         yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
-        GetComponent<SpriteRenderer>().sortingOrder = 8;
+        //GetComponent<SpriteRenderer>().sortingOrder = 8;
         anim.enabled = true;
         //SE REACTIVA SU MOVIMIENTO
         tiempoDentroRango = 0;
