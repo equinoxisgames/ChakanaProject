@@ -711,11 +711,11 @@ public class Hoyustus : CharactersBehaviour
     }
 
     public void cargaHabilidades() {
-        if (Input.GetKeyDown(KeyCode.N)) {
+        /*if (Input.GetKeyDown(KeyCode.N)) {
             cargaHabilidadLanza = 100f;
             cargaHabilidadSerpiente = 100f;
             cargaHabilidadCondor = 100f;
-        }
+        }*/
     }
 
     public void setPlayable(bool state)
