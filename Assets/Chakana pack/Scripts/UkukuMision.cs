@@ -12,6 +12,7 @@ public class UkukuMision : MonoBehaviour
     [SerializeField] private Inventory inventory;
 
     private bool isActive;
+    private bool isUkukuActive;
 
     private void Awake()
     {
@@ -54,6 +55,17 @@ public class UkukuMision : MonoBehaviour
                 transform.GetChild(0).gameObject.SetActive(false);
             }
         }
+
+        if (isUkukuActive)
+        {
+            if (Input.anyKeyDown)
+            {
+                isUkukuActive = false;
+                ukukuInv.transform.GetChild(5).gameObject.SetActive(false);
+                Time.timeScale = 1;
+                GetComponent<UkukuMision>().enabled = false;
+            }
+        }
     }
 
     IEnumerator ShowInventory()
@@ -91,7 +103,7 @@ public class UkukuMision : MonoBehaviour
             ukukuInv.transform.GetChild(4).gameObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
         if (PlayerPrefs.HasKey("ukukuM" + "01"))
         {
@@ -116,7 +128,20 @@ public class UkukuMision : MonoBehaviour
         if (misionCount == 4)
         {
             ukukuInv.transform.GetChild(4).gameObject.SetActive(false);
+
+            StartCoroutine(UkukuEvent());
         }
+    }
+
+    private IEnumerator UkukuEvent()
+    {
+        ukukuInv.transform.GetChild(5).gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        GetComponent<UkukuMision>().enabled = true;
+        isUkukuActive = true;
+        Time.timeScale = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
