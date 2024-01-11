@@ -67,7 +67,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         protected void Start()
         {
-            Reset();
+            /*Reset();
             EquipButton.interactable = RemoveButton.interactable = false;
 
             // TODO: Assigning static callbacks. Don't forget to set null values when UI will be closed. You can also use events instead.
@@ -108,7 +108,46 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (inventory.Count>0)
                 SelectItem(inventory[0].Id);
+            */
+        }
 
+        private void OnEnable()
+        {
+
+
+            EquipButton.interactable = RemoveButton.interactable = false;
+
+            // TODO: Assigning static callbacks. Don't forget to set null values when UI will be closed. You can also use events instead.
+            InventoryItem.OnItemSelected = SelectItem;
+            InventoryItem.OnDragStarted = SelectItem;
+            InventoryItem.OnDragCompleted = InventoryItem.OnDoubleClick = item => { if (Bag.Items.Contains(item)) Equip(); else Remove(); };
+
+            //
+
+            var inventory = new List<Item>();
+
+            if (PlayerPrefs.GetInt("conv01") != 2)
+            {
+                if (PlayerPrefs.HasKey("ukukuM02")) inventory.Add(new Item(ItemId.LuminousMushroom, 1));
+
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
+
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+            }
+
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
+
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
+
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
+
+            if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+
+
+            Bag.Initialize(ref inventory);
+
+            if (inventory.Count > 0)
+                SelectItem(inventory[0].Id);
         }
 
         public void SelectItem(Item item)

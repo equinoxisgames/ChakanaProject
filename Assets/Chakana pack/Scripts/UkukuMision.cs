@@ -16,8 +16,6 @@ public class UkukuMision : MonoBehaviour
 
     private void Awake()
     {
-        //PlayerPrefs.DeleteAll();
-
         if (!PlayerPrefs.HasKey("ukukuM"))
         {
             PlayerPrefs.SetInt("ukukuM", 0);
@@ -39,14 +37,15 @@ public class UkukuMision : MonoBehaviour
             PlayerPrefs.SetInt("ukukuM", e);
 
             PlayerPrefs.SetInt("ukukuM" + num, 1);
-            txt.SetActive(false);
 
             StartCoroutine(ShowInventory());
+            inventory.NewInventory();
+            GetComponent<AudioSource>().Play();
+
+            txt.SetActive(false);
 
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
-            inventory.NewInventory();
-            GetComponent<AudioSource>().Play();
 
             if (isDestroyed)
             {
@@ -74,12 +73,6 @@ public class UkukuMision : MonoBehaviour
 
         int misionCount = 0;
 
-        if (PlayerPrefs.HasKey("ukukuM" + "01"))
-        {
-            ukukuInv.transform.GetChild(0).gameObject.SetActive(true);
-            misionCount++;
-        }
-
         if (PlayerPrefs.HasKey("ukukuM" + "02"))
         {
             ukukuInv.transform.GetChild(1).gameObject.SetActive(true);
@@ -98,17 +91,12 @@ public class UkukuMision : MonoBehaviour
             misionCount++;
         }
 
-        if(misionCount == 4)
+        if(misionCount == 3)
         {
             ukukuInv.transform.GetChild(4).gameObject.SetActive(true);
         }
 
         yield return new WaitForSeconds(2);
-
-        if (PlayerPrefs.HasKey("ukukuM" + "01"))
-        {
-            ukukuInv.transform.GetChild(0).gameObject.SetActive(false);
-        }
         
         if (PlayerPrefs.HasKey("ukukuM" + "02"))
         {
@@ -125,7 +113,7 @@ public class UkukuMision : MonoBehaviour
             ukukuInv.transform.GetChild(3).gameObject.SetActive(false);
         }
 
-        if (misionCount == 4)
+        if (misionCount == 3)
         {
             ukukuInv.transform.GetChild(4).gameObject.SetActive(false);
 

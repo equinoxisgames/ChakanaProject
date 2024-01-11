@@ -111,7 +111,10 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         private void OnEnable()
         {
-            goldTxt.text = player.getGold().ToString();
+            if(goldTxt != null)
+            {
+                goldTxt.text = player.getGold().ToString();
+            }
         }
 
         public void SelectItem(Item item)

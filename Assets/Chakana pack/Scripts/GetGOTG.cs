@@ -43,7 +43,7 @@ public class GetGOTG : MonoBehaviour
         playerAnim.SetBool("Jumping", false);
         playerAnim.SetBool("Walking", false);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         anim.clip = clip2;
         anim.Play();
