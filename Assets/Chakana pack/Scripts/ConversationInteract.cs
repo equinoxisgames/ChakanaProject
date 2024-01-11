@@ -31,7 +31,7 @@ public class ConversationInteract : MonoBehaviour
 
         canvasUI = GameObject.Find("HUDMenu");
 
-        if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2)
+        if (PlayerPrefs.GetInt("ukukuM") == 3 && PlayerPrefs.GetInt("conv01") != 2)
         {
             data.conversation = "Ukuku02";
             shopEnable = true;
