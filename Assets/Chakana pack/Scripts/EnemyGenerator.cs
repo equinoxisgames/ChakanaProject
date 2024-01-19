@@ -28,11 +28,11 @@ public class EnemyGenerator : MonoBehaviour
     {
         destination1 = door1.position;
         originalPos1 = door1.position;
-        destination1.y -= 4;
+        destination1.y -= 4.7f;
 
         destination2 = door2.position;
         originalPos2 = door2.position;
-        destination2.y -= 4;
+        destination2.y -= 4.7f;
     }
 
     private void LateUpdate()
