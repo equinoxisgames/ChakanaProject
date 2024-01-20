@@ -49,8 +49,8 @@ public class ApallimayArco : Apallimay
         float angulo = Vector3.Angle(hoyustus.transform.position - transform.position, transform.right);
         if (transform.position.y >= hoyustus.transform.position.y) angulo *= -1;
 
-        if (angulo < 35f) codigoAtaque = 2;
-        else if (angulo >= 35f && angulo < -35f) codigoAtaque = 0;
+        if (angulo <= 30f && angulo > -30f) codigoAtaque = 0;
+        else if (angulo < 30f) codigoAtaque = 2;
         else codigoAtaque = 1;
 
         anim.SetBool("Jugador Detectado", jugadorDetectado);
