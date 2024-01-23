@@ -24,19 +24,23 @@ public class ApallimayArco : Apallimay
     [SerializeField] private GameObject goldObj;
     private AudioSource aud;
 
+    private void Awake()
+    {
+        groundDetector = transform.GetChild(3).gameObject.transform;
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void Start()
     {
         explosionInvulnerable = "ExplosionEnemy";
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
-        rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
         objetivo = limit2;
         limit1 = transform.GetChild(0).gameObject.transform.position;
         limit2 = transform.GetChild(1).gameObject.transform.position;
         posY = transform.position.y;
-        groundDetector = transform.GetChild(3).gameObject.transform;
         vidaMax = vida;
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         normalSpeed = speed;

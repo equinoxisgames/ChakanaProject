@@ -106,7 +106,7 @@ public class ConversationInteract : MonoBehaviour
             PlayerPrefs.SetInt("conv01", 1);
         }
         
-        if (PlayerPrefs.GetInt("ukukuM") == 4)
+        if (PlayerPrefs.GetInt("ukukuM") == 3)
         {
             PlayerPrefs.SetInt("conv01", 2);
             inventory.NewInventory();
