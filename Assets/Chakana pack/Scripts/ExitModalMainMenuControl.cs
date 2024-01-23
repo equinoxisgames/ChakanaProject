@@ -13,6 +13,9 @@ public class ExitModalMainMenuControl : MonoBehaviour
     public Button   btContinueExitGame;
     public bool     activateBtContinueExitGame = true;
 
+    public Button btContinueGame;
+    public bool activateBtContinueGame = true;
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +54,22 @@ public class ExitModalMainMenuControl : MonoBehaviour
                     {
                         btContinueExitGame.Select();
                         activateBtContinueExitGame = false;
+                    }
+                }
+
+                if (btContinueGame != null && btContinueGame.IsInteractable() && btContinueGame.gameObject == UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject)
+                {
+                    Debug.Log("El botón está seleccionado y habilitado.");
+                    // Realiza aquí las acciones correspondientes cuando el botón está seleccionado y habilitado.
+                }
+                else
+                {
+                    Debug.Log("El botón no está seleccionado y/o no está habilitado.");
+                    // Realiza aquí las acciones correspondientes cuando el botón no está seleccionado o no está habilitado.
+                    if (activateBtContinueGame)
+                    {
+                        btContinueGame.Select();
+                        activateBtContinueGame = false;
                     }
                 }
             }
