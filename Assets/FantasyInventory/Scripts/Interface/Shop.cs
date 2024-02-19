@@ -64,10 +64,6 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
             }
 
-            print(PlayerPrefs.GetInt("Boost01"));
-            print(PlayerPrefs.GetInt("Boost02"));
-            print(PlayerPrefs.GetInt("Boost03"));
-
             Trader.Initialize(ref shop);
         }
 

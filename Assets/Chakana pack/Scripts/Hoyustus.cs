@@ -84,6 +84,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float timeDashCooldown = 0.6f;
     [SerializeField] private float velocidadDash = 45f;
     [SerializeField] private bool dashAvailable = true;
+    [SerializeField] private bool dashBoton = true;
     [SerializeField] private bool isDashing = false;
     [Space(5)]
 
@@ -93,6 +94,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private int codigoAtaque = 0;
     [SerializeField] private float tiempoCooldownAtaque = 0.2f;
     [SerializeField] private bool ataqueAvailable = true;
+    [SerializeField] private bool ataqueBoton = true;
     [SerializeField] private GameObject[] lanzas;
     [SerializeField] private float valorAtaqueNormal = 50;
     [SerializeField] private float valorAtaqueHabilidadCondor = 100;
@@ -334,7 +336,35 @@ public class Hoyustus : CharactersBehaviour
             aplastarBotonCuracion = false;
         }
 
-        if (aplastarBotonCuracion && playable)
+        if (!curando && Input.GetButton("Skill01") && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
+        {
+            StartCoroutine("habilidadCondor");
+            return;
+        }
+        if (!curando && Input.GetButton("Skill02") && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable)
+        {
+            StartCoroutine("habilidadSerpiente");
+            return;
+        }
+        if (!curando && !atacando && Input.GetButtonDown("Skill03") && cargaHabilidadLanza >= maxHabilidad_Curacion && playable)
+        {
+            cargaHabilidadLanza = 0;
+            transform.parent = null;
+            invulnerable = true;
+            playable = false;
+            StartCoroutine(habilidadLanza());
+            return;
+        }
+        if (cargaCuracion >= maxHabilidad_Curacion && Input.GetButtonDown("Skill04") && playable)
+        {
+            curando = true;
+            cargaCuracion = 0;
+            playable = false;
+            StartCoroutine("Curacion");
+            return;
+        }
+
+        /*if (aplastarBotonCuracion && playable)
         {
             botonCuracion += Time.deltaTime;
 
@@ -374,7 +404,7 @@ public class Hoyustus : CharactersBehaviour
                 return;
             }
             return;
-        }
+        }*/
 
         if (playable)
         {
@@ -594,12 +624,18 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator Curacion()
     {
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        Destroy(Instantiate(skillObj04, transform.position, Quaternion.identity), 1);
+        Destroy(Instantiate(skillObj04, transform.position, Quaternion.identity), 1.5f);
         //CAMBIO A LA ANIMACION
         yield return new WaitForSeconds(0.5f);
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         playable = true;
         vida += 350;
+
+        if(vida > maxVida)
+        {
+            vida = maxVida;
+        }
+
         curando = false;
     }
 
@@ -646,7 +682,7 @@ public class Hoyustus : CharactersBehaviour
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
-        bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 14);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 10);
         yield return new WaitForEndOfFrame();
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         dashAvailable = true;
@@ -1007,44 +1043,29 @@ public class Hoyustus : CharactersBehaviour
             return;
         }
 
-        if (ataqueAvailable && Input.GetButtonDown("Atacar") && playable)
-        {
-            atacando = true;
-            //playable = false;
-            int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
-            //VOLVERLAS VARIABLES GLOBALES
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+        if (ataqueBoton && Input.GetAxis("Atacar") == 0f) ataqueBoton = false;
 
-            if (v == 0)
+        if(Input.GetAxis("Atacar") == 1f && !ataqueBoton)
+        {
+            ataqueBoton = true;
+
+            if (ataqueAvailable && playable)
             {
-                anim.Play("Lanza Lateral");
-                codigoAtaque = 4;
-            }
-            else if (v != 0 && h == 0)
-            {
-                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
-                if (v > 0)
-                {
-                    index = 1;
-                    codigoAtaque = 5;
-                }
-                else if (v <= 0 && !Grounded())
-                {
-                    index = 2;
-                    codigoAtaque = 6;
-                }
-                else if (v <= 0 && Grounded())
+                atacando = true;
+                //playable = false;
+                int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
+                                //VOLVERLAS VARIABLES GLOBALES
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
+
+                if (v == 0)
                 {
                     anim.Play("Lanza Lateral");
                     codigoAtaque = 4;
                 }
-            }
-            else if (v != 0 && h != 0)
-            {
-                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
-                if (Math.Abs(v) > Math.Abs(h))
+                else if (v != 0 && h == 0)
                 {
+                    //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
                     if (v > 0)
                     {
                         index = 1;
@@ -1061,18 +1082,40 @@ public class Hoyustus : CharactersBehaviour
                         codigoAtaque = 4;
                     }
                 }
-                else
+                else if (v != 0 && h != 0)
                 {
-                    //Aniadir el pequenio impulso de movimiento
-                    //lanza.SetActive(true);
-                    anim.Play("Lanza Lateral");
-                    codigoAtaque = 4;
+                    //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
+                    if (Math.Abs(v) > Math.Abs(h))
+                    {
+                        if (v > 0)
+                        {
+                            index = 1;
+                            codigoAtaque = 5;
+                        }
+                        else if (v <= 0 && !Grounded())
+                        {
+                            index = 2;
+                            codigoAtaque = 6;
+                        }
+                        else if (v <= 0 && Grounded())
+                        {
+                            anim.Play("Lanza Lateral");
+                            codigoAtaque = 4;
+                        }
+                    }
+                    else
+                    {
+                        //Aniadir el pequenio impulso de movimiento
+                        //lanza.SetActive(true);
+                        anim.Play("Lanza Lateral");
+                        codigoAtaque = 4;
+                    }
                 }
-            }
 
-            ataqueAvailable = false;
-            StartCoroutine(lanzaCooldown(index));
-        }
+                ataqueAvailable = false;
+                StartCoroutine(lanzaCooldown(index));
+            }
+        }     
     }
 
 
@@ -1099,16 +1142,23 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash()
     {
-        if (dashAvailable && Input.GetButtonDown("Dash") && tocandoPared != 0)
-        {
-            transform.parent = null;
-            invulnerable = true;
-            playable = false;
-            dashAvailable = false;
-            rb.velocity = Vector2.zero;
-            rb.gravityScale = 0f;
-            StartCoroutine(dashCooldown());
+        if (dashBoton && Input.GetAxis("Dash") == 0f) dashBoton = false;
 
+        if (Input.GetAxis("Dash") == 1f && !dashBoton)
+        {
+            dashBoton = true;
+
+            if (dashAvailable && tocandoPared != 0)
+            {
+                transform.parent = null;
+                invulnerable = true;
+                playable = false;
+                dashAvailable = false;
+                rb.velocity = Vector2.zero;
+                rb.gravityScale = 0f;
+                StartCoroutine(dashCooldown());
+
+            }
         }
     }
 

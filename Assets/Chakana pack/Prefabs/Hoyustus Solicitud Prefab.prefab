@@ -341,15 +341,15 @@ MonoBehaviour:
   resistenciaAire: 0.1
   walkSpeed: 12
   isWalking: 0
-  fuerzaPrimerSalto: 18
-  fuerzaDobleSalto: 18
+  fuerzaPrimerSalto: 30
+  fuerzaDobleSalto: 25
   isJumping: 0
   isSecondJump: 0
-  correctorSalto: 50
+  correctorSalto: 1
   firstJump: 1
   secondJump: 0
   saltoEspecial: 0
-  extraSalto: 10
+  extraSalto: 7
   fuerzaCaida: 8
   groundCheckRadius: 0.15
   groundTransform: {fileID: 1103388191273375783}
@@ -391,11 +391,13 @@ MonoBehaviour:
   timeDashCooldown: 0.5
   velocidadDash: 45
   dashAvailable: 1
+  dashBoton: 1
   isDashing: 0
   atacando: 0
   codigoAtaque: 0
   tiempoCooldownAtaque: 0.1
   ataqueAvailable: 1
+  ataqueBoton: 1
   lanzas: []
   valorAtaqueNormal: 50
   valorAtaqueHabilidadCondor: 100
@@ -829,11 +831,11 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1.0465937, y: 4.1816454}
-      - {x: -0.19750899, y: 3.7418451}
-      - {x: 1.1863494, y: 2.7326849}
-      - {x: 1.5512736, y: 1.8738726}
-      - {x: 0.7418339, y: 0.6313479}
-      - {x: -1.2855144, y: -0.54387987}
+      - {x: -1.2527478, y: 3.6877303}
+      - {x: 0.17169678, y: 2.5297544}
+      - {x: 0.22546124, y: 1.5762413}
+      - {x: -0.32693315, y: 0.6178192}
+      - {x: -1.948421, y: -0.44917905}
       - {x: 1.0622413, y: -0.41828847}
       - {x: 2.616117, y: 0.44138443}
       - {x: 3.3536968, y: 1.7290996}
