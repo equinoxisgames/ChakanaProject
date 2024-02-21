@@ -314,6 +314,8 @@ public class Hoyustus : CharactersBehaviour
         catch (Exception) {
             Debug.Log("Corregir nombre del Objeto padre del canvas para las pruebas");
         }
+
+        QuitarInvulnerabilidades(layerObject);
     }
 
 
@@ -682,7 +684,7 @@ public class Hoyustus : CharactersBehaviour
         //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         yield return new WaitForEndOfFrame();
-        bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 10);
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().AniadirFuerza(-transform.localScale.x, 14);
         yield return new WaitForEndOfFrame();
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         dashAvailable = true;

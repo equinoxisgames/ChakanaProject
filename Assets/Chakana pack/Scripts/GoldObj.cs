@@ -10,9 +10,15 @@ public class GoldObj : MonoBehaviour
     [SerializeField] GameObject healFX;
 
     Hoyustus player;
+    Transform tr;
     int amount;
+    bool isMove = false;
+
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+        tr = player.transform;
+
         if (goldType == 0)
         {
             if(PlayerPrefs.HasKey("goldfisic" + goldTypeFisic))
@@ -30,6 +36,9 @@ public class GoldObj : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+
+            StartCoroutine(StartMove());
+            transform.parent = null;
         }
 
         if (goldType == 1) amount = 3;
@@ -37,6 +46,22 @@ public class GoldObj : MonoBehaviour
         else if (goldType == 3) amount = 7;
         else if (goldType == 4) amount = 1;
         else if (goldType == 5) amount = 4;
+    }
+
+    private void LateUpdate()
+    {
+        if (isMove)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, tr.position, 18 * Time.deltaTime);
+        }
+    }
+
+    private IEnumerator StartMove()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        isMove = true;
+        print("hola");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -48,12 +73,11 @@ public class GoldObj : MonoBehaviour
                 PlayerPrefs.SetInt("gold" + goldTypeFisic, 1);
             }
 
-            collision.GetComponent<Hoyustus>().setGold(amount);
+            player.setGold(amount);
             StartCoroutine(Effect());
         }
         else if(collision.tag == "Player" && heal)
         {
-            player = collision.GetComponent<Hoyustus>();
             player.setCargaCuracion(25);
             StartCoroutine(Effect());
         }

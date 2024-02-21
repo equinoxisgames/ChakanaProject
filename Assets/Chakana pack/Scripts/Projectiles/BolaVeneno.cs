@@ -40,7 +40,7 @@ public class BolaVeneno : MonoBehaviour
         transform.gameObject.layer = layer;
         gameObject.tag = "Veneno";
         rb.WakeUp();
-        rb.AddForce(new Vector3(12f * -direccion, 18f, 0f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector3(10f * -direccion, 10f, 0f), ForceMode2D.Impulse);
     }
 
 
