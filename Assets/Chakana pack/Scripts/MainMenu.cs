@@ -6,7 +6,8 @@ using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
-
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class MainMenu : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class MainMenu : MonoBehaviour
     //public RectTransform exitMenu;
     //public Transform hoyustusGameObject;
     public Button btContinue;
+    public TextMeshProUGUI txtButtonContinueNormal;
+    public TextMeshProUGUI txtButtonContinueHighL;
+    public Button btNewGame;
     public Button btCancelExitGame;
     public Button btExitGame;
     public Button btSettingsResolution;
@@ -52,7 +56,31 @@ public class MainMenu : MonoBehaviour
 
     [Header("Map Spot Player")]
     public GameObject mapSpotHoyustus;
-    private Hoyustus player;     
+    private Hoyustus player;
+
+    int sceneLoad;
+
+    protected int gold;
+    protected float vida;
+    protected float ataque;
+    protected float ataqueMax;
+    private float maxVida = 1000;
+    float cargaHabilidadCondor;
+    float cargaHabilidadSerpiente;
+    float cargaHabilidadLanza;
+    float cargaCuracion;
+    private bool weaponEquip = false;
+    private float valorAtaqueHabilidadCondor = 100;
+    private float valorAtaqueHabilidadLanza = 150;
+
+    int flagGameSaved = 0;
+
+    
+
+    float aumentoBarraSalto = 10;
+    float aumentoBarraDash = 15;
+    float aumentoBarraAtaque = 15;
+    float danioExplosionCombinacionFuego_Veneno = 35;
 
     //public string tagObjetoAMover = "EtiquetaDelObjeto";
     //public Vector3 nuevaPosicion = new Vector3(100f, 100f, 0f);
@@ -60,6 +88,17 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         btContinue.Select();
+
+        flagGameSaved = PlayerPrefs.GetInt("GameSaved", 0);
+
+        if (flagGameSaved == 1 && escena == "00- Main Menu 0")
+        {
+            txtButtonContinueNormal.text = "CONTINUE GAME";
+            txtButtonContinueHighL.text = "CONTINUE GAME";
+
+            btNewGame.gameObject.SetActive(true);
+        }
+
         Time.timeScale = 1f;
 
         if (Input.GetJoystickNames().Length > 0 && !string.IsNullOrEmpty(Input.GetJoystickNames()[0]))
@@ -509,12 +548,96 @@ public class MainMenu : MonoBehaviour
         //}
         //SceneManager.LoadScene("00- StartRoom 1");
     }
+
+    IEnumerator LoadNextScene()
+    {
+        
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneLoad);
+
+        while (asyncLoad.isDone == false)
+        {
+            yield return null;
+        }
+    }
+
     public void PlayAnimatedIntro()
     {
         //PlayerPrefs.DeleteAll();
         DeletePLayerPrefs();
 
         loadPanel.SetActive(true);
+
+        if (flagGameSaved == 1)
+        {
+            PlayerPrefs.SetInt("scenePos", 0);
+            Time.timeScale = 1;
+
+            if (!PlayerPrefs.HasKey("respawn"))
+            {
+                //sceneLoad = 2;
+                StartCoroutine(LoadAsyncScene(17));
+            }
+            else sceneLoad = PlayerPrefs.GetInt("respawn");
+
+            StartCoroutine(LoadAsyncScene(sceneLoad));
+
+            //StartCoroutine(LoadNextScene());
+        }
+        else
+        {
+            float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+            float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+            float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+            int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+
+
+            PlayerPrefs.DeleteAll();
+
+            PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+            PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+            PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+            PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+
+            StartCoroutine(LoadAsyncScene(17));
+        }
+
+
+        
+
+
+
+        //if (!corutinaIniciada)
+        //{
+        //StartCoroutine(LoadAsyncScene(17));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- StartRoom 1");
+    }
+    public void OpenNewGame()
+    {
+        //PlayerPrefs.DeleteAll();
+        //DeletePLayerPrefs();
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+       
+
+        PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+        
+
+
+        loadPanel.SetActive(true);
+
+        
+
 
         //if (!corutinaIniciada)
         //{
@@ -523,9 +646,91 @@ public class MainMenu : MonoBehaviour
         //}
         //SceneManager.LoadScene("00- StartRoom 1");
     }
+
+    private void Awake()
+    {
+        escena = SceneManager.GetActiveScene().name;
+
+        //DeletePLayerPrefs();
+
+        if (escena != "00- Main Menu 0")
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+
+        if (PlayerPrefs.HasKey("Boost01"))
+        {
+            valorAtaqueHabilidadCondor *= 1.25f;
+            valorAtaqueHabilidadLanza *= 1.25f;
+        }
+
+        if (PlayerPrefs.HasKey("Boost02"))
+        {
+            maxVida *= 1.5f;
+
+        }
+        if (escena != "00- Main Menu 0")
+            LoadData();
+    }
+
+    public static void SavePlayerData(float vida, int gold, float condor, float serpiente, float lanza, float curacion, float ataque)
+    {
+        //Simplificar la firma
+        PlayerData data = new PlayerData(vida, gold, condor, serpiente, lanza, curacion, ataque);
+        string dataPath = Application.persistentDataPath + "/player.save";
+        FileStream fileStream = new FileStream(dataPath, FileMode.Create);
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        binaryFormatter.Serialize(fileStream, data);
+        fileStream.Close();
+    }
+
+    private void LoadData()
+    {
+        escena = SceneManager.GetActiveScene().name;
+
+        if (!PlayerPrefs.HasKey("iniciado"))
+        {
+            PlayerPrefs.SetInt("iniciado", 1);
+            if (escena != "00- Main Menu 0")
+                SaveManager.SavePlayerData(player.GetComponent<Hoyustus>());
+        }
+
+        PlayerData playerData = SaveManager.LoadPlayerData();
+        if (playerData != null)
+        {
+            gold = playerData.getGold();
+            ataque = playerData.getAtaque();
+            vida = playerData.getVida();
+            if (playerData.getVida() <= 0) vida = maxVida;
+            cargaHabilidadCondor = playerData.getCondor();
+            cargaHabilidadSerpiente = playerData.getSerpiente();
+            cargaHabilidadLanza = playerData.getLanza();
+            cargaCuracion = playerData.getCuracion();
+        }
+        else
+        {
+            SaveManager.SavePlayerData(player.GetComponent<Hoyustus>());
+        }
+
+        if (PlayerPrefs.HasKey("Boost03"))
+        {
+            ataqueMax *= 1.25f;
+            ataque *= 1.25f;
+        }
+
+        if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
+    }
+
+    public void SavePlayerData()
+    {
+        SaveManager.SavePlayerData(vida, gold, cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza, cargaCuracion, ataque);
+    }
+
     public void OpenMainMenu()
     {
         loadPanel.SetActive(true);
+
+        //save data
+        SavePlayerData();
+        //SaveManager.SavePlayerData(player.GetComponent<Hoyustus>());
 
         //if (!corutinaIniciada)
         //{
@@ -609,14 +814,16 @@ public class MainMenu : MonoBehaviour
         float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
         int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+        int valorRespawn = PlayerPrefs.GetInt("respawn",17);
 
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
 
         PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
         PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
         PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
         PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
-        
+        PlayerPrefs.SetInt("respawn", valorRespawn);
+
     }
 
 }

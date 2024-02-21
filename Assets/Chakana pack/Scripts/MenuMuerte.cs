@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.InputSystem;
+using Assets.FantasyInventory.Scripts.Interface.Elements;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class MenuMuerte : MonoBehaviour
 {
@@ -57,9 +63,43 @@ public class MenuMuerte : MonoBehaviour
         }
         else sceneLoad = PlayerPrefs.GetInt("respawn");
 
-        StartCoroutine(LoadNextScene());
+        //StartCoroutine(LoadNextScene());
+
+        StartCoroutine(LoadAsyncScene(sceneLoad));
     }
 
+    IEnumerator LoadAsyncScene(int sceneIndex)
+    {
+
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        yield return new WaitForSeconds(1f);
+        //SceneManager.LoadScene(9 + 1);
+        //yield return new WaitForSeconds(1f);
+        //while(!asyncOperation.isDone)
+        //{
+        //    Debug.Log("Progres: "+asyncOperation.progress);
+        //    loadBar.value = asyncOperation.progress+0.05f;
+        //    yield return null;
+        //}
+
+        //for (int i = 0; i < 20; i++)
+        //{
+        //    //Debug.Log("Progres: "+asyncOperation.progress);
+        //    //loadBar.value = asyncOperation.progress+0.05f;
+        //    if (i < 15)
+        //    {
+        //        loadBar.value = i * 0.01f;
+        //        yield return new WaitForSeconds(1f);
+        //    }
+        //    else
+        //    {
+        //        loadBar.value = i * 0.09f + 0.16f;
+        //        yield return new WaitForSeconds(1.5f);
+        //    }
+        //}
+
+        //yield break;
+    }
     private void correccionLogicas() {
         Physics2D.IgnoreLayerCollision(0, 3, false);
         Physics2D.IgnoreLayerCollision(11, 3, false);
