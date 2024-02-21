@@ -34,7 +34,6 @@ public class ControlManager : MonoBehaviour
         if (posicionActualDelMouse != ultimaPosicionDelMouse)
         {
             // El mouse se ha movido
-            Debug.Log("El mouse se ha movido");
             ultimaPosicionDelMouse = posicionActualDelMouse;
 
             if (joystick)

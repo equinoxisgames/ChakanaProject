@@ -158,7 +158,6 @@ public class TutorialRoute : MonoBehaviour
             if (tutoNum == 8 && Input.anyKeyDown)
             {
                 Time.timeScale = 1;
-                print("dfas");
                 tutoObj.SetActive(false);
                 PlayerPrefs.SetInt("tutorial" + tutoNum, 1);
                 Destroy(gameObject);

@@ -43,7 +43,7 @@ public class HudManager : MonoBehaviour
         {
             lifeMax = player.getMaxVida();
         }
-        print(lifeMax);
+
         if (lifeMax == 1500)
         {
             LifePlus();
