@@ -65756,6 +65756,9 @@ MonoBehaviour:
   confirmQuitMenu: {fileID: 8104933364466024077}
   inventoryMenu: {fileID: 5182842862276801448}
   btContinue: {fileID: 5621294134261322356}
+  txtButtonContinueNormal: {fileID: 5621294132915969305}
+  txtButtonContinueHighL: {fileID: 5621294132439797932}
+  btNewGame: {fileID: 5621294134261322356}
   btCancelExitGame: {fileID: 0}
   btExitGame: {fileID: 3257336232582380777}
   btSettingsResolution: {fileID: 0}
@@ -76695,6 +76698,9 @@ MonoBehaviour:
   ItemInfo: {fileID: 2071167207083695287}
   player: {fileID: 0}
   goldTxt: {fileID: 0}
+  hud: {fileID: 0}
+  managerPU: {fileID: 0}
+  inventory: {fileID: 0}
   Trader: {fileID: 1273304515756343370}
   Bag: {fileID: 4225291936474762289}
   BuyButton: {fileID: 9035802928450515264}
@@ -100004,6 +100010,13 @@ PrefabInstance:
       propertyPath: m_Navigation.m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4195430622835942823, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
+      propertyPath: m_text
+      value: ' UNSAVED DATA WILL BE LOST
+
+        ACCESS A CHECKPOINT TO SAVE YOUR
+        PROGRESS'
+      objectReference: {fileID: 0}
     - target: {fileID: 7339638916436360140, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: onPressEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -100054,7 +100067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681360060235012984, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: title
-      value: EXIT TO MAIN MENU
+      value: ATTENTION!
       objectReference: {fileID: 0}
     - target: {fileID: 8681360060235012984, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: blurManager
@@ -100062,7 +100075,10 @@ PrefabInstance:
       objectReference: {fileID: 5737705171926964602}
     - target: {fileID: 8681360060235012984, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: description
-      value: YOUR PROGRESS WILL BE LOST, ARE YOU SURE?
+      value: ' UNSAVED DATA WILL BE LOST
+
+        ACCESS A CHECKPOINT TO SAVE YOUR
+        PROGRESS'
       objectReference: {fileID: 0}
     - target: {fileID: 8681360060235012984, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: onCancel.m_PersistentCalls.m_Calls.Array.size
@@ -100331,6 +100347,10 @@ PrefabInstance:
     - target: {fileID: 9002809172488232936, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205344866315721227, guid: fca644ef066da26489ee7adffb3732d9, type: 3}
+      propertyPath: m_text
+      value: ATTENTION!
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -110029,6 +110049,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc83308b2b910e54999e3ddd280ec778, type: 3}
+--- !u!114 &5621294132439797932 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8314491805132427157, guid: bc83308b2b910e54999e3ddd280ec778, type: 3}
+  m_PrefabInstance: {fileID: 4423057126308405049}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5621294132915969305 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8314491804526232096, guid: bc83308b2b910e54999e3ddd280ec778, type: 3}
+  m_PrefabInstance: {fileID: 4423057126308405049}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5621294134261322356 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8314491805865168205, guid: bc83308b2b910e54999e3ddd280ec778, type: 3}

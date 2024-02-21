@@ -23,6 +23,9 @@ public class MainMenu : MonoBehaviour
     //public RectTransform exitMenu;
     //public Transform hoyustusGameObject;
     public Button btContinue;
+    public TextMeshProUGUI txtButtonContinueNormal;
+    public TextMeshProUGUI txtButtonContinueHighL;
+    public Button btNewGame;
     public Button btCancelExitGame;
     public Button btExitGame;
     public Button btSettingsResolution;
@@ -70,6 +73,8 @@ public class MainMenu : MonoBehaviour
     private float valorAtaqueHabilidadCondor = 100;
     private float valorAtaqueHabilidadLanza = 150;
 
+    int flagGameSaved = 0;
+
     
 
     float aumentoBarraSalto = 10;
@@ -83,6 +88,17 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         btContinue.Select();
+
+        flagGameSaved = PlayerPrefs.GetInt("GameSaved", 0);
+
+        if (flagGameSaved == 1 && escena == "00- Main Menu 0")
+        {
+            txtButtonContinueNormal.text = "CONTINUE GAME";
+            txtButtonContinueHighL.text = "CONTINUE GAME";
+
+            btNewGame.gameObject.SetActive(true);
+        }
+
         Time.timeScale = 1f;
 
         if (Input.GetJoystickNames().Length > 0 && !string.IsNullOrEmpty(Input.GetJoystickNames()[0]))
@@ -552,17 +568,42 @@ public class MainMenu : MonoBehaviour
 
         loadPanel.SetActive(true);
 
-        PlayerPrefs.SetInt("scenePos", 0);
-        Time.timeScale = 1;
-
-        if (!PlayerPrefs.HasKey("respawn"))
+        if (flagGameSaved == 1)
         {
-            //sceneLoad = 2;
+            PlayerPrefs.SetInt("scenePos", 0);
+            Time.timeScale = 1;
+
+            if (!PlayerPrefs.HasKey("respawn"))
+            {
+                //sceneLoad = 2;
+                StartCoroutine(LoadAsyncScene(17));
+            }
+            else sceneLoad = PlayerPrefs.GetInt("respawn");
+
+            StartCoroutine(LoadAsyncScene(sceneLoad));
+
+            //StartCoroutine(LoadNextScene());
+        }
+        else
+        {
+            float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+            float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+            float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+            int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+
+
+            PlayerPrefs.DeleteAll();
+
+            PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+            PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+            PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+            PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+
             StartCoroutine(LoadAsyncScene(17));
         }
-        else sceneLoad = PlayerPrefs.GetInt("respawn");
 
-        StartCoroutine(LoadNextScene());
+
+        
 
 
 
@@ -573,10 +614,44 @@ public class MainMenu : MonoBehaviour
         //}
         //SceneManager.LoadScene("00- StartRoom 1");
     }
+    public void OpenNewGame()
+    {
+        //PlayerPrefs.DeleteAll();
+        //DeletePLayerPrefs();
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+       
+
+        PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+        
+
+
+        loadPanel.SetActive(true);
+
+        
+
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(17));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- StartRoom 1");
+    }
 
     private void Awake()
     {
         escena = SceneManager.GetActiveScene().name;
+
+        //DeletePLayerPrefs();
 
         if (escena != "00- Main Menu 0")
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();

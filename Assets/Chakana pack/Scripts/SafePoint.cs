@@ -34,6 +34,9 @@ public class SafePoint : MonoBehaviour
 
             PlayerPrefs.SetInt("SP" + spNum, 1);
             PlayerPrefs.SetInt("respawn", SceneManager.GetActiveScene().buildIndex);
+
+            PlayerPrefs.SetInt("GameSaved", 1);
+
             GetComponent<AudioSource>().Play();
             isOn = false;
             StartCoroutine(Timer());
