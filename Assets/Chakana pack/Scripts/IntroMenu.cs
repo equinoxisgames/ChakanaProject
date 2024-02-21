@@ -27,7 +27,10 @@ public class IntroMenu : MonoBehaviour
     {
         Screen.fullScreen = true;
 
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
+
+        DeletePLayerPrefs();
+
         Resolution[] resolutions = Screen.resolutions;
         Resolution maxResolution = resolutions[resolutions.Length - 1];
         int maxWidthResolution = maxResolution.width;
@@ -44,6 +47,25 @@ public class IntroMenu : MonoBehaviour
 
     }
 
+    public void DeletePLayerPrefs()
+    {
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+        int valorRespawn = PlayerPrefs.GetInt("respawn", 17);
+
+        //PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+        PlayerPrefs.SetInt("respawn", valorRespawn);
+
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,7 +79,7 @@ public class IntroMenu : MonoBehaviour
     }
     public void OpenMainMenu()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
         
         loadPanel.SetActive(true);
 

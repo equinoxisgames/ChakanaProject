@@ -103,6 +103,41 @@ public class CreditsMenu : MonoBehaviour
        
     }
 
+    public void OpenNewGame()
+    {
+        //PlayerPrefs.DeleteAll();
+        //DeletePLayerPrefs();
+        if (sceneChange) return;
+        sceneChange = true;
+
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
+        float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
+        float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
+        int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+
+
+        PlayerPrefs.DeleteAll();
+
+        PlayerPrefs.SetFloat("MasterAudioKeyValue", valorMasterAudioKeyValue);
+        PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
+        PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
+        PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+
+
+
+        loadPanel.SetActive(true);
+
+
+
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(1));
+        //corutinaIniciada = true;
+        //}
+        //SceneManager.LoadScene("00- StartRoom 1");
+    }
+
     public void OpenStartRoom()
     {
         
