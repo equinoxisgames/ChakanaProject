@@ -93,8 +93,8 @@ public class MainMenu : MonoBehaviour
 
         if (flagGameSaved == 1 && escena == "00- Main Menu 0")
         {
-            txtButtonContinueNormal.text = "CONTINUE GAME";
-            txtButtonContinueHighL.text = "CONTINUE GAME";
+            txtButtonContinueNormal.text = "CONTINUE";
+            txtButtonContinueHighL.text = "CONTINUE";
 
             btNewGame.gameObject.SetActive(true);
         }
