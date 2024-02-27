@@ -15,16 +15,51 @@ public class TutorialRoute : MonoBehaviour
 
     void Start()
     {
-        if(PlayerPrefs.HasKey("tutorial" + tutoNum))
-        {
-            Destroy(gameObject);
-        }
-
         keyObj = tutoObj.transform.GetChild(0).gameObject;
         joyObj = tutoObj.transform.GetChild(1).gameObject;
 
         keyObj.SetActive(true);
         joyObj.SetActive(false);
+
+        int joystickCount = Input.GetJoystickNames().Length;
+
+        if (joystickCount > 0)
+        {
+            if (tutoNum == 5 && !scene01)
+            {
+                StartCoroutine(StartTuto());
+                scene01 = true;
+            }
+
+            if (!joystick)
+            {
+                joystick = true;
+
+                keyObj.SetActive(false);
+                joyObj.SetActive(true);
+            }
+        }
+        else
+        {
+            if (tutoNum == 5 && !scene01)
+            {
+                StartCoroutine(StartTuto());
+                scene01 = true;
+            }
+
+            if (joystick)
+            {
+                joystick = false;
+
+                keyObj.SetActive(true);
+                joyObj.SetActive(false);
+            }
+        }
+
+        if (PlayerPrefs.HasKey("tutorial" + tutoNum))
+        {
+            Destroy(gameObject);
+        }
 
         if (tutoNum == 8 || tutoNum == 9 || tutoNum == 10 || tutoNum == 11)
         {
