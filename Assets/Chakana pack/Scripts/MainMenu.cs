@@ -730,6 +730,9 @@ public class MainMenu : MonoBehaviour
 
         //save data
         SavePlayerData();
+
+        player.GetComponent<Hoyustus>().SavePlayerData();
+
         //SaveManager.SavePlayerData(player.GetComponent<Hoyustus>());
 
         //if (!corutinaIniciada)
