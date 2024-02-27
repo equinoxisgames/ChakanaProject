@@ -84,7 +84,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float timeDashCooldown = 0.6f;
     [SerializeField] private float velocidadDash = 45f;
     [SerializeField] private bool dashAvailable = true;
-    [SerializeField] private bool dashBoton = true;
     [SerializeField] private bool isDashing = false;
     [Space(5)]
 
@@ -94,7 +93,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private int codigoAtaque = 0;
     [SerializeField] private float tiempoCooldownAtaque = 0.2f;
     [SerializeField] private bool ataqueAvailable = true;
-    [SerializeField] private bool ataqueBoton = true;
     [SerializeField] private GameObject[] lanzas;
     [SerializeField] private float valorAtaqueNormal = 50;
     [SerializeField] private float valorAtaqueHabilidadCondor = 100;
@@ -143,6 +141,7 @@ public class Hoyustus : CharactersBehaviour
 
     private bool playerDie = false;
     private bool weaponEquip = false;
+    private bool botonSkill01, botonSkill02;
 
     public void isTocandoPared(int value)
     {
@@ -338,13 +337,15 @@ public class Hoyustus : CharactersBehaviour
             aplastarBotonCuracion = false;
         }
 
-        if (!curando && Input.GetButton("Skill01") && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
+        if (!curando && Input.GetAxis("Skill01") == 1 && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
         {
+            cargaHabilidadCondor = 0f;
             StartCoroutine("habilidadCondor");
             return;
         }
-        if (!curando && Input.GetButton("Skill02") && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable)
+        if (!curando && Input.GetAxis("Skill02") == 1 && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable)
         {
+            cargaHabilidadSerpiente = 0f;
             StartCoroutine("habilidadSerpiente");
             return;
         }
@@ -649,7 +650,6 @@ public class Hoyustus : CharactersBehaviour
     {
         anim.SetInteger("Skill", 2);
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
-        cargaHabilidadCondor = 0f;
         playable = false;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         cargaCuracion += 30;
@@ -676,7 +676,6 @@ public class Hoyustus : CharactersBehaviour
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
         dashAvailable = false;
-        cargaHabilidadSerpiente = 0f;
         cargaCuracion += 30;
         yield return new WaitForSeconds(0.05f);
         anim.SetInteger("Skill", 0);
@@ -940,6 +939,7 @@ public class Hoyustus : CharactersBehaviour
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         playable = false;
         GetComponent<AudioSource>().enabled = false;
+        GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
         yield return new WaitForSeconds(0.5f);
 
@@ -1045,12 +1045,9 @@ public class Hoyustus : CharactersBehaviour
             return;
         }
 
-        if (ataqueBoton && Input.GetAxis("Atacar") == 0f) ataqueBoton = false;
 
-        if(Input.GetAxis("Atacar") == 1f && !ataqueBoton)
+        if(Input.GetButtonDown("Atacar"))
         {
-            ataqueBoton = true;
-
             if (ataqueAvailable && playable)
             {
                 atacando = true;
@@ -1144,12 +1141,9 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private void Dash()
     {
-        if (dashBoton && Input.GetAxis("Dash") == 0f) dashBoton = false;
 
-        if (Input.GetAxis("Dash") == 1f && !dashBoton)
+        if (Input.GetButtonDown("Dash"))
         {
-            dashBoton = true;
-
             if (dashAvailable && tocandoPared != 0)
             {
                 transform.parent = null;

@@ -25,6 +25,30 @@ public class ControlManager : MonoBehaviour
         }
 
         ultimaPosicionDelMouse = Input.mousePosition;
+
+        int joystickCount = Input.GetJoystickNames().Length;
+
+        if (joystickCount > 0)
+        {
+            if (!joystick)
+            {
+                joystick = true;
+                //sliderMaster.Select();
+                Cursor.visible = false;
+                ChangeControls(false);
+
+            }
+        }
+        else
+        {
+            if (joystick)
+            {
+                joystick = false;
+                Cursor.visible = true;
+                ChangeControls(true);
+            }
+        }
+
     }
 
     void Update()
@@ -64,7 +88,7 @@ public class ControlManager : MonoBehaviour
                 Cursor.visible = false;
                 ChangeControls(false);
                 
-}
+            }
         }
     }
 
