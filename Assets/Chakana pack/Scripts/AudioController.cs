@@ -47,7 +47,7 @@ public class AudioController : MonoBehaviour
             sliderMasterSelected.Select();
         }
 
-        if (Input.GetButtonDown("Activador_Habilidades") || Input.GetButtonDown("Activador_Habilidades1"))
+        if (Input.GetButtonDown("Jump"))
         {
             sliderMasterSelected.Select();
         }

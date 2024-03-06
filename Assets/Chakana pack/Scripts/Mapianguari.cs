@@ -32,7 +32,6 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject humo;
     [SerializeField] private GameObject gotg;
     [SerializeField] private GameObject explosion2;
-    [SerializeField] private GameObject bloqueoDash;
     [SerializeField] private ManagerPeleaMapinguari levelController;
     [SerializeField] private bool usandoAtaqueEspecial = false;
     [SerializeField] private bool realizandoAB, realizandoAT, pruebaAtaqueEspecial, isDead, iddel;
@@ -77,7 +76,7 @@ public class Mapianguari : Enemy
         ataqueCuerpo.enabled = false;
         layerObject = transform.gameObject.layer;
         //SE DESACTIVAN LAS COLISIONES DEL CUERPO DEL BOSS CON EL DASHBODY DE HOYUSTUS Y SU CUERPO ESTANDAR
-        Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
+        //Physics2D.IgnoreCollision(cuerpo, GameObject.Find("Hoyustus Solicitud Prefab").GetComponent<CapsuleCollider2D>());
         explosion = Resources.Load<GameObject>("Explosion");
         ataqueDisponible = true;
     }
@@ -385,7 +384,6 @@ public class Mapianguari : Enemy
         atacando = true;
         iddel = true;
         anim.Play("Iddel Mapinguari");
-        //bloqueoDash.SetActive(false);
         //PREPARACION DEL ATAQUE
         yield return new WaitForSeconds(t1);
         iddel = false;
@@ -406,7 +404,6 @@ public class Mapianguari : Enemy
         }
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
-        //bloqueoDash.SetActive(true);
         atacando = false;
         iddel = false;
         yield return new WaitForSeconds(0.5f);
@@ -521,7 +518,6 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(0.3f);
         pruebaAtaqueEspecial = true;
         //EMBESTIDAS
-        bloqueoDash.SetActive(false);
         transform.localScale = new Vector3(-1, 1, 1);
         for (int i = 1; i <= 3; i++) {
             //DESPLAZAMIENTO A LA PLATAFORMA
@@ -568,7 +564,6 @@ public class Mapianguari : Enemy
         ataqueMax = ataque;
         pruebaAtaqueEspecial = false;
         iddel = true;
-        bloqueoDash.SetActive(false);
         //STUN
         yield return new WaitForSeconds(5f);
         iddel = false;

@@ -37,9 +37,8 @@ Transform:
   - {fileID: 627248764119676890}
   - {fileID: 627248763571091568}
   - {fileID: 5691883777219537957}
-  - {fileID: 5590391209139536312}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &627248762632895298
 SpriteRenderer:
@@ -106,8 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 3000
-  ataque: 100
+  vida: 4000
+  ataque: 150
   ataqueMax: 0
   estadoViento: 0
   estadoFuego: 0
@@ -171,7 +170,6 @@ MonoBehaviour:
   humo: {fileID: 7433347208218945765, guid: b204c0c9f9081b649a72c4c58cdff736, type: 3}
   gotg: {fileID: 7853187627403436360, guid: 0869043866fe18246ada1c5c80a85fbc, type: 3}
   explosion2: {fileID: 8081575625336725374, guid: 3f708db572fd8254fbdd12681c730e63, type: 3}
-  bloqueoDash: {fileID: 4698438496357530235}
   levelController: {fileID: 0}
   usandoAtaqueEspecial: 0
   realizandoAB: 0
@@ -185,7 +183,7 @@ MonoBehaviour:
   audioAtk: {fileID: 8300000, guid: c7d80479098aef846b31f93d3b5d8367, type: 3}
   audioScream: {fileID: 8300000, guid: b33f64f1af4ab1a49a34dcd74e3cd80b, type: 3}
   audioWalk: {fileID: 8300000, guid: 8bda213729c730a4c8dc74b7088afe4f, type: 3}
-  danioPlantaVeneno: 80
+  danioPlantaVeneno: 100
   tiempoAnimacionAtaqueNormal: 0.4
   spriteStatic: {fileID: 21300000, guid: 4292aee0872aa4940a24b1d45b7738ba, type: 3}
   rangoCercania: 15
@@ -681,98 +679,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoyustus: {fileID: 0}
---- !u!1 &4698438496357530235
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5590391209139536312}
-  - component: {fileID: 3984735681878540657}
-  - component: {fileID: 3088341957173374849}
-  m_Layer: 18
-  m_Name: BloqueoDash
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5590391209139536312
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698438496357530235}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 627248762632895297}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &3984735681878540657
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698438496357530235}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!70 &3088341957173374849
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698438496357530235}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.28857422}
-  m_Size: {x: 6, y: 6.5771484}
-  m_Direction: 0
