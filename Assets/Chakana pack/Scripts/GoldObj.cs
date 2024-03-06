@@ -26,7 +26,7 @@ public class GoldObj : MonoBehaviour
                 Destroy(gameObject);
             }
 
-            amount = 10;
+            amount = 7;
         }
         else
         {
@@ -41,11 +41,11 @@ public class GoldObj : MonoBehaviour
             transform.parent = null;
         }
 
-        if (goldType == 1) amount = 3;
-        else if (goldType == 2) amount = 5;
-        else if (goldType == 3) amount = 7;
+        if (goldType == 1) amount = 2;
+        else if (goldType == 2) amount = 4;
+        else if (goldType == 3) amount = 5;
         else if (goldType == 4) amount = 1;
-        else if (goldType == 5) amount = 4;
+        else if (goldType == 5) amount = 3;
     }
 
     private void LateUpdate()

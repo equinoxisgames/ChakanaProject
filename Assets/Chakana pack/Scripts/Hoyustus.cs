@@ -652,7 +652,7 @@ public class Hoyustus : CharactersBehaviour
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        cargaCuracion += 30;
+        cargaCuracion += 35;
 
         //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
         yield return new WaitForSeconds(0.35f);
@@ -676,7 +676,7 @@ public class Hoyustus : CharactersBehaviour
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         playable = false;
         dashAvailable = false;
-        cargaCuracion += 30;
+        cargaCuracion += 35;
         yield return new WaitForSeconds(0.05f);
         anim.SetInteger("Skill", 0);
         yield return new WaitForSeconds(0.25f);
@@ -703,7 +703,7 @@ public class Hoyustus : CharactersBehaviour
         playable = false;
 
         invulnerable = true;
-        cargaCuracion += 30;
+        cargaCuracion += 35;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         atacando = true;

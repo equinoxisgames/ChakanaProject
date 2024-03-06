@@ -74,12 +74,6 @@ public class TutorialRoute : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
-            if (tutoNum == 5 && !scene01)
-            {
-                StartCoroutine(StartTuto());
-                scene01 = true;
-            }
-
             if (joystick)
             {
                 joystick = false;
@@ -91,11 +85,6 @@ public class TutorialRoute : MonoBehaviour
 
         if (Input.GetButtonDown("JoystickButton") || Input.GetAxis("HorizontalJ") != 0f || Input.GetAxis("VerticalJ") != 0f)
         {
-            if (tutoNum == 5 && !scene01)
-            {
-                StartCoroutine(StartTuto());
-                scene01 = true;
-            }
 
             if (!joystick)
             {
