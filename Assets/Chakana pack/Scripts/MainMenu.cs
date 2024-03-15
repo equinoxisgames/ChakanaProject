@@ -277,74 +277,75 @@ public class MainMenu : MonoBehaviour
             switch (escena)
             {
                 case "00- StartRoom 1":
-                    UpdateMapSpotPosition(-80f, 80f, 0f);
+                    UpdateMapSpotPosition(-121f, 80f, 0f);
                     //UpdateMapSpotPosition(-80f, 180f, 0f);
                     break;
 
                 case "01-Level 1":
-                    UpdateMapSpotPosition((position.x - 108f) * 1.35f, (position.y + 80f) * 1.15f, 0f);
+                    UpdateMapSpotPosition((position.x - 128f) * 1.35f, (position.y + 80f) * 1.15f, 0f);
                     break;
 
                 case "03-Room 3":
-                    UpdateMapSpotPosition(-160f, 125f, 0f);
+                    UpdateMapSpotPosition(-200f, 125f, 0f);
                     break;
 
                 case "04-Level 2":
-                    UpdateMapSpotPosition((position.x - 245f), (position.y + 80f) * 1.3f, 0f);
+                    UpdateMapSpotPosition((position.x - 275f), (position.y + 80f) * 1.3f, 0f);
                     //UpdateMapSpotPosition(-400f, 125f, 0f);
                     break;
 
                 case "05-Room GA1":
-                    UpdateMapSpotPosition(-475f, 80f, 0f);
+                    UpdateMapSpotPosition(-500f, 78f, 0f);
                     break;
 
                 case "06- Room 6":
-                    UpdateMapSpotPosition((position.x - 35f) * 1.35f, (position.y + 80f) * 1.1f, 0f);
+                    UpdateMapSpotPosition((position.x - 75f) * 1.35f, (position.y + 80f) * 1.1f, 0f);
                     //UpdateMapSpotPosition(44f, 100f, 0f);
                     break;
 
                 case "07-Room 7":
-                    UpdateMapSpotPosition((position.x + 148f) * 1.35f, (position.y + 10f), 0f);
+                    UpdateMapSpotPosition((position.x + 98f) * 1.35f, (position.y + 11f), 0f);
                     //UpdateMapSpotPosition(210f, 30f, 0f);
                     break;
 
                 case "08-Room 8":
                     if (position.y < -16)
-                        UpdateMapSpotPosition((position.x + 181f) * 1.35f, (position.y - 40f), 0f);
+                        UpdateMapSpotPosition((position.x + 141f) * 1.35f, (position.y - 40f), 0f);
                     else
-                        UpdateMapSpotPosition((position.x + 181f) * 1.35f, (position.y - 15f), 0f);
+                        UpdateMapSpotPosition((position.x + 141f) * 1.35f, (position.y - 15f), 0f);
 
                     //UpdateMapSpotPosition(420f, -40f, 0f);
                     break;
 
                 case "09-Room 9":
-                    UpdateMapSpotPosition(290f, -110f, 0f);
+                    UpdateMapSpotPosition(230f, -110f, 0f);
                     break;
 
                 case "10-Room 10 - 11":
                     //UpdateMapSpotPosition((position.x + 70f) * 1.35f, (position.y - 55f), 0f);
 
                     if (position.y < -56)
-                        UpdateMapSpotPosition((position.x + 30f) * 1.35f, (position.y - 100f), 0f);
+                        UpdateMapSpotPosition((position.x + 5f) * 1.35f, (position.y - 100f), 0f);
                     else
-                        UpdateMapSpotPosition((position.x + 30f) * 1.35f, (position.y - 55f), 0f);
+                        UpdateMapSpotPosition((position.x + 5f) * 1.35f, (position.y - 55f), 0f);
 
                     //UpdateMapSpotPosition(-30f, -155f, 0f);
                     break;
                 case "12-Room 12":
-                    UpdateMapSpotPosition(90f, -155f, 0f);
+                    UpdateMapSpotPosition(40f, -155f, 0f);
                     break;
 
                 case "13- SaveRoom":
-                    UpdateMapSpotPosition(232f, -203f, 0f);
+                    UpdateMapSpotPosition(217f, -203f, 0f);
                     break;
 
                 case "13-Room 13":
-                    UpdateMapSpotPosition(500f, -85f, 0f);
+                    
+                    UpdateMapSpotPosition(518f, -50f, 0f);
                     break;
 
                 case "14-Boss Room":
-                    UpdateMapSpotPosition(330f, -203f, 0f);
+                    UpdateMapSpotPosition(280f, -203f, 0f);
                     break;
 
                 default:
