@@ -259,7 +259,7 @@ public class MainMenu : MonoBehaviour
         {
             if (escena == "14-Boss Room")
             {
-                UpdateMapSpotPosition(330f, -203f, 0f);
+                UpdateMapSpotPosition(280f, -203f, 0f);
                 return;
             }
 
@@ -346,6 +346,7 @@ public class MainMenu : MonoBehaviour
 
                 case "14-Boss Room":
                     UpdateMapSpotPosition(280f, -203f, 0f);
+                    Debug.Log("Entra al case de 14-Boss Room");
                     break;
 
                 default:
