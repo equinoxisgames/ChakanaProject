@@ -23,7 +23,7 @@ public class ApallimayDaga : Apallimay
     {
         explosionInvulnerable = "ExplosionEnemy";
         layerObject = transform.gameObject.layer;
-        fuerzaRecoil = 2f;
+        fuerzaRecoil = 3f;
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load<GameObject>("Explosion");
         daga = transform.GetChild(2).gameObject.GetComponent<BoxCollider2D>();

@@ -114,6 +114,7 @@ public class Mapianguari : Enemy
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CapsuleCollider2D>().enabled = false;
         anim.enabled = true;
         anim.SetBool("Muerto", true);
         campoVision.enabled = false;
@@ -139,7 +140,7 @@ public class Mapianguari : Enemy
         anim.SetBool("AE", pruebaAtaqueEspecial);
         anim.SetBool("Iddel", iddel);
 
-        if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual && !isDead) {
+        if (!usandoAtaqueEspecial && nuevaPlataforma != plataformaActual && !isDead && !atacando) {
             StartCoroutine(CambioPlataforma());       
         }
         //MODIFICACION DE POSICION A SEGUIR AL PLAYER AL ESTAR EN LA MISMA PLATAFORMA
@@ -437,7 +438,7 @@ public class Mapianguari : Enemy
             for (int i = 0; i < 3; i++) {
                 System.Random aux = new System.Random();
 
-                if (totalPlants == 3) break;
+                if (totalPlants >= 2) break;
                 else totalPlants++;
 
                 switch (aux.Next(0, 4))
@@ -458,7 +459,12 @@ public class Mapianguari : Enemy
             }
         }
         else {
-            Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+
+            if (totalPlants == 0)
+            {
+                totalPlants++;
+                Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+            }   
         }
         yield return new WaitForEndOfFrame();
         atacando = false;
@@ -539,14 +545,12 @@ public class Mapianguari : Enemy
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-40f, 0f);
-            ataqueCuerpo.enabled = true;
+            this.rb.velocity = new Vector2(-35f, 0f);
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
                 extraDashTime += 0.4f;
             }
             yield return new WaitForSeconds(1f + extraDashTime);
-            ataqueCuerpo.enabled = false;
 
             //DESAPARICION TRAS EMBESTIDA
             rb.velocity = Vector2.zero;
@@ -564,6 +568,7 @@ public class Mapianguari : Enemy
         ataqueMax = ataque;
         pruebaAtaqueEspecial = false;
         iddel = true;
+        transform.position = new Vector3(-42.82f, -98.99f, 0);
         //STUN
         yield return new WaitForSeconds(5f);
         iddel = false;

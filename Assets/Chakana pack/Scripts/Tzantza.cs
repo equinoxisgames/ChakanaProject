@@ -78,15 +78,15 @@ public class Tzantza : Enemy
         playable = false;
         rb.velocity = Vector2.zero;
         ataqueDisponible = false;
-
+        atacando = true;
+        yield return new WaitForSeconds(t1);
+        atacando = false;
         charAudio.Stop();
         charAudio.clip = audioAttack;
         charAudio.Play();
-        yield return new WaitForSeconds(t1);
         GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
         bolaFuegoGenerada.name += "Enemy";
         bolaFuegoGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
-        atacando = true;
         //TIEMPO ANIMACION
         yield return new WaitForSeconds(0.5f);
         atacando = false;

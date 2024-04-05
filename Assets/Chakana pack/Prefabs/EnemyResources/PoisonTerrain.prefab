@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 795364621647544211}
   - component: {fileID: 72091193082897424}
   - component: {fileID: 6951525775841749343}
-  m_Layer: 13
+  - component: {fileID: 4503202465848983321}
+  m_Layer: 12
   m_Name: PoisonTerrain
   m_TagString: Veneno
   m_Icon: {fileID: 0}
@@ -175,6 +176,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4503202465848983321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081575625336725374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c09aa410572fa3d448810015efed4f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radio: 5
+  indiceExplosion: 15
+  danioExplosion: 120
+  tipoExplosion: ExplosionPlayer
+  isDynamic: 0
+  tiempoDestruccionEstatico: 0.4
 --- !u!1001 &277016616494031399
 PrefabInstance:
   m_ObjectHideFlags: 0
