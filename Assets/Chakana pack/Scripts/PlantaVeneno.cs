@@ -11,6 +11,7 @@ public class PlantaVeneno : MonoBehaviour
     [SerializeField] private bool ataqueDisponible = false;
     [SerializeField] private bool atacando = false;
     [SerializeField] private GameObject bolaVeneno;
+    [SerializeField] private GameObject deathFX;
     [SerializeField] private float danio;
     [SerializeField] private float anguloCambioVista;
     [SerializeField] private Animator anim;
@@ -25,6 +26,13 @@ public class PlantaVeneno : MonoBehaviour
 
     void Update()
     {
+        if (boss.getVida() <= 0)
+        {
+            Destroy(Instantiate(deathFX, transform.position, Quaternion.identity), 1.5f);
+            boss.PlantDestroy();
+            Destroy(this.gameObject);
+        }
+
         CalcularDireccionVista();
         anim.SetInteger("Codigo Ataque", codigoAtaque);
         if(!atacando)
@@ -76,6 +84,7 @@ public class PlantaVeneno : MonoBehaviour
     private IEnumerator Ataque(){
         ataqueDisponible = false;
         atacando = true;
+        GetComponent<AudioSource>().Play();
         GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
         bolaVenenoGenerada.SetActive(false);
         bolaVenenoGenerada.name += "Enemy";
@@ -100,6 +109,7 @@ public class PlantaVeneno : MonoBehaviour
     {
         if (collider.gameObject.layer == 14 && collider.gameObject.CompareTag("Untagged"))
         {
+            Destroy(Instantiate(deathFX, transform.position, Quaternion.identity), 1.5f);
             boss.PlantDestroy();
             Destroy(this.gameObject);
         }

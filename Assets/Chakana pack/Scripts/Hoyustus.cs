@@ -40,6 +40,7 @@ public class Hoyustus : CharactersBehaviour
 
     [Header("Audio")]
     AudioSource playerAudio;
+    [SerializeField] AudioSource jumpAudio;
     [SerializeField] AudioClip AudioWalking;
     [SerializeField] AudioClip AudioJump;
     [SerializeField] AudioClip AudioHurt;
@@ -233,7 +234,7 @@ public class Hoyustus : CharactersBehaviour
             gold = playerData.getGold();
             ataque = playerData.getAtaque();
             vida = playerData.getVida();
-            if (playerData.getVida() <= 0) vida = maxVida;
+            if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0) vida = maxVida;
             cargaHabilidadCondor = playerData.getCondor();
             cargaHabilidadSerpiente = playerData.getSerpiente();
             cargaHabilidadLanza = playerData.getLanza();
@@ -491,8 +492,7 @@ public class Hoyustus : CharactersBehaviour
             {
                 playerAudio.Stop();
                 playerAudio.loop = false;
-                playerAudio.clip = AudioJump;
-                playerAudio.Play();
+                jumpAudio.Play();
 
                 anim.Play("Saltar");
                 isJumping = true;
@@ -516,8 +516,7 @@ public class Hoyustus : CharactersBehaviour
             {
                 playerAudio.loop = false;
                 playerAudio.Stop();
-                playerAudio.clip = AudioJump;
-                playerAudio.Play();
+                jumpAudio.Play();
 
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
@@ -1125,12 +1124,12 @@ public class Hoyustus : CharactersBehaviour
     {
         lanzas[index].SetActive(true);
         atacando = true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.14f);
         atacando = false;
         playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(false);
-        anim.Play("Idel");
+        //anim.Play("Idel");
         yield return new WaitForSeconds(tiempoCooldownAtaque);
         ataqueAvailable = true;
     }
@@ -1252,7 +1251,6 @@ public class Hoyustus : CharactersBehaviour
         anim.SetBool("Resurect", true);
         yield return new WaitForSeconds(0.1f);
         anim.SetBool("Resurect", false);
-        print("resusito");
     }
 
 

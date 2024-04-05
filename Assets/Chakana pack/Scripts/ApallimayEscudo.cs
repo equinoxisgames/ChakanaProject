@@ -16,6 +16,7 @@ public class ApallimayEscudo : Apallimay
     [SerializeField] private GameObject escudo;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private GameObject goldObj;
+    [SerializeField] private GameObject shieldImpact;
     private AudioSource aud;
 
     void Start()
@@ -168,8 +169,9 @@ public class ApallimayEscudo : Apallimay
             }
             return;
         }
-        else if (collider.gameObject.layer == 11)
+        else if (collider.gameObject.layer == 14)
         {
+            Destroy(Instantiate(shieldImpact, escudo.transform.position, Quaternion.identity), 1.5f);
             return;
         }
 

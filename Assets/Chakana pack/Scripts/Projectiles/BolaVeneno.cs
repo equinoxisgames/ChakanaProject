@@ -10,6 +10,7 @@ public class BolaVeneno : MonoBehaviour
     protected float tiempoEliminacion = 5f;
     protected GameObject explosion;
     [SerializeField] private GameObject charco;
+    //[SerializeField] private GameObject explosion;
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class BolaVeneno : MonoBehaviour
         rb.WakeUp();
         rb.AddForce(new Vector3(velocityX * -direccion, velocityY, 0f), ForceMode2D.Impulse);
         this.explosion = explosion;
-        this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 15, 6, 12, "Veneno", "ExplosionEnemy");
+        this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 50, 6, 12, "Veneno", "ExplosionEnemy");
     }
 
 
@@ -101,7 +102,6 @@ public class BolaVeneno : MonoBehaviour
             tiempoEliminacion = 5;
             //GENERAR CHARCO
             StartCoroutine(GenerarCharco(transform.localPosition));
-
         }
     }
 

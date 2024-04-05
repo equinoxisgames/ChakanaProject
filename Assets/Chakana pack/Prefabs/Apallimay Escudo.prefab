@@ -155,8 +155,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.25}
-  m_Size: {x: 1.2, y: 2.5}
+  m_Offset: {x: -0.057100177, y: -0.25}
+  m_Size: {x: 1.3470008, y: 2.5}
   m_Direction: 0
 --- !u!114 &1671242022381452182
 MonoBehaviour:
@@ -172,15 +172,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 400
-  ataque: 150
-  ataqueMax: 125
+  ataque: 120
+  ataqueMax: 120
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
   counterEstados: 0
   afectacionViento: 0
   afectacionFuego: 15
-  afectacionVeneno: 0.02
+  afectacionVeneno: 0.05
   aumentoFuegoPotenciado: 1
   aumentoDanioParalizacion: 1
   invulnerable: 0
@@ -227,6 +227,7 @@ MonoBehaviour:
   escudo: {fileID: 0}
   hurtSound: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
   goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
+  shieldImpact: {fileID: 100000, guid: a4585a9f0750b8b4a80739050af7ecbc, type: 3}
 --- !u!95 &9123002084359319138
 Animator:
   serializedVersion: 5

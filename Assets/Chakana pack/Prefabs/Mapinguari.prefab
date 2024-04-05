@@ -37,6 +37,7 @@ Transform:
   - {fileID: 627248764119676890}
   - {fileID: 627248763571091568}
   - {fileID: 5691883777219537957}
+  - {fileID: 7432151030036558804}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -106,8 +107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 4000
-  ataque: 150
-  ataqueMax: 0
+  ataque: 100
+  ataqueMax: 100
   estadoViento: 0
   estadoFuego: 0
   estadoVeneno: 0
@@ -147,7 +148,7 @@ MonoBehaviour:
   persiguiendo: 0
   atacando: 0
   cambiandoPlataforma: 0
-  t1: 0.5
+  t1: 0.2
   t2: 1
   tiempoDentroRango: 0
   tiempoFueraRango: 0
@@ -160,7 +161,7 @@ MonoBehaviour:
   cuerpo: {fileID: 0}
   movementVelocity: 6
   valorAtaqueBasico: 100
-  valorAtaqueEspecial: 150
+  valorAtaqueEspecial: 200
   coolDownAtaque: 2
   bolaVeneno: {fileID: 3988393829037458745, guid: c761468e5f4db0b46ab63295081c2160, type: 3}
   nuevaPlataforma: 0
@@ -247,8 +248,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.28857422}
-  m_Size: {x: 6, y: 6.5771484}
+  m_Offset: {x: 0.39492416, y: -0.53540134}
+  m_Size: {x: 4.5848618, y: 6.083494}
   m_Direction: 0
 --- !u!82 &7218420099408483804
 AudioSource:
@@ -432,7 +433,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 3, y: 0}
+  m_Offset: {x: 3.2210693, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -443,7 +444,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10, y: 6}
+  m_Size: {x: 10.442139, y: 6}
   m_EdgeRadius: 0
 --- !u!50 &627248763571091566
 Rigidbody2D:
@@ -679,3 +680,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoyustus: {fileID: 0}
+--- !u!1 &9001816307410407393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7432151030036558804}
+  - component: {fileID: 1931922806590395940}
+  m_Layer: 3
+  m_Name: ColliderBola
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7432151030036558804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001816307410407393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 627248762632895297}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1931922806590395940
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001816307410407393}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2.2
