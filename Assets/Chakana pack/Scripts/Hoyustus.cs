@@ -1123,6 +1123,7 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator lanzaCooldown(int index)
     {
         lanzas[index].SetActive(true);
+
         atacando = true;
         yield return new WaitForSeconds(0.14f);
         atacando = false;

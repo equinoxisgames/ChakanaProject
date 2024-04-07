@@ -25,6 +25,7 @@ public class UkukuMision : MonoBehaviour
         {
             GetComponent<UkukuMision>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
+            transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 
@@ -44,15 +45,18 @@ public class UkukuMision : MonoBehaviour
 
             txt.SetActive(false);
 
-            GetComponent<UkukuMision>().enabled = false;
-            GetComponent<BoxCollider2D>().enabled = false;
-
             if (isDestroyed)
             {
-                GetComponent<SpriteRenderer>().enabled = false;
+                if(GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().enabled = false;
                 GetComponent<BoxCollider2D>().enabled = false;
                 transform.GetChild(0).gameObject.SetActive(false);
+                print("holaaa");
             }
+
+            print("holaaa2");
+
+            GetComponent<UkukuMision>().enabled = false;
+            GetComponent<BoxCollider2D>().enabled = false;
         }
 
         if (isUkukuActive)
@@ -63,6 +67,8 @@ public class UkukuMision : MonoBehaviour
                 ukukuInv.transform.GetChild(5).gameObject.SetActive(false);
                 Time.timeScale = 1;
                 GetComponent<UkukuMision>().enabled = false;
+
+                print("que paso");
             }
         }
     }

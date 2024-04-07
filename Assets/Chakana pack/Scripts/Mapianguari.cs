@@ -407,8 +407,14 @@ public class Mapianguari : Enemy
         yield return new WaitForSeconds(t2);
         atacando = false;
         iddel = false;
-        yield return new WaitForSeconds(0.5f);
+
+        yield return new WaitForSeconds(0.1f);
         ataqueDisponible = true;
+
+        if (triggerProbabilidad.Next(0, 4) == 0)
+        {
+            StartCoroutine(AtaqueDistancia());
+        }
     }
 
     private void setIddel() {
@@ -460,10 +466,25 @@ public class Mapianguari : Enemy
         }
         else {
 
-            if (totalPlants == 0)
+            if (totalPlants <= 1)
             {
                 totalPlants++;
-                Instantiate(plantaVeneno, transform.position - Vector3.up, Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+                System.Random aux = new System.Random();
+                switch (aux.Next(0, 4))
+                {
+                    case 0:
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -7), -98, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+                        break;
+                    case 1:
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -92, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+                        break;
+                    case 2:
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-59, -31), -84, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+                        break;
+                    case 3:
+                        Instantiate(plantaVeneno, new Vector3(aux.Next(-38, -10), -76, 0), Quaternion.identity).GetComponent<PlantaVeneno>().setDanio(danioPlantaVeneno, gameObject);
+                        break;
+                }
             }   
         }
         yield return new WaitForEndOfFrame();
@@ -608,11 +629,6 @@ public class Mapianguari : Enemy
         tiempoFueraRango = 0;
         ataqueDisponible = true;
         usandoAtaqueEspecial = false;
-
-        //SEGUNDA ETAPA || PROBABILIDAD DE 50% en la primera etapa
-        if (segundaEtapa || triggerProbabilidad.Next(0, 2) == 0) {
-            StartCoroutine(AtaqueDistancia());
-        }
     }
 
 

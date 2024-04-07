@@ -82,6 +82,8 @@ public class ApallimayDaga : Apallimay
                 }
             }
 
+            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
             Destroy(this.gameObject);
         }
     }
