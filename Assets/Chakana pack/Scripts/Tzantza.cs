@@ -38,6 +38,8 @@ public class Tzantza : Enemy
                 }
             }
 
+            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
             Destroy(this.gameObject);
         }      
     }
@@ -63,7 +65,6 @@ public class Tzantza : Enemy
         if (siguiendo && playable) {
             Move();
         }
-        
     }
 
 
@@ -101,7 +102,7 @@ public class Tzantza : Enemy
     {
         base.OnTriggerEnter2D(collider);
 
-        if (collider.gameObject.layer == 14 && playable)
+        if (collider.gameObject.layer == 14)
         {
             int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 

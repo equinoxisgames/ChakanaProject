@@ -61,7 +61,6 @@ public class GoldObj : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isMove = true;
-        print("hola");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

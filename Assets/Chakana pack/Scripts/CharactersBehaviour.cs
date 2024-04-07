@@ -249,7 +249,7 @@ public class CharactersBehaviour : MonoBehaviour
         if (playerMat == null) playerMat = GetComponent<SpriteRenderer>().material;
         GetComponent<SpriteRenderer>().material = receiveDmgMat;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
 
         GetComponent<SpriteRenderer>().material = playerMat;
     }

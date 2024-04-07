@@ -85,6 +85,8 @@ public class ApallimayEscudo : Apallimay
                 }
             }
 
+            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
             Destroy(this.gameObject);
         }
     }

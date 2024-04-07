@@ -63,6 +63,8 @@ public class Chontacuro1 : Enemy
             }
         }
 
+        GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
         Destroy(this.gameObject);
     }
 
@@ -251,7 +253,7 @@ public class Chontacuro1 : Enemy
     {
         base.OnTriggerEnter2D(collider);
 
-        if (collider.gameObject.layer == 14 && playable)
+        if (collider.gameObject.layer == 14)
         {
             StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
             if (collider.transform.parent != null) {

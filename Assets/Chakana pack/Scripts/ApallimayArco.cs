@@ -93,6 +93,8 @@ public class ApallimayArco : Apallimay
                 }
             }
 
+            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
             Destroy(this.gameObject);
         }
     }

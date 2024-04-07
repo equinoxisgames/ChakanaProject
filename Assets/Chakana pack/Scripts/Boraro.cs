@@ -96,6 +96,8 @@ public class Boraro : Enemy
                 }
             }
 
+            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
+
             Destroy(this.gameObject);
         }
     }

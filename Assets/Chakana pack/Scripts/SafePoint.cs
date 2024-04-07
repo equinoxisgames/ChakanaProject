@@ -10,6 +10,7 @@ public class SafePoint : MonoBehaviour
     [SerializeField] Transform pivot;
     [SerializeField] GameObject particles;
     [SerializeField] GameObject txt;
+    [SerializeField] EnemyRespawn respawn;
     [SerializeField] int spNum;
     bool isIn, isOn;
 
@@ -17,6 +18,8 @@ public class SafePoint : MonoBehaviour
 
     void Start()
     {
+        if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0) respawn.ResetEnemies();
+
         if (PlayerPrefs.GetInt("SP" + spNum) == 1)
         {
             fire.SetActive(true);
@@ -42,6 +45,7 @@ public class SafePoint : MonoBehaviour
             StartCoroutine(Timer());
 
             player.CurarCompletamente();
+            respawn.ResetEnemies();
         }
     }
 
