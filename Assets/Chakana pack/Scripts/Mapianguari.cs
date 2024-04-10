@@ -51,6 +51,8 @@ public class Mapianguari : Enemy
     [SerializeField] private float reduccionTiempoAtaqueDistancia = 0;
 
     private int totalPlants = 0;
+    [SerializeField] private AudioSource hurtAudio;
+    private bool hurtSound = false;
 
     void Start()
     {
@@ -160,6 +162,17 @@ public class Mapianguari : Enemy
         }
     }
 
+    IEnumerator HurtSound()
+    {
+        hurtSound = true;
+
+        hurtAudio.Stop();
+        hurtAudio.Play();
+
+        yield return new WaitForSeconds(0.8f);
+
+        hurtSound = false;
+    }
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
@@ -183,10 +196,11 @@ public class Mapianguari : Enemy
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
-                charAudio.loop = false;
-                charAudio.Stop();
-                charAudio.clip = audioHurt;
-                charAudio.Play();
+
+                if (!hurtSound)
+                {
+                    StartCoroutine(HurtSound());
+                }
             }
         }
         //DETECCIONS DE TRIGGERS DE OBJETOS CON LAYER EXPLOSION O ARMA_PLAYER
@@ -488,6 +502,8 @@ public class Mapianguari : Enemy
             }   
         }
         yield return new WaitForEndOfFrame();
+
+        yield return new WaitForSeconds(0.5f);
         atacando = false;
         ataqueDisponible = true;
         tiempoDentroRango = 0f;
