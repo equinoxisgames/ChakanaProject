@@ -32,7 +32,7 @@ public class GoldObj : MonoBehaviour
         {
             int e = Random.Range(1, 11);
 
-            if (e > 6)
+            if (e > 5)
             {
                 Destroy(gameObject);
             }
