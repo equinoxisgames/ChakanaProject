@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7e9eca775f2a527438f58b37282a4f92
+guid: 7567032358e68aa4baf9c2c70bc1933b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -94,28 +94,7 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
-  - name: Plataforma1
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 666
-      y: 182
-      width: 290
-      height: 204
-    spriteID: 99d64bd7cf623ea4091bc03c632d2cfa
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 666, y: 182}
-    spritePosition: {x: 661, y: 1651}
-  - name: Plataforma2
+  - name: rock1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -124,9 +103,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 651
-      height: 170
-    spriteID: 11522217841413d468185a007eb845ac
+      width: 169
+      height: 167
+    spriteID: 526d0299602037b46908181ec831cf66
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -135,8 +114,50 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 1191, y: 1142}
-  - name: Plataforma3
+    spritePosition: {x: 913, y: 771}
+  - name: rock2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 61
+      y: 179
+      width: 53
+      height: 45
+    spriteID: 80bacfd05cbce9d429dca91ec484ccfa
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 61, y: 179}
+    spritePosition: {x: 933, y: 924}
+  - name: rock3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 122
+      y: 179
+      width: 51
+      height: 38
+    spriteID: 55c3597a9d97d2d409883b1c4ab5388c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 122, y: 179}
+    spritePosition: {x: 848, y: 819}
+  - name: rock4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -144,10 +165,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 182
-      width: 654
-      height: 165
-    spriteID: 664b30472ea661548ab3b0a6a2cd779e
+      y: 179
+      width: 49
+      height: 55
+    spriteID: 35309574177e6934a866e81b77116d08
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -155,20 +176,20 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 182}
-    spritePosition: {x: 326, y: 1341}
-  - name: Plataforma4
+    uvTransform: {x: 4, y: 179}
+    spritePosition: {x: 753, y: 830}
+  - name: rock5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 663
+      x: 181
       y: 4
-      width: 305
-      height: 143
-    spriteID: dab9c1a806a4b6a4da2d55dfa1a7c068
+      width: 59
+      height: 62
+    spriteID: 4800ec92af87a7b4891c036537f104c1
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -176,8 +197,29 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 663, y: 4}
-    spritePosition: {x: 321, y: 1915}
+    uvTransform: {x: 181, y: 4}
+    spritePosition: {x: 783, y: 907}
+  - name: rock6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 181
+      y: 74
+      width: 61
+      height: 58
+    spriteID: 2c822ad684406064cb35f546ea6e6d35
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 181, y: 74}
+    spritePosition: {x: 868, y: 924}
   characterData:
     bones: []
     parts: []
@@ -212,53 +254,63 @@ ScriptedImporter:
   resliceFromLayer: 0
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: plataformas roca
-    spriteName: 
-    isGroup: 1
+  - name: rock1
+    spriteName: rock1
+    isGroup: 0
     parentIndex: -1
-    spriteID: a0fda0e5afb0462409c6f7ee96d61d30
-    layerID: 629
-    mosaicPosition: {x: 0, y: 0}
-    flatten: 0
-    isImported: 0
-    isVisible: 1
-  - name: Plataforma1
-    spriteName: Plataforma1
-    isGroup: 0
-    parentIndex: 0
-    spriteID: 99d64bd7cf623ea4091bc03c632d2cfa
-    layerID: 628
-    mosaicPosition: {x: 666, y: 182}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
-  - name: Plataforma2
-    spriteName: Plataforma2
-    isGroup: 0
-    parentIndex: 0
-    spriteID: 11522217841413d468185a007eb845ac
-    layerID: 594
+    spriteID: 526d0299602037b46908181ec831cf66
+    layerID: 11
     mosaicPosition: {x: 4, y: 4}
     flatten: 0
     isImported: 1
     isVisible: 1
-  - name: Plataforma3
-    spriteName: Plataforma3
+  - name: rock2
+    spriteName: rock2
     isGroup: 0
-    parentIndex: 0
-    spriteID: 664b30472ea661548ab3b0a6a2cd779e
-    layerID: 620
-    mosaicPosition: {x: 4, y: 182}
+    parentIndex: -1
+    spriteID: 80bacfd05cbce9d429dca91ec484ccfa
+    layerID: 12
+    mosaicPosition: {x: 61, y: 179}
     flatten: 0
     isImported: 1
     isVisible: 1
-  - name: Plataforma4
-    spriteName: Plataforma4
+  - name: rock3
+    spriteName: rock3
     isGroup: 0
-    parentIndex: 0
-    spriteID: dab9c1a806a4b6a4da2d55dfa1a7c068
-    layerID: 586
-    mosaicPosition: {x: 663, y: 4}
+    parentIndex: -1
+    spriteID: 55c3597a9d97d2d409883b1c4ab5388c
+    layerID: 13
+    mosaicPosition: {x: 122, y: 179}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: rock4
+    spriteName: rock4
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 35309574177e6934a866e81b77116d08
+    layerID: 14
+    mosaicPosition: {x: 4, y: 179}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: rock5
+    spriteName: rock5
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 4800ec92af87a7b4891c036537f104c1
+    layerID: 15
+    mosaicPosition: {x: 181, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: rock6
+    spriteName: rock6
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 2c822ad684406064cb35f546ea6e6d35
+    layerID: 16
+    mosaicPosition: {x: 181, y: 74}
     flatten: 0
     isImported: 1
     isVisible: 1

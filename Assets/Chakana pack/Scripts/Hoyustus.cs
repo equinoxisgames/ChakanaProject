@@ -234,7 +234,11 @@ public class Hoyustus : CharactersBehaviour
             gold = playerData.getGold();
             ataque = playerData.getAtaque();
             vida = playerData.getVida();
-            if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0) vida = maxVida;
+            if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0)
+            {
+                vida = maxVida;
+                print("que paso!!");
+            }
             cargaHabilidadCondor = playerData.getCondor();
             cargaHabilidadSerpiente = playerData.getSerpiente();
             cargaHabilidadLanza = playerData.getLanza();
