@@ -17,12 +17,6 @@ public class IntroMenu : MonoBehaviour
 
     private bool corutinaIniciada = false;
 
-    void Start()
-    {
-        
-
-    }
-
     private void Awake()
     {
         //Screen.fullScreen = true;
@@ -66,17 +60,6 @@ public class IntroMenu : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-
-        
-
-
-
-
-    }
     public void OpenMainMenu()
     {
         //PlayerPrefs.DeleteAll();
