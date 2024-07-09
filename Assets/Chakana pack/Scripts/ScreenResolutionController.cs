@@ -15,12 +15,6 @@ public class ScreenResolutionController : MonoBehaviour
         FindResolutions();   
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void FindResolutions()
     {
         resolutionsList = Screen.resolutions;

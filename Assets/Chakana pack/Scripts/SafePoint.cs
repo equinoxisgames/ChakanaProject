@@ -51,7 +51,7 @@ public class SafePoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag == "Player")
+        if(collision.CompareTag("Player"))
         {
             isIn = true;
             txt.SetActive(true);
@@ -62,7 +62,7 @@ public class SafePoint : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             isIn = false;
             txt.SetActive(false);
