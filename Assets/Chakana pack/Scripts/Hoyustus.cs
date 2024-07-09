@@ -267,7 +267,6 @@ public class Hoyustus : CharactersBehaviour
     void Start()
     {
         //ESTABLECER FRAME RATE
-        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
         limitY = transform.position.y + 2;
