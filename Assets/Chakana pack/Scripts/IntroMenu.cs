@@ -25,7 +25,7 @@ public class IntroMenu : MonoBehaviour
 
     private void Awake()
     {
-        Screen.fullScreen = true;
+        //Screen.fullScreen = true;
 
         //PlayerPrefs.DeleteAll();
 
