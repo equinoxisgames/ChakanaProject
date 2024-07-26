@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 1221845895638026496}
   - component: {fileID: 3291059285470159778}
   - component: {fileID: 829538042660166157}
+  - component: {fileID: 1981637147278634250}
   m_Layer: 5
   m_Name: Joy
   m_TagString: Untagged
@@ -214,6 +215,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1981637147278634250
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345880453240103269}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1632891100684196161
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +238,7 @@ GameObject:
   - component: {fileID: 3824622968988412997}
   - component: {fileID: 4981757006409150446}
   - component: {fileID: 9168966437090952515}
+  - component: {fileID: 5566659953407830704}
   m_Layer: 5
   m_Name: Key
   m_TagString: Untagged
@@ -291,6 +305,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5566659953407830704
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632891100684196161}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1985400424862511520
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +328,7 @@ GameObject:
   - component: {fileID: 1433729762613942448}
   - component: {fileID: 216592612486404068}
   - component: {fileID: 6840522691633479568}
+  - component: {fileID: 1535808288011715825}
   m_Layer: 5
   m_Name: Key
   m_TagString: Untagged
@@ -368,6 +395,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1535808288011715825
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985400424862511520}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2026969929728270412
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,6 +553,7 @@ GameObject:
   - component: {fileID: 7710459244143651179}
   - component: {fileID: 224827104920284764}
   - component: {fileID: 8010775301962892622}
+  - component: {fileID: 3472324824455944828}
   m_Layer: 5
   m_Name: Joy
   m_TagString: Untagged
@@ -579,6 +619,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &3472324824455944828
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2163539071120314119}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2207899002314920863
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +642,7 @@ GameObject:
   - component: {fileID: 8598521464259140217}
   - component: {fileID: 4676322320356914871}
   - component: {fileID: 2248690012671675690}
+  - component: {fileID: 7291478088874336881}
   m_Layer: 5
   m_Name: Key
   m_TagString: Untagged
@@ -656,6 +709,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &7291478088874336881
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2207899002314920863}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2315486147178714582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,6 +1650,25 @@ MonoBehaviour:
   snakeBar: {fileID: 3583665702027799847}
   weaponBar: {fileID: 7422934551336061921}
   goldTxt: {fileID: 2315486148451869161}
+  btnKeys:
+  - {fileID: 4780339642490341050}
+  - {fileID: 7291478088874336881}
+  - {fileID: 5566659953407830704}
+  - {fileID: 1535808288011715825}
+  btnJoys:
+  - {fileID: 8286580900070386729}
+  - {fileID: 3472324824455944828}
+  - {fileID: 6255232594437830707}
+  - {fileID: 1981637147278634250}
+  condorLiq: {fileID: 1302635804577714745}
+  snakeLiq: {fileID: 3583665702027799847}
+  weaponLiq: {fileID: 7422934551336061921}
+  colorCondor1: {r: 0.14509805, g: 0.32941177, b: 1, a: 1}
+  colorSnake1: {r: 0, g: 0.5019608, b: 0.105882354, a: 1}
+  colorWeapon1: {r: 0.5019608, g: 0.44313726, b: 0.09019608, a: 1}
+  colorCondor2: {r: 0.5849056, g: 1.3214948, b: 4, a: 1}
+  colorSnake2: {r: 0, g: 2, b: 0.42465734, a: 1}
+  colorWeapon2: {r: 2, g: 1.7656021, b: 0.36792457, a: 1}
 --- !u!1 &2315486148242772034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2578,6 +2662,7 @@ GameObject:
   - component: {fileID: 7205990729195718629}
   - component: {fileID: 5185206030939163771}
   - component: {fileID: 5451256573307760966}
+  - component: {fileID: 4780339642490341050}
   m_Layer: 5
   m_Name: Key
   m_TagString: Untagged
@@ -2644,6 +2729,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &4780339642490341050
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893959632309521833}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3470237409206121887
 GameObject:
   m_ObjectHideFlags: 0
@@ -3050,8 +3147,8 @@ MonoBehaviour:
   currentFillAmount: 0.49999967
   EDITORUpdateMaterial: 1
   instanciatedMaterial: 1
-  barColor: {r: 1, g: 0.88280106, b: 0.18396229, a: 1}
-  backgroundColor: {r: 0.1882353, g: 0.14509805, b: 0.011764706, a: 1}
+  barColor: {r: 0.5019608, g: 0.44313726, b: 0.09019608, a: 1}
+  backgroundColor: {r: 0.16862746, g: 0.13333334, b: 0.015686275, a: 0.5882353}
   resolution: 1
   spherize: 1
   rotation: 2
@@ -3157,8 +3254,8 @@ MonoBehaviour:
   currentFillAmount: 0.49999967
   EDITORUpdateMaterial: 1
   instanciatedMaterial: 1
-  barColor: {r: 0.1462264, g: 0.3303737, b: 1, a: 1}
-  backgroundColor: {r: 0.003921569, g: 0.003921569, b: 0.2, a: 1}
+  barColor: {r: 0.14509805, g: 0.32941177, b: 1, a: 1}
+  backgroundColor: {r: 0.03137255, g: 0.03137255, b: 0.21568628, a: 0.5882353}
   resolution: 1
   spherize: 1
   rotation: 2
@@ -3179,6 +3276,7 @@ GameObject:
   - component: {fileID: 8071672277980607863}
   - component: {fileID: 2725524257218595207}
   - component: {fileID: 5248444970468422084}
+  - component: {fileID: 8286580900070386729}
   m_Layer: 5
   m_Name: Joy
   m_TagString: Untagged
@@ -3244,6 +3342,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &8286580900070386729
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6644005183692771627}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7184434105498391686
 GameObject:
   m_ObjectHideFlags: 0
@@ -3475,8 +3585,8 @@ MonoBehaviour:
   currentFillAmount: 0.49999967
   EDITORUpdateMaterial: 1
   instanciatedMaterial: 1
-  barColor: {r: 0, g: 1, b: 0.21232867, a: 1}
-  backgroundColor: {r: 0.039215688, g: 0.1882353, b: 0.011764706, a: 1}
+  barColor: {r: 0, g: 0.5019608, b: 0.105882354, a: 1}
+  backgroundColor: {r: 0.03137255, g: 0.13333334, b: 0.015686275, a: 0.5882353}
   resolution: 1
   spherize: 1
   rotation: 2
@@ -3497,6 +3607,7 @@ GameObject:
   - component: {fileID: 6499582976187614690}
   - component: {fileID: 935174438621555154}
   - component: {fileID: 4188989387599408340}
+  - component: {fileID: 6255232594437830707}
   m_Layer: 5
   m_Name: Joy
   m_TagString: Untagged
@@ -3562,6 +3673,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6255232594437830707
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9102958945296900000}
+  m_Enabled: 1
+  m_Alpha: 0.5
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &9121742990859196728
 GameObject:
   m_ObjectHideFlags: 0

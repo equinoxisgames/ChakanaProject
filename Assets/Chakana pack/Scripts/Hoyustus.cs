@@ -237,7 +237,6 @@ public class Hoyustus : CharactersBehaviour
             if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0)
             {
                 vida = maxVida;
-                print("que paso!!");
             }
             cargaHabilidadCondor = playerData.getCondor();
             cargaHabilidadSerpiente = playerData.getSerpiente();

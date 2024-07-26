@@ -14,6 +14,22 @@ public class HudManager : MonoBehaviour
     [SerializeField] LiquidBar weaponBar;
     [SerializeField] Text goldTxt;
 
+    [Header ("UI_Extras")]
+    [SerializeField] List<CanvasGroup> btnKeys = new List<CanvasGroup>();
+    [SerializeField] List<CanvasGroup> btnJoys = new List<CanvasGroup>();
+
+    [SerializeField] LiquidBar condorLiq;
+    [SerializeField] LiquidBar snakeLiq;
+    [SerializeField] LiquidBar weaponLiq;
+
+    [ColorUsage(true, true)]
+    [SerializeField] Color colorCondor1, colorSnake1, colorWeapon1;
+
+    [ColorUsage(true, true)]
+    [SerializeField] Color colorCondor2, colorSnake2, colorWeapon2;
+
+    private bool manaB, condorB, snakeB, weaponB;
+
     float lifeMax;
     float life;
     float mana;
@@ -76,6 +92,7 @@ public class HudManager : MonoBehaviour
     void Update()
     {
         UpdateData();
+        MaxCharge();
     }
 
     private void UpdateData()
@@ -120,6 +137,82 @@ public class HudManager : MonoBehaviour
             weapon = player.getCargaHabilidadLanza();
 
             weaponBar.targetFillAmount = (weapon / maxValue);
+        }
+    }
+
+    private void MaxCharge()
+    {
+        if (maxValue <= mana && !manaB)
+        {
+            manaB = true;
+
+            btnJoys[0].alpha = 1;
+            btnKeys[0].alpha = 1;
+        }
+        else if(maxValue > mana && manaB)
+        {
+            manaB = false;
+
+            btnJoys[0].alpha = 0.5f;
+            btnKeys[0].alpha = 0.5f;
+        }
+
+        if (maxValue <= condor && !condorB)
+        {
+            condorB = true;
+
+            btnJoys[1].alpha = 1;
+            btnKeys[1].alpha = 1;
+
+            condorLiq.barColor = colorCondor2;
+        }
+        else if(maxValue > condor && condorB)
+        {
+            condorB = false;
+
+            btnJoys[1].alpha = 0.5f;
+            btnKeys[1].alpha = 0.5f;
+
+            condorLiq.barColor = colorCondor1;
+        }
+
+        if (maxValue <= snake && !snakeB)
+        {
+            print("aparece");
+            snakeB = true;
+
+            btnJoys[2].alpha = 1;
+            btnKeys[2].alpha = 1;
+
+            snakeLiq.barColor = colorSnake2;
+        }
+        else if(maxValue > snake && snakeB)
+        {
+            snakeB = false;
+
+            btnJoys[2].alpha = 0.5f;
+            btnKeys[2].alpha = 0.5f;
+
+            snakeLiq.barColor = colorSnake1;
+        }
+
+        if (maxValue == weapon && !weaponB)
+        {
+            weaponB = true;
+
+            btnJoys[3].alpha = 1;
+            btnKeys[3].alpha = 1;
+
+            weaponLiq.barColor = colorWeapon2;
+        }
+        else if(maxValue > weapon && weaponB)
+        {
+            weaponB = false;
+
+            btnJoys[3].alpha = 0.5f;
+            btnKeys[3].alpha = 0.5f;
+
+            weaponLiq.barColor = colorWeapon1;
         }
     }
 
