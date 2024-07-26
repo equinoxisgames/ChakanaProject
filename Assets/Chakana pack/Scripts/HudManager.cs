@@ -18,15 +18,8 @@ public class HudManager : MonoBehaviour
     [SerializeField] List<CanvasGroup> btnKeys = new List<CanvasGroup>();
     [SerializeField] List<CanvasGroup> btnJoys = new List<CanvasGroup>();
 
-    [SerializeField] LiquidBar condorLiq;
-    [SerializeField] LiquidBar snakeLiq;
-    [SerializeField] LiquidBar weaponLiq;
-
-    [ColorUsage(true, true)]
-    [SerializeField] Color colorCondor1, colorSnake1, colorWeapon1;
-
-    [ColorUsage(true, true)]
-    [SerializeField] Color colorCondor2, colorSnake2, colorWeapon2;
+    [SerializeField] List<GameObject> habIcons1 = new List<GameObject>();
+    [SerializeField] List<GameObject> habIcons2 = new List<GameObject>();
 
     private bool manaB, condorB, snakeB, weaponB;
 
@@ -164,7 +157,8 @@ public class HudManager : MonoBehaviour
             btnJoys[1].alpha = 1;
             btnKeys[1].alpha = 1;
 
-            condorLiq.barColor = colorCondor2;
+            habIcons1[0].SetActive(false);
+            habIcons2[0].SetActive(true);
         }
         else if(maxValue > condor && condorB)
         {
@@ -173,7 +167,8 @@ public class HudManager : MonoBehaviour
             btnJoys[1].alpha = 0.5f;
             btnKeys[1].alpha = 0.5f;
 
-            condorLiq.barColor = colorCondor1;
+            habIcons1[0].SetActive(true);
+            habIcons2[0].SetActive(false);
         }
 
         if (maxValue <= snake && !snakeB)
@@ -184,7 +179,8 @@ public class HudManager : MonoBehaviour
             btnJoys[2].alpha = 1;
             btnKeys[2].alpha = 1;
 
-            snakeLiq.barColor = colorSnake2;
+            habIcons1[1].SetActive(false);
+            habIcons2[1].SetActive(true);
         }
         else if(maxValue > snake && snakeB)
         {
@@ -193,7 +189,8 @@ public class HudManager : MonoBehaviour
             btnJoys[2].alpha = 0.5f;
             btnKeys[2].alpha = 0.5f;
 
-            snakeLiq.barColor = colorSnake1;
+            habIcons1[1].SetActive(true);
+            habIcons2[1].SetActive(false);
         }
 
         if (maxValue == weapon && !weaponB)
@@ -203,7 +200,8 @@ public class HudManager : MonoBehaviour
             btnJoys[3].alpha = 1;
             btnKeys[3].alpha = 1;
 
-            weaponLiq.barColor = colorWeapon2;
+            habIcons1[2].SetActive(false);
+            habIcons2[2].SetActive(true);
         }
         else if(maxValue > weapon && weaponB)
         {
@@ -212,7 +210,8 @@ public class HudManager : MonoBehaviour
             btnJoys[3].alpha = 0.5f;
             btnKeys[3].alpha = 0.5f;
 
-            weaponLiq.barColor = colorWeapon1;
+            habIcons1[2].SetActive(true);
+            habIcons2[2].SetActive(false);
         }
     }
 
