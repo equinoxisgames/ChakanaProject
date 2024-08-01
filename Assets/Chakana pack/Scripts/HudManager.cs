@@ -21,6 +21,8 @@ public class HudManager : MonoBehaviour
     [SerializeField] List<GameObject> habIcons1 = new List<GameObject>();
     [SerializeField] List<GameObject> habIcons2 = new List<GameObject>();
 
+    [SerializeField] GameObject manaEffects;
+
     private bool manaB, condorB, snakeB, weaponB;
 
     float lifeMax;
@@ -141,6 +143,8 @@ public class HudManager : MonoBehaviour
 
             btnJoys[0].alpha = 1;
             btnKeys[0].alpha = 1;
+
+            manaEffects.SetActive(true);
         }
         else if(maxValue > mana && manaB)
         {
@@ -148,6 +152,8 @@ public class HudManager : MonoBehaviour
 
             btnJoys[0].alpha = 0.5f;
             btnKeys[0].alpha = 0.5f;
+
+            manaEffects.SetActive(false);
         }
 
         if (maxValue <= condor && !condorB)
