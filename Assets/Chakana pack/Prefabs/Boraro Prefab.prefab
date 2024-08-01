@@ -98,7 +98,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1768239101035504340}
-  m_RootOrder: 13
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1926290662
 Rigidbody2D:
@@ -5310,7 +5310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 600
+  vida: 550
   ataque: 85
   ataqueMax: 85
   estadoViento: 0
@@ -5339,7 +5339,7 @@ MonoBehaviour:
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
   rangoVision: 12
   rangoAtaque: 3
-  rangoPreparacion: 2
+  rangoPreparacion: 2.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 131136
@@ -5355,7 +5355,7 @@ MonoBehaviour:
   t2: 2
   enfriamientoAtaque: 0.2
   tiempoAtaque: 0.2
-  fuerzaDesplazamientoAtaque: 15
+  fuerzaDesplazamientoAtaque: 12
   enfriamientoCombo: 0
   direction: 0
   siguiendo: 0
@@ -5364,7 +5364,7 @@ MonoBehaviour:
   visible: 1
   ataqueDisponible: 1
   entroRangoAtaque: 0
-  garras: {fileID: 0}
+  garras: {fileID: 106017626366429361}
   detectorPared: {fileID: 5295233952886841263}
   detectorPiso: {fileID: 4699220226996257333}
   cuerpo: {fileID: 0}

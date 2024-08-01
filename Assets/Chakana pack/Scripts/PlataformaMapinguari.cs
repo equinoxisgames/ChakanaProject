@@ -8,6 +8,7 @@ public class PlataformaMapinguari : MonoBehaviour
     public int plataforma;
     public float minX;
     public float maxX;
+    public Vector3 position;
     private Mapianguari boss;
     private GameObject nubeVeneno;
 
@@ -30,6 +31,7 @@ public class PlataformaMapinguari : MonoBehaviour
             boss.nuevaPlataforma = plataforma;
             boss.minX= minX;
             boss.maxX= maxX;
+            boss.positionPlat = position;
         }
     }
 

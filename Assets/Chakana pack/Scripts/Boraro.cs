@@ -51,7 +51,6 @@ public class Boraro : Enemy
         direction = transform.localScale.x;
         explosion = Resources.Load<GameObject>("Explosion");
         detectorPared = transform.GetChild(transform.childCount - 3).GameObject();
-        garras = transform.GetChild(transform.childCount - 2).GameObject();
         hoyustus = GameObject.FindGameObjectWithTag("Player");
         objetivo = transform.position;
         rangoVision += 1;
@@ -263,9 +262,10 @@ public class Boraro : Enemy
             yield return new WaitForSeconds(1);
         }
 
-        detectorPared.transform.position = hoyustus.transform.position - Vector3.right * hoyustus.transform.localScale.x * 2.5f;
+        detectorPared.transform.position = hoyustus.transform.position - Vector3.right * hoyustus.transform.localScale.x * 4f;
         objetivo = hoyustus.transform.position;
         detectorPiso.transform.position = detectorPared.transform.position + Vector3.down * 1f;
+
         if (!Physics2D.OverlapArea(detectorPared.transform.position + Vector3.left + Vector3.up,
             detectorPared.transform.position + Vector3.right + Vector3.down, pared) &&
             Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
@@ -274,7 +274,7 @@ public class Boraro : Enemy
             //CAMBIO LA ORIENTACIÓN
             //ANALIZO LA ORIENTACIÓN
             float aux = hoyustus.transform.localScale.x;
-            transform.position = objetivo - Vector3.right * aux;
+            transform.position = objetivo - Vector3.right * aux * 4;
             Aparecer();
             if (hoyustus.transform.position.x < transform.position.x)
             {
@@ -286,6 +286,8 @@ public class Boraro : Enemy
                 direction = 1;
                 transform.localScale = new Vector3(1, 1, 1);
             }
+
+            yield return new WaitForSeconds(0.5f);
 
             StartCoroutine(Ataque());
         }
@@ -306,6 +308,7 @@ public class Boraro : Enemy
         cuerpo.enabled = false;
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         foreach(GameObject g in componentesBoraro) {
+
             g.SetActive(false);
         }
     }
@@ -315,10 +318,15 @@ public class Boraro : Enemy
         visible = true;
         teletransportandose = false;
         this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
         foreach (GameObject g in componentesBoraro)
         {
-            g.SetActive(true);
+            if (g.name != "Garras")
+            {
+                g.SetActive(true);
+            }
         }
+
         rb.isKinematic = false;
         cuerpo.enabled = true;
         objetivo = detectorPared.transform.position = hoyustus.transform.position;

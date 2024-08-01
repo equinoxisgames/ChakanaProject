@@ -23,6 +23,7 @@ public class Mapianguari : Enemy
     [SerializeField] private float valorAtaqueEspecial;
     [SerializeField] private float coolDownAtaque;
     private bool segundaEtapa = false;
+    public Vector3 positionPlat = new Vector3();
 
     [SerializeField] private GameObject bolaVeneno;
     [SerializeField] public int nuevaPlataforma;
@@ -634,7 +635,7 @@ public class Mapianguari : Enemy
         plataformaActual = nuevaPlataforma;
         triggerProbabilidad = new System.Random();
         int posicionTeletransporteX = triggerProbabilidad.Next((int)minX, (int)maxX) + 1;
-        transform.position = new Vector3(posicionTeletransporteX, -99f + plataformaActual * 8.3f, 0);
+        transform.position = positionPlat;
         Destroy(Instantiate(humo, transform.position, Quaternion.identity), 1);
         yield return new WaitForSeconds(0.5f);
         //REAPARECE "SALE DE LOS ARBOLES"
@@ -660,6 +661,7 @@ public class Mapianguari : Enemy
             {
                 minX = collision.gameObject.GetComponent<PlataformaMapinguari>().minX;
                 maxX = collision.gameObject.GetComponent<PlataformaMapinguari>().maxX;
+                positionPlat = collision.gameObject.GetComponent<PlataformaMapinguari>().position;
                 plataformaActual = collision.gameObject.GetComponent<PlataformaMapinguari>().plataforma;
             }
         }

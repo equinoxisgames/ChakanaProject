@@ -32,7 +32,7 @@ public class GoldObj : MonoBehaviour
         {
             int e = Random.Range(1, 11);
 
-            if (e > 5)
+            if (e > 3)
             {
                 Destroy(gameObject);
             }
@@ -77,7 +77,7 @@ public class GoldObj : MonoBehaviour
         }
         else if(collision.tag == "Player" && heal)
         {
-            player.setCargaCuracion(25);
+            player.setCargaCuracion(35);
             StartCoroutine(Effect());
         }
     }

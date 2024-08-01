@@ -14,6 +14,17 @@ public class HudManager : MonoBehaviour
     [SerializeField] LiquidBar weaponBar;
     [SerializeField] Text goldTxt;
 
+    [Header ("UI_Extras")]
+    [SerializeField] List<CanvasGroup> btnKeys = new List<CanvasGroup>();
+    [SerializeField] List<CanvasGroup> btnJoys = new List<CanvasGroup>();
+
+    [SerializeField] List<GameObject> habIcons1 = new List<GameObject>();
+    [SerializeField] List<GameObject> habIcons2 = new List<GameObject>();
+
+    [SerializeField] GameObject manaEffects;
+
+    private bool manaB, condorB, snakeB, weaponB;
+
     float lifeMax;
     float life;
     float mana;
@@ -76,6 +87,7 @@ public class HudManager : MonoBehaviour
     void Update()
     {
         UpdateData();
+        MaxCharge();
     }
 
     private void UpdateData()
@@ -120,6 +132,92 @@ public class HudManager : MonoBehaviour
             weapon = player.getCargaHabilidadLanza();
 
             weaponBar.targetFillAmount = (weapon / maxValue);
+        }
+    }
+
+    private void MaxCharge()
+    {
+        if (maxValue <= mana && !manaB)
+        {
+            manaB = true;
+
+            btnJoys[0].alpha = 1;
+            btnKeys[0].alpha = 1;
+
+            manaEffects.SetActive(true);
+        }
+        else if(maxValue > mana && manaB)
+        {
+            manaB = false;
+
+            btnJoys[0].alpha = 0.5f;
+            btnKeys[0].alpha = 0.5f;
+
+            manaEffects.SetActive(false);
+        }
+
+        if (maxValue <= condor && !condorB)
+        {
+            condorB = true;
+
+            btnJoys[1].alpha = 1;
+            btnKeys[1].alpha = 1;
+
+            habIcons1[0].SetActive(false);
+            habIcons2[0].SetActive(true);
+        }
+        else if(maxValue > condor && condorB)
+        {
+            condorB = false;
+
+            btnJoys[1].alpha = 0.5f;
+            btnKeys[1].alpha = 0.5f;
+
+            habIcons1[0].SetActive(true);
+            habIcons2[0].SetActive(false);
+        }
+
+        if (maxValue <= snake && !snakeB)
+        {
+            print("aparece");
+            snakeB = true;
+
+            btnJoys[2].alpha = 1;
+            btnKeys[2].alpha = 1;
+
+            habIcons1[1].SetActive(false);
+            habIcons2[1].SetActive(true);
+        }
+        else if(maxValue > snake && snakeB)
+        {
+            snakeB = false;
+
+            btnJoys[2].alpha = 0.5f;
+            btnKeys[2].alpha = 0.5f;
+
+            habIcons1[1].SetActive(true);
+            habIcons2[1].SetActive(false);
+        }
+
+        if (maxValue == weapon && !weaponB)
+        {
+            weaponB = true;
+
+            btnJoys[3].alpha = 1;
+            btnKeys[3].alpha = 1;
+
+            habIcons1[2].SetActive(false);
+            habIcons2[2].SetActive(true);
+        }
+        else if(maxValue > weapon && weaponB)
+        {
+            weaponB = false;
+
+            btnJoys[3].alpha = 0.5f;
+            btnKeys[3].alpha = 0.5f;
+
+            habIcons1[2].SetActive(true);
+            habIcons2[2].SetActive(false);
         }
     }
 
