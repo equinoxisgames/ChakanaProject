@@ -7,6 +7,7 @@ public class SafePoint : MonoBehaviour
 {
 
     [SerializeField] GameObject fire;
+    [SerializeField] GameObject CheckPointOffFX;
     [SerializeField] Transform pivot;
     [SerializeField] GameObject particles;
     [SerializeField] GameObject txt;
@@ -23,6 +24,7 @@ public class SafePoint : MonoBehaviour
         if (PlayerPrefs.GetInt("SP" + spNum) == 1)
         {
             fire.SetActive(true);
+            CheckPointOffFX.SetActive(false);
         }
 
         isOn = true;
@@ -33,6 +35,7 @@ public class SafePoint : MonoBehaviour
         if(isIn && Input.GetButtonDown("Interact")&& isOn)
         {
             fire.SetActive(true);
+            CheckPointOffFX.SetActive(false);
             Destroy(Instantiate(particles, pivot), 2.5f);
 
             PlayerPrefs.SetInt("SP" + spNum, 1);
