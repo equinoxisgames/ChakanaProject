@@ -8,6 +8,7 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] string doorName;
     [SerializeField] string keyCode;
     [SerializeField] GameObject altarFX;
+    [SerializeField] GameObject altarOffFX;
     [SerializeField] GameObject txtUse;
     [SerializeField] GameObject details;
     [SerializeField] TextMeshProUGUI detailTxt;
@@ -28,6 +29,7 @@ public class ElementalAltar : MonoBehaviour
         else if (PlayerPrefs.GetInt(altarName) == 1)
         {
             altarFX.SetActive(true);
+            altarOffFX.SetActive(false);
             isOn = true;
         }
     }
@@ -37,6 +39,7 @@ public class ElementalAltar : MonoBehaviour
         if (isIn && Input.GetButtonDown("Interact"))
         {
             altarFX.SetActive(true);
+            altarOffFX.SetActive(false);
             txtUse.SetActive(false);
             
             isOn = true;
