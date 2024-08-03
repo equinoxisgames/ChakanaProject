@@ -179,7 +179,6 @@ public class HudManager : MonoBehaviour
 
         if (maxValue <= snake && !snakeB)
         {
-            print("aparece");
             snakeB = true;
 
             btnJoys[2].alpha = 1;
@@ -199,7 +198,7 @@ public class HudManager : MonoBehaviour
             habIcons2[1].SetActive(false);
         }
 
-        if (maxValue == weapon && !weaponB)
+        if (maxValue <= weapon && !weaponB)
         {
             weaponB = true;
 

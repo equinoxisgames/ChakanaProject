@@ -454,7 +454,7 @@ public class Hoyustus : CharactersBehaviour
 
     private void jump()
     {
-        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
+        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS && firstJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             if (!atacando)
@@ -496,7 +496,6 @@ public class Hoyustus : CharactersBehaviour
                 playerAudio.Stop();
                 playerAudio.loop = false;
                 jumpAudio.Play();
-
                 anim.Play("Saltar");
                 isJumping = true;
                 secondJump = false;
@@ -520,7 +519,6 @@ public class Hoyustus : CharactersBehaviour
                 playerAudio.loop = false;
                 playerAudio.Stop();
                 jumpAudio.Play();
-
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
                 rb.velocity = new Vector2(rb.velocity.x, 0);

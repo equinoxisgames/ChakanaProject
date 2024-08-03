@@ -35,8 +35,6 @@ public class LoopScenes : MonoBehaviour
         escena = SceneManager.GetActiveScene().name;
         if (escena != "14-Boss Room" && escena != "00- Main Menu 0")
         {
-            Debug.Log("Awake() Aplica DontDestroyOnLoad(this.gameObject) al objeto; escena: " + escena);
-
             DontDestroyOnLoad(this.gameObject);
         }
         else
