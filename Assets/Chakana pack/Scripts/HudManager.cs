@@ -158,7 +158,6 @@ public class HudManager : MonoBehaviour
 
         if (maxValue <= condor && !condorB)
         {
-            print("por q");
             condorB = true;
 
             btnJoys[1].alpha = 1;

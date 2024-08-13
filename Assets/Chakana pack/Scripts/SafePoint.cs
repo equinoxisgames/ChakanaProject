@@ -10,15 +10,36 @@ public class SafePoint : MonoBehaviour
     [SerializeField] GameObject CheckPointOffFX;
     [SerializeField] Transform pivot;
     [SerializeField] GameObject particles;
-    [SerializeField] GameObject txt;
+    [SerializeField] GameObject txtUse;
     [SerializeField] EnemyRespawn respawn;
     [SerializeField] int spNum;
     bool isIn, isOn;
 
+    private GameObject keyObj, joyObj;
+    private bool joystick = false;
     Hoyustus player;
 
     void Start()
     {
+        keyObj = txtUse.transform.GetChild(0).gameObject;
+        joyObj = txtUse.transform.GetChild(1).gameObject;
+
+        keyObj.SetActive(true);
+        joyObj.SetActive(false);
+
+        int joystickCount = Input.GetJoystickNames().Length;
+
+        if (joystickCount > 0)
+        {
+            if (!joystick)
+            {
+                joystick = true;
+
+                keyObj.SetActive(false);
+                joyObj.SetActive(true);
+            }
+        }
+
         if (PlayerPrefs.HasKey("respawn") && PlayerPrefs.GetInt("scenePos") == 0) respawn.ResetEnemies();
 
         if (PlayerPrefs.GetInt("SP" + spNum) == 1)
@@ -32,7 +53,30 @@ public class SafePoint : MonoBehaviour
 
     void Update()
     {
-        if(isIn && Input.GetButtonDown("Interact")&& isOn)
+        if (Input.anyKeyDown)
+        {
+            if (joystick)
+            {
+                joystick = false;
+
+                keyObj.SetActive(true);
+                joyObj.SetActive(false);
+            }
+        }
+
+        if (Input.GetButtonDown("JoystickButton") || Input.GetAxis("HorizontalJ") != 0f || Input.GetAxis("VerticalJ") != 0f)
+        {
+
+            if (!joystick)
+            {
+                joystick = true;
+
+                keyObj.SetActive(false);
+                joyObj.SetActive(true);
+            }
+        }
+
+        if (isIn && Input.GetButtonDown("Interact")&& isOn)
         {
             fire.SetActive(true);
             CheckPointOffFX.SetActive(false);
@@ -57,7 +101,7 @@ public class SafePoint : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             isIn = true;
-            txt.SetActive(true);
+            txtUse.SetActive(true);
 
             player = collision.gameObject.GetComponent<Hoyustus>();
         }
@@ -68,7 +112,7 @@ public class SafePoint : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isIn = false;
-            txt.SetActive(false);
+            txtUse.SetActive(false);
         }
     }
 

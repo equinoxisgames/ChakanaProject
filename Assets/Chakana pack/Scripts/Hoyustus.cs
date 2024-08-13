@@ -256,7 +256,7 @@ public class Hoyustus : CharactersBehaviour
             ataque *= 1.25f;
         }
 
-        if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
+        weaponEquip = true;
     }
 
     public void SavePlayerData()
