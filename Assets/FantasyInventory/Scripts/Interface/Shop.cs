@@ -185,7 +185,8 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         private void Update()
         {
-            if (Input.GetButtonDown("Jump"))
+            //if (Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Submit"))
             {
                 Buy();
             }
