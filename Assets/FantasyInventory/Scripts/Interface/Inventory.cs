@@ -60,7 +60,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
 
-            if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
 
             Bag.Initialize(ref inventory);
         }
@@ -101,7 +101,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
 
-            if (PlayerPrefs.HasKey("WeaponEquip")) inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
 
 
             Bag.Initialize(ref inventory);

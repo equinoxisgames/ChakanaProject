@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
+    [SerializeField] private string combatNum;
     [SerializeField] List<GameObject> enemies = new List<GameObject>();
     [SerializeField] Transform door1, door2;
     [SerializeField] GameObject invokeFX;
@@ -18,7 +19,7 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Awake()
     {
-        if (PlayerPrefs.HasKey("combat"))
+        if (PlayerPrefs.HasKey("combat" + combatNum))
         {
             Destroy(gameObject);
         }
@@ -28,11 +29,20 @@ public class EnemyGenerator : MonoBehaviour
     {
         destination1 = door1.position;
         originalPos1 = door1.position;
-        destination1.y -= 4.7f;
 
         destination2 = door2.position;
         originalPos2 = door2.position;
-        destination2.y -= 4.7f;
+
+        if (combatNum == "2")
+        {
+            destination1.y -= 4.7f;
+            destination2.y -= 4.7f;
+        }
+        else
+        {
+            destination1.y -= 5.2f;
+            destination2.y -= 5.2f;
+        }
     }
 
     private void LateUpdate()
@@ -84,7 +94,7 @@ public class EnemyGenerator : MonoBehaviour
 
             isMove = true;
 
-            PlayerPrefs.SetInt("combat", 1);
+            PlayerPrefs.SetInt("combat" + combatNum, 1);
 
             treasureCollect = false;
         }
@@ -130,9 +140,20 @@ public class EnemyGenerator : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        treasure.SetActive(true);
-        PlayerPrefs.SetInt("combat", 1);
+        if (combatNum == "1")
+        {
+            isMove = true;
+            isOnBattle = false;
 
-        treasureCollect = true;
+            GetComponent<AudioSource>().clip = doorAu;
+            GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            treasure.SetActive(true);
+            treasureCollect = true;
+        }
+
+        PlayerPrefs.SetInt("combat" + combatNum, 1);
     }
 }

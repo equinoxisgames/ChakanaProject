@@ -22,6 +22,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool secondJump = false;
     [SerializeField] private bool saltoEspecial = false;
     [SerializeField] private float extraSalto = 10;
+    [SerializeField] private float coyoteTime = 0.2f;
+    private float coyoteTimeCount = 0f;
     [Space(5)]
 
     [Header("Falling")]
@@ -254,7 +256,7 @@ public class Hoyustus : CharactersBehaviour
             ataque *= 1.25f;
         }
 
-        if (PlayerPrefs.HasKey("WeaponEquip")) weaponEquip = true;
+        weaponEquip = true;
     }
 
     public void SavePlayerData()
@@ -454,7 +456,7 @@ public class Hoyustus : CharactersBehaviour
 
     private void jump()
     {
-        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
+        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS && firstJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             if (!atacando)
@@ -491,12 +493,11 @@ public class Hoyustus : CharactersBehaviour
                 return;
             }
 
-            if (Input.GetButtonDown("Jump") && Grounded())
+            if (Input.GetButtonDown("Jump") && coyoteTimeCount > 0f)
             {
                 playerAudio.Stop();
                 playerAudio.loop = false;
                 jumpAudio.Play();
-
                 anim.Play("Saltar");
                 isJumping = true;
                 secondJump = false;
@@ -520,7 +521,6 @@ public class Hoyustus : CharactersBehaviour
                 playerAudio.loop = false;
                 playerAudio.Stop();
                 jumpAudio.Play();
-
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
                 rb.velocity = new Vector2(rb.velocity.x, 0);
@@ -558,6 +558,15 @@ public class Hoyustus : CharactersBehaviour
         if (playable)
         {
             jump();
+
+            if (Grounded())
+            {
+                coyoteTimeCount = coyoteTime;
+            }
+            else
+            {
+                coyoteTimeCount -= Time.deltaTime;
+            }
         }
     }
 
@@ -723,8 +732,8 @@ public class Hoyustus : CharactersBehaviour
 
         IEnumerator movimientoHabilidadLanza()
         {
-            rb.AddForce(new Vector2(transform.localScale.x * 30, 0), ForceMode2D.Impulse);
-            yield return new WaitForSeconds(0.5f);
+            rb.AddForce(new Vector2(transform.localScale.x * 40, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.35f);
             rb.velocity = Vector2.zero;
             realizandoHabilidadLanza = false;
         }

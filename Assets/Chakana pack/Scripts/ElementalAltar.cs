@@ -15,11 +15,33 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] GameObject explodeFx;
     [SerializeField] AudioClip audioComplete;
 
+    private GameObject keyObj, joyObj;
+    private bool joystick = false;
+
     private bool isIn, isOn;
     private string altarName;
 
     private void Start()
     {
+        keyObj = txtUse.transform.GetChild(0).gameObject;
+        joyObj = txtUse.transform.GetChild(1).gameObject;
+
+        keyObj.SetActive(true);
+        joyObj.SetActive(false);
+
+        int joystickCount = Input.GetJoystickNames().Length;
+
+        if (joystickCount > 0)
+        {
+            if (!joystick)
+            {
+                joystick = true;
+
+                keyObj.SetActive(false);
+                joyObj.SetActive(true);
+            }
+        }
+
         altarName = doorName + keyCode;
 
         if (!PlayerPrefs.HasKey(altarName))
@@ -50,6 +72,29 @@ public class ElementalAltar : MonoBehaviour
             int e = PlayerPrefs.GetInt(doorName) + 1;
             PlayerPrefs.SetInt(doorName, e);
             StartCoroutine(ShowDetails());
+        }
+
+        if (Input.anyKeyDown)
+        {
+            if (joystick)
+            {
+                joystick = false;
+
+                keyObj.SetActive(true);
+                joyObj.SetActive(false);
+            }
+        }
+
+        if (Input.GetButtonDown("JoystickButton") || Input.GetAxis("HorizontalJ") != 0f || Input.GetAxis("VerticalJ") != 0f)
+        {
+
+            if (!joystick)
+            {
+                joystick = true;
+
+                keyObj.SetActive(false);
+                joyObj.SetActive(true);
+            }
         }
     }
 
