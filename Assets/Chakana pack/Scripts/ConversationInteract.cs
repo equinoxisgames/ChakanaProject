@@ -151,7 +151,10 @@ public class ConversationInteract : MonoBehaviour
 
     public void EnableBtn(bool t)
     {
-        interactBtn.SetActive(t);
+        if (interactBtn != null)
+        {
+            interactBtn.SetActive(t);
+        }
     }
 
     public void CloseShop()
