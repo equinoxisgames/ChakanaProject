@@ -108,7 +108,10 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 }
             }
 
-            StartCoroutine(ResetScrollRect());
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(ResetScrollRect());
+            }
         }
 
         private IEnumerator ResetScrollRect()

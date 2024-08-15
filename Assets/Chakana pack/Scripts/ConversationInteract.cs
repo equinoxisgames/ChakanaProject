@@ -121,8 +121,23 @@ public class ConversationInteract : MonoBehaviour
     IEnumerator SelectItem()
     {
         yield return new WaitForSeconds(0.5f);
-        shopList.GetChild(0).GetComponent<Button>().Select();
+
+        if (shopList != null && shopList.childCount > 0)
+        {
+            Transform firstChild = shopList.GetChild(0);
+
+            if (firstChild != null)
+            {
+                Button button = firstChild.GetComponent<Button>();
+
+                if (button != null)
+                {
+                    button.Select();
+                }
+            }
+        }
     }
+
 
     public void StopConversation()
     {
