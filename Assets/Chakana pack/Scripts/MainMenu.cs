@@ -39,6 +39,7 @@ public class MainMenu : MonoBehaviour
 
     string escena;
     bool boolHomeMenuActive = true;
+    public bool boolDialogueMenuActive = false;
 
     public bool mouseMovido = false;
     public bool joystickIzquierdoMovido = false;
@@ -88,6 +89,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         btContinue.Select();
+        boolDialogueMenuActive = false;
 
         flagGameSaved = PlayerPrefs.GetInt("GameSaved", 0);
 
@@ -138,6 +140,8 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
+        
+
         mouseMovido = true;
 
         if (Input.GetMouseButtonDown(0))
@@ -217,18 +221,30 @@ public class MainMenu : MonoBehaviour
                 mouseMovido = false;
                 joystickIzquierdoMovido = true;
 
-                Debug.Log("El joystick izquierdo del gamepad se ha movido exclusivamente.");
+                //Debug.Log("El joystick izquierdo del gamepad se ha movido exclusivamente.");
                 // Realiza las acciones que desees cuando solo el joystick izquierdo se haya movido
             }
         }
 
-
+        
 
         Escape();
         //Inventory();
         //LocateMapScene();
 
     }
+
+    
+
+    public void OpenDialoguePanel()
+    {
+        boolDialogueMenuActive = true;
+    }
+    public void CloseDialoguePanel()
+    {
+        boolDialogueMenuActive = false;
+    }
+
     public void Inventory()
     {
 
@@ -402,7 +418,7 @@ public class MainMenu : MonoBehaviour
         {
             if (escena != "00- Main Menu 0")
             {
-                if (!pauseMenu.gameObject.activeSelf && !confirmQuitMenu.gameObject.activeSelf)
+                if (!pauseMenu.gameObject.activeSelf && !confirmQuitMenu.gameObject.activeSelf && !boolDialogueMenuActive)
                 {
                     pauseMenu.gameObject.SetActive(true);
                     btContinue.Select();
@@ -481,9 +497,13 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
+            
+
             homeMenu.gameObject.SetActive(true);
             boolHomeMenuActive = true;
             ActivateHomeMenu();
+
+           
 
         }
     }
