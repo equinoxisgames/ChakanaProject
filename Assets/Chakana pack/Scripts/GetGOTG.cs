@@ -50,6 +50,7 @@ public class GetGOTG : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
+        Cursor.visible = true;
         SceneManager.LoadSceneAsync(18);
     }
 

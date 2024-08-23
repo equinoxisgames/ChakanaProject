@@ -18,7 +18,8 @@ public class ControlManager : MonoBehaviour
 
     void Start()
     {
-        for(int i = 0; i < controlParent.Count; i++)
+        Cursor.visible = false;
+        for (int i = 0; i < controlParent.Count; i++)
         {
             keyObj.Add(controlParent[i].transform.GetChild(0).gameObject);
             joyObj.Add(controlParent[i].transform.GetChild(1).gameObject);
@@ -34,7 +35,6 @@ public class ControlManager : MonoBehaviour
             {
                 joystick = true;
                 //sliderMaster.Select();
-                Cursor.visible = false;
                 ChangeControls(false);
 
             }
@@ -44,7 +44,6 @@ public class ControlManager : MonoBehaviour
             if (joystick)
             {
                 joystick = false;
-                Cursor.visible = true;
                 ChangeControls(true);
             }
         }
@@ -63,8 +62,6 @@ public class ControlManager : MonoBehaviour
             if (joystick)
             {
                 joystick = false;
-                Cursor.visible = true;
-
                 ChangeControls(true);
             }
         }
@@ -74,7 +71,6 @@ public class ControlManager : MonoBehaviour
             if (joystick)
             {
                 joystick = false;
-                Cursor.visible = true;
                 ChangeControls(true);
             }
         }
@@ -85,7 +81,6 @@ public class ControlManager : MonoBehaviour
             {
                 joystick = true;
                 //sliderMaster.Select();
-                Cursor.visible = false;
                 ChangeControls(false);
                 
             }
