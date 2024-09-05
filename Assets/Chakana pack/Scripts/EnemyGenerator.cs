@@ -13,6 +13,8 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField] AudioClip doorAu;
     [SerializeField] AudioClip enemyAu;
 
+    [SerializeField] AudioClip combatAu;
+
     bool isOn, isMove, isOnBattle, finishSpawn, treasureCollect;
     private Vector3 destination1, destination2;
     private Vector3 originalPos1, originalPos2;
@@ -112,6 +114,8 @@ public class EnemyGenerator : MonoBehaviour
                 GetComponent<AudioSource>().clip = doorAu;
                 GetComponent<AudioSource>().Play();
 
+                
+
                 StartCoroutine(StartCombat());
 
                 isOn = true;
@@ -121,19 +125,31 @@ public class EnemyGenerator : MonoBehaviour
 
     IEnumerator StartCombat()
     {
-        for(int i = 0; i < enemies.Count; i++)
+        yield return new WaitForSeconds(1f);
+        GetComponent<AudioSource>().clip = combatAu;
+        GetComponent<AudioSource>().volume = 0.7f;
+        GetComponent<AudioSource>().Play();
+       
+
+        for (int i = 0; i < enemies.Count; i++)
         {
             yield return new WaitForSeconds(2f);
             Destroy(Instantiate(invokeFX, enemies[i].transform.position, Quaternion.identity), 2);
-            GetComponent<AudioSource>().clip = enemyAu;
-            GetComponent<AudioSource>().Play();
+            //GetComponent<AudioSource>().clip = enemyAu;
+            //GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.2f);
             enemies[i].SetActive(true);
         }
 
+       
+
         yield return new WaitForSeconds(5);
 
+       
+
         finishSpawn = true;
+
+        
     }
 
     IEnumerator StopCombat()
@@ -147,6 +163,8 @@ public class EnemyGenerator : MonoBehaviour
 
             GetComponent<AudioSource>().clip = doorAu;
             GetComponent<AudioSource>().Play();
+
+           
         }
         else
         {
