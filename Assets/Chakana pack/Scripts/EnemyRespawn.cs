@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyRespawn : MonoBehaviour
 {
     public string sceneName;
-
+    public Transform player;
     public List<GameObject> enemiesName = new List<GameObject>();
 
     private void Awake()
@@ -55,5 +55,25 @@ public class EnemyRespawn : MonoBehaviour
                 PlayerPrefs.SetInt(sceneName + i, 1);
             }
         }
+    }
+
+    public Transform GetNearEnemy()
+    {
+        float lastDistance = 400;
+        int ec = 0;
+
+        for (int i = 0; i < enemiesName.Count; i++)
+        {
+            float distance = Vector2.Distance(enemiesName[i].transform.position, player.position);
+
+            if(distance < lastDistance)
+            {
+                lastDistance = distance;
+                ec = i;
+            }
+        }
+
+        if (enemiesName.Count == 0) return null;
+        return enemiesName[ec].transform;
     }
 }
