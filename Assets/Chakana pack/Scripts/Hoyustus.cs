@@ -63,6 +63,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] AudioSource GameplayLoop;
 
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
+    [SerializeField] ParticleSystem AttackVFX = null;
+    [SerializeField] ParticleSystem Attack2VFX = null;
 
     [SerializeField] private GameObject menuMuerte;
 
@@ -1302,6 +1304,11 @@ public class Hoyustus : CharactersBehaviour
     public void PlayParticles()
     {
         ParticleTestParticleTest.Play();
+    }
+    public void PlayAttackVFX()
+    {
+        AttackVFX.Play();
+        Attack2VFX.Play();
     }
 
 }
