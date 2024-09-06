@@ -301,7 +301,7 @@ public class Mapianguari : Enemy
                 else
                 {
                     tiempoDentroRango = 0;
-                    print(distanciaPlayer);
+
                     tiempoFueraRango += Time.deltaTime;
                 }
             }

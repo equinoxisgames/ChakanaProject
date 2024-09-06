@@ -12,9 +12,20 @@ public class BolaVeneno : MonoBehaviour
     [SerializeField] private GameObject charco;
     //[SerializeField] private GameObject explosion;
 
+    EnemyRespawn respawn;
+
+    Transform target;
+    float baseProjectileSpeed = 5f;
+    float maxForceMultiplier = 10f;
+
     void Start()
     {
-        rb = this.gameObject.GetComponent<Rigidbody2D>();;
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
+
+        respawn = GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>();
+
+        if(respawn != null) target = respawn.GetNearEnemy();
+
         //rb.Sleep();
     }
 
@@ -40,8 +51,28 @@ public class BolaVeneno : MonoBehaviour
     public void AniadirFuerza(float direccion, int layer) {
         transform.gameObject.layer = layer;
         gameObject.tag = "Veneno";
+
+        if(target == null)
+        {
+            rb.WakeUp();
+            rb.AddForce(new Vector3(12f * -direccion, 12f, 0f), ForceMode2D.Impulse);
+
+            return;
+        }
+
+        float distanceToTarget = Vector2.Distance(transform.position, target.position);
+
+        Vector3 newPos = target.position;
+        newPos.y += newPos.y + distanceToTarget / 3;
+
+        Vector2 direction = (newPos - transform.position).normalized;
+
+        float forceMultiplier = Mathf.Clamp(distanceToTarget, 1f, maxForceMultiplier);
+
         rb.WakeUp();
-        rb.AddForce(new Vector3(10f * -direccion, 10f, 0f), ForceMode2D.Impulse);
+
+        Vector2 launchForce = direction * baseProjectileSpeed * forceMultiplier;
+        rb.velocity = launchForce;
     }
 
 
@@ -57,7 +88,8 @@ public class BolaVeneno : MonoBehaviour
 
 
     private IEnumerator GenerarCharco(Vector3 position) {
-        GetComponent<SpriteRenderer>().enabled = false;
+        //GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false);
         rb.velocity= Vector3.zero;
         rb.isKinematic = true;
         this.GetComponent<CircleCollider2D>().enabled = false;
@@ -78,17 +110,18 @@ public class BolaVeneno : MonoBehaviour
             Destroy(charco);
             Destroy(this.gameObject);
         }
-        else if (this.gameObject.layer == 14 && (collider.gameObject.layer == 6 || collider.gameObject.layer == 17)) {
-            tiempoEliminacion = 5;
+        else if (this.gameObject.layer == 14 && (collider.gameObject.layer == 6)) {
+            tiempoEliminacion = 2f;
             //GENERAR CHARCO
             StartCoroutine(GenerarCharco(transform.localPosition));
         }
         else if ((collider.gameObject.layer == 3 || collider.gameObject.layer == 19 || collider.gameObject.layer == 16) && transform.gameObject.layer == 14)
         {
             //GENERAR BOLA DE VENENO DESCENDENTE
-            tiempoEliminacion = 50f;
-            this.GetComponent<CircleCollider2D>().isTrigger = true;
-            rb.velocity = new Vector2(0f, 0f);
+
+            tiempoEliminacion = 2f;
+
+            StartCoroutine(GenerarCharco(transform.localPosition));
         }
     }
 
