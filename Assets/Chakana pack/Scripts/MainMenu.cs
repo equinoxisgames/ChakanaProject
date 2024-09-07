@@ -466,7 +466,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (escena != "00- Main Menu 0")
                 {
-                    Debug.Log("escena != 00 - Main Menu 0");
+                    
                 }
                 else
                 {
