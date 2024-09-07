@@ -22,9 +22,9 @@ public class BolaVeneno : MonoBehaviour
     {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
 
-        respawn = GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>();
+        //respawn = GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>();
 
-        if(respawn != null) target = respawn.GetNearEnemy();
+        //if(respawn != null) target = respawn.GetNearEnemy();
 
         //rb.Sleep();
     }
@@ -52,18 +52,14 @@ public class BolaVeneno : MonoBehaviour
         transform.gameObject.layer = layer;
         gameObject.tag = "Veneno";
 
-        if(target == null)
-        {
-            rb.WakeUp();
-            rb.AddForce(new Vector3(12f * -direccion, 12f, 0f), ForceMode2D.Impulse);
+        rb.WakeUp();
+        rb.AddForce(new Vector3(12f * -direccion, 12f, 0f), ForceMode2D.Impulse);
 
-            return;
-        }
-
-        float distanceToTarget = Vector2.Distance(transform.position, target.position);
+        /*float distanceToTarget = Vector2.Distance(transform.position, target.position);
 
         Vector3 newPos = target.position;
         newPos.y += newPos.y + distanceToTarget / 3;
+        print(newPos.y);
 
         Vector2 direction = (newPos - transform.position).normalized;
 
@@ -72,7 +68,7 @@ public class BolaVeneno : MonoBehaviour
         rb.WakeUp();
 
         Vector2 launchForce = direction * baseProjectileSpeed * forceMultiplier;
-        rb.velocity = launchForce;
+        rb.velocity = launchForce;*/
     }
 
 
