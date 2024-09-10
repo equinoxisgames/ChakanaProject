@@ -53,6 +53,11 @@ public class Mapianguari : Enemy
 
     private int totalPlants = 0;
     [SerializeField] private AudioSource hurtAudio;
+    [SerializeField] private AudioSource hurtAudio2;
+    [SerializeField] private AudioSource hurtAudio3;
+    [SerializeField] private AudioSource hurtAudio4;
+
+    private System.Random random = new System.Random();
     private bool hurtSound = false;
 
     void Start()
@@ -169,6 +174,28 @@ public class Mapianguari : Enemy
 
         hurtAudio.Stop();
         hurtAudio.Play();
+
+        // Genera un número aleatorio entre 0 y 1
+        int randomIndex = random.Next(0, 2);  // System.Random genera 0 o 1
+
+        // Detiene ambos audios antes de reproducir uno
+        hurtAudio2.Stop();
+        hurtAudio3.Stop();
+        hurtAudio4.Stop();
+
+        // Reproduce el audio aleatorio
+        if (randomIndex == 0)
+        {
+            hurtAudio2.Play();
+        }
+        else if (randomIndex == 1)
+        {
+            hurtAudio3.Play();
+        }
+        else
+        {
+            hurtAudio4.Play();
+        }
 
         yield return new WaitForSeconds(0.8f);
 
