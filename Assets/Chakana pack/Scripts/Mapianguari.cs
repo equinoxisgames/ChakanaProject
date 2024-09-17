@@ -60,6 +60,16 @@ public class Mapianguari : Enemy
     private System.Random random = new System.Random();
     private bool hurtSound = false;
 
+    //variables para el manejo de la pantalla de victoria
+
+    [SerializeField] private GameObject boss;  // Referencia al jefe
+    [SerializeField] private GameObject player;  // Referencia al jugador
+    [SerializeField] private Material silhouetteMaterial;  // Material de silueta (negro)
+    [SerializeField] private AudioSource victorySound;  // Clip de audio para la victoria
+    [SerializeField] private GameObject quadPrefab;  // Prefab del Quad negro que actuará como fondo
+    private GameObject bossSilhouette, playerSilhouette, blackBackground;
+
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -110,10 +120,64 @@ public class Mapianguari : Enemy
             isDead = true;
             GameObject.FindObjectOfType<Hoyustus>().QuitarParalisis();
             StopAllCoroutines();
+            
             StartCoroutine(Muerte());
         }
     }
 
+    IEnumerator ShowVictoryScreen()
+    {
+
+
+
+        victorySound.Stop();
+        victorySound.Play();
+
+        // 1. Desactivar los personajes originales
+        //boss.SetActive(false);
+        //player.SetActive(false);
+
+        // 2. Crear las siluetas de los personajes
+        Vector3 bossPosition = boss.transform.position;
+        Vector3 playerPosition = player.transform.position;
+
+        bossSilhouette = Instantiate(boss, bossPosition, Quaternion.identity);
+        playerSilhouette = Instantiate(player, playerPosition, Quaternion.identity);
+
+        // Asignar el material de silueta
+        bossSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
+        playerSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
+
+        // 3. Crear el Quad negro como fondo detrás de los personajes
+        // Ajustar la posición del Quad en el eje Z (detrás de los personajes)
+        blackBackground = Instantiate(quadPrefab, new Vector3(0, 0, -1), Quaternion.identity);
+        blackBackground.transform.localScale = new Vector3(500f, 300f, 0f);  // Escalar el Quad para cubrir la pantalla
+        //blackBackground.GetComponent<MeshRenderer>().material.color = Color.black;
+
+        // Colocar las siluetas en la misma posición X e Y, pero con Z ajustado a -1
+        bossSilhouette.transform.position = new Vector3(bossPosition.x, bossPosition.y, -1);
+        playerSilhouette.transform.position = new Vector3(playerPosition.x, playerPosition.y, -1);
+
+        Time.timeScale = 0;  // Pausar el tiempo si lo habías pausado antes
+        // 4. Pausa de retroalimentación
+        yield return new WaitForSecondsRealtime(0.8f);
+        Time.timeScale = 1;  // Reanudar el tiempo si lo habías pausado antes
+        yield return new WaitForSecondsRealtime(0.2f);
+        blackBackground.transform.localScale = new Vector3(0f, 0f, 0f);
+        Time.timeScale = 0;  // Pausar el tiempo si lo habías pausado antes
+        // 5. Desactivar el fondo negro y las siluetas
+        Destroy(bossSilhouette);
+        Destroy(playerSilhouette);
+        Destroy(blackBackground);
+
+        bossSilhouette.SetActive(false);
+        playerSilhouette.SetActive(false);
+        blackBackground.SetActive(false);
+        
+
+        // 6. Continuar con el juego (transición o siguiente nivel)
+        Time.timeScale = 1;  // Reanudar el tiempo si lo habías pausado antes
+    }
 
     //***************************************************************************************************
     //CORRUTINA DE MUERTE
@@ -121,6 +185,9 @@ public class Mapianguari : Enemy
     private IEnumerator Muerte() {
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        
+
+
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
         anim.enabled = true;
@@ -132,7 +199,11 @@ public class Mapianguari : Enemy
         levelController.EliminarLogicaPlataformas();
         GetComponent<SpriteRenderer>().material = playerMat;
         //TIEMPO ANIMACION DEL Boss
-        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(ShowVictoryScreen());
+
+        yield return new WaitForSeconds(5f);
+        
 
         Instantiate(gotg, transform.position, Quaternion.identity);
 
