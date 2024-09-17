@@ -197,7 +197,7 @@ public class Mapianguari : Enemy
             hurtAudio4.Play();
         }
 
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.4f);
 
         hurtSound = false;
     }
