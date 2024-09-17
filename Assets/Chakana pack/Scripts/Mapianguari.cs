@@ -128,7 +128,7 @@ public class Mapianguari : Enemy
     IEnumerator ShowVictoryScreen()
     {
 
-
+        GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibrationBossDeath();
 
         victorySound.Stop();
         victorySound.Play();

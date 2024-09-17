@@ -256,6 +256,15 @@ public class HudManager : MonoBehaviour
         }
     }
 
+    public void SetVibrationBossDeath()
+    {
+        if (!isVibration)
+        {
+            StartCoroutine(StartVibration(0.25f, 1));
+            isVibration = true;
+        }
+    }
+
     IEnumerator StartVibration(float e, float i)
     {
         int playerIndex = 0;
