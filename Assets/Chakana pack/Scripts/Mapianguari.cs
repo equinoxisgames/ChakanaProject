@@ -158,13 +158,13 @@ public class Mapianguari : Enemy
         bossSilhouette.transform.position = new Vector3(bossPosition.x, bossPosition.y, -1);
         playerSilhouette.transform.position = new Vector3(playerPosition.x, playerPosition.y, -1);
 
-        Time.timeScale = 0;  // Pausar el tiempo si lo habías pausado antes
+        Time.timeScale = 1;  // Pausar el tiempo si lo habías pausado antes
         // 4. Pausa de retroalimentación
-        yield return new WaitForSecondsRealtime(0.8f);
-        Time.timeScale = 1;  // Reanudar el tiempo si lo habías pausado antes
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 0;  // Reanudar el tiempo si lo habías pausado antes
+        yield return new WaitForSecondsRealtime(1f);
         blackBackground.transform.localScale = new Vector3(0f, 0f, 0f);
-        Time.timeScale = 0;  // Pausar el tiempo si lo habías pausado antes
+        Time.timeScale = 1;  // Pausar el tiempo si lo habías pausado antes
         // 5. Desactivar el fondo negro y las siluetas
         Destroy(bossSilhouette);
         Destroy(playerSilhouette);
