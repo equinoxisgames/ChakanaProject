@@ -1136,13 +1136,15 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     private IEnumerator lanzaCooldown(int index)
     {
-        lanzas[index].SetActive(true);
 
         atacando = true;
-        yield return new WaitForSeconds(0.14f);
+        yield return new WaitForSeconds(0.1f);
         atacando = false;
         playable = true;
         codigoAtaque = 0;
+
+        lanzas[index].SetActive(true);
+        yield return new WaitForSeconds(0.1f);
         lanzas[index].SetActive(false);
         //anim.Play("Idel");
         yield return new WaitForSeconds(tiempoCooldownAtaque);
