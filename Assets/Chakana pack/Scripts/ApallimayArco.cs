@@ -101,7 +101,7 @@ public class ApallimayArco : Apallimay
 
     private void Move() {
 
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
 
         if (transform.position.x <= limit1.x)
         {
@@ -190,7 +190,7 @@ public class ApallimayArco : Apallimay
             {
                 jugadorDetectado = true;
                 if(Grounded())
-                    rb.velocity = Vector2.zero;
+                    rb.linearVelocity = Vector2.zero;
                 speed = 0;
             }
             else {
@@ -220,7 +220,7 @@ public class ApallimayArco : Apallimay
             {
                 jugadorDetectado = true;
                 if (Grounded() && playable) {
-                    rb.velocity = Vector2.zero;
+                    rb.linearVelocity = Vector2.zero;
                 }
                 if (collider.transform.position.x <= transform.position.x)
                 {
@@ -296,7 +296,7 @@ public class ApallimayArco : Apallimay
         }
         else if(collision.gameObject.layer == 11)
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
 
         if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)

@@ -75,8 +75,8 @@
                 buoyancyEffector2D.flowAngle = waterObjectBuoyancyEffector2D.flowAngle;
                 buoyancyEffector2D.flowMagnitude = waterObjectBuoyancyEffector2D.flowMagnitude;
                 buoyancyEffector2D.flowVariation = waterObjectBuoyancyEffector2D.flowVariation;
-                buoyancyEffector2D.angularDrag = waterObjectBuoyancyEffector2D.angularDrag;
-                buoyancyEffector2D.linearDrag = waterObjectBuoyancyEffector2D.linearDrag;
+                buoyancyEffector2D.angularDamping = waterObjectBuoyancyEffector2D.angularDamping;
+                buoyancyEffector2D.linearDamping = waterObjectBuoyancyEffector2D.linearDamping;
                 buoyancyEffector2D.colliderMask = waterObjectBuoyancyEffector2D.colliderMask;
                 buoyancyEffector2D.useColliderMask = waterObjectBuoyancyEffector2D.useColliderMask;
 

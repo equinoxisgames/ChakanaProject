@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Chontacuro : MonoBehaviour
 {
     //variables
 
-    private CinemachineVirtualCamera cm;
+    private CinemachineCamera cm;
     private SpriteRenderer sp;
     private Rigidbody2D rb;
 
@@ -32,14 +32,14 @@ public class Chontacuro : MonoBehaviour
 
     private void Awake()
     {
-        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineCamera>();
         sp = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
         anim = GetComponent<Animator>();
-        anim.SetFloat("XVelocity", rb.velocity.x);
+        anim.SetFloat("XVelocity", rb.linearVelocity.x);
 
-        Debug.Log("XVelocity: "+ rb.velocity.x);
+        Debug.Log("XVelocity: "+ rb.linearVelocity.x);
     }
 
     // Start is called before the first frame update
@@ -70,12 +70,12 @@ public class Chontacuro : MonoBehaviour
 
         if (distance <= detectionRadius)
         {
-            rb.velocity = direction.normalized * movementSpeed;
+            rb.linearVelocity = direction.normalized * movementSpeed;
             ChontacuroFlip(direction.normalized.x);
             anim.SetBool("ChontacuroWalk", true);
         }
         else {
-            rb.velocity = direction.normalized * -1f;
+            rb.linearVelocity = direction.normalized * -1f;
             
            // Move();
 

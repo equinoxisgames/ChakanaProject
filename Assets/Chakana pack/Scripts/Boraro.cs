@@ -134,7 +134,7 @@ public class Boraro : Enemy
             }
             else
             {
-                rb.velocity = new Vector2(0, rb.velocity.y);
+                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
                 if (hoyustus.transform.position.x < transform.position.x)
                     transform.localScale = new Vector3(-1, 1, 1);
                 else if (hoyustus.transform.position.x > transform.position.x)
@@ -166,7 +166,7 @@ public class Boraro : Enemy
 
     void Move()
     {
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
 
         if (transform.position.x <= objetivo.x)
         {
@@ -205,7 +205,7 @@ public class Boraro : Enemy
         }
         else if (collider.gameObject.layer == 11 && collider.gameObject.CompareTag("Untagged"))
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             if (objetivo.x < transform.position.x)
                 transform.localScale = new Vector3(-1, 1, 1);
             else
@@ -303,7 +303,7 @@ public class Boraro : Enemy
 
         visible = false;
         teletransportandose = true;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.isKinematic = true;
         cuerpo.enabled = false;
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -348,14 +348,14 @@ public class Boraro : Enemy
         entroRangoAtaque = true;
         yield return new WaitForSeconds(t1);
         //ATAQUE
-        rb.velocity = new Vector2(0f, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
             if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
             {
                 /*anim.Play("BoraroIdle");
                 anim.speed = 1;*/
-                rb.velocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero;
                 atacando = false;
                 tiempoVolteo = 0;
                 yield return new WaitForSeconds(t2);
@@ -383,7 +383,7 @@ public class Boraro : Enemy
             garras.SetActive(true);
             yield return new WaitForSeconds(tiempoAtaque);
             //anim.speed = 0;
-            rb.velocity = new Vector2(0f, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             garras.SetActive(false);
             yield return new WaitForSeconds(enfriamientoAtaque);
         }

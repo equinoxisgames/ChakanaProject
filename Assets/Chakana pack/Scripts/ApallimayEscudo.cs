@@ -93,7 +93,7 @@ public class ApallimayEscudo : Apallimay
 
     private void Move()
     {
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
 
         if (transform.position.x <= limit1.x) objetivo = limit2;
         else if (transform.position.x >= limit2.x) objetivo = limit1;
@@ -117,7 +117,7 @@ public class ApallimayEscudo : Apallimay
 
     private IEnumerator Ataque(float direccionAtaque)
     {
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         playable = false;
         ataqueDisponible = false;
         //PREPARACION
@@ -129,7 +129,7 @@ public class ApallimayEscudo : Apallimay
         daga.enabled = true;
         //ATAQUE
         yield return new WaitForSeconds(0.4f);
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         daga.enabled = false;
         atacando = false;
         //DESCANSO DEL ATAQUE
@@ -143,7 +143,7 @@ public class ApallimayEscudo : Apallimay
 
     protected override void Recoil(int direccion, float fuerzaRecoil)
     {
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
         rb.AddForce(new Vector2(direccion, rb.gravityScale) * fuerzaRecoil, ForceMode2D.Impulse);
     }

@@ -1,7 +1,7 @@
 #if USE_CINEMACHINE
 using System.Collections;
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 
 namespace PixelCrushers.DialogueSystem.SequencerCommands
 {
@@ -21,7 +21,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
         protected virtual IEnumerator Start()
         {
             var vcamGO = GetSubject(0);
-            var vcam = (vcamGO != null) ? vcamGO.GetComponent<CinemachineVirtualCamera>() : null;
+            var vcam = (vcamGO != null) ? vcamGO.GetComponent<CinemachineCamera>() : null;
             var zoom = GetParameterAsFloat(1);
             var duration = GetParameterAsFloat(2, 0);
             if (vcam == null)
@@ -33,20 +33,20 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             {
                 if (DialogueDebug.LogInfo) Debug.Log("Dialogue System: Sequencer: CinemachineZoom(" + vcam + ", " + 
                     zoom + ", " + duration + ")");
-                if (vcam.m_Lens.Orthographic)
+                if (vcam.Lens.Orthographic)
                 { 
                     if (duration > 0)
                     {
-                        var originalSize = vcam.m_Lens.OrthographicSize;
+                        var originalSize = vcam.Lens.OrthographicSize;
                         float elapsed = 0;
                         while (elapsed < duration)
                         {
-                            vcam.m_Lens.OrthographicSize = Mathf.Lerp(originalSize, zoom, elapsed / duration);
+                            vcam.Lens.OrthographicSize = Mathf.Lerp(originalSize, zoom, elapsed / duration);
                             yield return null;
                             elapsed += DialogueTime.deltaTime;
                         }
                     }
-                    vcam.m_Lens.OrthographicSize = zoom;
+                    vcam.Lens.OrthographicSize = zoom;
                 }
                 else
                 {

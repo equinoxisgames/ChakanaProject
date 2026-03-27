@@ -125,7 +125,7 @@ namespace StylizedWater2
 
         public void EnableReflections()
         {
-            if (!AllowReflections || XRGraphics.enabled) return;
+            if (!AllowReflections || XRGraphicsAutomatedTests.enabled) return;
 
             RenderPipelineManager.beginCameraRendering += OnWillRenderCamera;
             ToggleMaterialReflectionSampling(true);

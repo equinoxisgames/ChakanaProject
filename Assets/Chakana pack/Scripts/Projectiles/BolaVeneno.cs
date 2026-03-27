@@ -86,7 +86,7 @@ public class BolaVeneno : MonoBehaviour
     private IEnumerator GenerarCharco(Vector3 position) {
         //GetComponent<SpriteRenderer>().enabled = false;
         transform.GetChild(0).gameObject.SetActive(false);
-        rb.velocity= Vector3.zero;
+        rb.linearVelocity= Vector3.zero;
         rb.isKinematic = true;
         this.GetComponent<CircleCollider2D>().enabled = false;
         GameObject charcoGenerado = Instantiate(charco, transform.position, Quaternion.identity);

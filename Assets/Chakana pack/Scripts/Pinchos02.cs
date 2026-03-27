@@ -36,18 +36,18 @@ public class Pinchos02 : MonoBehaviour
         if(player.getVida() <= 0)
         {
             //Instantiate(exVFX, transform.position, Quaternion.identity);
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.AddForce(Vector2.up * 12, ForceMode2D.Impulse);
         }
         else
         {
             //Instantiate(exVFX, transform.position, Quaternion.identity);
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.AddForce(Vector2.up * 12, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(0.44f);
 
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             pos.z = player.transform.position.z;
             player.transform.position = pos;
             isActive = false;

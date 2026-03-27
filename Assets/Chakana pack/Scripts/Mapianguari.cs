@@ -66,7 +66,7 @@ public class Mapianguari : Enemy
     [SerializeField] private GameObject player;  // Referencia al jugador
     [SerializeField] private Material silhouetteMaterial;  // Material de silueta (negro)
     [SerializeField] private AudioSource victorySound;  // Clip de audio para la victoria
-    [SerializeField] private GameObject quadPrefab;  // Prefab del Quad negro que actuará como fondo
+    [SerializeField] private GameObject quadPrefab;  // Prefab del Quad negro que actuarï¿½ como fondo
     private GameObject bossSilhouette, playerSilhouette, blackBackground;
 
 
@@ -148,23 +148,23 @@ public class Mapianguari : Enemy
         bossSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
         playerSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
 
-        // 3. Crear el Quad negro como fondo detrás de los personajes
-        // Ajustar la posición del Quad en el eje Z (detrás de los personajes)
+        // 3. Crear el Quad negro como fondo detrï¿½s de los personajes
+        // Ajustar la posiciï¿½n del Quad en el eje Z (detrï¿½s de los personajes)
         blackBackground = Instantiate(quadPrefab, new Vector3(0, 0, -1), Quaternion.identity);
         blackBackground.transform.localScale = new Vector3(500f, 300f, 0f);  // Escalar el Quad para cubrir la pantalla
         //blackBackground.GetComponent<MeshRenderer>().material.color = Color.black;
 
-        // Colocar las siluetas en la misma posición X e Y, pero con Z ajustado a -1
+        // Colocar las siluetas en la misma posiciï¿½n X e Y, pero con Z ajustado a -1
         bossSilhouette.transform.position = new Vector3(bossPosition.x, bossPosition.y, -1);
         playerSilhouette.transform.position = new Vector3(playerPosition.x, playerPosition.y, -1);
 
-        Time.timeScale = 1;  // Pausar el tiempo si lo habías pausado antes
-        // 4. Pausa de retroalimentación
+        Time.timeScale = 1;  // Pausar el tiempo si lo habï¿½as pausado antes
+        // 4. Pausa de retroalimentaciï¿½n
         yield return new WaitForSecondsRealtime(0.5f);
-        Time.timeScale = 0;  // Reanudar el tiempo si lo habías pausado antes
+        Time.timeScale = 0;  // Reanudar el tiempo si lo habï¿½as pausado antes
         yield return new WaitForSecondsRealtime(1f);
         blackBackground.transform.localScale = new Vector3(0f, 0f, 0f);
-        Time.timeScale = 1;  // Pausar el tiempo si lo habías pausado antes
+        Time.timeScale = 1;  // Pausar el tiempo si lo habï¿½as pausado antes
         // 5. Desactivar el fondo negro y las siluetas
         Destroy(bossSilhouette);
         Destroy(playerSilhouette);
@@ -175,8 +175,8 @@ public class Mapianguari : Enemy
         blackBackground.SetActive(false);
         
 
-        // 6. Continuar con el juego (transición o siguiente nivel)
-        Time.timeScale = 1;  // Reanudar el tiempo si lo habías pausado antes
+        // 6. Continuar con el juego (transiciï¿½n o siguiente nivel)
+        Time.timeScale = 1;  // Reanudar el tiempo si lo habï¿½as pausado antes
     }
 
     //***************************************************************************************************
@@ -246,7 +246,7 @@ public class Mapianguari : Enemy
         hurtAudio.Stop();
         hurtAudio.Play();
 
-        // Genera un número aleatorio entre 0 y 1
+        // Genera un nï¿½mero aleatorio entre 0 y 1
         int randomIndex = random.Next(0, 2);  // System.Random genera 0 o 1
 
         // Detiene ambos audios antes de reproducir uno
@@ -511,10 +511,10 @@ public class Mapianguari : Enemy
         realizandoAB = false;
         if (segundaEtapa && !((transform.position.x < minX + 3 && transform.localScale.x > 1) || (transform.position.x > maxX - 3 && transform.localScale.x < 1))) {
             rb.gravityScale = 0;
-            rb.velocity = new Vector2(12f * -transform.localScale.x, 0f);
+            rb.linearVelocity = new Vector2(12f * -transform.localScale.x, 0f);
             yield return new WaitForSeconds(0.25f);
             rb.gravityScale = 5;
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
         //DETENIMIENTO TRAS ATAQUE
         yield return new WaitForSeconds(t2);
@@ -681,7 +681,7 @@ public class Mapianguari : Enemy
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 
             //MOVIMIENTO DE EXTREMO A EXTREMO
-            this.rb.velocity = new Vector2(-35f, 0f);
+            this.rb.linearVelocity = new Vector2(-35f, 0f);
             float extraDashTime = 0f;
             if (nuevaPlataforma == 0) {
                 extraDashTime += 0.4f;
@@ -689,7 +689,7 @@ public class Mapianguari : Enemy
             yield return new WaitForSeconds(1f + extraDashTime);
 
             //DESAPARICION TRAS EMBESTIDA
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             //OCULTAMIENTO
             if (i != 3) {
                 this.gameObject.GetComponent<SpriteRenderer>().enabled = false;

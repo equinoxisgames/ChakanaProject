@@ -1,6 +1,6 @@
 #if USE_CINEMACHINE
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 
 namespace PixelCrushers.DialogueSystem.SequencerCommands
 {
