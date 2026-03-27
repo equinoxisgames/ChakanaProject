@@ -70,7 +70,7 @@ public class CharactersBehaviour : MonoBehaviour
 
         yield return new WaitForSeconds(0.4f);
         //SE DETIENE EL RECOIL
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(0.4f);
         //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
@@ -256,7 +256,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     public void SetParalisis()
     {
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         playable = false;
         aumentoDanioParalizacion = 1.5f;
         paralizadoPorAtaque = true;
@@ -474,7 +474,7 @@ public class CharactersBehaviour : MonoBehaviour
             if (combObj02 == null) combObj02 = Instantiate(combFX02, transform.position, Quaternion.identity, transform);
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoViento");
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             counterEstados = 0;
             estadoVeneno = false;
             estadoViento = false;

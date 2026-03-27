@@ -331,7 +331,7 @@ public class Hoyustus : CharactersBehaviour
         cargaHabilidades();
         TocarPared();
 
-        if (Mathf.Abs(rb.velocity.y) < 0.1f)
+        if (Mathf.Abs(rb.linearVelocity.y) < 0.1f)
             Grounded();
 
         if (transform.parent != null && !isJumping)
@@ -434,7 +434,7 @@ public class Hoyustus : CharactersBehaviour
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
-            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f)
+            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.linearVelocity.y > 0.1f)
                 return false;
 
             anim.SetBool("Grounded", true);
@@ -460,7 +460,7 @@ public class Hoyustus : CharactersBehaviour
     {
         if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS && firstJump)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
             if (!atacando)
                 anim.Play("Caer");
 
@@ -491,7 +491,7 @@ public class Hoyustus : CharactersBehaviour
                 firstJump = false;
                 isJumping = false;
                 CSTEPS = 0;
-                rb.velocity = new Vector2(rb.velocity.x, 0);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                 return;
             }
 
@@ -525,8 +525,8 @@ public class Hoyustus : CharactersBehaviour
                 jumpAudio.Play();
                 anim.Play("Doble Salto");
                 CSTEPS = 1;
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                rb.AddForce(new Vector2(0, -rb.velocity.y + fuerzaDobleSalto), ForceMode2D.Impulse);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                rb.AddForce(new Vector2(0, -rb.linearVelocity.y + fuerzaDobleSalto), ForceMode2D.Impulse);
                 isJumping = true;
                 secondJump = true;
                 limitY = transform.position.y + extraSalto;
@@ -548,7 +548,7 @@ public class Hoyustus : CharactersBehaviour
                 secondJump = false;
                 isJumping = false;
                 secondJump = false;
-                rb.velocity = new Vector2(rb.velocity.x, 0);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                 return;
             }
 
@@ -586,10 +586,10 @@ public class Hoyustus : CharactersBehaviour
             playerDie = true;
         }
 
-        anim.SetBool("Walking", rb.velocity.x != 0);
+        anim.SetBool("Walking", rb.linearVelocity.x != 0);
         anim.SetBool("Grounded", Grounded());
-        anim.SetFloat("YVelocity", rb.velocity.y);
-        anim.SetFloat("XVelocity", rb.velocity.x);
+        anim.SetFloat("YVelocity", rb.linearVelocity.y);
+        anim.SetFloat("XVelocity", rb.linearVelocity.x);
         anim.SetFloat("Vida", vida);
         anim.SetFloat("Ataque", ataque);
         anim.SetInteger("Gold", gold);
@@ -608,7 +608,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (isJumping)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             rb.gravityScale = 2f;
             rb.AddForce(new Vector2(direccion * 2.6f * fuerzaRecoil, rb.gravityScale), ForceMode2D.Impulse);
         }
@@ -722,7 +722,7 @@ public class Hoyustus : CharactersBehaviour
         atacando = true;
         codigoAtaque = 3;
         cargaHabilidadLanza = 0f;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         //ACTIVACION Y MODIFICACION DE LA LANZA
         ataque = valorAtaqueHabilidadLanza;
@@ -736,7 +736,7 @@ public class Hoyustus : CharactersBehaviour
         {
             rb.AddForce(new Vector2(transform.localScale.x * 40, 0), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.35f);
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             realizandoHabilidadLanza = false;
         }
         StartCoroutine(movimientoHabilidadLanza());
@@ -752,7 +752,7 @@ public class Hoyustus : CharactersBehaviour
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         ataque = valorAtaqueNormal;
         ataque = ataqueMax;
 
@@ -956,7 +956,7 @@ public class Hoyustus : CharactersBehaviour
         //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
         yield return new WaitForSeconds(0.5f);
 
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         this.gameObject.tag = "Untagged";
         this.gameObject.layer = 0;
         Physics2D.IgnoreLayerCollision(0, 3, true);
@@ -1000,7 +1000,7 @@ public class Hoyustus : CharactersBehaviour
 
         if (h >= -0.10 && h <= 0.10)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             isWalking = false;
             if (playerAudio.clip == AudioWalking) playerAudio.Stop();
             return;
@@ -1034,8 +1034,8 @@ public class Hoyustus : CharactersBehaviour
             }
         }
 
-        rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
-        if (rb.velocity == Vector2.zero) playerAudio.Stop();
+        rb.linearVelocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.linearVelocity.y);
+        if (rb.linearVelocity == Vector2.zero) playerAudio.Stop();
     }
 
 
@@ -1044,7 +1044,7 @@ public class Hoyustus : CharactersBehaviour
     //***************************************************************************************************
     void Falling()
     {
-        if (rb.velocity.y < 0) rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * fuerzaCaida;
+        if (rb.linearVelocity.y < 0) rb.linearVelocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * fuerzaCaida;
     }
 
 
@@ -1166,7 +1166,7 @@ public class Hoyustus : CharactersBehaviour
                 invulnerable = true;
                 playable = false;
                 dashAvailable = false;
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
                 rb.gravityScale = 0f;
                 StartCoroutine(dashCooldown());
 
@@ -1214,7 +1214,7 @@ public class Hoyustus : CharactersBehaviour
         StartCoroutine(movimientoDash());
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
         rb.gravityScale = 2;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         isDashing = false;
         playable = true;
         isJumping = false;

@@ -90,7 +90,7 @@ public class ApallimayDaga : Apallimay
 
     private void Move() {
 
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
         
         if (transform.position.x <= limit1.x) objetivo = limit2;
         else if (transform.position.x >= limit2.x) objetivo = limit1;
@@ -112,7 +112,7 @@ public class ApallimayDaga : Apallimay
 
 
     private IEnumerator Ataque(float direccionAtaque) {
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         playable = false;
         ataqueDisponible = false;
         atacando = true;
@@ -128,7 +128,7 @@ public class ApallimayDaga : Apallimay
         //ATAQUE
         //TIEMPO ANIMACION ATAQUE
         yield return new WaitForSeconds(0.4f);
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         daga.enabled = false;
         //DESCANSO DEL ATAQUE
         yield return new WaitForSeconds(t2);

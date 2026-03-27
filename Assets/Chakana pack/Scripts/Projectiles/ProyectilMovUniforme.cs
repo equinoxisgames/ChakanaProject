@@ -30,7 +30,7 @@ public class ProyectilMovUniforme : MonoBehaviour
     public void aniadirFuerza() {
         Vector2 direction = hoyustus - transform.position;
         float distance = Vector2.Distance(transform.position, hoyustus);
-        rb.velocity = direction.normalized * 20;
+        rb.linearVelocity = direction.normalized * 20;
     }
 
     public void setDanio(float danio) {

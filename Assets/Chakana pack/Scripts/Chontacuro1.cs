@@ -41,7 +41,7 @@ public class Chontacuro1 : Enemy
     }
 
     private void Falling() {
-        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
+        rb.linearVelocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
     }
 
     private void Muerte() {
@@ -89,7 +89,7 @@ public class Chontacuro1 : Enemy
         if (playable)
             Move();            
 
-        if (rb.velocity.y < 0)
+        if (rb.linearVelocity.y < 0)
             Falling();
 
         if (vida <= 0)
@@ -114,7 +114,7 @@ public class Chontacuro1 : Enemy
 
         if (siguiendo)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             speed = 0;
         }
         else
@@ -233,7 +233,7 @@ public class Chontacuro1 : Enemy
 
     private void Move()
     {
-        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
 
         if (!siguiendo) { 
             if (transform.position.x <= limit1.x) objetivo = limit2;

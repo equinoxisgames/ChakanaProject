@@ -41,7 +41,7 @@ public class Enemy : CharactersBehaviour
         }
 
         yield return new WaitForSeconds(0.2f);
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(0.2f);
         playable = true;
     }

@@ -77,7 +77,7 @@ public class Tzantza : Enemy
 
     private IEnumerator Ataque(Vector3 objetivoAtaque) {
         playable = false;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         ataqueDisponible = false;
         atacando = true;
         yield return new WaitForSeconds(t1);
@@ -161,7 +161,7 @@ public class Tzantza : Enemy
         if (collision.gameObject.CompareTag("Player"))
         {
             siguiendo = false;
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
@@ -180,10 +180,10 @@ public class Tzantza : Enemy
 
         if (Vector3.Distance(transform.position, objetivo) > distanciaMinimaJugador)
         {
-            rb.velocity = direction.normalized * speed * (1 - afectacionViento);
+            rb.linearVelocity = direction.normalized * speed * (1 - afectacionViento);
         }
         else {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
     }
 

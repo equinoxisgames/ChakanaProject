@@ -1,7 +1,7 @@
 #if USE_CINEMACHINE
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 
 namespace PixelCrushers.DialogueSystem.SequencerCommands
 {
@@ -57,16 +57,16 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                 // Handle cut:
                 var shouldIRestoreBlendMode = false;
                 var cinemachineBrain = cut ? FindObjectOfType<CinemachineBrain>() : null;
-                var previousBlendStyle = CinemachineBlendDefinition.Style.EaseInOut;
+                var previousBlendStyle = CinemachineBlendDefinition.Styles.EaseInOut;
                 var previousBlendTime = 0f;
                 if (cut && cinemachineBrain != null)
                 {
                     shouldIRestoreBlendMode = !hasRecordedBlendMode;
                     hasRecordedBlendMode = true;
-                    previousBlendStyle = cinemachineBrain.m_DefaultBlend.m_Style;
-                    previousBlendTime = cinemachineBrain.m_DefaultBlend.m_Time;
-                    cinemachineBrain.m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-                    cinemachineBrain.m_DefaultBlend.m_Time = 0;
+                    previousBlendStyle = cinemachineBrain.DefaultBlend.Style;
+                    previousBlendTime = cinemachineBrain.DefaultBlend.Time;
+                    cinemachineBrain.DefaultBlend.Style = CinemachineBlendDefinition.Styles.Cut;
+                    cinemachineBrain.DefaultBlend.Time = 0;
                     cinemachineBrain.enabled = false;
                 }
 
@@ -101,8 +101,8 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                     if (shouldIRestoreBlendMode)
                     {
                         yield return null;
-                        cinemachineBrain.m_DefaultBlend.m_Style = previousBlendStyle;
-                        cinemachineBrain.m_DefaultBlend.m_Time = previousBlendTime;
+                        cinemachineBrain.DefaultBlend.Style = previousBlendStyle;
+                        cinemachineBrain.DefaultBlend.Time = previousBlendTime;
                         hasRecordedBlendMode = false;
                     }
                 }

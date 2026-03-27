@@ -93,7 +93,7 @@
 
         private void FixedUpdate()
         {
-            Vector2 playerVelocity = _playerRigidBody.velocity;
+            Vector2 playerVelocity = _playerRigidBody.linearVelocity;
 
             playerVelocity.x = _horizontalMove;
             playerVelocity.y += _verticalMove;
@@ -104,7 +104,7 @@
                 _jump = false;
             }
 
-            _playerRigidBody.velocity = playerVelocity;
+            _playerRigidBody.linearVelocity = playerVelocity;
         }
 
         private void CheckPlayerSpriteOrientation()
