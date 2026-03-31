@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class Enemy : CharactersBehaviour
@@ -12,7 +13,9 @@ public class Enemy : CharactersBehaviour
     [SerializeField] protected LayerMask wallLayer;
     [SerializeField] protected Vector3 objetivo;
     [SerializeField] protected float speed;
-    [SerializeField] protected Animator anim;
+    protected Animator anim;
+    [SerializeField] protected GameObject healthBar;
+    protected EnemyHealthBar bar;
 
     protected virtual float OrientacionDeteccionPlayer(float playerPositionX)
     {
@@ -50,5 +53,4 @@ public class Enemy : CharactersBehaviour
     {
         anim.Play(animation);
     }
-
 }

@@ -28,6 +28,11 @@ public class ApallimayArco : Apallimay
     {
         groundDetector = transform.GetChild(3).gameObject.transform;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        vidaMax = vida;
+
+        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+        bar.SetFocus(transform);
     }
 
     void Start()
@@ -62,6 +67,8 @@ public class ApallimayArco : Apallimay
         anim.SetBool("Atacando", atacando);
         anim.SetFloat("CA1", codigoAtaque);
 
+        bar.SetHealthValue(vida / vidaMax);
+
         Muerte();
         if (Grounded()) {
             Flip();
@@ -95,6 +102,7 @@ public class ApallimayArco : Apallimay
 
             GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
 
+            Destroy(bar.gameObject);
             Destroy(this.gameObject);
         }
     }
