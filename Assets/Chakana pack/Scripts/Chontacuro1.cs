@@ -25,6 +25,10 @@ public class Chontacuro1 : Enemy
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         charAudio = GetComponent<AudioSource>();
+        vidaMax = vida;
+
+        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+        bar.SetFocus(transform);
     }
 
     void Start()
@@ -65,12 +69,15 @@ public class Chontacuro1 : Enemy
 
         GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
 
+        Destroy(bar.gameObject);
         Destroy(this.gameObject);
     }
 
 
     private void FixedUpdate()
     {
+        bar.SetHealthValue(vida / vidaMax);
+
         if (playable)
         {
             DetectarPiso();
