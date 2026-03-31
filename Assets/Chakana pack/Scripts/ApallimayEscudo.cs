@@ -40,6 +40,9 @@ public class ApallimayEscudo : Apallimay
         rangoPreparacion += 1;
         rangoAtaque += 1;
         aud = GetComponent<AudioSource>();
+
+        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+        bar.SetFocus(transform);
     }
 
 
@@ -47,6 +50,8 @@ public class ApallimayEscudo : Apallimay
     {
         anim.SetBool("Atacando", atacando);
         anim.SetBool("Playable", playable);
+
+        bar.SetHealthValue(vida / vidaMax);
 
         Muerte();
         if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
@@ -87,6 +92,7 @@ public class ApallimayEscudo : Apallimay
 
             GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
 
+            Destroy(bar.gameObject);
             Destroy(this.gameObject);
         }
     }

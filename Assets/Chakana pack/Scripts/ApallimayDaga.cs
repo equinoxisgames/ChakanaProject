@@ -39,6 +39,10 @@ public class ApallimayDaga : Apallimay
         rangoAtaque += 1;
         ataqueDisponible = true;
         aud = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
+
+        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+        bar.SetFocus(transform);
     }
 
 
@@ -46,7 +50,10 @@ public class ApallimayDaga : Apallimay
     {
         anim.SetBool("Atacando", atacando);
         Muerte();
-        if(Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
+
+        bar.SetHealthValue(vida / vidaMax);
+
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
             wallDetector.position + Vector3.down * 0.5f,wallLayer) && playable)
             DetectarPared();
         if (Grounded() && playable) {
@@ -84,6 +91,7 @@ public class ApallimayDaga : Apallimay
 
             GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
 
+            Destroy(bar.gameObject);
             Destroy(this.gameObject);
         }
     }
