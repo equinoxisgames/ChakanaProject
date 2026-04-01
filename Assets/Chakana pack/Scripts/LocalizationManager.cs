@@ -30,6 +30,10 @@ public class LocalizationManager : MonoBehaviour
     [Tooltip("Texto TextMeshPro donde se mostrará el idioma activo.")]
     [SerializeField] private TextMeshProUGUI languageDisplayText;
 
+    public TextMeshProUGUI txtButtonContinueNormal;
+    public TextMeshProUGUI txtButtonContinueHighL;
+    public Button btNewGame;
+
     // Si no usas TextMeshPro, descomenta la siguiente línea y comenta la de arriba:
     // [SerializeField] private Text languageDisplayText;
 
@@ -244,6 +248,7 @@ public class LocalizationManager : MonoBehaviour
     {
         SaveLanguage(code);
         ApplyLanguageByCode(code);
+        //ValidateNewGameLocalizationText();
     }
 
     /// <summary>
@@ -265,5 +270,30 @@ public class LocalizationManager : MonoBehaviour
         PlayerPrefs.DeleteKey(LANGUAGE_PREF_KEY);
         Debug.Log("[LocalizationManager] Preferencia de idioma eliminada. Detectando idioma del sistema...");
         DetectAndSaveSystemLanguage();
+    }
+
+    public void ValidateNewGameLocalizationText()
+    {
+        int flagGameSaved = 0;
+        flagGameSaved = PlayerPrefs.GetInt("GameSaved", 0);
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> flagGameSaved: {flagGameSaved}");
+
+
+        string language = PlayerPrefs.GetString("SelectedLanguage", "en");
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> SelectedLanguage: '{language}'");
+
+        string continueText = language == "es" ? "CONTINUAR" : "CONTINUE";
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> continueText resuelto: '{continueText}'");
+
+        txtButtonContinueNormal.text = continueText;
+        txtButtonContinueHighL.text = continueText;
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> Textos actualizados en UI.");
+
+        btNewGame.gameObject.SetActive(true);
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> btNewGame activado.");
+
+
+        Debug.Log($"<b>[ValidateNewGameLocalizationText]</b> flagGameSaved es 0, no se modifica la UI.");
+
     }
 }

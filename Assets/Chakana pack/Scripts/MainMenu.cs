@@ -93,11 +93,21 @@ public class MainMenu : MonoBehaviour
 
         flagGameSaved = PlayerPrefs.GetInt("GameSaved", 0);
 
+        //if (flagGameSaved == 1 && escena == "00- Main Menu 0")
+        //{
+        //    txtButtonContinueNormal.text = "CONTINUE";
+        //    txtButtonContinueHighL.text = "CONTINUE";
+
+        //    btNewGame.gameObject.SetActive(true);
+        //}
+
         if (flagGameSaved == 1 && escena == "00- Main Menu 0")
         {
-            txtButtonContinueNormal.text = "CONTINUE";
-            txtButtonContinueHighL.text = "CONTINUE";
+            string language = PlayerPrefs.GetString("SelectedLanguage", "en");
+            string continueText = language == "es" ? "CONTINUAR" : "CONTINUE";
 
+            txtButtonContinueNormal.text = continueText;
+            txtButtonContinueHighL.text = continueText;
             btNewGame.gameObject.SetActive(true);
         }
 
@@ -140,7 +150,17 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        
+
+        if (flagGameSaved == 1 && escena == "00- Main Menu 0")
+        {
+            string language = PlayerPrefs.GetString("SelectedLanguage", "en");
+            string continueText = language == "es" ? "CONTINUAR" : "CONTINUE";
+
+            txtButtonContinueNormal.text = continueText;
+            txtButtonContinueHighL.text = continueText;
+            btNewGame.gameObject.SetActive(true);
+        }
+
 
         mouseMovido = true;
 
