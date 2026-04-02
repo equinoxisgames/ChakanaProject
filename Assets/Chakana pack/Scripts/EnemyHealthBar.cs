@@ -75,7 +75,6 @@ public class EnemyHealthBar : MonoBehaviour
             healtBar.fillAmount = e;
 
             // Mostramos el fondo y reiniciamos el temporizador
-            print("por q" + healtBar.fillAmount + " " + e);
             MostrarBarra();
             temporizadorOcultar = tiempoVisible;
         }

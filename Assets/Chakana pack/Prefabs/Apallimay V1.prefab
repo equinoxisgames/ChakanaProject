@@ -292,8 +292,8 @@ MonoBehaviour:
   damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
   fuerzaRecoil: 2
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
-  rangoVision: 10
-  rangoAtaque: 1.5
+  rangoVision: 15
+  rangoAtaque: 3.5
   rangoPreparacion: 1.5
   groundLayer:
     serializedVersion: 2
@@ -308,16 +308,15 @@ MonoBehaviour:
   wallDetector: {fileID: 0}
   distanciaPlayer: 0
   ataqueDisponible: 0
-  atacando: 0
-  siguiendo: 0
-  limit1: {x: 0, y: 0, z: 0}
-  limit2: {x: 0, y: 0, z: 0}
-  direction: 1
-  posY: 0
-  daga: {fileID: 0}
-  cooldownAtaque: 1.5
-  t1: 0.3
-  t2: 0.4
+  estadoActual: 0
+  speedIdle: 8.5
+  speedChase: 10
+  speedFlee: 7
+  tiempoPreparacion: 0.2
+  tiempoDescansoAtaque: 0.2
+  cooldownAtaque: 0.5
+  fuerzaImpulsoAtaque: 10
+  daga: {fileID: 8680837175859667481}
   hurtSound: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
   attackSound: {fileID: 8300000, guid: db90f94e3dfd1bf469b022d0e0dcfe2c, type: 3}
   goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
@@ -382,8 +381,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.14053434, y: -0.25}
-  m_Size: {x: 1.2108103, y: 2.5}
+  m_Offset: {x: 0, y: -0.3}
+  m_Size: {x: 1.25, y: 2.5}
   m_Direction: 0
 --- !u!212 &3388880203931149885
 SpriteRenderer:
@@ -660,7 +659,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1.2514672}
+  m_Offset: {x: 0, y: 1.2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -670,5 +669,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 20, y: 5.4970655}
+  m_Size: {x: 20, y: 5.5}
   m_EdgeRadius: 0

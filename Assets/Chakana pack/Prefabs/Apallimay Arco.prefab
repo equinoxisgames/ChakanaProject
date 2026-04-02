@@ -78,37 +78,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 40, y: 20}
   m_EdgeRadius: 0
---- !u!1 &171205522654622230
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5851274737754425580}
-  m_Layer: 0
-  m_Name: Limit 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5851274737754425580
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171205522654622230}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.47, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8059498668322056468}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1358139068768279747
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +114,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8121405141560141104}
-  - {fileID: 5851274737754425580}
   - {fileID: 854937195}
   - {fileID: 399219049880165367}
   m_Father: {fileID: 0}
@@ -190,9 +158,9 @@ MonoBehaviour:
   damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
   fuerzaRecoil: 0
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
-  rangoVision: 0
-  rangoAtaque: 0
-  rangoPreparacion: 0
+  rangoVision: 20
+  rangoAtaque: 20
+  rangoPreparacion: 20
   groundLayer:
     serializedVersion: 2
     m_Bits: 131136
@@ -206,24 +174,14 @@ MonoBehaviour:
   wallDetector: {fileID: 0}
   distanciaPlayer: 0
   ataqueDisponible: 0
-  rangoAtaqueEspecial: 3
-  cooldownAtaqueEspecial: 5
-  cooldownDisparoFlechas: 1
-  normalSpeed: 0
-  ataqueEspecialDisponible: 1
+  estadoActual: 0
+  cooldownCambioMirada: 3
   flecha: {fileID: 8113373987107829549, guid: ef78fa7e08bf65248bb1631d875663d2, type: 3}
-  vientoFX02: {fileID: 9083388726327727002, guid: c219890fb55af17448280b64bc94b579, type: 3}
-  atacando: 0
-  limit1: {x: 0, y: 0, z: 0}
-  limit2: {x: 0, y: 0, z: 0}
-  jugadorDetectado: 0
-  direction: 1
-  posY: 0
-  realizandoAtaqueEspecial: 0
-  hoyustus: {fileID: 0}
-  codigoAtaque: 0
+  cooldownDisparoFlechas: 2.5
+  puntoTeletransporte: {fileID: 8121405141560141104}
+  dropObj: {fileID: 6756394103562637179, guid: edacec1dcb57ecb4fbf82e0b98572c0b, type: 3}
+  humoFX: {fileID: 1587515840449148115, guid: 26e68c9f66dc8cc47bb59a5241640ea9, type: 3}
   hurtSound: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
-  goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
 --- !u!50 &2751620291725323903
 Rigidbody2D:
   serializedVersion: 5
@@ -507,7 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8121405141560141104}
   m_Layer: 0
-  m_Name: Limit 1
+  m_Name: Tp
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -522,7 +480,7 @@ Transform:
   m_GameObject: {fileID: 7044487949952634384}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

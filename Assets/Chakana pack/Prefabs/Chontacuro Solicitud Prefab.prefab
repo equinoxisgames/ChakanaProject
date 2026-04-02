@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &99506108735929779
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7357335557707845225}
-  m_Layer: 3
-  m_Name: Limit1
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7357335557707845225
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 99506108735929779}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.36, y: 0.17, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7165638828952281755}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1178925489640933548
 GameObject:
   m_ObjectHideFlags: 0
@@ -20003,37 +19972,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!1 &5319600761641532664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6687784361098022329}
-  m_Layer: 3
-  m_Name: Limit2
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!4 &6687784361098022329
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5319600761641532664}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.6, y: 0.13, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7165638828952281755}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5896998056373328120
 GameObject:
   m_ObjectHideFlags: 0
@@ -25082,8 +25020,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7357335557707845225}
-  - {fileID: 6687784361098022329}
   - {fileID: 5751967806101383462}
   - {fileID: 3860695121173351583}
   - {fileID: 7165638829690821465}
@@ -25145,14 +25081,10 @@ MonoBehaviour:
   speed: 0
   healthBar: {fileID: 5556671023797495195, guid: 66b4714c4fdbc04419e927ef54ff0420, type: 3}
   movementSpeed: 2
-  seguimientoSpeed: 4.8
-  direction: 0
-  siguiendo: 0
-  limit1: {x: 0, y: 0, z: 0}
-  limit2: {x: 0, y: 0, z: 0}
-  posY: 0
   groundDetector: {fileID: 4086364227226373197}
   wallDetector: {fileID: 6215895332146038802}
+  radioDeteccion: 0.3
+  tiempoAturdimiento: 0.4
   audioHurt: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
   goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
 --- !u!50 &7165638828952281732
