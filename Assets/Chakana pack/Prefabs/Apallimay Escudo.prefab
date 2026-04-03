@@ -84,8 +84,8 @@ MonoBehaviour:
   damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
   fuerzaRecoil: 3
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
-  rangoVision: 10
-  rangoAtaque: 1.5
+  rangoVision: 20
+  rangoAtaque: 2.5
   rangoPreparacion: 1.5
   groundLayer:
     serializedVersion: 2
@@ -94,26 +94,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   objetivo: {x: 0, y: 0, z: 0}
-  speed: 4
+  speed: 7
   healthBar: {fileID: 5556671023797495195, guid: 66b4714c4fdbc04419e927ef54ff0420, type: 3}
   groundDetector: {fileID: 8529676781732042558}
   wallDetector: {fileID: 6293307691400626687}
   distanciaPlayer: 0
   ataqueDisponible: 0
+  estadoActual: 0
+  rangoAtaqueMeele: 3
+  cooldownCambioMirada: 3
+  tiempoCaminarAtras: 2
+  t1: 0.4
+  t2: 2.5
+  cooldownAtaque: 3
+  backWalk: 0
   atacando: 0
-  siguiendo: 0
-  limit1: {x: 0, y: 0, z: 0}
-  limit2: {x: 0, y: 0, z: 0}
-  direction: 1
-  posY: 0
-  daga: {fileID: 0}
-  cooldownAtaque: 2
-  t1: 0.6
-  t2: 1.5
-  escudo: {fileID: 0}
+  daga: {fileID: 7398452362810188897}
+  escudo: {fileID: 6787275540869854148}
+  shieldImpact: {fileID: 100000, guid: a4585a9f0750b8b4a80739050af7ecbc, type: 3}
   hurtSound: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
   goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
-  shieldImpact: {fileID: 100000, guid: a4585a9f0750b8b4a80739050af7ecbc, type: 3}
 --- !u!212 &358327951426089632
 SpriteRenderer:
   serializedVersion: 2
