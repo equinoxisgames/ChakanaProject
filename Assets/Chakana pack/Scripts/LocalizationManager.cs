@@ -80,6 +80,7 @@ public class LocalizationManager : MonoBehaviour
             // Si existe, lo recuperamos y lo aplicamos.
             string savedCode = PlayerPrefs.GetString(LANGUAGE_PREF_KEY);
             Debug.Log($"[LocalizationManager] Idioma guardado encontrado: {savedCode}");
+            Debug.Log($"[LocalizationManager] Player Pref: {LANGUAGE_PREF_KEY}");
             ApplyLanguageByCode(savedCode);
         }
         else

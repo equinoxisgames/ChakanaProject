@@ -632,6 +632,8 @@ public class MainMenu : MonoBehaviour
             float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
             float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
             int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
+            string code = PlayerPrefs.GetString("SelectedLanguage","en");
+
 
 
             PlayerPrefs.DeleteAll();
@@ -640,6 +642,7 @@ public class MainMenu : MonoBehaviour
             PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
             PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
             PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
+            PlayerPrefs.SetString("SelectedLanguage", code);
 
             StartCoroutine(LoadAsyncScene(17));
         }
@@ -665,7 +668,9 @@ public class MainMenu : MonoBehaviour
         float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
         int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
-       
+        string code = PlayerPrefs.GetString("SelectedLanguage", "en");
+
+
 
         PlayerPrefs.DeleteAll();
 
@@ -673,7 +678,8 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetFloat("MusicAudioKeyValue", valorMusicAudioKeyValue);
         PlayerPrefs.SetFloat("SFXAudioKeyValue", valorSFXAudioKeyValue);
         PlayerPrefs.SetInt("FullScreenKeyValue", valorFullScreenKeyValue);
-        
+        PlayerPrefs.SetString("SelectedLanguage", code);
+
 
 
         loadPanel.SetActive(true);
