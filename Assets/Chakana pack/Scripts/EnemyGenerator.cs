@@ -109,6 +109,14 @@ public class EnemyGenerator : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // Si se destruye este GameObject (cambio de escena) mientras hay un fade activo,
+        // cancela la coroutine y restaura la música de fondo de inmediato
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CancelFadeAndRestoreBackground();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -159,7 +167,7 @@ public class EnemyGenerator : MonoBehaviour
         if (MusicManager.Instance != null)
             MusicManager.Instance.CrossfadeToBackground(combatMusicSource);
         else
-            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null.");
+            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null");
 
         if (combatNum == "1")
         {

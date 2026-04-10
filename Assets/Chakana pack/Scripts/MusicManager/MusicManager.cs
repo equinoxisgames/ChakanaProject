@@ -7,7 +7,7 @@ public class MusicManager : MonoBehaviour
 
     [SerializeField] private AudioClip backgroundClip;
     [SerializeField] private float fadeDuration = 1.5f;
-    [SerializeField] [Range(0f, 1f)] private float backgroundVolume = 0.5f; // ajusta este valor en el inspector
+    [SerializeField] [Range(0f, 1f)] private float backgroundVolume = 0.5f;
 
     private AudioSource backgroundMusicSource;
     private Coroutine activeFadeCoroutine;
@@ -29,6 +29,7 @@ public class MusicManager : MonoBehaviour
 
         if (backgroundClip != null)
         {
+
             backgroundMusicSource.clip = backgroundClip;
             backgroundMusicSource.loop = true;
             backgroundMusicSource.volume = backgroundVolume;
@@ -61,16 +62,34 @@ public class MusicManager : MonoBehaviour
                 fadeOut: combatSource,
                 fadeIn: backgroundMusicSource,
                 clipToPlay: null,
-                targetVolumeIn: backgroundVolume  // restaura al volumen original, no a 1f
+                targetVolumeIn: backgroundVolume
             )
         );
+    }
+
+    /// <summary>
+    /// Cancela cualquier fade en curso y restaura la música de fondo de inmediato.
+    /// Llamar al cambiar de escena para evitar que una coroutine acceda a
+    /// AudioSources ya destruidos.
+    /// </summary>
+    public void CancelFadeAndRestoreBackground()
+    {
+        if (activeFadeCoroutine != null)
+        {
+            StopCoroutine(activeFadeCoroutine);
+            activeFadeCoroutine = null;
+        }
+
+        backgroundMusicSource.volume = backgroundVolume;
+
+        if (!backgroundMusicSource.isPlaying)
+            backgroundMusicSource.UnPause();
     }
 
     private IEnumerator CrossfadeRoutine(AudioSource fadeOut, AudioSource fadeIn,
                                          AudioClip clipToPlay, float targetVolumeIn)
     {
         float startVolumeOut = fadeOut.volume;
-        float startVolumeIn = fadeIn.volume;
         float elapsed = 0f;
 
         if (clipToPlay != null)
@@ -89,6 +108,22 @@ public class MusicManager : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
+            // Si el AudioSource externo fue destruido (cambio de escena), aborta limpiamente
+            if (fadeOut != backgroundMusicSource && !fadeOut)
+            {
+                backgroundMusicSource.volume = backgroundVolume;
+                if (!backgroundMusicSource.isPlaying)
+                    backgroundMusicSource.UnPause();
+                activeFadeCoroutine = null;
+                yield break;
+            }
+
+            if (fadeIn != backgroundMusicSource && !fadeIn)
+            {
+                activeFadeCoroutine = null;
+                yield break;
+            }
+
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / fadeDuration);
 
@@ -101,7 +136,7 @@ public class MusicManager : MonoBehaviour
         fadeOut.volume = 0f;
         fadeIn.volume = targetVolumeIn;
 
-        fadeOut.Pause();
+        if (fadeOut) fadeOut.Pause();
 
         activeFadeCoroutine = null;
     }
