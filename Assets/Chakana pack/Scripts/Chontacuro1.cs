@@ -4,16 +4,8 @@ using UnityEngine;
 public class Chontacuro1 : Enemy
 {
     [Header("Configuración de Patrulla")]
-    [SerializeField] public float movementSpeed = 2f;
+    [SerializeField] public float speed = 2f;
     private int direction = 1;
-
-    [Header("Detección de Entorno")]
-    [Tooltip("Objeto vacío posicionado frente y debajo del gusano")]
-    [SerializeField] private Transform groundDetector;
-    [Tooltip("Objeto vacío posicionado justo en la 'nariz' del gusano")]
-    [SerializeField] private Transform wallDetector;
-    [Tooltip("Radio de detección para paredes y bordes")]
-    [SerializeField] private float radioDeteccion = 0.1f;
 
     [Header("Estado de Combate")]
     [SerializeField] private float tiempoAturdimiento = 0.4f;
@@ -31,6 +23,7 @@ public class Chontacuro1 : Enemy
         anim = GetComponent<Animator>();
         charAudio = GetComponent<AudioSource>();
         vidaMax = vida;
+        flash = GetComponent<DamageFlash>();
 
         if (healthBar != null)
         {
@@ -43,7 +36,6 @@ public class Chontacuro1 : Enemy
     {
         fuerzaRecoil = 1;
         explosionInvulnerable = "ExplosionEnemy";
-        speed = movementSpeed;
         layerObject = transform.gameObject.layer;
 
         // Asignamos la orientación inicial basada en la escala del prefab
@@ -81,11 +73,11 @@ public class Chontacuro1 : Enemy
     private void DetectarEntorno()
     {
         // 1. Detección de precipicio: Si el detector de suelo NO toca la capa groundLayer
-        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, radioDeteccion, groundLayer);
+        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, 0.3f, groundLayer);
 
         // 2. Detección de pared: Si el detector frontal SÍ toca una pared o el suelo frente a él
-        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, radioDeteccion, wallLayer) ||
-                          Physics2D.OverlapCircle(wallDetector.position, radioDeteccion, groundLayer);
+        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, 0.3f, wallLayer) ||
+                          Physics2D.OverlapCircle(wallDetector.position, 0.3f, groundLayer);
 
         // Si se acaba el piso o hay un muro, se da la vuelta
         if (!haySuelo || chocaPared)

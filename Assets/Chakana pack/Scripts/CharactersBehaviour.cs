@@ -34,16 +34,14 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject fuegoFX;
     [SerializeField] protected GameObject venenoFX;
     [SerializeField] protected GameObject recieveDmgFX;
-    [SerializeField] protected Material receiveDmgMat;
 
     [SerializeField] protected GameObject explosion;
     [SerializeField] protected GameObject combFX01;
     [SerializeField] protected GameObject combFX02;
     [SerializeField] protected GameObject combFX03;
-    [SerializeField] protected GameObject damageTxt;
 
     protected GameObject combObj01, combObj02, combObj03;
-    protected Material playerMat = null;
+    protected DamageFlash flash;
     protected int layerObject;
     protected Rigidbody2D rb;
     protected bool paralizadoPorAtaque = false;
@@ -121,6 +119,7 @@ public class CharactersBehaviour : MonoBehaviour
         if ((collider.gameObject.layer == 12 && !invulnerable && collider.gameObject.GetComponent<ExplosionBehaviour>().getTipoExplosion() != explosionInvulnerable))
         {
             TriggerElementos_1_1_1(collider);
+            print(collider.gameObject.name);
             RecibirDanio(collider.gameObject.GetComponent<ExplosionBehaviour>().getDanioExplosion());
             StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
             return;
@@ -150,7 +149,6 @@ public class CharactersBehaviour : MonoBehaviour
             vientoObj.transform.parent = transform;
         }
         afectacionViento = 0.10f;
-        print(gameObject.name);
         yield return new WaitForSeconds(10f);
         estadoViento = false;
         afectacionViento = 0;
@@ -223,17 +221,14 @@ public class CharactersBehaviour : MonoBehaviour
     //***************************************************************************************************
     public void RecibirDanio(float danio)
     {
-
         if (vidaMax == 0) vidaMax = vida;
+
+        CameraShakeManager.Instance.ShakeDanio();
 
         vida -= (danio * aumentoDanioParalizacion);
 
-        StartCoroutine(RecibirDanioBrillo());
-        Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
-
-        Transform dmgTxt = Instantiate(damageTxt, transform.position, Quaternion.identity).transform;
-        dmgTxt.GetChild(0).GetComponent<TextMeshPro>().text = danio.ToString();
-        Destroy(dmgTxt.gameObject, 0.5f);
+        flash.CallDamageFlash();
+        Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1.5f);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)
@@ -242,16 +237,6 @@ public class CharactersBehaviour : MonoBehaviour
             aumentoDanioParalizacion = 1.0f;
             paralizadoPorAtaque = true;
         }
-    }
-
-    IEnumerator RecibirDanioBrillo()
-    {
-        if (playerMat == null) playerMat = GetComponent<SpriteRenderer>().material;
-        GetComponent<SpriteRenderer>().material = receiveDmgMat;
-
-        yield return new WaitForSeconds(0.2f);
-
-        GetComponent<SpriteRenderer>().material = playerMat;
     }
 
     public void SetParalisis()

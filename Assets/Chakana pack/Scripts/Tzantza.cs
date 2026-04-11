@@ -7,7 +7,9 @@ public class Tzantza : Enemy
 
     [Header("Comportamiento IA")]
     [SerializeField] private EstadoTzantza estadoActual = EstadoTzantza.Idle;
-    [SerializeField] private float radioVision = 8f;
+    [SerializeField] private float rangoVision = 8f;
+    [SerializeField] private float rangoAtaque = 8f;
+    [SerializeField] private float speed;
 
     [Tooltip("Distancia a la que empezará a retroceder si el jugador se acerca mucho")]
     [SerializeField] private float distanciaMinimaSegura = 3f;
@@ -44,13 +46,18 @@ public class Tzantza : Enemy
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         vidaMax = vida;
-        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
-        bar.SetFocus(transform);
+        flash = GetComponent<DamageFlash>();
 
         explosionInvulnerable = "ExplosionEnemy";
         explosion = Resources.Load<GameObject>("Explosion");
         layerObject = transform.gameObject.layer;
         fuerzaRecoil = 2f;
+
+        if (healthBar != null)
+        {
+            bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+            bar.SetFocus(transform);
+        }
 
         puntoAnclaje = transform.position;
         ElegirNuevoDestinoIdle();
@@ -95,7 +102,7 @@ public class Tzantza : Enemy
 
         float distancia = Vector2.Distance(transform.position, playerTransform.position);
 
-        if (estadoActual == EstadoTzantza.Idle && distancia <= radioVision)
+        if (estadoActual == EstadoTzantza.Idle && distancia <= rangoVision)
         {
             estadoActual = EstadoTzantza.Combate;
         }
@@ -129,7 +136,7 @@ public class Tzantza : Enemy
         MirarHacia(playerTransform.position); // Siempre mira al jugador en combate
 
         // 1. Condición de pérdida de aggro
-        if (distancia > radioVision * 1.5f)
+        if (distancia > rangoVision * 1.5f)
         {
             estadoActual = EstadoTzantza.Idle;
             puntoAnclaje = transform.position;

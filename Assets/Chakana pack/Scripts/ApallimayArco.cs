@@ -1,20 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-public class ApallimayArco : Apallimay
+public class ApallimayArco : Enemy
 {
     public enum EstadoArquero { Idle, Atacando }
 
     [Header("Estado y Visión")]
     [SerializeField] private EstadoArquero estadoActual = EstadoArquero.Idle;
-    //[SerializeField] private float rangoVision = 10f;
+    [SerializeField] private float rangoVision = 10f;
     [SerializeField] private float cooldownCambioMirada = 3f;
     private float temporizadorMirada;
 
     [Header("Combate (Arco)")]
     [SerializeField] private GameObject flecha;
     [SerializeField] private float cooldownDisparoFlechas = 2f;
-    //private bool ataqueDisponible = true;
+    [SerializeField] private bool ataqueDisponible;
     private bool atacando = false;
     private int codigoAtaque; // Para el Animator: 0=Frente, 1=Arriba, 2=Abajo
 
@@ -44,6 +44,7 @@ public class ApallimayArco : Apallimay
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         aud = GetComponent<AudioSource>();
+        flash = GetComponent<DamageFlash>();
 
         if (healthBar != null)
         {

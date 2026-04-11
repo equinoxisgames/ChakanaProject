@@ -6,17 +6,16 @@ using UnityEngine;
 public class PlataformaMapinguari : MonoBehaviour
 {
     public int plataforma;
-    public float minX;
-    public float maxX;
+    private Vector3 minX;
+    private Vector3 maxX;
     public Vector3 position;
-    private Mapianguari boss;
+    public Mapianguari boss;
     private GameObject nubeVeneno;
 
     private void Start()
     {
-        boss = GameObject.Find("Mapinguari").GetComponent<Mapianguari>();
-        minX = this.gameObject.transform.GetChild(0).position.x;
-        maxX = this.gameObject.transform.GetChild(1).position.x;
+        minX = this.gameObject.transform.GetChild(0).position;
+        maxX = this.gameObject.transform.GetChild(1).position;
         nubeVeneno = this.gameObject.transform.GetChild(2).gameObject;
 
         for (int i = 0; i < 5; i++) {
@@ -28,11 +27,17 @@ public class PlataformaMapinguari : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && collision.gameObject.transform.position.y -0.1f > transform.position.y) {
-            boss.nuevaPlataforma = plataforma;
-            boss.minX= minX;
-            boss.maxX= maxX;
-            boss.positionPlat = position;
+            boss.NewTeleport(minX, maxX, plataforma);
         }
     }
 
+    public Vector3 GetMinX()
+    {
+        return minX;
+    }
+    
+    public Vector3 GetMaxX()
+    {
+        return maxX;
+    }
 }

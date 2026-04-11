@@ -1,7 +1,8 @@
 using System.Collections;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
-public class ApallimayDaga : Apallimay
+public class ApallimayDaga : Enemy
 {
     public enum EstadoEnemigo { Idle, Persecucion, Ataque, Huida }
 
@@ -16,12 +17,13 @@ public class ApallimayDaga : Apallimay
     private float tiempoPatrullaAleatoria;
 
     [Header("Configuración de Combate")]
-    //[SerializeField] private float rangoVision = 6f;
-    //[SerializeField] private float rangoAtaque = 1.5f;
+    [SerializeField] private float rangoVision = 6f;
+    [SerializeField] private float rangoAtaque = 1.5f;
     [SerializeField] private float tiempoPreparacion = 0.5f; // t1
     [SerializeField] private float tiempoDescansoAtaque = 0.4f; // t2
     [SerializeField] private float cooldownAtaque = 3f;
     [SerializeField] private float fuerzaImpulsoAtaque = 12f;
+    [SerializeField] private bool ataqueDisponible;
 
     private float temporizadorCooldown;
     //private bool ataqueDisponible = true;
@@ -45,11 +47,7 @@ public class ApallimayDaga : Apallimay
         rb = GetComponent<Rigidbody2D>();
         aud = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
-
-        // Referencias de los hijos
-        daga = transform.GetChild(2).GetComponent<BoxCollider2D>();
-        groundDetector = transform.GetChild(4);
-        wallDetector = transform.GetChild(5);
+        flash = GetComponent<DamageFlash>();
 
         daga.enabled = false;
         vidaMax = vida;
@@ -204,9 +202,9 @@ public class ApallimayDaga : Apallimay
 
     private bool EntornoBloqueado()
     {
-        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, 0.3f, groundLayer);
-        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, 0.3f, wallLayer) ||
-                          Physics2D.OverlapCircle(wallDetector.position, 0.3f, groundLayer);
+        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, 0.5f, groundLayer);
+        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, 0.5f, wallLayer) ||
+                          Physics2D.OverlapCircle(wallDetector.position, 0.5f, groundLayer);
 
         return !haySuelo || chocaPared;
     }

@@ -1,16 +1,17 @@
 using System.Collections;
 using UnityEngine;
 
-public class ApallimayEscudo : Apallimay
+public class ApallimayEscudo : Enemy
 {
     public enum EstadoEscudo { Idle, Persecucion, Atacando, Vulnerable, Huida }
 
     [Header("Máquina de Estados")]
     [SerializeField] private EstadoEscudo estadoActual = EstadoEscudo.Idle;
-    //[SerializeField] private float rangoVision = 8f;
-    [SerializeField] private float rangoAtaqueMeele = 1.5f;
+    [SerializeField] private float rangoVision = 8f;
+    [SerializeField] private float rangoAtaque = 1.5f;
 
     [Header("Configuración Idle & Movimiento")]
+    [SerializeField] private float speed = 5f;
     [SerializeField] private float cooldownCambioMirada = 3f;
     [SerializeField] private float tiempoCaminarAtras = 2f;
     private float temporizadorMirada;
@@ -20,8 +21,7 @@ public class ApallimayEscudo : Apallimay
     [SerializeField] private float t1 = 0.5f; // Preparación ataque
     [SerializeField] private float t2 = 1.5f; // Tiempo de descanso/vulnerabilidad
     [SerializeField] private float cooldownAtaque = 1f;
-    [SerializeField] private bool backWalk;
-    [SerializeField] private bool atacando;
+    [SerializeField] private bool ataqueDisponible;
 
     [Header("Referencias Ojetos")]
     [SerializeField] private BoxCollider2D daga;
@@ -45,6 +45,7 @@ public class ApallimayEscudo : Apallimay
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         aud = GetComponent<AudioSource>();
+        flash = GetComponent<DamageFlash>();
 
         if (healthBar != null)
         {
@@ -55,9 +56,6 @@ public class ApallimayEscudo : Apallimay
         // Buscar al jugador al inicio es más eficiente
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null) playerTransform = playerObj.transform;
-
-        daga = transform.GetChild(2).GetComponent<BoxCollider2D>();
-        groundDetector = transform.GetChild(4);
 
         daga.enabled = false;
         escudo.SetActive(true);
@@ -139,7 +137,7 @@ public class ApallimayEscudo : Apallimay
 
         MirarAlJugador();
 
-        if (distancia <= rangoAtaqueMeele && ataqueDisponible)
+        if (distancia <= rangoAtaque && ataqueDisponible)
         {
             StartCoroutine(SecuenciaAtaqueYVulnerabilidad());
             return;
@@ -181,13 +179,11 @@ public class ApallimayEscudo : Apallimay
         yield return new WaitForSeconds(t1);
 
         anim.SetBool("Atacando", false);
-        atacando = true;
         daga.enabled = true;
         escudo.SetActive(true);
 
         yield return new WaitForSeconds(0.4f);
 
-        atacando = false;
         daga.enabled = false;
 
         // 2. Estado Vulnerable
