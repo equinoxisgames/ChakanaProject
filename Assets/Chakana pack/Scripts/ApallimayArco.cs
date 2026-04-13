@@ -1,360 +1,318 @@
 using System.Collections;
 using UnityEngine;
 
-
-public class ApallimayArco : Apallimay
+public class ApallimayArco : Enemy
 {
-    [SerializeField] private float rangoAtaqueEspecial;
-    [SerializeField] private float cooldownAtaqueEspecial;
-    [SerializeField] private float cooldownDisparoFlechas;
-    [SerializeField] private float normalSpeed;
-    [SerializeField] private bool ataqueEspecialDisponible = true;
+    public enum EstadoArquero { Idle, Atacando }
+
+    [Header("Estado y Visión")]
+    [SerializeField] private EstadoArquero estadoActual = EstadoArquero.Idle;
+    [SerializeField] private float rangoVision = 10f;
+    [SerializeField] private float cooldownCambioMirada = 3f;
+    private float temporizadorMirada;
+
+    [Header("Combate (Arco)")]
     [SerializeField] private GameObject flecha;
-    [SerializeField] private GameObject vientoFX02;
-    [SerializeField] private bool atacando;
-    [SerializeField] private Vector3 limit1;
-    [SerializeField] private Vector3 limit2;
-    [SerializeField] private bool jugadorDetectado;
-    [SerializeField] private float direction = 1;
-    [SerializeField] private float posY = 0;
-    [SerializeField] private bool realizandoAtaqueEspecial = false;
-    [SerializeField] private GameObject hoyustus;
-    [SerializeField] private int codigoAtaque;
+    [SerializeField] private float cooldownDisparoFlechas = 2f;
+    [SerializeField] private bool ataqueDisponible;
+    private bool atacando = false;
+    private int codigoAtaque; // Para el Animator: 0=Frente, 1=Arriba, 2=Abajo
+
+    [Header("Pasiva Especial (Teletransporte al 50% HP)")]
+    [Tooltip("Asigna un Empty GameObject de la escena aquí. El enemigo huirá a esta posición.")]
+    [SerializeField] private Transform puntoTeletransporte;
+    [SerializeField] private GameObject dropObj; // El objeto que dejará al huir (goldObj)
+    [SerializeField] private GameObject humoFX; // Opcional, para que el TP tenga feedback visual
+
+    private Vector3 posicionEscape;
+    private bool teleportUsado = false;
+
+    [Header("Referencias")]
     [SerializeField] private AudioClip hurtSound;
-    [SerializeField] private GameObject goldObj;
     private AudioSource aud;
-
-    private void Awake()
-    {
-        groundDetector = transform.GetChild(3).gameObject.transform;
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        vidaMax = vida;
-
-        bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
-        bar.SetFocus(transform);
-    }
+    private Transform playerTransform;
+    private int direction = 1;
 
     void Start()
     {
         explosionInvulnerable = "ExplosionEnemy";
-        layerObject = transform.gameObject.layer;
+        layerObject = gameObject.layer;
         fuerzaRecoil = 2f;
-        ataqueDisponible = true;
-        explosion = Resources.Load<GameObject>("Explosion");
-        objetivo = limit2;
-        limit1 = transform.GetChild(0).gameObject.transform.position;
-        limit2 = transform.GetChild(1).gameObject.transform.position;
-        posY = transform.position.y;
         vidaMax = vida;
-        hoyustus = GameObject.FindGameObjectWithTag("Player");
-        normalSpeed = speed;
+        ataqueDisponible = true;
+
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         aud = GetComponent<AudioSource>();
-    }
+        flash = GetComponent<DamageFlash>();
 
-
-    void Update()
-    {
-        float angulo = Vector3.Angle(hoyustus.transform.position - transform.position, transform.right);
-        if (transform.position.y >= hoyustus.transform.position.y) angulo *= -1;
-
-        if (angulo <= 30f && angulo > -30f) codigoAtaque = 0;
-        else if (angulo < 30f) codigoAtaque = 2;
-        else codigoAtaque = 1;
-
-        anim.SetBool("Jugador Detectado", jugadorDetectado);
-        anim.SetBool("Realizando Ataque Especial", realizandoAtaqueEspecial);
-        anim.SetBool("Atacando", atacando);
-        anim.SetFloat("CA1", codigoAtaque);
-
-        bar.SetHealthValue(vida / vidaMax);
-
-        Muerte();
-        if (Grounded()) {
-            Flip();
-            DetectarPiso();
-            if (!jugadorDetectado && playable)
-                Move();
+        if (healthBar != null)
+        {
+            bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+            bar.SetFocus(transform);
         }
+
+        // Buscar al jugador solo una vez al inicio ahorra mucho rendimiento
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null) playerTransform = playerObj.transform;
+
+        // Guardamos la coordenada exacta al inicio. Aunque el puntoTeletransporte se mueva luego,
+        // el enemigo recordará este Vector3 específico.
+        if (puntoTeletransporte != null) posicionEscape = puntoTeletransporte.position;
+
+        temporizadorMirada = cooldownCambioMirada;
+        direction = (int)Mathf.Sign(transform.localScale.x);
     }
 
-    private void Muerte()
+    void FixedUpdate()
     {
         if (vida <= 0)
         {
-            Instantiate(deathFX, transform.position, Quaternion.identity);
+            Muerte();
+            return;
+        }
 
-            Instantiate(goldObj, transform.position, Quaternion.identity);
+        if (bar != null) bar.SetHealthValue(vida / vidaMax);
 
-            Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+        // --- PASIVA ESPECIAL: Revisar si la vida bajó al 50% o menos ---
+        if (!teleportUsado && vida <= vidaMax * 0.5f)
+        {
+            EjecutarTeletransporte();
+            return; // Detenemos el resto del código en este frame
+        }
 
-            foreach (Collider2D collider in objetos)
+        // --- ACTUALIZAR ANIMACIONES ---
+        anim.SetFloat("CA1", codigoAtaque);
+
+        // Si está sufriendo recoil por un golpe o disparando, no evaluamos la IA
+        if (!playable || atacando) return;
+
+        ActualizarComportamiento();
+    }
+
+    private void ActualizarComportamiento()
+    {
+        float distancia = ObtenerDistanciaAlJugador();
+        bool jugadorEnRango = distancia <= rangoVision && JugadorEnLineaDeVision(distancia);
+
+        if (jugadorEnRango)
+        {
+            estadoActual = EstadoArquero.Atacando;
+            MirarHacia(playerTransform.position.x);
+            Apuntar();
+
+            if (ataqueDisponible)
             {
-                Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
-                if (rb2D != null)
-                {
-                    Vector2 direccion = collider.transform.position - transform.position;
-                    float distancia = 1 + direccion.magnitude;
-                    float fuerza = 200 / distancia;
-                    rb2D.AddForce(direccion * fuerza);
-                }
+                StartCoroutine(DispararFlecha());
             }
-
-            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
-
-            Destroy(bar.gameObject);
-            Destroy(this.gameObject);
+        }
+        else
+        {
+            estadoActual = EstadoArquero.Idle;
+            ComportamientoIdle();
         }
     }
 
-    private void Move() {
+    #region Estados y Mecánicas
 
-        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
+    private void ComportamientoIdle()
+    {
+        // Se asegura de no moverse físicamente
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
-        if (transform.position.x <= limit1.x)
+        // Rotar cada cierto tiempo
+        temporizadorMirada -= Time.fixedDeltaTime;
+        if (temporizadorMirada <= 0)
         {
-            objetivo = limit2;
+            Flip();
+            temporizadorMirada = cooldownCambioMirada;
         }
-        else if (transform.position.x >= limit2.x)
+    }
+
+    private void Apuntar()
+    {
+        if (playerTransform == null) return;
+
+        Vector2 direccionJugador = playerTransform.position - transform.position;
+        // Calculamos el ángulo basándonos hacia donde mira (transform.right * direction)
+        float angulo = Vector2.Angle(transform.right * direction, direccionJugador);
+        // Si el jugador está más abajo, el ángulo es negativo
+        if (playerTransform.position.y < transform.position.y) angulo *= -1;
+
+        if (angulo <= 30f && angulo >= -30f) codigoAtaque = 0; // Frente
+        else if (angulo > 30f) codigoAtaque = 1; // Arriba
+        else codigoAtaque = 2; // Abajo
+    }
+
+    private IEnumerator DispararFlecha()
+    {
+        ataqueDisponible = false;
+        atacando = true;
+        anim.SetBool("Atacando", true);
+
+        // 1. Tiempo de preparación (Levantar el arco)
+        yield return new WaitForSeconds(0.55f);
+        anim.SetBool("Atacando", false);
+        // 2. Disparo de la flecha
+        if (playerTransform != null)
         {
-            objetivo = limit1;
+            GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);
+            flechaGenerada.name += "Enemy";
+
+            // Usamos Mathf.Atan2 para una rotación perfecta y sin fallos matemáticos hacia el objetivo
+            Vector2 dirDisparo = playerTransform.position - transform.position;
+            float anguloFlecha = Mathf.Atan2(dirDisparo.y, dirDisparo.x) * Mathf.Rad2Deg;
+            flechaGenerada.transform.rotation = Quaternion.Euler(0, 0, anguloFlecha);
+
+            flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
+        }
+
+        // 3. Finaliza animación de disparo
+        yield return new WaitForSeconds(0.2f);
+        atacando = false;
+
+        // 4. Esperar el CD para volver a disparar
+        yield return new WaitForSeconds(cooldownDisparoFlechas);
+        ataqueDisponible = true;
+    }
+
+    private void EjecutarTeletransporte()
+    {
+        teleportUsado = true;
+
+        // 1. Dejar el Drop
+        if (dropObj != null) Instantiate(dropObj, transform.position, Quaternion.identity);
+
+        // 2. Efecto visual (opcional)
+        if (humoFX != null) Instantiate(humoFX, transform.position, Quaternion.identity);
+
+        // 3. Mover instantáneamente al Vector3 guardado en Start
+        transform.position = posicionEscape;
+
+        // 4. Frenar físicas e interrumpir corrutinas para que no se teletransporte y dispare al mismo tiempo
+        rb.linearVelocity = Vector2.zero;
+
+        //estadoActual = EstadoArquero.Idle;
+        //atacando = false;
+        //ataqueDisponible = true; // Reseteamos por si estaba a medio ataque
+    }
+
+    #endregion
+
+    #region Utilidades y Detección
+
+    private float ObtenerDistanciaAlJugador()
+    {
+        if (playerTransform == null) return Mathf.Infinity;
+        return Vector2.Distance(transform.position, playerTransform.position);
+    }
+
+    private bool JugadorEnLineaDeVision(float distancia)
+    {
+        if (playerTransform == null) return false;
+
+        Vector2 direccionRayo = (playerTransform.position - transform.position).normalized;
+
+        // Raycast ignora al jugador, solo busca si hay un muro o piso en medio del camino
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direccionRayo, distancia, wallLayer);
+
+        return hit.collider == null; // Si no chocó con un muro, lo está viendo
+    }
+
+    private void MirarHacia(float targetX)
+    {
+        int nuevaDireccion = targetX > transform.position.x ? 1 : -1;
+        if (direction != nuevaDireccion)
+        {
+            direction = nuevaDireccion;
+            ActualizarEscala();
         }
     }
 
     private void Flip()
     {
-        if (transform.position.x < objetivo.x) direction = 1;
-        else if (transform.position.x > objetivo.x) direction = -1;
-
-        transform.localScale = new Vector3(direction, 1, 0);
+        direction *= -1;
+        ActualizarEscala();
     }
 
-
-    private IEnumerator Ataque(Vector3 objetivoAtaque) {
-        //PREPARACION
-        atacando = true;
-        yield return new WaitForSeconds(0.2f);
-        atacando = false;
-        yield return new WaitForSeconds(0.55f);
-        //ROTAR SPRITE
-        GameObject flechaGenerada = Instantiate(flecha, transform.position, Quaternion.identity);//.name += "Enemy";
-        if (hoyustus.transform.position.y < transform.position.y)
-        {
-            flechaGenerada.transform.Rotate(new Vector3(0, 0f, -Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
-        }
-        else {
-            flechaGenerada.transform.Rotate(new Vector3(0, 0f, Vector3.Angle(hoyustus.transform.position - flechaGenerada.transform.position, flechaGenerada.transform.right)));
-        }
-        flechaGenerada.name += "Enemy";
-        flechaGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
-
-        /*if (flechaGenerada.transform.rotation.z < 0.20f) codigoAtaque = 0;
-        else if (flechaGenerada.transform.rotation.z >= 0.20f && flechaGenerada.transform.rotation.z < 0.5f) codigoAtaque = 1;
-        else codigoAtaque = 2;*/
-
-        //TIEMPO DE ANIMACION/PREPARACION
-        yield return new WaitForSeconds(0.2f);
-        //codigoAtaque = -1;
-        yield return new WaitForSeconds(cooldownDisparoFlechas);
-        ataqueDisponible = true;
-    }
-
-
-    protected override void Recoil(int direccion, float fuerzaRecoil)
+    private void ActualizarEscala()
     {
-        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(direccion * 2, rb.gravityScale * 2), ForceMode2D.Impulse);
+        transform.localScale = new Vector3(direction, 1, 1);
     }
 
+    #endregion
+
+    #region Sistema de Daño y Muerte
+
+    protected override void Recoil(int direccionGolpe, float fuerzaRecoilMod)
+    {
+        playable = false;
+        rb.AddForce(new Vector2(direccionGolpe * 2f, rb.gravityScale * 2f), ForceMode2D.Impulse);
+        Invoke("RestaurarPlayable", 0.4f);
+    }
+
+    private void RestaurarPlayable()
+    {
+        playable = true;
+    }
 
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
 
+        // Layer 14 (Arma del jugador)
         if (collider.gameObject.layer == 14)
         {
-            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
-
+            int dirGolpe = -(int)Mathf.Sign(collider.transform.position.x - transform.position.x);
             TriggerElementos_1_1_1(collider);
-            playable = false;
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
+
+            StartCoroutine(cooldownRecibirDanio(dirGolpe, 1));
+
             if (collider.transform.parent != null)
             {
-                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                var jugador = collider.transform.parent.parent.GetComponent<Hoyustus>();
+                if (jugador != null)
+                {
+                    jugador.cargaLanza();
+                    RecibirDanio(jugador.getAtaque());
 
-                aud.Stop();
-                aud.clip = hurtSound;
-                aud.Play();
+                    if (aud != null)
+                    {
+                        aud.Stop();
+                        aud.clip = hurtSound;
+                        aud.Play();
+                    }
+                }
             }
-            return;
         }
-        else if (collider.gameObject.layer == 11)
-        {
-            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
-
-            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
-            {
-                jugadorDetectado = true;
-                if(Grounded())
-                    rb.linearVelocity = Vector2.zero;
-                speed = 0;
-            }
-            else {
-                jugadorDetectado = false;
-                speed = normalSpeed;
-            }
-            return;
-        }
-
-        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
+        else if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             TriggerElementos_1_1_1(collider);
         }
     }
 
-
-    private void OnTriggerStay2D(Collider2D collider)
+    private void Muerte()
     {
+        if (deathFX != null) Instantiate(deathFX, transform.position, Quaternion.identity);
 
-        if (collider.gameObject.layer == 11)
+        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+        foreach (Collider2D obj in objetos)
         {
-            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
-
-            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-
-            if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
+            Rigidbody2D rb2D = obj.GetComponent<Rigidbody2D>();
+            if (rb2D != null && obj.gameObject != gameObject)
             {
-                jugadorDetectado = true;
-                if (Grounded() && playable) {
-                    rb.linearVelocity = Vector2.zero;
-                }
-                if (collider.transform.position.x <= transform.position.x)
-                {
-                    transform.localScale = new Vector3(-1, 1, 1);
-                    objetivo = limit1;
-                }
-                else
-                {
-                    transform.localScale = new Vector3(1, 1, 1);
-                    objetivo = limit2;
-                }
-
-
-                if (distanciaPlayer <= rangoAtaqueEspecial && ataqueEspecialDisponible && !atacando)
-                {
-                    atacando = true;
-                    realizandoAtaqueEspecial = true;
-                    StartCoroutine(AtaqueEspecial());
-                }
-                else if (ataqueDisponible && !realizandoAtaqueEspecial)
-                {
-                    atacando = true;
-                    ataqueDisponible = false;
-                    //codigoAtaque = -1;
-                    StartCoroutine(Ataque(collider.transform.position));
-                }
-            }
-            else
-            {
-                jugadorDetectado = false;
-                speed = normalSpeed;
+                Vector2 direccionExp = obj.transform.position - transform.position;
+                float distancia = 1 + direccionExp.magnitude;
+                float fuerza = 200 / distancia;
+                rb2D.AddForce(direccionExp * fuerza);
             }
         }
+
+        var spawner = GameObject.Find("-----ENEMIES");
+        if (spawner != null) spawner.GetComponent<EnemyRespawn>().EnemyDeath();
+
+        if (bar != null) Destroy(bar.gameObject);
+        Destroy(gameObject);
     }
-
-
-    private IEnumerator AtaqueEspecial() {
-        playable = false;
-        realizandoAtaqueEspecial = true;
-        ataqueEspecialDisponible = false;
-        yield return new WaitForSeconds(1);
-        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, 1, 15, 12, "Untagged", explosionInvulnerable);
-        Instantiate(explosion, transform.position, Quaternion.identity);
-        Destroy(Instantiate(vientoFX02, transform.position, Quaternion.identity), 1);
-        //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
-        //yield return new WaitUntil(() => !realizandoAtaqueEspecial);
-        yield return new WaitForSeconds(1.4f);
-        realizandoAtaqueEspecial = false;
-        atacando = false;
-        playable = true;
-        yield return new WaitForSeconds(cooldownAtaqueEspecial);
-        ataqueEspecialDisponible = true;
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 16)
-        {
-            if (objetivo == limit1)
-            {
-                limit1 = transform.position + Vector3.right * 0.5f;
-                objetivo = limit1;
-                direction = 1;
-            }
-            else if (objetivo == limit2)
-            {
-                limit2 = transform.position - Vector3.right * 0.5f;
-                objetivo = limit2;
-                direction = -1;
-            }
-
-        }
-        else if(collision.gameObject.layer == 11)
-        {
-            rb.linearVelocity = Vector2.zero;
-        }
-
-        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 17)
-        {
-            posY = transform.position.y;
-            limit1 = transform.GetChild(0).gameObject.transform.position;
-            limit2 = transform.GetChild(1).gameObject.transform.position;
-            objetivo = limit2;
-
-            if (limit1.x >= limit2.x) {
-                Vector3 aux = limit1;
-                limit1 = limit2;
-                limit2 = aux;
-            }
-        }
-
-        if (!collision.gameObject.name.Contains("Enemy"))
-        {
-            CollisionElementos_1_1_1(collision);
-        }
-    }
-
-
-    public bool DetectarPiso()
-    {
-        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
-        {
-            if (direction == -1)
-            {
-                limit1 = transform.position + Vector3.right * 0.1f;
-            }
-            else if (direction == 1)
-            {
-                limit2 = transform.position - Vector3.right * 0.1f;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            jugadorDetectado = false;
-            speed = normalSpeed;
-        }
-    }
-
-    private void finalizarAtaqueEspecial() {
-        realizandoAtaqueEspecial = false;
-    }
+    #endregion
 }

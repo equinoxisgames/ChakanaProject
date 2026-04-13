@@ -18,7 +18,7 @@ public class BossBattle_cin : MonoBehaviour
 
     void Update()
     {
-        print(director.state);
+        //print(director.state);
     }
 
     IEnumerator PlayScene()
