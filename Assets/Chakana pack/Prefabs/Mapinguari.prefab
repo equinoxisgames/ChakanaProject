@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 627248762632895301}
   - component: {fileID: 7218420099408483804}
   - component: {fileID: 7737763353764628324}
+  - component: {fileID: 1268339580385459457}
   m_Layer: 3
   m_Name: Mapinguari
   m_TagString: Untagged
@@ -68,7 +69,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4f78839a74c62964481fde7f813ef475, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -169,6 +170,7 @@ MonoBehaviour:
   hurtAudio2: {fileID: 0}
   hurtAudio3: {fileID: 0}
   hurtAudio4: {fileID: 0}
+  shockAudio: {fileID: 0}
   victorySound: {fileID: 0}
   bossSilhouettePrefab: {fileID: 0}
   playerSilhouettePrefab: {fileID: 0}
@@ -357,6 +359,63 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1268339580385459457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627248762632895303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852461b044dba5c40b496d956de2f02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  flashTime: 0.25
+  flashSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -20
+      outSlope: -20
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.05
+      value: 0
+      inSlope: 0.013893616
+      outSlope: 0.013893616
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22858873
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.15
+      value: 1
+      inSlope: 0.017472303
+      outSlope: 0.017472303
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.11844308
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: -10.000001
+      outSlope: -10.000001
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  charSprites:
+  - {fileID: 627248762632895298}
 --- !u!1 &627248763571091569
 GameObject:
   m_ObjectHideFlags: 0
