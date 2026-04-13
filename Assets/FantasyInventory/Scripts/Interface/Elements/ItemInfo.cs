@@ -19,14 +19,51 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
         public Text Price;
         public Image Icon;
 
+        // ── PRIORIDAD 6: Re-buscar referencias si fueron destruidas al cambiar de escena ──
+        private void Awake()
+        {
+            if (Name == null)
+            {
+                var nameObj = transform.Find("NameText");
+                if (nameObj != null) Name = nameObj.GetComponent<Text>();
+            }
+            if (Description == null)
+            {
+                var descObj = transform.Find("DescriptionText");
+                if (descObj != null) Description = descObj.GetComponent<Text>();
+            }
+            if (Price == null)
+            {
+                var priceObj = transform.Find("PriceText");
+                if (priceObj != null) Price = priceObj.GetComponent<Text>();
+            }
+        }
+
+        // ── PRIORIDAD 1: Validar referencias antes de usarlas ──
+        private bool ReferencesAreValid()
+        {
+            if (Name == null || Description == null || Price == null || Icon == null)
+            {
+                Debug.LogWarning("[ItemInfo] Una o más referencias de UI están destruidas o son nulas. Operación cancelada.");
+                return false;
+            }
+            return true;
+        }
+
         public void Reset()
         {
+            // ── PRIORIDAD 1 ──
+            if (!ReferencesAreValid()) return;
+
             Name.text = Description.text = Price.text = null;
             Icon.sprite = ImageCollection.Instance.DefaultItemIcon;
         }
 
         public void Initialize(ItemId itemId, ItemParams itemParams, bool shop = false)
         {
+            // ── PRIORIDAD 1 ──
+            if (!ReferencesAreValid()) return;
+
             Icon.sprite = ImageCollection.Instance.GetIcon(itemId);
             Name.text = SplitName(itemId.ToString());
             Description.text = $"Here will be {itemId} description soon...";
@@ -49,7 +86,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             //    Price.text = $"Sell price: {itemParams.Price / Shop.SellRatio}G";
             //}
 
-            var description = new List<string> {$"Type: {itemParams.Type}"};
+            var description = new List<string> { $"Type: {itemParams.Type}" };
 
             if (itemParams.Tags.Any())
             {
@@ -63,7 +100,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
             Description.text = string.Join(Environment.NewLine, description.ToArray());
         }
-        
+
         public static string SplitName(string name)
         {
             return Regex.Replace(Regex.Replace(name, "[A-Z]", " $0"), "([a-z])([1-9])", "$1 $2").Trim();
