@@ -51,7 +51,6 @@ namespace Michsky.UI.Dark
                 gamepadConnected = false;
                 SwitchToKeyboard();
             }
-
             else
             {
                 gamepadConnected = true;
@@ -85,13 +84,24 @@ namespace Michsky.UI.Dark
         public void SwitchToGamepad()
         {
             for (int i = 0; i < keyboardObjects.Count; i++)
+            {
+                if (keyboardObjects[i] == null)
+                    continue;
                 keyboardObjects[i].SetActive(false);
+            }
 
             for (int i = 0; i < gamepadObjects.Count; i++)
             {
+                if (gamepadObjects[i] == null)
+                    continue;
                 gamepadObjects[i].SetActive(true);
-                LayoutRebuilder.ForceRebuildLayoutImmediate(gamepadObjects[i].GetComponentInParent<RectTransform>());
             }
+
+            // Rebuild síncrono inmediato (cubre escenas simples)
+            ForceRebuildLayouts(gamepadObjects);
+
+            // Rebuild diferido como seguro (cubre escenas con layouts anidados o animaciones)
+            StartCoroutine(RebuildAllLayoutsDelayed(gamepadObjects));
 
             customNav.mode = Navigation.Mode.Automatic;
 
@@ -116,7 +126,6 @@ namespace Michsky.UI.Dark
             {
                 if (panelManagers[i] == null)
                     continue;
-
                 panelManagers[i].gamepadEnabled = true;
             }
         }
@@ -127,7 +136,6 @@ namespace Michsky.UI.Dark
             {
                 if (gamepadObjects[i] == null)
                     continue;
-
                 gamepadObjects[i].SetActive(false);
             }
 
@@ -135,13 +143,16 @@ namespace Michsky.UI.Dark
             {
                 if (keyboardObjects[i] == null)
                     continue;
-
                 keyboardObjects[i].SetActive(true);
-                LayoutRebuilder.ForceRebuildLayoutImmediate(keyboardObjects[i].GetComponentInParent<RectTransform>());
             }
 
-            customNav.mode = Navigation.Mode.None;
+            // Rebuild síncrono inmediato (cubre escenas simples)
+            ForceRebuildLayouts(keyboardObjects);
 
+            // Rebuild diferido como seguro (cubre escenas con layouts anidados o animaciones)
+            StartCoroutine(RebuildAllLayoutsDelayed(keyboardObjects));
+
+            customNav.mode = Navigation.Mode.None;
             for (int i = 0; i < buttons.Count; i++)
                 if (buttons[i] != null)
                     buttons[i].navigation = customNav;
@@ -151,9 +162,89 @@ namespace Michsky.UI.Dark
 
             if (affectCursor == true)
                 Cursor.visible = true;
-
             if (defaultPanelManager != null)
                 defaultPanelManager.gamepadEnabled = false;
+        }
+
+        /// <summary>
+        /// Rebuild síncrono e inmediato de todos los LayoutGroups en la jerarquía.
+        /// Recorre de hijo a padre para respetar el orden correcto de recálculo.
+        /// </summary>
+        private void ForceRebuildLayouts(List<GameObject> objects)
+        {
+            HashSet<RectTransform> rebuilt = new HashSet<RectTransform>();
+
+            foreach (GameObject obj in objects)
+            {
+                if (obj == null) continue;
+
+                // Primero el propio objeto
+                RectTransform selfRT = obj.GetComponent<RectTransform>();
+                if (selfRT != null && !rebuilt.Contains(selfRT))
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(selfRT);
+                    rebuilt.Add(selfRT);
+                }
+
+                // Luego sube por los padres buscando LayoutGroups
+                Transform parent = obj.transform.parent;
+                while (parent != null)
+                {
+                    RectTransform parentRT = parent.GetComponent<RectTransform>();
+                    LayoutGroup lg = parent.GetComponent<LayoutGroup>();
+
+                    if (parentRT != null && lg != null && !rebuilt.Contains(parentRT))
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(parentRT);
+                        rebuilt.Add(parentRT);
+                    }
+
+                    parent = parent.parent;
+                }
+            }
+
+            Debug.Log($"[GamepadChecker] ForceRebuildLayouts (síncrono) — layouts reconstruidos: {rebuilt.Count}");
+        }
+
+        /// <summary>
+        /// Rebuild diferido: espera 2 frames y repite el rebuild.
+        /// Cubre casos donde el Canvas o animaciones interfieren con el layout inmediato.
+        /// </summary>
+        private IEnumerator RebuildAllLayoutsDelayed(List<GameObject> objects)
+        {
+            yield return null;
+            yield return null;
+
+            HashSet<RectTransform> rebuilt = new HashSet<RectTransform>();
+
+            foreach (GameObject obj in objects)
+            {
+                if (obj == null) continue;
+
+                RectTransform selfRT = obj.GetComponent<RectTransform>();
+                if (selfRT != null && !rebuilt.Contains(selfRT))
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(selfRT);
+                    rebuilt.Add(selfRT);
+                }
+
+                Transform parent = obj.transform.parent;
+                while (parent != null)
+                {
+                    RectTransform parentRT = parent.GetComponent<RectTransform>();
+                    LayoutGroup lg = parent.GetComponent<LayoutGroup>();
+
+                    if (parentRT != null && lg != null && !rebuilt.Contains(parentRT))
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(parentRT);
+                        rebuilt.Add(parentRT);
+                    }
+
+                    parent = parent.parent;
+                }
+            }
+
+            Debug.Log($"[GamepadChecker] RebuildAllLayoutsDelayed (diferido) — layouts reconstruidos: {rebuilt.Count}");
         }
 
         public void SelectUIObject(GameObject tempObj)
