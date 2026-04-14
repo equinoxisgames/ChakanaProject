@@ -1,5 +1,5 @@
 using System.Collections;
-using UnityEditor.EditorTools;
+//using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class ApallimayDaga : Enemy
