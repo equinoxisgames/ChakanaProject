@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -19,6 +20,9 @@ public class CameraShakeManager : MonoBehaviour
     private Vector3 vectorShake;
     private bool estaVibrando;
 
+    // Guardar el timescale original por si acaso ya estaba modificado (ej. cámara lenta)
+    private float timeScaleOriginal;
+
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -27,7 +31,6 @@ public class CameraShakeManager : MonoBehaviour
 
     void OnEnable()
     {
-        // Registro de callbacks según el Pipeline de Renderizado (URP o Built-in)
         if (GraphicsSettings.currentRenderPipeline == null)
         {
             Camera.onPreRender += AlPreRender;
@@ -55,16 +58,26 @@ public class CameraShakeManager : MonoBehaviour
     }
 
     // --- MÉTODOS DE DISPARO ---
-    public void ShakeDanio() => IniciarVibracion(0.2f, 0.4f);
-    public void ShakeMuerteEnemigo() => IniciarVibracion(0.5f, 0.7f);
+    // (Duración Shake, Fuerza Shake, Duración Hitstop)
+    public void ShakeDanio() => IniciarVibracion(0.2f, 0.45f, 0.1f);
+    public void ShakeMuerteEnemigo() => IniciarVibracion(0.5f, 0.75f, 0.2f);
 
-    public void IniciarVibracion(float duracion, float fuerza)
+    public void IniciarVibracion(float duracion, float fuerza, float duracionHitstop = 0f)
     {
+        // REGLA: Si ya está vibrando, ignoramos esta nueva llamada para evitar acumulación
+        if (estaVibrando) return;
+
         PrepararCamaras();
         duracionTotal = duracion;
         intensidad = fuerza;
         tiempoActual = 0;
         estaVibrando = true;
+
+        // Si se solicitó hitstop, ejecutamos la corrutina
+        if (duracionHitstop > 0f)
+        {
+            StartCoroutine(RutinaHitstop(duracionHitstop));
+        }
     }
 
     private void PrepararCamaras()
@@ -84,10 +97,10 @@ public class CameraShakeManager : MonoBehaviour
 
         if (tiempoActual < duracionTotal)
         {
-            tiempoActual += Time.deltaTime;
+            // VITAL: Usamos unscaledDeltaTime para que el temblor no se congele durante el Hitstop
+            tiempoActual += Time.unscaledDeltaTime;
             float decaimiento = 1f - (tiempoActual / duracionTotal);
 
-            // Generar vector aleatorio similar a CartoonFX
             vectorShake = new Vector3(
                 Random.Range(-1f, 1f) * intensidad * decaimiento,
                 Random.Range(-1f, 1f) * intensidad * decaimiento,
@@ -101,7 +114,22 @@ public class CameraShakeManager : MonoBehaviour
         }
     }
 
-    // --- LÓGICA DE RENDERIZADO (El "Corazón" del script de CartoonFX) ---
+    // --- SISTEMA DE HITSTOP ---
+    private IEnumerator RutinaHitstop(float duracion)
+    {
+        yield return new WaitForSecondsRealtime(0.01f);
+        // Guardamos el TimeScale actual y congelamos el juego
+        timeScaleOriginal = Time.timeScale;
+        Time.timeScale = 0f;
+
+        // Esperamos en tiempo real (ignorando el congelamiento)
+        yield return new WaitForSecondsRealtime(duracion);
+
+        // Restauramos el tiempo a la normalidad
+        Time.timeScale = timeScaleOriginal;
+    }
+
+    // --- LÓGICA DE RENDERIZADO ---
     private void AlPreRender(Camera cam)
     {
         if (estaVibrando && posicionesOriginales.ContainsKey(cam))

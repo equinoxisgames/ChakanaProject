@@ -26,6 +26,7 @@ public class Mapianguari : Enemy
 
     [Header("Mecánica: Invocación")]
     [SerializeField] private GameObject plantaVeneno;
+    [SerializeField] private List<Transform> posPlantas;
     [SerializeField] private float danioPlantaVeneno = 10f;
 
     [Header("Efectos y Referencias Extra")]
@@ -149,6 +150,9 @@ public class Mapianguari : Enemy
     {
         if (plataformaActual == e || estadoActual == EstadoMapinguari.AsedioRodante || estadoActual == EstadoMapinguari.TransicionFuria) return;
         plataformaActual = e;
+        StopAllCoroutines();
+        anim.SetBool("Iddel", false);
+        anim.SetBool("AB", false);
         StartCoroutine(TeletransporteAlJugador(posMin, posMax));
     }
 
@@ -179,7 +183,7 @@ public class Mapianguari : Enemy
 
         // --- LÓGICA TÁCTICA DE REAPARICIÓN ---
 
-        float distanciaSegura = 5f; // Distancia mínima que mantendrá con Sinchi
+        float distanciaSegura = 7f; // Distancia mínima que mantendrá con Sinchi
         float margenBorde = 1.5f;   // Margen para no aparecer con medio cuerpo fuera de la plataforma
         float playerX = playerTransform.position.x;
 
@@ -219,7 +223,7 @@ public class Mapianguari : Enemy
         // Opcional: Sumar un pequeño offset (+ 0.5f) si el punto de pivote (pivot) de tu sprite no está en los pies.
         float nuevoY = posMax.y;
 
-        transform.position = new Vector3(nuevoX, nuevoY, transform.position.z);
+        transform.position = new Vector3(nuevoX, nuevoY, 0);
 
         // Obligamos al jefe a mirar al jugador instantáneamente antes de aparecer
         MirarHacia(playerX);
@@ -246,7 +250,15 @@ public class Mapianguari : Enemy
         ReproducirAudio(audioAtk);
         anim.SetBool("AB", false);
 
-        yield return new WaitForSeconds(0.5f); // Pequeño descanso tras atacar
+        yield return new WaitForSeconds(0.2f);
+
+        ataqueCuerpo.enabled = true;
+
+        yield return new WaitForSeconds(0.2f); // Pequeño descanso tras atacar
+
+        ataqueCuerpo.enabled = false;
+
+        yield return new WaitForSeconds(0.5f);
 
         anim.SetBool("Iddel", false);
         estadoActual = EstadoMapinguari.Acechando;
@@ -265,16 +277,36 @@ public class Mapianguari : Enemy
 
         yield return new WaitForSeconds(0.5f);
         anim.SetBool("AT", false);
-        // Invocar plantas en posiciones predeterminadas (aleatorias)
-        System.Random rnd = new System.Random();
-        for (int i = 0; i < (enFuria ? 3 : 2); i++)
-        {
-            // Puedes ajustar estas coordenadas a las posiciones reales de tus plataformas
-            Vector3 posPlanta = new Vector3(rnd.Next(-50, -10), playerTransform.position.y + rnd.Next(5, 15), 0);
-            GameObject planta = Instantiate(plantaVeneno, posPlanta, Quaternion.identity);
 
-            var scriptPlanta = planta.GetComponent<PlantaVeneno>();
-            if (scriptPlanta != null) scriptPlanta.setDanio(danioPlantaVeneno, gameObject);
+        // --- LÓGICA DE APARICIÓN SIN REPETIR ---
+
+        // 1. Definimos cuántas plantas van a salir
+        int cantidadAInvocar = enFuria ? 3 : 2;
+
+        // Seguridad: Evitar error si hay menos posiciones en la lista que plantas a invocar
+        cantidadAInvocar = Mathf.Min(cantidadAInvocar, posPlantas.Count);
+
+        if (cantidadAInvocar > 0)
+        {
+            // 2. Creamos una copia temporal de la lista para ir eliminando las posiciones ya usadas
+            List<Transform> posicionesDisponibles = new List<Transform>(posPlantas);
+
+            for (int i = 0; i < cantidadAInvocar; i++)
+            {
+                // 3. Elegimos un índice al azar de las posiciones que AÚN están disponibles
+                int indiceAleatorio = UnityEngine.Random.Range(0, posicionesDisponibles.Count);
+                Transform puntoElegido = posicionesDisponibles[indiceAleatorio];
+
+                // 4. Instanciamos la planta en la posición exacta del Transform elegido
+                GameObject planta = Instantiate(plantaVeneno, puntoElegido.position, Quaternion.identity);
+
+                // Configuramos su daño
+                var scriptPlanta = planta.GetComponent<PlantaVeneno>();
+                if (scriptPlanta != null) scriptPlanta.setDanio(danioPlantaVeneno, gameObject);
+
+                // 5. Eliminamos esta posición de la lista temporal para que no se repita
+                posicionesDisponibles.RemoveAt(indiceAleatorio);
+            }
         }
 
         yield return new WaitForSeconds(0.9f);

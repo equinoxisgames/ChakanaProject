@@ -60,7 +60,7 @@ public class VorticeViento : MonoBehaviour
 
         if (temporizadorDanio >= tiempoEntreDanio)
         {
-            jugador.RecibirDanio(danioVortice);
+            jugador.RecibirDanioBajo(danioVortice);
 
             temporizadorDanio = 0f;
         }
