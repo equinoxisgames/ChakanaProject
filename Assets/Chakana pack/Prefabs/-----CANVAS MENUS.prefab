@@ -29110,16 +29110,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6de8302c889a93b43ad03181654c7bed, type: 3}
   - {fileID: 21300000, guid: 8218ad752ef851545881fff02bc90590, type: 3}
   - {fileID: 21300000, guid: 57bca8a82730c014fad059273a7f7bb2, type: 3}
-  - {fileID: 21300000, guid: fdbcbd1239f346b4da36ef8a931b6e08, type: 3}
-  - {fileID: 21300000, guid: e91ce35803d40014fbb196ab5ef27887, type: 3}
   - {fileID: 21300000, guid: fadafbc7d8c2fd647a6bcc9080d02419, type: 3}
-  - {fileID: 21300000, guid: cb80823a08b0a81429a1437c2db8a7e7, type: 3}
+  - {fileID: 21300000, guid: e91ce35803d40014fbb196ab5ef27887, type: 3}
   - {fileID: 21300000, guid: f76fb575b413a514cacc63d63d1505b1, type: 3}
   - {fileID: 21300000, guid: cca09c6649eac544abe52e663206972b, type: 3}
+  - {fileID: 21300000, guid: fdbcbd1239f346b4da36ef8a931b6e08, type: 3}
   - {fileID: 21300000, guid: 699ef3e75d417be408760b7a3d4eab96, type: 3}
   - {fileID: 21300000, guid: 7390a53854353d44ba3bbe738a0ea784, type: 3}
   - {fileID: 21300000, guid: 76c6540c59ec60b42913487d10dfdf48, type: 3}
   - {fileID: 21300000, guid: 021c0c2cbeabf3941a5e36f86df4b94b, type: 3}
+  - {fileID: 21300000, guid: cb80823a08b0a81429a1437c2db8a7e7, type: 3}
   ItemPatterns:
   - {fileID: 21300000, guid: b6a21285d376d01458d6d14806add091, type: 3}
   - {fileID: 21300000, guid: d66bf464f31c5fb469a1b4d8d31fa045, type: 3}
@@ -86865,16 +86865,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6de8302c889a93b43ad03181654c7bed, type: 3}
   - {fileID: 21300000, guid: 8218ad752ef851545881fff02bc90590, type: 3}
   - {fileID: 21300000, guid: 57bca8a82730c014fad059273a7f7bb2, type: 3}
-  - {fileID: 21300000, guid: fdbcbd1239f346b4da36ef8a931b6e08, type: 3}
-  - {fileID: 21300000, guid: e91ce35803d40014fbb196ab5ef27887, type: 3}
   - {fileID: 21300000, guid: fadafbc7d8c2fd647a6bcc9080d02419, type: 3}
-  - {fileID: 21300000, guid: cb80823a08b0a81429a1437c2db8a7e7, type: 3}
+  - {fileID: 21300000, guid: e91ce35803d40014fbb196ab5ef27887, type: 3}
   - {fileID: 21300000, guid: f76fb575b413a514cacc63d63d1505b1, type: 3}
   - {fileID: 21300000, guid: cca09c6649eac544abe52e663206972b, type: 3}
+  - {fileID: 21300000, guid: fdbcbd1239f346b4da36ef8a931b6e08, type: 3}
   - {fileID: 21300000, guid: 699ef3e75d417be408760b7a3d4eab96, type: 3}
   - {fileID: 21300000, guid: 7390a53854353d44ba3bbe738a0ea784, type: 3}
   - {fileID: 21300000, guid: 76c6540c59ec60b42913487d10dfdf48, type: 3}
   - {fileID: 21300000, guid: 021c0c2cbeabf3941a5e36f86df4b94b, type: 3}
+  - {fileID: 21300000, guid: cb80823a08b0a81429a1437c2db8a7e7, type: 3}
   ItemPatterns:
   - {fileID: 21300000, guid: b6a21285d376d01458d6d14806add091, type: 3}
   - {fileID: 21300000, guid: d66bf464f31c5fb469a1b4d8d31fa045, type: 3}
@@ -120635,6 +120635,7 @@ GameObject:
   - component: {fileID: 7944354664561512587}
   - component: {fileID: 6786753348623828871}
   - component: {fileID: 5433459713669697366}
+  - component: {fileID: 7172568467239854147}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -120779,6 +120780,46 @@ MonoBehaviour:
   useCustomColor: 0
   colorType: 0
   fontType: 1
+--- !u!114 &7172568467239854147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719660408302643830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:0f6ec91f13c749641b380f2ed3de5076
+    m_TableEntryReference:
+      m_KeyId: 759652164993024
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6786753348623828871}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &7734092795223548526
 GameObject:
   m_ObjectHideFlags: 0
