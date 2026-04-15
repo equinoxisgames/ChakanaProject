@@ -14,7 +14,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
         public static readonly Dictionary<ItemId, ItemParams> Params = new Dictionary<ItemId, ItemParams>
         {
             {
-                ItemId.SupayMask,
+                ItemId.SupaypaUma,
                 new ItemParams
                 {
                     Type = ItemType.Ukuku_Object,
@@ -39,7 +39,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.KunkaKuchuna,
+                ItemId.Suntur,
                 new ItemParams
                 {
                     Type = ItemType.Weapon,
@@ -68,7 +68,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.KunturMask,
+                ItemId.KunturpaUma,
                 new ItemParams
                 {
                     Type = ItemType.Talisman,
@@ -77,7 +77,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.AyahuascaRoot,
+                ItemId.Ayahuasca,
                 new ItemParams
                 {
                     Type = ItemType.Ukuku_Object,
@@ -86,7 +86,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.LuminousMushroom,
+                ItemId.KilluKallampa,
                 new ItemParams
                 {
                     Type = ItemType.Ukuku_Object,
@@ -95,7 +95,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.PachamamaAmulet,
+                ItemId.ValdiviaIlla,
                 new ItemParams
                 {
                     Type = ItemType.Talisman,
@@ -142,7 +142,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.WarriorTearAmulet,
+                ItemId.UturunkuIlla,
                 new ItemParams
                 {
                     Type = ItemType.Talisman,

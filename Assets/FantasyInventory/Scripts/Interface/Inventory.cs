@@ -40,19 +40,19 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
+                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
+                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
 
-                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
-                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
-            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
-            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+            inventory.Add(new Item(ItemId.Suntur, 1));
 
             Bag.Initialize(ref inventory);
         }
@@ -78,19 +78,19 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
+                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
+                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
 
-                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
-                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
-            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
-            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+            inventory.Add(new Item(ItemId.Suntur, 1));
 
             // ── PRIORIDAD 5: Proteger el SelectItem inicial ──
             if (inventory.Count > 0 && ItemInfo != null)
