@@ -150,6 +150,8 @@ public class DialogueController : MonoBehaviour
     private Coroutine _typingCoroutine;
     private List<Coroutine> _transitionCoroutines = new List<Coroutine>();
     private string _currentLocale;
+    private string _currentLineText;
+    private Coroutine _subTypingCoroutine;
 
     // ─────────────────────────────────────────────────────────────────────────
     // UNITY LIFECYCLE
@@ -321,12 +323,12 @@ public class DialogueController : MonoBehaviour
         if (!_activeConversation.isMonologue)
             StartActorTransitions(line.actorIndex);
 
-        // Obtener texto localizado antes de iniciar el tipeo
-        string localizedText = GetLocalizedText(line.localizationKey);
+        // Obtener y cachear el texto localizado antes de iniciar el tipeo
+        _currentLineText = GetLocalizedText(line.localizationKey);
 
         // Iniciar coroutine de tipeo
         StopTypingCoroutine();
-        _typingCoroutine = StartCoroutine(TypeText(localizedText, line));
+        _typingCoroutine = StartCoroutine(TypeText(_currentLineText, line));
     }
 
     /// <summary>
@@ -358,11 +360,8 @@ public class DialogueController : MonoBehaviour
 
         if (_activeConversation == null) return;
 
-        DialogueLine line = _activeConversation.lines[_currentLineIndex];
-        string localizedText = GetLocalizedText(line.localizationKey);
-
         if (dialogueText != null)
-            dialogueText.text = localizedText;
+            dialogueText.text = _currentLineText;
 
         _isTyping = false;
     }
@@ -429,11 +428,13 @@ public class DialogueController : MonoBehaviour
 
         if (_activeConversation.typingSoundMode == TypingSoundMode.PerCharacter)
         {
-            yield return StartCoroutine(TypePerCharacter(fullText, useLineAudio));
+            _subTypingCoroutine = StartCoroutine(TypePerCharacter(fullText, useLineAudio));
+            yield return _subTypingCoroutine;
         }
         else
         {
-            yield return StartCoroutine(TypePerWord(fullText, useLineAudio));
+            _subTypingCoroutine = StartCoroutine(TypePerWord(fullText, useLineAudio));
+            yield return _subTypingCoroutine;
         }
 
         _isTyping = false;
@@ -611,6 +612,11 @@ public class DialogueController : MonoBehaviour
     /// </summary>
     private void StopTypingCoroutine()
     {
+        if (_subTypingCoroutine != null)
+        {
+            StopCoroutine(_subTypingCoroutine);
+            _subTypingCoroutine = null;
+        }
         if (_typingCoroutine != null)
         {
             StopCoroutine(_typingCoroutine);

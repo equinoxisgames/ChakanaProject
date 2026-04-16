@@ -95,7 +95,7 @@ public class ConversationInteract : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E) || gamepad.buttonNorth.wasPressedThisFrame )
             {
-            dialogueController.StartConversation("4");
+            dialogueController.StartConversation("1");
             StartConversation();
         }
         
