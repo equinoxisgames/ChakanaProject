@@ -169,8 +169,8 @@ public class DialogueController : MonoBehaviour
             continueButton.onClick.AddListener(OnContinueButtonPressed);
 
         // Auto-iniciar conversación si se especificó un ID
-        if (!string.IsNullOrEmpty(startConversationID))
-            StartConversation(startConversationID);
+        //if (!string.IsNullOrEmpty(startConversationID))
+        //    StartConversation(startConversationID);
     }
 
     private void OnDestroy()

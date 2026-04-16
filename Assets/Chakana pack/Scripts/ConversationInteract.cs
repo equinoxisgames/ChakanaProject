@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
@@ -7,6 +7,7 @@ using Assets.FantasyInventory.Scripts.Enums;
 using Assets.FantasyInventory.Scripts.GameData;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
 using Assets.FantasyInventory.Scripts.Interface;
+using UnityEngine.InputSystem;
 
 public class ConversationInteract : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] GameObject shop;
     [SerializeField] Transform shopList;
     public Inventory inventory;
+    public DialogueController dialogueController;
     GameObject canvas;
 
     private GameObject canvasUI;
@@ -84,6 +86,20 @@ public class ConversationInteract : MonoBehaviour
                 CloseShop();
             }
         }
+
+
+        var gamepad = Gamepad.current;
+        if (gamepad == null) return;
+
+        
+
+            if (Input.GetKeyDown(KeyCode.E) || gamepad.buttonNorth.wasPressedThisFrame )
+            {
+            dialogueController.StartConversation("1");
+            StartConversation();
+        }
+        
+
     }
 
 
