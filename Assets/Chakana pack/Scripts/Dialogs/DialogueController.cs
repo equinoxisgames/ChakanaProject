@@ -152,10 +152,14 @@ public class DialogueController : MonoBehaviour
     private string _currentLocale;
     private string _currentLineText;
     private Coroutine _subTypingCoroutine;
+    private List<GameObject> _activatedParents = new List<GameObject>();
 
     // ─────────────────────────────────────────────────────────────────────────
     // UNITY LIFECYCLE
     // ─────────────────────────────────────────────────────────────────────────
+
+    // Callback invocado al terminar cualquier conversación (suscribirse desde código externo)
+    public System.Action OnConversationFinished;
 
     private void Awake()
     {
@@ -192,11 +196,20 @@ public class DialogueController : MonoBehaviour
     /// <param name="conversationID">ID único de la conversación a iniciar.</param>
     public void StartConversation(string conversationID)
     {
+        Debug.Log($"[DialogueController] StartConversation llamado con ID: '{conversationID}'");
+
+        // Evitar re-iniciar si ya hay una conversación activa
+        if (_activeConversation != null)
+        {
+            Debug.LogWarning($"[DialogueController] Ya hay una conversación activa: '{_activeConversation.conversationID}'. Ignorando.");
+            return;
+        }
+
         Conversation conv = conversations.Find(c => c.conversationID == conversationID);
 
         if (conv == null)
         {
-            Debug.LogError($"[DialogueController] No se encontró la conversación con ID: '{conversationID}'");
+            Debug.LogError($"[DialogueController] No se encontró la conversación con ID: '{conversationID}'. IDs disponibles: {string.Join(", ", conversations.ConvertAll(c => c.conversationID))}");
             return;
         }
 
@@ -215,7 +228,30 @@ public class DialogueController : MonoBehaviour
 
         // Mostrar el panel
         if (dialogPanel != null)
+        {
+            // Activar toda la cadena de padres para garantizar visibilidad, recordando cuáles activamos
+            _activatedParents.Clear();
+            Transform t = dialogPanel.transform.parent;
+            while (t != null)
+            {
+                if (!t.gameObject.activeSelf)
+                {
+                    Debug.Log($"[DialogueController] Activando padre inactivo: {t.gameObject.name}");
+                    t.gameObject.SetActive(true);
+                    _activatedParents.Add(t.gameObject);
+                }
+                t = t.parent;
+            }
             dialogPanel.SetActive(true);
+            string hierarchy = dialogPanel.name;
+            Transform th = dialogPanel.transform.parent;
+            while (th != null) { hierarchy = th.gameObject.name + (th.gameObject.activeSelf ? "" : "[INACTIVO]") + " > " + hierarchy; th = th.parent; }
+            Debug.Log($"[DialogueController] dialogPanel activado. Es visible: {dialogPanel.activeInHierarchy}. Jerarquía: {hierarchy}");
+        }
+        else
+        {
+            Debug.LogError("[DialogueController] dialogPanel es NULL. No está asignado en el Inspector.");
+        }
 
         // Configurar visibilidad de actores según monólogo/diálogo
         SetupActorVisibility();
@@ -235,6 +271,14 @@ public class DialogueController : MonoBehaviour
 
         if (dialogPanel != null)
             dialogPanel.SetActive(false);
+
+        // Restaurar padres que fueron activados por nosotros
+        foreach (var parent in _activatedParents)
+        {
+            if (parent != null)
+                parent.SetActive(false);
+        }
+        _activatedParents.Clear();
 
         _activeConversation = null;
     }
@@ -311,6 +355,7 @@ public class DialogueController : MonoBehaviour
         if (_activeConversation == null) return;
 
         DialogueLine line = _activeConversation.lines[_currentLineIndex];
+        Debug.Log($"[DialogueController] ShowCurrentLine — índice {_currentLineIndex}, actorIndex: {line.actorIndex}, key: '{line.localizationKey}'");
 
         // Validar actorIndex
         if (!IsActorIndexValid(line.actorIndex)) return;
@@ -388,22 +433,24 @@ public class DialogueController : MonoBehaviour
     /// </summary>
     private void FinishConversation()
     {
+        Debug.Log("[DialogueController] FinishConversation llamado.");
         StopAllTypingAndTransitions();
         RestoreActorVisibility();
 
-        bool hasListeners = _activeConversation.onFinished != null &&
-                            _activeConversation.onFinished.GetPersistentEventCount() > 0;
+        // Limpiar estado ANTES de invocar callbacks para evitar re-entrada inconsistente
+        var conv = _activeConversation;
+        _activeConversation = null;
 
-        if (hasListeners)
-        {
-            _activeConversation.onFinished.Invoke();
-        }
-
-        // Ocultar el panel (en segundo plano si hay evento, o directamente si no)
         if (dialogPanel != null)
             dialogPanel.SetActive(false);
 
-        _activeConversation = null;
+        bool hasListeners = conv.onFinished != null &&
+                            conv.onFinished.GetPersistentEventCount() > 0;
+
+        if (hasListeners)
+            conv.onFinished.Invoke();
+
+        OnConversationFinished?.Invoke();
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -416,9 +463,12 @@ public class DialogueController : MonoBehaviour
     private IEnumerator TypeText(string fullText, DialogueLine line)
     {
         _isTyping = true;
+        Debug.Log($"[DialogueController] TypeText iniciado. Texto: '{fullText?.Substring(0, Mathf.Min(30, fullText?.Length ?? 0))}...' Panel activo en jerarquía: {dialogPanel?.activeInHierarchy}");
 
         if (dialogueText != null)
             dialogueText.text = string.Empty;
+        else
+            Debug.LogError("[DialogueController] dialogueText es NULL.");
 
         // Si la línea tiene un AudioClip específico, reproducirlo al inicio
         if (line.audioClip != null && audioSource != null)
