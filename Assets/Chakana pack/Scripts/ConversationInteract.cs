@@ -102,6 +102,16 @@ public class ConversationInteract : MonoBehaviour
         }
 
 
+        //Valida la conversación que va a presentar dependiendo de los palyer prefs
+        ValidateAndRunConversation();
+
+    }
+
+    /// <summary>
+    /// Evalúa inputs, estado de interacción y prioridades de PlayerPrefs para ejecutar la conversación.
+    /// </summary>
+    public void ValidateAndRunConversation()
+    {
         var gamepad = Gamepad.current;
 
         bool pressedE = Input.GetKeyDown(KeyCode.E);
@@ -110,40 +120,82 @@ public class ConversationInteract : MonoBehaviour
         if (pressedE || pressedY)
             Debug.Log($"[ConversationInteract] Input detectado — E: {pressedE}, Y: {pressedY}, _inConversation: {_inConversation}");
 
+        // --- DEBUG PREVIO: Para ver por qué entra o no al bloque ---
+        Debug.Log($"[DEBUG Check] _inConversation: {!_inConversation} | pressedE: {pressedE} | pressedY: {pressedY} | _interactBtn: {_interactBtn}");
+
+
+        // --- 1. DEBUG DE INPUTS Y ESTADO ---
+        // Ayuda a identificar si el problema es de input o de flags lógicos.
+        if (pressedE || pressedY)
+        {
+            Debug.Log($"[Check Pre-Condición] _inConversation: {_inConversation} | _interactBtn: {_interactBtn} | E: {pressedE} | Y: {pressedY}");
+        }
+
+        // --- 2. CONDICIÓN DE ENTRADA ---
         if (!_inConversation && (pressedE || pressedY) && _interactBtn)
         {
-            Debug.Log("[ConversationInteract] Abriendo conversación...");
+            Debug.Log("<color=green><b>[VALIDATION PASSED]</b></color> Iniciando lógica de prioridades...");
 
-            // 1. Determinar qué diálogo cargar según los PlayerPrefs
+            // --- 3. LECTURA DE DATOS ---
             string conversationID = "1"; // Valor por defecto
-            int ukukuM = PlayerPrefs.GetInt("ukukuM", 0); // El segundo parámetro es el valor si no existe
+            int ukukuM = PlayerPrefs.GetInt("ukukuM", 0);
             int conv1 = PlayerPrefs.GetInt("conv1", 0);
 
-            // Lógica de prioridad
+            Debug.Log($"<color=yellow>[DEBUG PlayerPrefs]</color> ukukuM: {ukukuM} | conv1: {conv1}");
+
+            // --- 4. ÁRBOL DE PRIORIDADES ---
+
+            // Prioridad 1: Tienda desbloqueada permanentemente
             if (conv1 == 2)
             {
                 conversationID = "OPEN_STORE";
+                Debug.Log("<color=white>-> Prioridad Seleccionada: Tienda Permanente (conv1 == 2)</color>");
             }
+            // Prioridad 2: Condición especial (Misión completa + Tienda sin abrir)
+            else if (ukukuM == 3 && conv1 == 0)
+            {
+                conversationID = "OPEN_STORE";
+                Debug.Log("<color=white>-> Prioridad Seleccionada: Apertura Tienda Post-Misión (ukukuM == 3 & conv1 == 0)</color>");
+            }
+            // Prioridad 3: No ha empezado la misión
             else if (ukukuM == 0)
             {
                 conversationID = "START_MISSION";
+                Debug.Log("<color=white>-> Prioridad Seleccionada: Inicio de Misión (ukukuM == 0)</color>");
             }
+            // Prioridad 4: Misión completada
             else if (ukukuM == 3)
             {
                 conversationID = "MISSION_COMPLETE";
+                Debug.Log("<color=white>-> Prioridad Seleccionada: Misión Finalizada (ukukuM == 3)</color>");
             }
+            // Prioridad 5: Misión en curso (1 o 2)
             else if (ukukuM > 0 && ukukuM < 3)
             {
                 conversationID = "INCOMPLETE_MISSION";
+                Debug.Log($"<color=white>-> Prioridad Seleccionada: Misión en progreso (ukukuM: {ukukuM})</color>");
+            }
+            else
+            {
+                Debug.LogWarning("[DEBUG Logic] Ninguna condición de prioridad encajó. Se usará ID default: " + conversationID);
             }
 
-            // 2. Ejecutar la conversación con el ID seleccionado
+            // --- 5. EJECUCIÓN FINAL ---
+            Debug.Log($"<color=cyan><b>[EXECUTION]</b></color> Enviando ID final: <b>{conversationID}</b> al dialogueController.");
+
             _inConversation = true;
-            dialogueController.StartConversation(conversationID);
-            StartConversation();
+
+            if (dialogueController != null)
+            {
+                dialogueController.StartConversation(conversationID);
+            }
+            else
+            {
+                Debug.LogError("<b>[ERROR]</b> ¡dialogueController no está asignado en el script!");
+            }
+
+            StartConversation(); // Llamada al método que gestiona el inicio visual/lógico
         }
-
-
     }
 
 
