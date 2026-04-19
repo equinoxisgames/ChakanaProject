@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
+using UnityEngine.UIElements;
 
 public class CharactersBehaviour : MonoBehaviour
 {
@@ -185,7 +186,7 @@ public class CharactersBehaviour : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(2f);
-            RecibirDanio(afectacionFuego * aumentoFuegoPotenciado);
+            RecibirDanioBajo(afectacionFuego * aumentoFuegoPotenciado);
         }
         aumentoFuegoPotenciado = 1;
         estadoFuego = false;
@@ -208,7 +209,7 @@ public class CharactersBehaviour : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(2f);
-            RecibirDanio(vidaMax * afectacionVeneno);
+            RecibirDanioBajo(vidaMax * afectacionVeneno);
         }
         estadoVeneno = false;
         counterEstados = 0;
@@ -229,6 +230,22 @@ public class CharactersBehaviour : MonoBehaviour
 
         flash.CallDamageFlash();
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1.5f);
+
+        //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
+        if (paralizadoPorAtaque)
+        {
+            playable = true;
+            aumentoDanioParalizacion = 1.0f;
+            paralizadoPorAtaque = true;
+        }
+    }
+
+    public void RecibirDanioBajo(float danio)
+    {
+        if (vidaMax == 0) vidaMax = vida;
+
+        vida -= (danio * aumentoDanioParalizacion);
+        flash.CallDamageFlash();
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)

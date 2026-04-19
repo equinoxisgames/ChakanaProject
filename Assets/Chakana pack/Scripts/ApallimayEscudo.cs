@@ -28,6 +28,7 @@ public class ApallimayEscudo : Enemy
     [SerializeField] private GameObject escudo;
     [SerializeField] private GameObject shieldImpact;
     [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip atkSound;
     [SerializeField] private GameObject goldObj;
 
     private Transform playerTransform;
@@ -178,8 +179,12 @@ public class ApallimayEscudo : Enemy
         escudo.SetActive(false); // Baja el escudo
         yield return new WaitForSeconds(t1);
 
+        aud.Stop();
+        aud.clip = atkSound;
+        aud.Play();
         anim.SetBool("Atacando", false);
         daga.enabled = true;
+
         escudo.SetActive(true);
 
         yield return new WaitForSeconds(0.4f);

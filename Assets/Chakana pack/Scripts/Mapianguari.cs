@@ -1,3 +1,4 @@
+using Game2DWaterKit.Demo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ public class Mapianguari : Enemy
 
     [Header("Mecánica: Invocación")]
     [SerializeField] private GameObject plantaVeneno;
+    [SerializeField] private List<Transform> posPlantas;
     [SerializeField] private float danioPlantaVeneno = 10f;
 
     [Header("Efectos y Referencias Extra")]
@@ -46,10 +48,10 @@ public class Mapianguari : Enemy
     private bool hurtSound = false;
 
     [Header("Pantalla Victoria")]
-    [SerializeField] private GameObject bossSilhouettePrefab;
-    [SerializeField] private GameObject playerSilhouettePrefab;
     [SerializeField] private Material silhouetteMaterial;
     [SerializeField] private GameObject quadPrefab;
+    [SerializeField] private GameObject bossSilhouette;
+    [SerializeField] private GameObject playerSilhouette;
 
     private void Start()
     {
@@ -88,7 +90,9 @@ public class Mapianguari : Enemy
         if (vida <= 0)
         {
             StopAllCoroutines();
+            print(estadoActual);
             estadoActual = EstadoMapinguari.Muerto;
+            print(estadoActual);
             StartCoroutine(RutinaMuerte());
             return;
         }
@@ -149,6 +153,9 @@ public class Mapianguari : Enemy
     {
         if (plataformaActual == e || estadoActual == EstadoMapinguari.AsedioRodante || estadoActual == EstadoMapinguari.TransicionFuria) return;
         plataformaActual = e;
+        StopAllCoroutines();
+        anim.SetBool("Iddel", false);
+        anim.SetBool("AB", false);
         StartCoroutine(TeletransporteAlJugador(posMin, posMax));
     }
 
@@ -179,7 +186,7 @@ public class Mapianguari : Enemy
 
         // --- LÓGICA TÁCTICA DE REAPARICIÓN ---
 
-        float distanciaSegura = 5f; // Distancia mínima que mantendrá con Sinchi
+        float distanciaSegura = 7f; // Distancia mínima que mantendrá con Sinchi
         float margenBorde = 1.5f;   // Margen para no aparecer con medio cuerpo fuera de la plataforma
         float playerX = playerTransform.position.x;
 
@@ -219,7 +226,7 @@ public class Mapianguari : Enemy
         // Opcional: Sumar un pequeño offset (+ 0.5f) si el punto de pivote (pivot) de tu sprite no está en los pies.
         float nuevoY = posMax.y;
 
-        transform.position = new Vector3(nuevoX, nuevoY, transform.position.z);
+        transform.position = new Vector3(nuevoX, nuevoY, 0);
 
         // Obligamos al jefe a mirar al jugador instantáneamente antes de aparecer
         MirarHacia(playerX);
@@ -246,7 +253,15 @@ public class Mapianguari : Enemy
         ReproducirAudio(audioAtk);
         anim.SetBool("AB", false);
 
-        yield return new WaitForSeconds(0.5f); // Pequeño descanso tras atacar
+        yield return new WaitForSeconds(0.2f);
+
+        ataqueCuerpo.enabled = true;
+
+        yield return new WaitForSeconds(0.2f); // Pequeño descanso tras atacar
+
+        ataqueCuerpo.enabled = false;
+
+        yield return new WaitForSeconds(0.5f);
 
         anim.SetBool("Iddel", false);
         estadoActual = EstadoMapinguari.Acechando;
@@ -265,16 +280,36 @@ public class Mapianguari : Enemy
 
         yield return new WaitForSeconds(0.5f);
         anim.SetBool("AT", false);
-        // Invocar plantas en posiciones predeterminadas (aleatorias)
-        System.Random rnd = new System.Random();
-        for (int i = 0; i < (enFuria ? 3 : 2); i++)
-        {
-            // Puedes ajustar estas coordenadas a las posiciones reales de tus plataformas
-            Vector3 posPlanta = new Vector3(rnd.Next(-50, -10), playerTransform.position.y + rnd.Next(5, 15), 0);
-            GameObject planta = Instantiate(plantaVeneno, posPlanta, Quaternion.identity);
 
-            var scriptPlanta = planta.GetComponent<PlantaVeneno>();
-            if (scriptPlanta != null) scriptPlanta.setDanio(danioPlantaVeneno, gameObject);
+        // --- LÓGICA DE APARICIÓN SIN REPETIR ---
+
+        // 1. Definimos cuántas plantas van a salir
+        int cantidadAInvocar = enFuria ? 3 : 2;
+
+        // Seguridad: Evitar error si hay menos posiciones en la lista que plantas a invocar
+        cantidadAInvocar = Mathf.Min(cantidadAInvocar, posPlantas.Count);
+
+        if (cantidadAInvocar > 0)
+        {
+            // 2. Creamos una copia temporal de la lista para ir eliminando las posiciones ya usadas
+            List<Transform> posicionesDisponibles = new List<Transform>(posPlantas);
+
+            for (int i = 0; i < cantidadAInvocar; i++)
+            {
+                // 3. Elegimos un índice al azar de las posiciones que AÚN están disponibles
+                int indiceAleatorio = UnityEngine.Random.Range(0, posicionesDisponibles.Count);
+                Transform puntoElegido = posicionesDisponibles[indiceAleatorio];
+
+                // 4. Instanciamos la planta en la posición exacta del Transform elegido
+                GameObject planta = Instantiate(plantaVeneno, puntoElegido.position, Quaternion.identity);
+
+                // Configuramos su daño
+                var scriptPlanta = planta.GetComponent<PlantaVeneno>();
+                if (scriptPlanta != null) scriptPlanta.setDanio(danioPlantaVeneno, gameObject);
+
+                // 5. Eliminamos esta posición de la lista temporal para que no se repita
+                posicionesDisponibles.RemoveAt(indiceAleatorio);
+            }
         }
 
         yield return new WaitForSeconds(0.9f);
@@ -449,6 +484,8 @@ public class Mapianguari : Enemy
     private IEnumerator RutinaMuerte()
     {
         if (scriptJugador != null) scriptJugador.QuitarParalisis();
+
+        StartCoroutine(ShowVictoryScreen());
         CameraShakeManager.Instance.ShakeMuerteEnemigo();
         GetComponent<AudioSource>().Stop();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -458,8 +495,6 @@ public class Mapianguari : Enemy
         anim.SetBool("Muerto", true);
         if (levelController != null) levelController.EliminarLogicaPlataformas();
 
-        StartCoroutine(ShowVictoryScreen());
-
         yield return new WaitForSeconds(5f);
 
         if (gotg != null) Instantiate(gotg, transform.position, Quaternion.identity);
@@ -468,20 +503,45 @@ public class Mapianguari : Enemy
 
     IEnumerator ShowVictoryScreen()
     {
-        // ... (Tu lógica de pantalla de victoria intacta) ...
-        GameObject hudMenu = GameObject.Find("HUDMenu");
-        if (hudMenu != null) hudMenu.GetComponent<HudManager>().SetVibrationBossDeath();
+        GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibrationBossDeath();
 
-        victorySound.Stop(); 
+        victorySound.Stop();
         victorySound.Play();
 
-        /*GameObject bossSilhouette = Instantiate(bossSilhouettePrefab, transform.position, Quaternion.identity);
-        bossSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
-        bossSilhouette.transform.position = new Vector3(transform.position.x, transform.position.y, -1);*/
+        Vector3 bossPosition = gameObject.transform.position;
+        Vector3 playerPosition = scriptJugador.transform.position;
 
+        bossSilhouette.GetComponent<SpriteRenderer>().sprite = GetComponent<SpriteRenderer>().sprite;
+        bossSilhouette.transform.localScale = transform.localScale;
+        playerSilhouette.GetComponent<SpriteRenderer>().sprite = scriptJugador.GetComponent<SpriteRenderer>().sprite;
+        playerSilhouette.transform.localScale = scriptJugador.transform.localScale;
+
+        GameObject blackBackground = Instantiate(quadPrefab, new Vector3(0, 0, -1), Quaternion.identity);
+        blackBackground.transform.localScale = new Vector3(500f, 300f, 0f);  // Escalar el Quad para cubrir la pantalla
+        //blackBackground.GetComponent<MeshRenderer>().material.color = Color.black;
+
+        bossSilhouette.transform.position = new Vector3(bossPosition.x, bossPosition.y, -1);
+        playerSilhouette.transform.position = new Vector3(playerPosition.x, playerPosition.y, -1);
+
+        Time.timeScale = 1;  // Pausar el tiempo si lo hab�as pausado antes
+
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 0;  // Reanudar el tiempo si lo hab�as pausado antes
         yield return new WaitForSecondsRealtime(1f);
+        blackBackground.transform.localScale = new Vector3(0f, 0f, 0f);
+        Time.timeScale = 1;  // Pausar el tiempo si lo hab�as pausado antes
+        // 5. Desactivar el fondo negro y las siluetas
+        Destroy(bossSilhouette);
+        Destroy(playerSilhouette);
+        Destroy(blackBackground);
 
-        //Destroy(bossSilhouette);
+        bossSilhouette.SetActive(false);
+        playerSilhouette.SetActive(false);
+        blackBackground.SetActive(false);
+
+
+        // 6. Continuar con el juego (transici�n o siguiente nivel)
+        Time.timeScale = 1;  // Reanudar el tiempo si lo hab�as pausado antes
     }
 
     #endregion
