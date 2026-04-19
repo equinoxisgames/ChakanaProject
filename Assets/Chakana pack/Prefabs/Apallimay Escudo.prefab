@@ -94,7 +94,7 @@ MonoBehaviour:
   healthBar: {fileID: 5556671023797495195, guid: 66b4714c4fdbc04419e927ef54ff0420, type: 3}
   estadoActual: 0
   rangoVision: 20
-  rangoAtaque: 2.5
+  rangoAtaque: 3
   speed: 7
   cooldownCambioMirada: 3
   tiempoCaminarAtras: 2
@@ -106,6 +106,7 @@ MonoBehaviour:
   escudo: {fileID: 6787275540869854148}
   shieldImpact: {fileID: 100000, guid: a4585a9f0750b8b4a80739050af7ecbc, type: 3}
   hurtSound: {fileID: 8300000, guid: 114381e7f36bd734e906efdabe33b872, type: 3}
+  atkSound: {fileID: 8300000, guid: fef89f2005dba7941a897dd485c6bf5f, type: 3}
   goldObj: {fileID: 6304513040470492369, guid: 95dfbe745213a8e4dbbca8d4a3548923, type: 3}
 --- !u!212 &358327951426089632
 SpriteRenderer:
@@ -264,7 +265,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -5916331914982963989, guid: ede1117611717ee43b5d1a0af3088025, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -25,8 +25,7 @@ public class CameraShakeManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
-        else { Destroy(gameObject); }
+        if (Instance == null) Instance = this;
     }
 
     void OnEnable()
@@ -61,6 +60,7 @@ public class CameraShakeManager : MonoBehaviour
     // (Duración Shake, Fuerza Shake, Duración Hitstop)
     public void ShakeDanio() => IniciarVibracion(0.2f, 0.45f, 0.1f);
     public void ShakeMuerteEnemigo() => IniciarVibracion(0.5f, 0.75f, 0.2f);
+    public void ShakeSinHitStop() => IniciarVibracion(0.5f, 0.75f);
 
     public void IniciarVibracion(float duracion, float fuerza, float duracionHitstop = 0f)
     {

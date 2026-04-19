@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class HudManager : MonoBehaviour
 {
+    public static HudManager Instance { get; private set; }
+
     Hoyustus player;
     [SerializeField] LiquidBar lifeBar;
     [SerializeField] LiquidBar manaBar;
@@ -13,15 +15,19 @@ public class HudManager : MonoBehaviour
     [SerializeField] LiquidBar snakeBar;
     [SerializeField] LiquidBar weaponBar;
     [SerializeField] Text goldTxt;
+    [SerializeField] GameObject skillContain;
+
+    [Header("UI_Skills")]
+    [SerializeField] List<GameObject> habIcons1 = new List<GameObject>();
+    [SerializeField] List<GameObject> habIcons2 = new List<GameObject>();
+    [SerializeField] List<GameObject> habContainer = new List<GameObject>();
+
+
+    [SerializeField] GameObject manaEffects;
 
     [Header ("UI_Extras")]
     [SerializeField] List<CanvasGroup> btnKeys = new List<CanvasGroup>();
     [SerializeField] List<CanvasGroup> btnJoys = new List<CanvasGroup>();
-
-    [SerializeField] List<GameObject> habIcons1 = new List<GameObject>();
-    [SerializeField] List<GameObject> habIcons2 = new List<GameObject>();
-
-    [SerializeField] GameObject manaEffects;
 
     private bool manaB, condorB, snakeB, weaponB;
 
@@ -38,6 +44,8 @@ public class HudManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+
         maxValue = 100;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
     }
@@ -54,6 +62,8 @@ public class HudManager : MonoBehaviour
         {
             lifeMax = player.getMaxVida();
         }
+
+        RefreshUI();
 
         if (lifeMax == 1500)
         {
@@ -245,6 +255,14 @@ public class HudManager : MonoBehaviour
     public float GetCuracion()
     {
         return mana;
+    }
+
+    public void RefreshUI()
+    {
+        skillContain.SetActive(PlayerPrefs.HasKey("unlookSkills"));
+        habContainer[0].SetActive(PlayerPrefs.HasKey("condorSkill"));
+        habContainer[1].SetActive(PlayerPrefs.HasKey("snakeSkill"));
+        habContainer[2].SetActive(PlayerPrefs.HasKey("spearSkill"));
     }
 
     public void SetVibration()

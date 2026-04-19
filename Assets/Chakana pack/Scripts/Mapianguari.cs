@@ -1,3 +1,4 @@
+using Game2DWaterKit.Demo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,10 +48,10 @@ public class Mapianguari : Enemy
     private bool hurtSound = false;
 
     [Header("Pantalla Victoria")]
-    [SerializeField] private GameObject bossSilhouettePrefab;
-    [SerializeField] private GameObject playerSilhouettePrefab;
     [SerializeField] private Material silhouetteMaterial;
     [SerializeField] private GameObject quadPrefab;
+    [SerializeField] private GameObject bossSilhouette;
+    [SerializeField] private GameObject playerSilhouette;
 
     private void Start()
     {
@@ -89,7 +90,9 @@ public class Mapianguari : Enemy
         if (vida <= 0)
         {
             StopAllCoroutines();
+            print(estadoActual);
             estadoActual = EstadoMapinguari.Muerto;
+            print(estadoActual);
             StartCoroutine(RutinaMuerte());
             return;
         }
@@ -481,6 +484,8 @@ public class Mapianguari : Enemy
     private IEnumerator RutinaMuerte()
     {
         if (scriptJugador != null) scriptJugador.QuitarParalisis();
+
+        StartCoroutine(ShowVictoryScreen());
         CameraShakeManager.Instance.ShakeMuerteEnemigo();
         GetComponent<AudioSource>().Stop();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -490,8 +495,6 @@ public class Mapianguari : Enemy
         anim.SetBool("Muerto", true);
         if (levelController != null) levelController.EliminarLogicaPlataformas();
 
-        StartCoroutine(ShowVictoryScreen());
-
         yield return new WaitForSeconds(5f);
 
         if (gotg != null) Instantiate(gotg, transform.position, Quaternion.identity);
@@ -500,20 +503,45 @@ public class Mapianguari : Enemy
 
     IEnumerator ShowVictoryScreen()
     {
-        // ... (Tu lógica de pantalla de victoria intacta) ...
-        GameObject hudMenu = GameObject.Find("HUDMenu");
-        if (hudMenu != null) hudMenu.GetComponent<HudManager>().SetVibrationBossDeath();
+        GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibrationBossDeath();
 
-        victorySound.Stop(); 
+        victorySound.Stop();
         victorySound.Play();
 
-        /*GameObject bossSilhouette = Instantiate(bossSilhouettePrefab, transform.position, Quaternion.identity);
-        bossSilhouette.GetComponent<SpriteRenderer>().material = silhouetteMaterial;
-        bossSilhouette.transform.position = new Vector3(transform.position.x, transform.position.y, -1);*/
+        Vector3 bossPosition = gameObject.transform.position;
+        Vector3 playerPosition = scriptJugador.transform.position;
 
+        bossSilhouette.GetComponent<SpriteRenderer>().sprite = GetComponent<SpriteRenderer>().sprite;
+        bossSilhouette.transform.localScale = transform.localScale;
+        playerSilhouette.GetComponent<SpriteRenderer>().sprite = scriptJugador.GetComponent<SpriteRenderer>().sprite;
+        playerSilhouette.transform.localScale = scriptJugador.transform.localScale;
+
+        GameObject blackBackground = Instantiate(quadPrefab, new Vector3(0, 0, -1), Quaternion.identity);
+        blackBackground.transform.localScale = new Vector3(500f, 300f, 0f);  // Escalar el Quad para cubrir la pantalla
+        //blackBackground.GetComponent<MeshRenderer>().material.color = Color.black;
+
+        bossSilhouette.transform.position = new Vector3(bossPosition.x, bossPosition.y, -1);
+        playerSilhouette.transform.position = new Vector3(playerPosition.x, playerPosition.y, -1);
+
+        Time.timeScale = 1;  // Pausar el tiempo si lo hab�as pausado antes
+
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 0;  // Reanudar el tiempo si lo hab�as pausado antes
         yield return new WaitForSecondsRealtime(1f);
+        blackBackground.transform.localScale = new Vector3(0f, 0f, 0f);
+        Time.timeScale = 1;  // Pausar el tiempo si lo hab�as pausado antes
+        // 5. Desactivar el fondo negro y las siluetas
+        Destroy(bossSilhouette);
+        Destroy(playerSilhouette);
+        Destroy(blackBackground);
 
-        //Destroy(bossSilhouette);
+        bossSilhouette.SetActive(false);
+        playerSilhouette.SetActive(false);
+        blackBackground.SetActive(false);
+
+
+        // 6. Continuar con el juego (transici�n o siguiente nivel)
+        Time.timeScale = 1;  // Reanudar el tiempo si lo hab�as pausado antes
     }
 
     #endregion
