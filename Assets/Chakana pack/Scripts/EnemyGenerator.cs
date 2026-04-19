@@ -26,6 +26,8 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Awake()
     {
+        PlayerPrefs.DeleteKey("combat" + combatNum);
+
         if (PlayerPrefs.HasKey("combat" + combatNum))
         {
             Destroy(gameObject);
@@ -123,21 +125,28 @@ public class EnemyGenerator : MonoBehaviour
         {
             if (!isOn)
             {
-                isOnBattle = true;
-                isMove = true;
-
-                sfxSource.clip = doorAu;
-                sfxSource.Play();
-
-                StartCoroutine(StartCombat());
-
-                isOn = true;
+                StartCombatAuto();
             }
+        }
+    }
+
+    public void StartCombatAuto()
+    {
+        if (!isOn)
+        {
+            StartCoroutine(StartCombat());
         }
     }
 
     IEnumerator StartCombat()
     {
+        isOnBattle = true;
+        isMove = true;
+        isOn = true;
+
+        sfxSource.clip = doorAu;
+        sfxSource.Play();
+
         yield return new WaitForSeconds(1f);
 
         // Crossfade: música de fondo → música de combate
@@ -156,6 +165,7 @@ public class EnemyGenerator : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
+        isOn = true;
         finishSpawn = true;
     }
 

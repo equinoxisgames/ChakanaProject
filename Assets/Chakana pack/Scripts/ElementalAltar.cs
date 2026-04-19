@@ -7,24 +7,22 @@ public class ElementalAltar : MonoBehaviour
 {
     [SerializeField] string doorName;
     [SerializeField] string keyCode;
-    [SerializeField] GameObject altarFX;
-    [SerializeField] GameObject altarOffFX;
-    [SerializeField] GameObject txtUse;
-    [SerializeField] GameObject details;
-    [SerializeField] TextMeshProUGUI detailTxt;
-    [SerializeField] GameObject explodeFx;
-    [SerializeField] AudioClip audioComplete;
+    [SerializeField] GameObject btnControls;
+    [SerializeField] GameObject particle;
+    [SerializeField] Hoyustus player;
+    [SerializeField] GameObject tutoObj;
+    [SerializeField] EnemyGenerator enemyG;
 
     private GameObject keyObj, joyObj;
     private bool joystick = false;
 
-    private bool isIn, isOn;
+    private bool isIn, isOn, isActive;
     private string altarName;
 
     private void Start()
     {
-        keyObj = txtUse.transform.GetChild(0).gameObject;
-        joyObj = txtUse.transform.GetChild(1).gameObject;
+        keyObj = btnControls.transform.GetChild(0).gameObject;
+        joyObj = btnControls.transform.GetChild(1).gameObject;
 
         keyObj.SetActive(true);
         joyObj.SetActive(false);
@@ -43,26 +41,23 @@ public class ElementalAltar : MonoBehaviour
         }
 
         altarName = doorName + keyCode;
-
+        PlayerPrefs.SetInt(altarName, 0);
         if (!PlayerPrefs.HasKey(altarName))
         {
             PlayerPrefs.SetInt(altarName, 0);
         }
         else if (PlayerPrefs.GetInt(altarName) == 1)
         {
-            altarFX.SetActive(true);
-            altarOffFX.SetActive(false);
             isOn = true;
+            gameObject.SetActive(false);
         }
     }
 
     void Update()
     {
-        if (isIn && Input.GetButtonDown("Interact"))
+        if (isIn && Input.GetButtonDown("Interact") && !isOn)
         {
-            altarFX.SetActive(true);
-            altarOffFX.SetActive(false);
-            txtUse.SetActive(false);
+            btnControls.SetActive(false);
             
             isOn = true;
             isIn = false;
@@ -71,11 +66,41 @@ public class ElementalAltar : MonoBehaviour
 
             int e = PlayerPrefs.GetInt(doorName) + 1;
             PlayerPrefs.SetInt(doorName, e);
-            StartCoroutine(ShowDetails());
+
+            CameraShakeManager.Instance.ShakeSinHitStop();
+
+            particle.SetActive(false);
+            PlayerPrefs.SetInt("unlookSkills", 1);
+            
+            if(keyCode == "01")
+            {
+                PlayerPrefs.SetInt("snakeSkill", 1);
+            }
+            if(keyCode == "02")
+            {
+                PlayerPrefs.SetInt("condorSkill", 1);
+            }
+            if (keyCode == "03")
+            {
+                PlayerPrefs.SetInt("spearSkill", 1);
+            }
+
+            HudManager.Instance.RefreshUI();
+
+            StartCoroutine(SkillsTuto());
         }
 
         if (Input.anyKeyDown)
         {
+            if (isOn && isActive)
+            {
+                tutoObj.SetActive(false);
+                Time.timeScale = 1;
+                enemyG.StartCombatAuto();
+                gameObject.SetActive(false);
+                isActive = false;
+            }
+
             if (joystick)
             {
                 joystick = false;
@@ -103,7 +128,7 @@ public class ElementalAltar : MonoBehaviour
         if (collision.transform.tag == "Player" && !isOn)
         {
             isIn = true;
-            txtUse.SetActive(true);
+            btnControls.SetActive(true);
         }
     }
 
@@ -112,36 +137,19 @@ public class ElementalAltar : MonoBehaviour
         if (collision.transform.tag == "Player" && !isOn)
         {
             isIn = false;
-            txtUse.SetActive(false);
+            btnControls.SetActive(false);
         }
     }
 
-    IEnumerator ShowDetails()
+    IEnumerator SkillsTuto()
     {
-        int e = 3 - PlayerPrefs.GetInt(doorName);
+        GetComponent<AudioSource>().Play();
+        Time.timeScale = 0;
+        tutoObj.transform.GetChild(5).gameObject.SetActive(false);
+        tutoObj.SetActive(true);
 
-        if(e == 2)
-        {
-            detailTxt.text = e + " MORE" + " ALTARS";
-            GetComponent<AudioSource>().Play();
-        }
-        else if(e == 1)
-        {
-            detailTxt.text = e + " MORE" + " ALTAR";
-            GetComponent<AudioSource>().Play();
-        }
-        else
-        {
-            detailTxt.text = "THE DOOR HAS OPENED";
-            GetComponent<AudioSource>().clip = audioComplete;
-            GetComponent<AudioSource>().Play();
-            Instantiate(explodeFx);
-        }
-
-        details.SetActive(true);
-
-        yield return new WaitForSeconds(4.4f);
-
-        details.SetActive(false);
+        yield return new WaitForSecondsRealtime(1f);
+        tutoObj.transform.GetChild(5).gameObject.SetActive(true);
+        isActive = true;
     }
 }
