@@ -15,7 +15,7 @@
         Bow          	= 6,
         KunturpaUma 	= 7,
         Ayahuasca       = 8,
-        KilluKallampa   = 9,
+        AnkasKallampa   = 9,
         ValdiviaIlla	= 10,
         SilverRing      = 11,
         Spear           = 12,

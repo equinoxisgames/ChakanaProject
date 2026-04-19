@@ -86,7 +86,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.KilluKallampa,
+                ItemId.AnkasKallampa,
                 new ItemParams
                 {
                     Type = ItemType.Ukuku_Object,

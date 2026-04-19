@@ -40,9 +40,9 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 1));
 
                 if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
                 if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
@@ -78,9 +78,9 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 1));
 
                 if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
                 if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
