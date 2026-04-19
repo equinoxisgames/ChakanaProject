@@ -145,6 +145,7 @@ public class ConversationInteract : MonoBehaviour
         else if (ukukuM == 3)
         {
             conversationID = "MISSION_COMPLETE";
+            PlayerPrefs.SetInt("conv1", 2);
             Debug.Log("[Prioridad 2] Misión completada (ukukuM == 3)");
         }
         // Prioridad 3 — Misión en progreso.
