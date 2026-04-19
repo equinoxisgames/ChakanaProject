@@ -117,85 +117,67 @@ public class ConversationInteract : MonoBehaviour
         bool pressedE = Input.GetKeyDown(KeyCode.E);
         bool pressedY = gamepad != null && gamepad.buttonNorth.wasPressedThisFrame;
 
-        if (pressedE || pressedY)
-            Debug.Log($"[ConversationInteract] Input detectado — E: {pressedE}, Y: {pressedY}, _inConversation: {_inConversation}");
+        // --- 1. GUARD: Sin input o condiciones no cumplidas, salir temprano ---
+        if (_inConversation || (!pressedE && !pressedY) || !_interactBtn)
+            return;
 
-        // --- DEBUG PREVIO: Para ver por qué entra o no al bloque ---
-        Debug.Log($"[DEBUG Check] _inConversation: {!_inConversation} | pressedE: {pressedE} | pressedY: {pressedY} | _interactBtn: {_interactBtn}");
+        Debug.Log($"[ConversationInteract] Input detectado — E: {pressedE}, Y: {pressedY}");
 
+        // --- 2. LECTURA DE PLAYERPREFS ---
+        int ukukuM = PlayerPrefs.GetInt("ukukuM", 0);
+        int conv1 = PlayerPrefs.GetInt("conv1", 0);
 
-        // --- 1. DEBUG DE INPUTS Y ESTADO ---
-        // Ayuda a identificar si el problema es de input o de flags lógicos.
-        if (pressedE || pressedY)
+        Debug.Log($"[PlayerPrefs] ukukuM: {ukukuM} | conv1: {conv1}");
+
+        // --- 3. ÁRBOL DE PRIORIDADES (sin solapamientos) ---
+        string conversationID;
+
+        // Prioridad 1 — Estado final: tienda ya desbloqueada permanentemente.
+        // conv1 == 2 es el estado más avanzado y debe prevalecer sobre todo.
+        if (conv1 == 2)
         {
-            Debug.Log($"[Check Pre-Condición] _inConversation: {_inConversation} | _interactBtn: {_interactBtn} | E: {pressedE} | Y: {pressedY}");
+            conversationID = "OPEN_STORE";
+            Debug.Log("[Prioridad 1] Tienda permanente abierta (conv1 == 2)");
+        }
+        // Prioridad 2 — Misión recién completada (ukukuM == 3).
+        // Se evalúa ANTES que conv1 == 1 para no quedar atrapado en INCOMPLETE_MISSION
+        // en la misma sesión en que el jugador entrega los 3 objetos.
+        else if (ukukuM == 3)
+        {
+            conversationID = "MISSION_COMPLETE";
+            Debug.Log("[Prioridad 2] Misión completada (ukukuM == 3)");
+        }
+        // Prioridad 3 — Misión en progreso.
+        // Cubre tanto conv1 == 1 (ya habló con Ukuku) como ukukuM parcial (1 o 2 objetos).
+        // Al unirlos se elimina la redundancia y el posible conflicto entre ambas reglas.
+        else if (conv1 == 1 || (ukukuM > 0 && ukukuM < 3))
+        {
+            conversationID = "INCOMPLETE_MISSION";
+            Debug.Log($"[Prioridad 3] Misión en progreso (conv1: {conv1} | ukukuM: {ukukuM})");
+        }
+        // Prioridad 4 — Estado inicial: ninguna conversación ni objeto previo.
+        else if (ukukuM == 0 && conv1 == 0)
+        {
+            conversationID = "START_MISSION";
+            Debug.Log("[Prioridad 4] Inicio de misión (ukukuM == 0 && conv1 == 0)");
+        }
+        // Fallback — Estado inesperado; se loguea para facilitar debugging.
+        else
+        {
+            Debug.LogWarning($"[ConversationInteract] Estado inesperado — ukukuM: {ukukuM}, conv1: {conv1}. No se inicia diálogo.");
+            return;
         }
 
-        // --- 2. CONDICIÓN DE ENTRADA ---
-        if (!_inConversation && (pressedE || pressedY) && _interactBtn)
-        {
-            Debug.Log("<color=green><b>[VALIDATION PASSED]</b></color> Iniciando lógica de prioridades...");
+        // --- 4. EJECUCIÓN ---
+        Debug.Log($"[EXECUTION] Enviando conversationID: {conversationID}");
+        _inConversation = true;
 
-            // --- 3. LECTURA DE DATOS ---
-            string conversationID = "1"; // Valor por defecto
-            int ukukuM = PlayerPrefs.GetInt("ukukuM", 0);
-            int conv1 = PlayerPrefs.GetInt("conv1", 0);
+        if (dialogueController != null)
+            dialogueController.StartConversation(conversationID);
+        else
+            Debug.LogError("[ConversationInteract] dialogueController no está asignado en el Inspector.");
 
-            Debug.Log($"<color=yellow>[DEBUG PlayerPrefs]</color> ukukuM: {ukukuM} | conv1: {conv1}");
-
-            // --- 4. ÁRBOL DE PRIORIDADES ---
-
-            // Prioridad 1: Tienda desbloqueada permanentemente
-            if (conv1 == 2)
-            {
-                conversationID = "OPEN_STORE";
-                Debug.Log("<color=white>-> Prioridad Seleccionada: Tienda Permanente (conv1 == 2)</color>");
-            }
-            // Prioridad 2: Condición especial (Misión completa + Tienda sin abrir)
-            else if (ukukuM == 3 && conv1 == 0)
-            {
-                conversationID = "OPEN_STORE";
-                Debug.Log("<color=white>-> Prioridad Seleccionada: Apertura Tienda Post-Misión (ukukuM == 3 & conv1 == 0)</color>");
-            }
-            // Prioridad 3: No ha empezado la misión
-            else if (ukukuM == 0)
-            {
-                conversationID = "START_MISSION";
-                Debug.Log("<color=white>-> Prioridad Seleccionada: Inicio de Misión (ukukuM == 0)</color>");
-            }
-            // Prioridad 4: Misión completada
-            else if (ukukuM == 3)
-            {
-                conversationID = "MISSION_COMPLETE";
-                Debug.Log("<color=white>-> Prioridad Seleccionada: Misión Finalizada (ukukuM == 3)</color>");
-            }
-            // Prioridad 5: Misión en curso (1 o 2)
-            else if (ukukuM > 0 && ukukuM < 3)
-            {
-                conversationID = "INCOMPLETE_MISSION";
-                Debug.Log($"<color=white>-> Prioridad Seleccionada: Misión en progreso (ukukuM: {ukukuM})</color>");
-            }
-            else
-            {
-                Debug.LogWarning("[DEBUG Logic] Ninguna condición de prioridad encajó. Se usará ID default: " + conversationID);
-            }
-
-            // --- 5. EJECUCIÓN FINAL ---
-            Debug.Log($"<color=cyan><b>[EXECUTION]</b></color> Enviando ID final: <b>{conversationID}</b> al dialogueController.");
-
-            _inConversation = true;
-
-            if (dialogueController != null)
-            {
-                dialogueController.StartConversation(conversationID);
-            }
-            else
-            {
-                Debug.LogError("<b>[ERROR]</b> ¡dialogueController no está asignado en el script!");
-            }
-
-            StartConversation(); // Llamada al método que gestiona el inicio visual/lógico
-        }
+        StartConversation(); 
     }
 
 
