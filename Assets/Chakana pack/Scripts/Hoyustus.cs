@@ -29,8 +29,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float jumpBufferTime = 0.15f;
     [Tooltip("Escala de gravedad normal del personaje.")]
     [SerializeField] private float defaultGravityScale = 3f;
-    [Tooltip("Multiplicador de gravedad aplicado únicamente cuando el personaje está cayendo.")]
-    [SerializeField] private float fallGravityMultiplier = 1.6f;
+    [Tooltip("Multiplicador de gravedad aplicado únicamente cuando el personaje está cayendo. Aumentar para caer más rápido.")]
+    [SerializeField] private float fallGravityMultiplier = 2.5f;
     
     private float coyoteTimeCount = 0f;
     private float jumpBufferCount = 0f;
@@ -757,7 +757,6 @@ public class Hoyustus : CharactersBehaviour
             }
         } else playerAudio.Stop();
         
-        // Aplicar el multiplicadorAire si no estamos tocando suelo
         float currentHorizontalSpeed = Grounded() ? walkSpeed : walkSpeed * multiplicadorAire;
         rb.linearVelocity = new Vector2(h * currentHorizontalSpeed * (1 - afectacionViento) * tocandoPared, rb.linearVelocity.y);
     }
