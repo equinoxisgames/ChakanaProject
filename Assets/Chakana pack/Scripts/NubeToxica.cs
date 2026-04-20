@@ -62,7 +62,7 @@ public class NubeToxica : MonoBehaviour
     }
 
     private IEnumerator DaniarPlayer() {
-        hoyustus.RecibirDanio(25);
+        hoyustus.RecibirDanioBajo(25);
         yield return new WaitForSeconds(1f);
         danioPlayerDisponible = true;
     }

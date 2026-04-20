@@ -29,7 +29,7 @@ public class PlantaVeneno : MonoBehaviour
         if (boss.getVida() <= 0)
         {
             Destroy(Instantiate(deathFX, transform.position, Quaternion.identity), 1.5f);
-            boss.PlantDestroy();
+            //boss.PlantDestroy();
             Destroy(this.gameObject);
         }
 
@@ -110,7 +110,7 @@ public class PlantaVeneno : MonoBehaviour
         if (collider.gameObject.layer == 14 && collider.gameObject.CompareTag("Untagged"))
         {
             Destroy(Instantiate(deathFX, transform.position, Quaternion.identity), 1.5f);
-            boss.PlantDestroy();
+            //boss.PlantDestroy();
             Destroy(this.gameObject);
         }
     }

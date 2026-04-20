@@ -1,253 +1,131 @@
+using System.Collections;
 using UnityEngine;
-
 
 public class Chontacuro1 : Enemy
 {
-    [SerializeField] public float movementSpeed;
-    [SerializeField] public float seguimientoSpeed;
+    [Header("Configuración de Patrulla")]
+    [SerializeField] public float speed = 2f;
+    private int direction = 1;
 
-    [SerializeField] private float direction = 1;
-    [SerializeField] private bool siguiendo = false;
+    [Header("Estado de Combate")]
+    [SerializeField] private float tiempoAturdimiento = 0.4f;
+    private bool aturdido = false;
 
-    [SerializeField] private Vector3 limit1, limit2;
-    [SerializeField] private float posY;
-
-    [SerializeField] Transform groundDetector;
-    [SerializeField] Transform wallDetector;
+    [Header("Referencias")]
     [SerializeField] AudioClip audioHurt;
     [SerializeField] GameObject goldObj;
 
-    AudioSource charAudio;
-
+    private AudioSource charAudio;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         charAudio = GetComponent<AudioSource>();
+        vidaMax = vida;
+        flash = GetComponent<DamageFlash>();
+
+        if (healthBar != null)
+        {
+            bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+            bar.SetFocus(transform);
+        }
     }
 
     void Start()
     {
         fuerzaRecoil = 1;
         explosionInvulnerable = "ExplosionEnemy";
-        speed = movementSpeed;
-
-        limit1 = transform.GetChild(0).gameObject.transform.position;
-        limit2 = transform.GetChild(1).gameObject.transform.position;
-        objetivo = limit1;
         layerObject = transform.gameObject.layer;
-        posY = transform.localPosition.y;
+
+        // Asignamos la orientación inicial basada en la escala del prefab
+        direction = (int)Mathf.Sign(transform.localScale.x);
     }
-
-    private void Falling() {
-        rb.linearVelocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
-    }
-
-    private void Muerte() {
-        Instantiate(deathFX, transform.position, Quaternion.identity);
-
-        Instantiate(goldObj, transform.position, Quaternion.identity);
-
-        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
-
-        foreach (Collider2D collider in objetos)
-        {
-            Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
-            if (rb2D != null)
-            {
-                Vector2 direccion = collider.transform.position - transform.position;
-                float distancia = 1 + direccion.magnitude;
-                float fuerza = 200 / distancia;
-                rb2D.AddForce(direccion * fuerza);
-            }
-        }
-
-        GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
-
-        Destroy(this.gameObject);
-    }
-
 
     private void FixedUpdate()
     {
-        if (playable)
+        if (vida <= 0)
         {
-            DetectarPiso();
-
-            if (Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, 0.2f, groundLayer)) {
-                if (CambioOrientacionDisponible(0.8f) && siguiendo)
-                    Flip();
-                else if (CambioOrientacionDisponible(0.2f) && !siguiendo)
-                    Flip();
-            }
+            Muerte();
+            return;
         }
-        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.2f,
-            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
-            DetectarPared();
 
-        if (playable)
-            Move();            
+        if (bar != null)
+        {
+            bar.SetHealthValue(vida / vidaMax);
+        }
 
         if (rb.linearVelocity.y < 0)
+        {
             Falling();
-
-        if (vida <= 0)
-            Muerte();
-    }
-
-
-    private void DetectarPared() {
-        if (transform.localScale.x == -1)
-        {
-            limit1 = transform.position + Vector3.right * 0.1f;
-            objetivo = limit1;
-            direction = 1;
         }
-        else
-        {
-            limit2 = transform.position - Vector3.right * 0.1f;
-            objetivo = limit2;
-            direction = -1;
-        }
-        Flip();
 
-        if (siguiendo)
+        // Solo se mueve y detecta entorno si NO está aturdido por un golpe
+        if (!aturdido)
         {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-            speed = 0;
-        }
-        else
-        {
-            speed = movementSpeed;
+            DetectarEntorno();
+            Move();
         }
     }
 
+    #region Lógica de Movimiento y Entorno
 
-    private void OnTriggerStay2D(Collider2D collider)
+    private void DetectarEntorno()
     {
+        // 1. Detección de precipicio: Si el detector de suelo NO toca la capa groundLayer
+        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, 0.3f, groundLayer);
 
-        if (collider.gameObject.CompareTag("Player"))
+        // 2. Detección de pared: Si el detector frontal SÍ toca una pared o el suelo frente a él
+        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, 0.3f, wallLayer) ||
+                          Physics2D.OverlapCircle(wallDetector.position, 0.3f, groundLayer);
+
+        // Si se acaba el piso o hay un muro, se da la vuelta
+        if (!haySuelo || chocaPared)
         {
-            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!DetectarPiso() && !Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
-                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
-            {
-                if (collider.gameObject.transform.position.x < transform.position.x)
-                {
-                    objetivo = limit1;
-                }
-                else { 
-                    objetivo = limit2;
-                }
-                speed = 0;
-            }
-            else if (!Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
-                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
-            {
-                speed = seguimientoSpeed;
-                siguiendo = true;
-                objetivo = collider.transform.position;
-            }
-            else if (Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
-                Vector3.Distance(transform.position, collider.transform.position), wallLayer)) {
-                siguiendo = false;
-                speed = movementSpeed;
-            }
+            Flip();
         }
     }
-
-    public bool DetectarPiso(int option = 0) {
-        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer)) {
-            if (option == 0)
-            {
-                if (direction == -1)
-                {
-                    limit1 = transform.position + Vector3.right * 0.1f;
-                }
-                else if (direction == 1)
-                {
-                    limit2 = transform.position - Vector3.right * 0.1f;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private void OnTriggerExit2D(Collider2D collider)
-    {
-        if (collider.gameObject.CompareTag("Player")) {
-            siguiendo = false;
-            speed = movementSpeed;
-            if (transform.position.x >= collider.transform.position.x) {
-                if (transform.position.x < limit1.x)
-                {
-                    objetivo = limit1;
-                }
-                else {
-                    objetivo = limit2;
-                }
-            }
-            else if (transform.position.x < collider.transform.position.x) {
-                objetivo = limit2;
-                if (transform.position.x > limit2.x)
-                {
-                    objetivo = limit2;
-                }
-                else
-                {
-                    objetivo = limit1;
-                }
-            }
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 1 < posY)
-        {
-            speed = movementSpeed;
-            posY = transform.position.y;
-            limit1 = transform.position + Vector3.left * 5.5f;
-            limit2 = transform.position + Vector3.right * 5.5f;
-            if(!siguiendo)
-                objetivo = limit2;
-
-            if (limit1.x >= limit2.x)
-            {
-                Vector3 aux = limit1;
-                limit1 = limit2;
-                limit2 = aux;
-            }
-        }
-    }
-
-
-    protected override void Recoil(int direccion, float fuerzaRecoil)
-    {
-        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
-        rb.AddForce(new Vector2(-direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
-    }
-
 
     private void Move()
     {
         rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
-
-        if (!siguiendo) { 
-            if (transform.position.x <= limit1.x) objetivo = limit2;
-            else if (transform.position.x >= limit2.x) objetivo = limit1;
-        }
     }
 
-    private void Flip() {
-        if (transform.position.x < objetivo.x) direction = 1;
-        else if (transform.position.x > objetivo.x) direction = -1;
+    private void Flip()
+    {
+        // Invertimos la dirección matemática
+        direction *= -1;
 
-        transform.localScale = new Vector3(direction, 1, 0);
+        // Volteamos visualmente el sprite y los detectores
+        transform.localScale = new Vector3(direction, 1, 1);
     }
 
+    private void Falling()
+    {
+        rb.linearVelocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity.y * 4.5f;
+    }
+
+    #endregion
+
+    #region Sistema de Daño y Aturdimiento
+
+    protected override void Recoil(int direccionGolpe, float fuerzaRecoilMod)
+    {
+        StopCoroutine("RutinaAturdido");
+        StartCoroutine(RutinaAturdido(direccionGolpe));
+    }
+
+    private IEnumerator RutinaAturdido(int direccionGolpe)
+    {
+        aturdido = true;
+
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        rb.AddForce(new Vector2(-direccionGolpe * 10f, rb.gravityScale * 4f), ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(tiempoAturdimiento);
+
+        aturdido = false;
+    }
 
     private new void OnTriggerEnter2D(Collider2D collider)
     {
@@ -255,11 +133,19 @@ public class Chontacuro1 : Enemy
 
         if (collider.gameObject.layer == 14)
         {
-            StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
-            if (collider.transform.parent != null) {
-                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            int dirRecoil = (int)Mathf.Sign(collider.transform.position.x - transform.position.x);
+            StartCoroutine(cooldownRecibirDanio(dirRecoil, 1));
+
+            if (collider.transform.parent != null)
+            {
+                var jugador = collider.transform.parent.parent.GetComponent<Hoyustus>();
+                if (jugador != null)
+                {
+                    jugador.cargaLanza();
+                    RecibirDanio(jugador.getAtaque());
+                }
             }
+
             charAudio.loop = false;
             charAudio.Stop();
             charAudio.clip = audioHurt;
@@ -294,12 +180,11 @@ public class Chontacuro1 : Enemy
         }
     }
 
-
     private void CombinacionesElementales()
     {
         if (counterEstados == 11)
         {
-             if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+            if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
 
             estadoViento = false;
             afectacionViento = 0;
@@ -311,4 +196,35 @@ public class Chontacuro1 : Enemy
             StartCoroutine("afectacionEstadoFuego");
         }
     }
+
+    #endregion
+
+    #region Muerte
+
+    private void Muerte()
+    {
+        if (deathFX != null) Instantiate(deathFX, transform.position, Quaternion.identity);
+        if (goldObj != null) Instantiate(goldObj, transform.position, Quaternion.identity);
+
+        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+        foreach (Collider2D collider in objetos)
+        {
+            Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
+            if (rb2D != null && collider.gameObject != this.gameObject)
+            {
+                Vector2 direccion = collider.transform.position - transform.position;
+                float distancia = 1 + direccion.magnitude;
+                float fuerza = 200 / distancia;
+                rb2D.AddForce(direccion * fuerza);
+            }
+        }
+
+        var spawner = GameObject.Find("-----ENEMIES");
+        if (spawner != null) spawner.GetComponent<EnemyRespawn>().EnemyDeath();
+
+        if (bar != null) Destroy(bar.gameObject);
+        Destroy(this.gameObject);
+    }
+
+    #endregion
 }

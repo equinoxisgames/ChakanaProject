@@ -51,17 +51,17 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturMask, 1));
+                shop.Add(new Item(ItemId.KunturpaUma, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
-                shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+                shop.Add(new Item(ItemId.ValdiviaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
             {
-                shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
+                shop.Add(new Item(ItemId.UturunkuIlla, 1));
             }
 
             Trader.Initialize(ref shop);
@@ -85,17 +85,17 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturMask, 1));
+                shop.Add(new Item(ItemId.KunturpaUma, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
-                shop.Add(new Item(ItemId.PachamamaAmulet, 1));
+                shop.Add(new Item(ItemId.ValdiviaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
             {
-                shop.Add(new Item(ItemId.WarriorTearAmulet, 1));
+                shop.Add(new Item(ItemId.UturunkuIlla, 1));
             }
 
             Trader.Initialize(ref shop);
@@ -137,14 +137,14 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 return;
             }
 
-            if(SelectedItem.ToString() == "KunturMask")
+            if(SelectedItem.ToString() == "KunturpaUma")
             {
                 PlayerPrefs.SetInt("Boost01", 1);
 
                 player.UpdatePU(1);
                 managerPU.ShowVFX(1);
             }
-            else if (SelectedItem.ToString() == "PachamamaAmulet")
+            else if (SelectedItem.ToString() == "ValdiviaIlla")
             {
                 PlayerPrefs.SetInt("Boost02", 1);
 
@@ -152,7 +152,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 player.UpdatePU(2);
                 managerPU.ShowVFX(2);
             }
-            else if (SelectedItem.ToString() == "WarriorTearAmulet")
+            else if (SelectedItem.ToString() == "UturunkuIlla")
             {
                 PlayerPrefs.SetInt("Boost03", 1);
                 player.UpdatePU(3);

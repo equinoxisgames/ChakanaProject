@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,19 +12,28 @@ public class EnemyGenerator : MonoBehaviour
 
     [SerializeField] AudioClip doorAu;
     [SerializeField] AudioClip enemyAu;
-
     [SerializeField] AudioClip combatAu;
+
+    // AudioSource exclusivo para la música de combate (separado del AudioSource de SFX)
+    [SerializeField] private AudioSource combatMusicSource;
 
     bool isOn, isMove, isOnBattle, finishSpawn, treasureCollect;
     private Vector3 destination1, destination2;
     private Vector3 originalPos1, originalPos2;
 
+    // AudioSource principal usado para SFX de puertas
+    private AudioSource sfxSource;
+
     private void Awake()
     {
+        PlayerPrefs.DeleteKey("combat" + combatNum);
+
         if (PlayerPrefs.HasKey("combat" + combatNum))
         {
             Destroy(gameObject);
         }
+
+        sfxSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -74,13 +83,13 @@ public class EnemyGenerator : MonoBehaviour
         {
             for (int i = 0; i < enemies.Count; i++)
             {
-                if(enemies[i] == null)
+                if (enemies[i] == null)
                 {
                     enemies.RemoveAt(i);
                 }
             }
 
-            if(enemies.Count == 0)
+            if (enemies.Count == 0)
             {
                 finishSpawn = false;
                 StartCoroutine(StopCombat());
@@ -91,8 +100,8 @@ public class EnemyGenerator : MonoBehaviour
         {
             isOnBattle = false;
 
-            GetComponent<AudioSource>().clip = doorAu;
-            GetComponent<AudioSource>().Play();
+            sfxSource.clip = doorAu;
+            sfxSource.Play();
 
             isMove = true;
 
@@ -102,69 +111,81 @@ public class EnemyGenerator : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // Si se destruye este GameObject (cambio de escena) mientras hay un fade activo,
+        // cancela la coroutine y restaura la música de fondo de inmediato
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CancelFadeAndRestoreBackground();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
             if (!isOn)
             {
-                isOnBattle = true;
-                isMove = true;
-
-                GetComponent<AudioSource>().clip = doorAu;
-                GetComponent<AudioSource>().Play();
-
-                
-
-                StartCoroutine(StartCombat());
-
-                isOn = true;
+                StartCombatAuto();
             }
+        }
+    }
+
+    public void StartCombatAuto()
+    {
+        if (!isOn)
+        {
+            StartCoroutine(StartCombat());
         }
     }
 
     IEnumerator StartCombat()
     {
+        isOnBattle = true;
+        isMove = true;
+        isOn = true;
+
+        sfxSource.clip = doorAu;
+        sfxSource.Play();
+
         yield return new WaitForSeconds(1f);
-        GetComponent<AudioSource>().clip = combatAu;
-        GetComponent<AudioSource>().volume = 0.7f;
-        GetComponent<AudioSource>().Play();
-       
+
+        // Crossfade: música de fondo → música de combate
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CrossfadeToCombat(combatMusicSource, combatAu, targetCombatVolume: 0.7f);
+        else
+            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null. Asegúrate de que existe un GameObject con MusicManager en la escena.");
 
         for (int i = 0; i < enemies.Count; i++)
         {
             yield return new WaitForSeconds(2f);
             Destroy(Instantiate(invokeFX, enemies[i].transform.position, Quaternion.identity), 2);
-            //GetComponent<AudioSource>().clip = enemyAu;
-            //GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.2f);
             enemies[i].SetActive(true);
         }
 
-       
+        yield return new WaitForSeconds(5f);
 
-        yield return new WaitForSeconds(5);
-
-       
-
+        isOn = true;
         finishSpawn = true;
-
-        
     }
 
     IEnumerator StopCombat()
     {
         yield return new WaitForSeconds(1f);
 
+        // Crossfade inverso: música de combate → música de fondo
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CrossfadeToBackground(combatMusicSource);
+        else
+            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null");
+
         if (combatNum == "1")
         {
             isMove = true;
             isOnBattle = false;
 
-            GetComponent<AudioSource>().clip = doorAu;
-            GetComponent<AudioSource>().Play();
-
-           
+            sfxSource.clip = doorAu;
+            sfxSource.Play();
         }
         else
         {

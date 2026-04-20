@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Assets.FantasyInventory.Scripts.Interface
 {
     /// <summary>
-    /// High-level inventory inverface.
+    /// High-level inventory interface.
     /// </summary>
     public class Inventory : ItemWorkspace
     {
@@ -23,14 +23,13 @@ namespace Assets.FantasyInventory.Scripts.Interface
         public AudioClip RemoveSound;
 
         /// <summary>
-        /// Initialize owned items (just for example).
+        /// Initialize owned items.
         /// </summary>
         public void Awake()
         {
             NewInventory();
 
             var equipped = new List<Item>();
-
             Equipment.Initialize(ref equipped);
         }
 
@@ -41,26 +40,19 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                {
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
-                }
+                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                {
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
-                }
+                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
 
-                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
-
-                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
-
-            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
-
-            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
+            inventory.Add(new Item(ItemId.Suntur, 1));
 
             Bag.Initialize(ref inventory);
         }
@@ -70,45 +62,73 @@ namespace Assets.FantasyInventory.Scripts.Interface
             Reset();
             EquipButton.interactable = RemoveButton.interactable = false;
 
-            // TODO: Assigning static callbacks. Don't forget to set null values when UI will be closed. You can also use events instead.
+            // ── PRIORIDAD 4: Limpiar antes de asignar para evitar delegates huérfanos ──
+            InventoryItem.OnItemSelected = null;
+            InventoryItem.OnDragStarted = null;
+            InventoryItem.OnDragCompleted = null;
+            InventoryItem.OnDoubleClick = null;
+
             InventoryItem.OnItemSelected = SelectItem;
             InventoryItem.OnDragStarted = SelectItem;
-            InventoryItem.OnDragCompleted = InventoryItem.OnDoubleClick = item => { if (Bag.Items.Contains(item)) Equip(); else Remove(); };
-
-            //
+            InventoryItem.OnDragCompleted = InventoryItem.OnDoubleClick =
+                item => { if (Bag.Items.Contains(item)) Equip(); else Remove(); };
 
             var inventory = new List<Item>();
 
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                {
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 2));
-                }
+                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                {
-                    inventory.Add(new Item(ItemId.LuminousMushroom, 1));
-                }
+                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
 
-                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupayMask, 1));
-
-                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.AyahuascaRoot, 1));
+                if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
+                if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturMask, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.PachamamaAmulet, 1));
+            inventory.Add(new Item(ItemId.Suntur, 1));
 
-            if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.WarriorTearAmulet, 1));
-
-            inventory.Add(new Item(ItemId.KunkaKuchuna, 1));
-
-
-            Bag.Initialize(ref inventory);
-
-            if (inventory.Count>0)
+            // ── PRIORIDAD 5: Proteger el SelectItem inicial ──
+            if (inventory.Count > 0 && ItemInfo != null)
                 SelectItem(inventory[0].Id);
-            
+        }
+
+        // ── PRIORIDAD 4: Limpiar delegates estáticos al destruirse esta instancia ──
+        protected void OnDestroy()
+        {
+            if (InventoryItem.OnItemSelected != null &&
+                InventoryItem.OnItemSelected.GetInvocationList()
+                    .Any(d => d.Target == (object)this))
+            {
+                InventoryItem.OnItemSelected = null;
+            }
+
+            if (InventoryItem.OnDragStarted != null &&
+                InventoryItem.OnDragStarted.GetInvocationList()
+                    .Any(d => d.Target == (object)this))
+            {
+                InventoryItem.OnDragStarted = null;
+            }
+
+            if (InventoryItem.OnDragCompleted != null &&
+                InventoryItem.OnDragCompleted.GetInvocationList()
+                    .Any(d => d.Target == (object)this))
+            {
+                InventoryItem.OnDragCompleted = null;
+            }
+
+            if (InventoryItem.OnDoubleClick != null &&
+                InventoryItem.OnDoubleClick.GetInvocationList()
+                    .Any(d => d.Target == (object)this))
+            {
+                InventoryItem.OnDoubleClick = null;
+            }
+
+            Debug.Log("[Inventory] Delegates estáticos limpiados en OnDestroy.");
         }
 
         public void SelectItem(Item item)
@@ -118,6 +138,13 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
         public void SelectItem(ItemId itemId)
         {
+            // ── PRIORIDAD 1 (defensa extra): No continuar si ItemInfo no está disponible ──
+            if (ItemInfo == null)
+            {
+                Debug.LogWarning("[Inventory] ItemInfo es null en SelectItem. Abortando.");
+                return;
+            }
+
             SelectedItem = itemId;
             SelectedItemParams = Items.Params[itemId];
             ItemInfo.Initialize(SelectedItem, SelectedItemParams);
@@ -129,27 +156,19 @@ namespace Assets.FantasyInventory.Scripts.Interface
             var equipped = Equipment.Items.LastOrDefault(i => i.Params.Type == SelectedItemParams.Type);
 
             if (equipped != null)
-            {
                 AutoRemove(SelectedItemParams.Type, Equipment.Slots.Count(i => i.ItemType == SelectedItemParams.Type));
-            }
 
             if (SelectedItemParams.Tags.Contains(ItemTag.TwoHanded))
             {
                 var shield = Equipment.Items.SingleOrDefault(i => i.Params.Type == ItemType.Amulet);
-
                 if (shield != null)
-                {
                     MoveItem(shield, Equipment, Bag);
-                }
             }
             else if (SelectedItemParams.Type == ItemType.Amulet)
             {
                 var weapon2H = Equipment.Items.SingleOrDefault(i => i.Params.Tags.Contains(ItemTag.TwoHanded));
-
                 if (weapon2H != null)
-                {
                     MoveItem(weapon2H, Equipment, Bag);
-                }
             }
 
             MoveItem(SelectedItem, Bag, Equipment);
@@ -200,14 +219,10 @@ namespace Assets.FantasyInventory.Scripts.Interface
             long sum = 0;
 
             foreach (var p in items)
-            {
                 sum += p.Count;
-            }
 
             if (sum == max)
-            {
                 MoveItem(items.LastOrDefault(i => i.Id != SelectedItem) ?? items.Last(), Equipment, Bag);
-            }
         }
     }
 }

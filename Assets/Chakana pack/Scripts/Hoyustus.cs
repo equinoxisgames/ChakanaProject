@@ -307,6 +307,7 @@ public class Hoyustus : CharactersBehaviour
         lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
+        flash = GetComponent<DamageFlash>();
         ataque = ataqueMax;
         ataqueMax = ataque;
 

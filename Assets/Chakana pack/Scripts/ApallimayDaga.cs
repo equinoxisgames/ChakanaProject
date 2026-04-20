@@ -1,288 +1,376 @@
-using System;
 using System.Collections;
+//using UnityEditor.EditorTools;
 using UnityEngine;
 
-public class ApallimayDaga : Apallimay
+public class ApallimayDaga : Enemy
 {
-    [SerializeField] private bool atacando;
-    [SerializeField] private bool siguiendo;
-    [SerializeField] private Vector3 limit1;
-    [SerializeField] private Vector3 limit2;
-    [SerializeField] private float direction = 1;
-    [SerializeField] private float posY = 0;
+    public enum EstadoEnemigo { Idle, Persecucion, Ataque, Huida }
+
+    [Header("Máquina de Estados")]
+    [SerializeField] private EstadoEnemigo estadoActual = EstadoEnemigo.Idle;
+
+    [Header("Configuración de Movimiento")]
+    [SerializeField] private float speedIdle = 2f;
+    [SerializeField] private float speedChase = 4f;
+    [SerializeField] private float speedFlee = 4.5f;
+    private int direction = 1;
+    private float tiempoPatrullaAleatoria;
+
+    [Header("Configuración de Combate")]
+    [SerializeField] private float rangoVision = 6f;
+    [SerializeField] private float rangoAtaque = 1.5f;
+    [SerializeField] private float tiempoPreparacion = 0.5f; // t1
+    [SerializeField] private float tiempoDescansoAtaque = 0.4f; // t2
+    [SerializeField] private float cooldownAtaque = 3f;
+    [SerializeField] private float fuerzaImpulsoAtaque = 12f;
+    [SerializeField] private bool ataqueDisponible;
+
+    private float temporizadorCooldown;
+    //private bool ataqueDisponible = true;
+    private bool atacando = false;
+
+    [Header("Referencias")]
     [SerializeField] private BoxCollider2D daga;
-    [SerializeField] private float cooldownAtaque;
-    [SerializeField] private float t1;
-    [SerializeField] private float t2;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip attackSound;
-    [SerializeField] private GameObject goldObj;
+    [SerializeField] private GameObject goldObj; // Drop (Spondylus)
+
     private AudioSource aud;
+    private Transform playerTransform;
 
     void Start()
     {
         explosionInvulnerable = "ExplosionEnemy";
-        layerObject = transform.gameObject.layer;
+        layerObject = gameObject.layer;
         fuerzaRecoil = 3f;
+
         rb = GetComponent<Rigidbody2D>();
-        explosion = Resources.Load<GameObject>("Explosion");
-        daga = transform.GetChild(2).gameObject.GetComponent<BoxCollider2D>();
-        limit1 = transform.GetChild(0).gameObject.transform.position;
-        limit2 = transform.GetChild(1).gameObject.transform.position;
-        objetivo = limit2;
-        posY = transform.position.y;
-        groundDetector = transform.GetChild(4).gameObject.transform;
-        wallDetector = transform.GetChild(5).gameObject.transform;
-        vidaMax = vida;
-        rangoVision += 1;
-        rangoPreparacion += 1;
-        rangoAtaque += 1;
-        ataqueDisponible = true;
         aud = GetComponent<AudioSource>();
-    }
+        anim = GetComponent<Animator>();
+        flash = GetComponent<DamageFlash>();
 
+        daga.enabled = false;
+        vidaMax = vida;
 
-    void Update()
-    {
-        anim.SetBool("Atacando", atacando);
-        Muerte();
-        if(Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
-            wallDetector.position + Vector3.down * 0.5f,wallLayer) && playable)
-            DetectarPared();
-        if (Grounded() && playable) {
-            DetectarPiso(distanciaPlayer, siguiendo);
-            if (CambioOrientacionDisponible(0.6f) && siguiendo)
-                Flip();
-            else if (CambioOrientacionDisponible(0.1f) && !siguiendo)
-                Flip();
-            if (playable)
-                Move();
+        if (healthBar != null)
+        {
+            bar = Instantiate(healthBar).GetComponent<EnemyHealthBar>();
+            bar.SetFocus(transform);
         }
+
+        // Buscar al jugador una sola vez al inicio
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null) playerTransform = playerObj.transform;
+
+        AsignarNuevoTiempoPatrulla();
     }
 
-    private void Muerte()
+    void FixedUpdate()
     {
         if (vida <= 0)
         {
-            Instantiate(deathFX, transform.position, Quaternion.identity);
+            Muerte();
+            return;
+        }
 
-            Instantiate(goldObj, transform.position, Quaternion.identity);
+        if (bar != null) bar.SetHealthValue(vida / vidaMax);
 
-            Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+        if (rb.linearVelocity.y < 0) Falling();
 
-            foreach (Collider2D collider in objetos)
-            {
-                Rigidbody2D rb2D = collider.GetComponent<Rigidbody2D>();
-                if (rb2D != null)
-                {
-                    Vector2 direccion = collider.transform.position - transform.position;
-                    float distancia = 1 + direccion.magnitude;
-                    float fuerza = 200 / distancia;
-                    rb2D.AddForce(direccion * fuerza);
-                }
-            }
-
-            GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>().EnemyDeath();
-
-            Destroy(this.gameObject);
+        // Si el enemigo está en modo jugable (no está aturdido por recoil) y no está en medio de la animación de ataque
+        if (playable && !atacando)
+        {
+            ActualizarEstado();
         }
     }
 
-    private void Move() {
+    #region Lógica de Estados
 
-        rb.linearVelocity = new Vector2(direction * speed * (1 - afectacionViento), rb.linearVelocity.y);
-        
-        if (transform.position.x <= limit1.x) objetivo = limit2;
-        else if (transform.position.x >= limit2.x) objetivo = limit1;
+    private void ActualizarEstado()
+    {
+        // Actualizar el CD del ataque si ya lo usamos
+        if (!ataqueDisponible)
+        {
+            temporizadorCooldown -= Time.fixedDeltaTime;
+            if (temporizadorCooldown <= 0)
+            {
+                ataqueDisponible = true;
+                if (estadoActual == EstadoEnemigo.Huida) estadoActual = EstadoEnemigo.Persecucion;
+            }
+        }
+
+        float distanciaAlJugador = ObtenerDistanciaAlJugador();
+        bool jugadorVisible = JugadorEnLineaDeVision(distanciaAlJugador);
+
+        switch (estadoActual)
+        {
+            case EstadoEnemigo.Idle:
+                ComportamientoIdle(jugadorVisible);
+                break;
+
+            case EstadoEnemigo.Persecucion:
+                ComportamientoPersecucion(distanciaAlJugador, jugadorVisible);
+                break;
+
+            case EstadoEnemigo.Huida:
+                ComportamientoHuida();
+                break;
+        }
+    }
+
+    private void ComportamientoIdle(bool jugadorVisible)
+    {
+        if (jugadorVisible && ataqueDisponible)
+        {
+            estadoActual = EstadoEnemigo.Persecucion;
+            return;
+        }
+
+        // Patrulla aleatoria
+        tiempoPatrullaAleatoria -= Time.fixedDeltaTime;
+        if (tiempoPatrullaAleatoria <= 0)
+        {
+            Flip();
+            AsignarNuevoTiempoPatrulla();
+        }
+
+        if (EntornoBloqueado())
+        {
+            Flip();
+            AsignarNuevoTiempoPatrulla();
+        }
+
+        Mover(speedIdle);
+    }
+
+    private void ComportamientoPersecucion(float distancia, bool jugadorVisible)
+    {
+        if (!jugadorVisible)
+        {
+            estadoActual = EstadoEnemigo.Idle;
+            return;
+        }
+
+        MirarHacia(playerTransform.position.x);
+
+        if (distancia <= rangoAtaque && ataqueDisponible)
+        {
+            StartCoroutine(EjecutarAtaque());
+        }
+        else
+        {
+            if (!EntornoBloqueado()) Mover(speedChase);
+            else rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
+    }
+
+    private void ComportamientoHuida()
+    {
+        // Corre en dirección opuesta al jugador
+        int direccionHuida = playerTransform.position.x > transform.position.x ? -1 : 1;
+
+        if (direction != direccionHuida)
+        {
+            direction = direccionHuida;
+            ActualizarEscala();
+        }
+
+        // Si en su huida se topa con una pared o un abismo, se queda acorralado esperando el CD
+        if (EntornoBloqueado())
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
+        else
+        {
+            Mover(speedFlee);
+        }
+    }
+
+    #endregion
+
+    #region Movimiento y Detección
+
+    private void Mover(float velocidadActual)
+    {
+        rb.linearVelocity = new Vector2(direction * velocidadActual * (1 - afectacionViento), rb.linearVelocity.y);
+    }
+
+    private void AsignarNuevoTiempoPatrulla()
+    {
+        tiempoPatrullaAleatoria = Random.Range(1.5f, 4f); // Se mueve entre 1.5 y 4 segundos antes de cambiar
+    }
+
+    private bool EntornoBloqueado()
+    {
+        bool haySuelo = Physics2D.OverlapCircle(groundDetector.position, 0.5f, groundLayer);
+        bool chocaPared = Physics2D.OverlapCircle(wallDetector.position, 0.5f, wallLayer) ||
+                          Physics2D.OverlapCircle(wallDetector.position, 0.5f, groundLayer);
+
+        return !haySuelo || chocaPared;
+    }
+
+    private float ObtenerDistanciaAlJugador()
+    {
+        if (playerTransform == null) return Mathf.Infinity;
+        return Vector2.Distance(transform.position, playerTransform.position);
+    }
+
+    private bool JugadorEnLineaDeVision(float distancia)
+    {
+        if (playerTransform == null || distancia > rangoVision) return false;
+
+        // Comprueba la orientación: ¿Está mirando hacia el jugador?
+        //float dirHaciaJugador = Mathf.Sign(playerTransform.position.x - transform.position.x);
+        //if (dirHaciaJugador != direction) return false; 
+        // Solo lo ve si está frente a él
+
+        // Raycast para comprobar que no hay paredes en medio
+        Vector2 direccionRayo = (playerTransform.position - transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direccionRayo, distancia, wallLayer | groundLayer);
+
+        return hit.collider == null; // Retorna true si el rayo no chocó con ninguna pared
+    }
+
+    private void MirarHacia(float targetX)
+    {
+        int nuevaDireccion = targetX > transform.position.x ? 1 : -1;
+        if (direction != nuevaDireccion)
+        {
+            direction = nuevaDireccion;
+            ActualizarEscala();
+        }
     }
 
     private void Flip()
     {
-        if (transform.position.x < objetivo.x)
-        {
-            direction = 1;
-            objetivo = limit2;
-        }
-        else if (transform.position.x > objetivo.x) {
-            direction = -1;
-            objetivo = limit1;
-        }
-        transform.localScale = new Vector3(direction, 1, 0);
+        direction *= -1;
+        ActualizarEscala();
     }
 
+    private void ActualizarEscala()
+    {
+        transform.localScale = new Vector3(direction, 1, 1);
+    }
 
-    private IEnumerator Ataque(float direccionAtaque) {
-        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-        playable = false;
-        ataqueDisponible = false;
+    private void Falling()
+    {
+        rb.linearVelocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity.y * 4.5f;
+    }
+
+    #endregion
+
+    #region Combate
+
+    private IEnumerator EjecutarAtaque()
+    {
+        estadoActual = EstadoEnemigo.Ataque;
         atacando = true;
-        //PREPARACION
-        yield return new WaitForSeconds(t1);
-        aud.Stop();
-        aud.clip = attackSound;
-        aud.Play();
-        atacando = false;
+        ataqueDisponible = false;
 
-        rb.AddForce(new Vector2(direccionAtaque * 12f, 0f), ForceMode2D.Impulse);
-        daga.enabled = true;
-        //ATAQUE
-        //TIEMPO ANIMACION ATAQUE
-        yield return new WaitForSeconds(0.4f);
+        // 1. FRENAR (Preparación)
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        anim.SetBool("Atacando", true);
+
+        yield return new WaitForSeconds(tiempoPreparacion);
+        anim.SetBool("Atacando", false);
+        // 2. ATAQUE (Dash con daga)
+        if (aud != null)
+        {
+            aud.Stop();
+            aud.clip = attackSound;
+            aud.Play();
+        }
+
+        rb.AddForce(new Vector2(direction * fuerzaImpulsoAtaque, 0f), ForceMode2D.Impulse);
+        daga.enabled = true;
+
+        yield return new WaitForSeconds(0.4f); // Duración activa de la daga
+
+        // 3. FINALIZAR ATAQUE
         daga.enabled = false;
-        //DESCANSO DEL ATAQUE
-        yield return new WaitForSeconds(t2);
-        playable = true;
-        //ATAQUE DISPONIBLE NUEVAMENTE
-        yield return new WaitForSeconds(cooldownAtaque);
-        ataqueDisponible = true;
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        yield return new WaitForSeconds(tiempoDescansoAtaque);
+
+        // 4. TRANSICIÓN A HUIDA
+        atacando = false;
+        temporizadorCooldown = cooldownAtaque;
+        estadoActual = EstadoEnemigo.Huida;
     }
 
-
-    protected override void Recoil(int direccion, float fuerzaRecoil)
+    protected override void Recoil(int direccionGolpe, float fuerzaRecoilMod)
     {
         playable = false;
-        rb.AddForce(new Vector2(direccion * 7, rb.gravityScale * 4), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(direccionGolpe * 7f, rb.gravityScale * 4f), ForceMode2D.Impulse);
+        Invoke("RestaurarPlayable", 0.5f); // Pequeño aturdimiento tras recibir daño
     }
 
+    private void RestaurarPlayable()
+    {
+        playable = true;
+    }
 
     private new void OnTriggerEnter2D(Collider2D collider)
     {
         base.OnTriggerEnter2D(collider);
 
+        // Daño del jugador
         if (collider.gameObject.layer == 14)
         {
-
-            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
-
+            int dirGolpe = -(int)Mathf.Sign(collider.transform.position.x - transform.position.x);
             TriggerElementos_1_1_1(collider);
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            StartCoroutine(cooldownRecibirDanio(dirGolpe, 1));
+
             if (collider.transform.parent != null)
             {
-                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                var jugador = collider.transform.parent.parent.GetComponent<Hoyustus>();
+                if (jugador != null)
+                {
+                    jugador.cargaLanza();
+                    RecibirDanio(jugador.getAtaque());
 
-                aud.Stop();
-                aud.clip = hurtSound;
-                aud.Play();
+                    if (aud != null)
+                    {
+                        aud.Stop();
+                        aud.clip = hurtSound;
+                        aud.Play();
+                    }
+                }
             }
-            return;
         }
-        else if (collider.gameObject.layer == 11)
-        {
-            //rb.velocity = Vector2.zero;
-            return;
-        }
-
-        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
+        else if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
             TriggerElementos_1_1_1(collider);
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collider)
+    #endregion
+
+    #region Muerte
+
+    private void Muerte()
     {
+        if (deathFX != null) Instantiate(deathFX, transform.position, Quaternion.identity);
+        if (goldObj != null) Instantiate(goldObj, transform.position, Quaternion.identity);
 
-        if (collider.gameObject.layer == 11)
+        Collider2D[] objetos = Physics2D.OverlapCircleAll(transform.position, 3);
+        foreach (Collider2D obj in objetos)
         {
-            float orientacionDeteccion = OrientacionDeteccionPlayer(collider.transform.position.x);
-            distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
-
-            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccion, distanciaPlayer, wallLayer) && /*detectarPiso(distanciaPlayer, true) &&*/ Grounded())
+            Rigidbody2D rb2D = obj.GetComponent<Rigidbody2D>();
+            if (rb2D != null && obj.gameObject != this.gameObject)
             {
-                objetivo = collider.transform.position;
-                siguiendo = true;
-                if (distanciaPlayer <= rangoPreparacion && ataqueDisponible && !atacando && playable)
-                {
-                    StartCoroutine(Ataque(direction));
-                }
+                Vector2 direccionExp = obj.transform.position - transform.position;
+                float distancia = 1 + direccionExp.magnitude;
+                float fuerza = 200 / distancia;
+                rb2D.AddForce(direccionExp * fuerza);
             }
         }
+
+        var spawner = GameObject.Find("-----ENEMIES");
+        if (spawner != null) spawner.GetComponent<EnemyRespawn>().EnemyDeath();
+
+        if (bar != null) Destroy(bar.gameObject);
+        Destroy(gameObject);
     }
 
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
- 
-        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 3 < posY)
-        {
-            posY = transform.position.y;
-            limit1 = transform.position + Vector3.left * 5.5f;
-            limit2 = transform.position + Vector3.right * 5.5f;
-            objetivo = limit2;
-
-            if (limit1.x >= limit2.x)
-            {
-                Vector3 aux = limit1;
-                limit1 = limit2;
-                limit2 = aux;
-            }
-        }
-        else if (!collision.gameObject.name.Contains("Enemy"))
-        {
-            CollisionElementos_1_1_1(collision);
-        }
-    }
-
-    public bool DetectarPiso(float option = 0, bool detectandoPlayer = false)
-    {
-        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
-        {
-            speed = 0;
-            if (!detectandoPlayer)
-            {
-                if (direction == -1)
-                {
-                    limit1 = transform.position + Vector3.right * 0.1f;
-                    limit2 = limit1 + Vector3.right * 11;
-                }
-                else if (direction == 1)
-                {
-                    limit2 = transform.position - Vector3.right * 0.1f;
-                    limit1 = limit2 - Vector3.right * 11;
-                }
-                transform.localScale = new Vector3(-transform.localScale.x, 1, 0);
-            }
-            return false;
-        }
-        speed = 7;
-        return true;
-    }
-
-
-    public void DetectarPared() {
-
-        if (transform.localScale.x == -1)
-        {
-            limit1 = transform.position + Vector3.right * 0.3f;
-            objetivo = limit1;
-            limit2 = limit1 + Vector3.right * 11;
-            direction = 1;
-        }
-        else
-        {
-            limit2 = transform.position - Vector3.right * 0.3f;
-            objetivo = limit2;
-            limit1 = limit2 - Vector3.right * 11;
-            direction = -1;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == 11)
-        {
-            distanciaPlayer = 0;
-            siguiendo = false;
-            speed = 5;
-            if (transform.position.x > limit2.x)
-            {
-                objetivo = limit1;
-            }
-            else if (transform.position.x < limit1.x) {
-                objetivo = limit2;
-            } 
-        }
-    }
+    #endregion
 }
