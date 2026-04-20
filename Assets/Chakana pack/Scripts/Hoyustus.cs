@@ -5,25 +5,36 @@ using System;
 
 public class Hoyustus : CharactersBehaviour
 {
-    [Header("Movimiento")]
+    [Header("Movimiento Base")]
+    [Tooltip("Velocidad máxima al caminar por el suelo.")]
     [SerializeField] float walkSpeedGround = 9f;
+    [Tooltip("Factor de reducción de velocidad horizontal mientras se está en el aire.")]
     [SerializeField] float resistenciaAire = 0.3f;
     [SerializeField] float walkSpeed = 12f;
     [SerializeField] private bool isWalking = false;
     [Space(5)]
 
     [Header("Salto (Hollow Knight Style)")]
-    [SerializeField] private float alturaPrimerSalto = 5f; // Objetivo: 5 veces el cuerpo
-    [SerializeField] private float alturaDobleSalto = 2f;  // Objetivo: 2 veces más
+    [Tooltip("Altura objetivo del primer salto (multiplicador basado en el tamaño del cuerpo).")]
+    [SerializeField] private float alturaPrimerSalto = 5f;
+    [Tooltip("Altura adicional que alcanza el doble salto.")]
+    [SerializeField] private float alturaDobleSalto = 3f;
+    [Tooltip("Reducción de velocidad horizontal mientras saltas (0 = no se mueve, 1 = igual que en suelo).")]
+    [SerializeField] private float multiplicadorAire = 0.7f;
+    [Tooltip("Multiplicador de velocidad que se aplica al soltar el botón de salto prematuramente (microsaltos).")]
     [SerializeField] private float jumpCutMultiplier = 0.5f;
+    [Tooltip("Tiempo de gracia para saltar después de dejar una plataforma.")]
     [SerializeField] private float coyoteTime = 0.15f;
+    [Tooltip("Margen de tiempo para registrar un salto antes de tocar el suelo.")]
     [SerializeField] private float jumpBufferTime = 0.15f;
+    [Tooltip("Escala de gravedad normal del personaje.")]
     [SerializeField] private float defaultGravityScale = 3f;
+    [Tooltip("Multiplicador de gravedad aplicado únicamente cuando el personaje está cayendo.")]
     [SerializeField] private float fallGravityMultiplier = 1.6f;
     
     private float coyoteTimeCount = 0f;
     private float jumpBufferCount = 0f;
-    private bool doubleJumpQueued = false; // Nueva flag para asegurar el doble salto
+    private bool doubleJumpQueued = false;
 
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isSecondJump = false; 
@@ -333,14 +344,29 @@ public class Hoyustus : CharactersBehaviour
             }
             else jumpBufferCount -= Time.deltaTime;
 
-            // coyote time solo si no estamos saltando ya
+            // coyote time y estados de salto
             if (Grounded())
             {
                 coyoteTimeCount = coyoteTime;
                 firstJump = true;
                 secondJump = false;
+                isJumping = false;
+                doubleJumpQueued = false;
+                walkSpeed = walkSpeedGround;
             }
-            else coyoteTimeCount -= Time.deltaTime;
+            else
+            {
+                coyoteTimeCount -= Time.deltaTime;
+                walkSpeed = walkSpeedGround * (1 - resistenciaAire);
+                
+                if (coyoteTimeCount <= 0f && firstJump)
+                {
+                    firstJump = false;
+                    secondJump = true;
+                }
+            }
+
+            jump();
         }
 
         if (!curando && Input.GetAxis("Skill01") == 1 && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
@@ -376,14 +402,12 @@ public class Hoyustus : CharactersBehaviour
 
     public bool Grounded()
     {
-        // Solo detectamos suelo si estamos cayendo o quietos en Y
         if (rb.linearVelocity.y > 0.1f) return false;
 
         if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
             Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
             anim.SetBool("Grounded", true);
-            isJumping = false;
             return true;
         }
         else
@@ -400,7 +424,7 @@ public class Hoyustus : CharactersBehaviour
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 5f && isJumping)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
-            isJumping = false; // Bloqueamos para que no se aplique varias veces
+            isJumping = false;
         }
 
         // SALTO INICIAL
@@ -412,7 +436,7 @@ public class Hoyustus : CharactersBehaviour
             anim.Play("Saltar");
             
             float gravity = -Physics2D.gravity.y * defaultGravityScale;
-            float jumpVel = Mathf.Sqrt(2 * gravity * (alturaPrimerSalto * 1.5f)); // Multiplicador para compensar drag/física
+            float jumpVel = Mathf.Sqrt(2 * gravity * (alturaPrimerSalto * 1.5f));
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpVel);
             
             isJumping = true;
@@ -424,7 +448,7 @@ public class Hoyustus : CharactersBehaviour
         }
         
         // DOBLE SALTO
-        if (doubleJumpQueued && secondJump && !Grounded() && !isTouchingRoof())
+        else if (doubleJumpQueued && secondJump && !Grounded() && !isTouchingRoof())
         {
             playerAudio.loop = false;
             playerAudio.Stop();
@@ -444,12 +468,6 @@ public class Hoyustus : CharactersBehaviour
         if (rb.linearVelocity.y < -0.1f && !Grounded() && !atacando)
             anim.Play("Caer");
     }
-
-    private void LateUpdate()
-    {
-        if (playable) jump();
-    }
-
 
     void FixedUpdate()
     {
@@ -739,7 +757,9 @@ public class Hoyustus : CharactersBehaviour
             }
         } else playerAudio.Stop();
         
-        rb.linearVelocity = new Vector2(h * walkSpeedGround * (1 - afectacionViento) * tocandoPared, rb.linearVelocity.y);
+        // Aplicar el multiplicadorAire si no estamos tocando suelo
+        float currentHorizontalSpeed = Grounded() ? walkSpeed : walkSpeed * multiplicadorAire;
+        rb.linearVelocity = new Vector2(h * currentHorizontalSpeed * (1 - afectacionViento) * tocandoPared, rb.linearVelocity.y);
     }
 
     void Falling()
