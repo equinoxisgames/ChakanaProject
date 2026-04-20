@@ -31,6 +31,10 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float defaultGravityScale = 3f;
     [Tooltip("Multiplicador de gravedad aplicado únicamente cuando el personaje está cayendo. Aumentar para caer más rápido.")]
     [SerializeField] private float fallGravityMultiplier = 2.5f;
+    [Tooltip("Prefab del efecto visual para el doble salto.")]
+    [SerializeField] private GameObject doubleJumpVFXPrefab;
+    [Tooltip("Duración en segundos del efecto visual del doble salto.")]
+    [SerializeField] private float doubleJumpVFXDuration = 1f;
     
     private float coyoteTimeCount = 0f;
     private float jumpBufferCount = 0f;
@@ -455,6 +459,13 @@ public class Hoyustus : CharactersBehaviour
             jumpAudio.Play();
             anim.Play("Doble Salto");
             
+            // Instanciar VFX para el doble salto
+            if (doubleJumpVFXPrefab != null)
+            {
+                GameObject vfx = Instantiate(doubleJumpVFXPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
+                Destroy(vfx, doubleJumpVFXDuration);
+            }
+
             float gravity = -Physics2D.gravity.y * defaultGravityScale;
             float jumpVel = Mathf.Sqrt(2 * gravity * (alturaDobleSalto * 1.5f));
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpVel);
