@@ -16,7 +16,7 @@
         KunturpaUma 	= 7,
         Ayahuasca       = 8,
         AnkasKallampa   = 9,
-        ValdiviaIlla	= 10,
+        MirayIlla       = 10,
         SilverRing      = 11,
         Spear           = 12,
         StoneAmulet     = 13,

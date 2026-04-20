@@ -49,7 +49,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
             }
 
             if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.MirayIlla, 1));
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
             inventory.Add(new Item(ItemId.Suntur, 1));
@@ -87,7 +87,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
             }
 
             if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.MirayIlla, 1));
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
             inventory.Add(new Item(ItemId.Suntur, 1));
