@@ -6,6 +6,7 @@ using Assets.FantasyInventory.Scripts.Data;
 using Assets.FantasyInventory.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization.Settings;
 
 namespace Assets.FantasyInventory.Scripts.Interface.Elements
 {
@@ -41,7 +42,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             if (ShortDescription == null)
             {
                 var shortDescObj = transform.Find("ShortDescriptionText");
-                if (shortDescObj != null) Description = shortDescObj.GetComponent<Text>();
+                if (shortDescObj != null) ShortDescription = shortDescObj.GetComponent<Text>();
             }
         }
 
@@ -85,7 +86,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 //Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
 
                 Price.text = $"Buy price: {itemParams.Price}G";
-                ShortDescription.text = itemParams.ShortDescription;
+                ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
             }
 
             // Se comenta esta parte ya que no se implementara la venta de objetos
@@ -108,7 +109,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
             Description.text = string.Join(Environment.NewLine, description.ToArray());
 
-            ShortDescription.text = itemParams.ShortDescription;
+            ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
         }
 
         public static string SplitName(string name)

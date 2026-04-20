@@ -73,7 +73,7 @@ namespace Assets.FantasyInventory.Scripts.GameData
                 }
             },
             {
-                ItemId.KunturpaUma,
+                ItemId.KunturpaIlla,
                 new ItemParams
                 {
                     Type = ItemType.Talisman,

@@ -13,7 +13,7 @@
         SupaypaUma      = 4,
         Sword       	= 5,
         Bow          	= 6,
-        KunturpaUma 	= 7,
+        KunturpaIlla 	= 7,
         Ayahuasca       = 8,
         AnkasKallampa   = 9,
         MirayIlla       = 10,

@@ -51,7 +51,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturpaUma, 1));
+                shop.Add(new Item(ItemId.KunturpaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
@@ -85,7 +85,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturpaUma, 1));
+                shop.Add(new Item(ItemId.KunturpaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
@@ -137,7 +137,7 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 return;
             }
 
-            if(SelectedItem.ToString() == "KunturpaUma")
+            if(SelectedItem.ToString() == "KunturpaIlla")
             {
                 PlayerPrefs.SetInt("Boost01", 1);
 
