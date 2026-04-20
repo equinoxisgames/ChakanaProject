@@ -40,16 +40,16 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 1));
 
                 if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
                 if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.MirayIlla, 1));
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
             inventory.Add(new Item(ItemId.Suntur, 1));
@@ -78,16 +78,16 @@ namespace Assets.FantasyInventory.Scripts.Interface
             if (PlayerPrefs.GetInt("conv01") != 2)
             {
                 if (PlayerPrefs.HasKey("ukukuM01") && PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 2));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 2));
                 else if (PlayerPrefs.HasKey("ukukuM01") || PlayerPrefs.HasKey("ukukuM02"))
-                    inventory.Add(new Item(ItemId.KilluKallampa, 1));
+                    inventory.Add(new Item(ItemId.AnkasKallampa, 1));
 
                 if (PlayerPrefs.HasKey("ukukuM03")) inventory.Add(new Item(ItemId.SupaypaUma, 1));
                 if (PlayerPrefs.HasKey("ukukuM04")) inventory.Add(new Item(ItemId.Ayahuasca, 1));
             }
 
-            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaUma, 1));
-            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.ValdiviaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost01")) inventory.Add(new Item(ItemId.KunturpaIlla, 1));
+            if (PlayerPrefs.HasKey("Boost02")) inventory.Add(new Item(ItemId.MirayIlla, 1));
             if (PlayerPrefs.HasKey("Boost03")) inventory.Add(new Item(ItemId.UturunkuIlla, 1));
 
             inventory.Add(new Item(ItemId.Suntur, 1));

@@ -6,6 +6,7 @@ using Assets.FantasyInventory.Scripts.Data;
 using Assets.FantasyInventory.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization.Settings;
 
 namespace Assets.FantasyInventory.Scripts.Interface.Elements
 {
@@ -17,6 +18,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
         public Text Name;
         public Text Description;
         public Text Price;
+        public Text ShortDescription;
         public Image Icon;
 
         // ── PRIORIDAD 6: Re-buscar referencias si fueron destruidas al cambiar de escena ──
@@ -37,12 +39,17 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 var priceObj = transform.Find("PriceText");
                 if (priceObj != null) Price = priceObj.GetComponent<Text>();
             }
+            if (ShortDescription == null)
+            {
+                var shortDescObj = transform.Find("ShortDescriptionText");
+                if (shortDescObj != null) ShortDescription = shortDescObj.GetComponent<Text>();
+            }
         }
 
         // ── PRIORIDAD 1: Validar referencias antes de usarlas ──
         private bool ReferencesAreValid()
         {
-            if (Name == null || Description == null || Price == null || Icon == null)
+            if (Name == null || Description == null || Price == null || ShortDescription == null || Icon == null)
             {
                 Debug.LogWarning("[ItemInfo] Una o más referencias de UI están destruidas o son nulas. Operación cancelada.");
                 return false;
@@ -55,7 +62,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             // ── PRIORIDAD 1 ──
             if (!ReferencesAreValid()) return;
 
-            Name.text = Description.text = Price.text = null;
+            Name.text = Description.text = Price.text = ShortDescription.text = null;
             Icon.sprite = ImageCollection.Instance.DefaultItemIcon;
         }
 
@@ -71,6 +78,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             if (itemParams.Tags.Contains(ItemTag.NotForSale))
             {
                 Price.text = null;
+                ShortDescription.text = null;
             }
             else if (shop)
             {
@@ -78,6 +86,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 //Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
 
                 Price.text = $"Buy price: {itemParams.Price}G";
+                ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
             }
 
             // Se comenta esta parte ya que no se implementara la venta de objetos
@@ -99,6 +108,8 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             }
 
             Description.text = string.Join(Environment.NewLine, description.ToArray());
+
+            ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
         }
 
         public static string SplitName(string name)

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
@@ -7,6 +7,7 @@ using Assets.FantasyInventory.Scripts.Enums;
 using Assets.FantasyInventory.Scripts.GameData;
 using Assets.FantasyInventory.Scripts.Interface.Elements;
 using Assets.FantasyInventory.Scripts.Interface;
+using UnityEngine.InputSystem;
 
 public class ConversationInteract : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class ConversationInteract : MonoBehaviour
     [SerializeField] GameObject shop;
     [SerializeField] Transform shopList;
     public Inventory inventory;
+    public DialogueController dialogueController;
     GameObject canvas;
 
     private GameObject canvasUI;
@@ -24,20 +26,29 @@ public class ConversationInteract : MonoBehaviour
     private GameObject cam;
     private bool shopEnable = false;
     private bool shopping = false;
-    
+    private bool _inConversation = false;
+    private bool _interactBtn = false;
+
     void Start()
     {
         canvas = GameObject.Find("Dialogue Manager").transform.GetChild(0).gameObject;
+        Debug.Log($"[ConversationInteract] canvas (Dialogue Manager hijo): {(canvas != null ? canvas.name : "NULL")}");
 
         canvasUI = GameObject.Find("HUDMenu");
+        Debug.Log($"[ConversationInteract] canvasUI (HUDMenu): {(canvasUI != null ? canvasUI.name : "NULL")}");
+
+        if (dialogueController != null)
+            Debug.Log("[ConversationInteract] Suscrito a OnConversationFinished.");
+        else
+            Debug.LogError("[ConversationInteract] dialogueController es NULL. No está asignado en el Inspector.");
 
         if (PlayerPrefs.GetInt("ukukuM") == 3 && PlayerPrefs.GetInt("conv01") != 2)
         {
             data.conversation = "Ukuku02";
             shopEnable = true;
         }
-        else if(PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
-        else if(PlayerPrefs.GetInt("conv01") == 2)
+        else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
+        else if (PlayerPrefs.GetInt("conv01") == 2)
         {
             data.conversation = "Ukuku04";
             shopEnable = true;
@@ -50,6 +61,11 @@ public class ConversationInteract : MonoBehaviour
 
         keyObj.SetActive(true);
         joyObj.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        // Sin suscripciones por código que limpiar
     }
 
     private void Update()
@@ -84,6 +100,85 @@ public class ConversationInteract : MonoBehaviour
                 CloseShop();
             }
         }
+
+
+        //Valida la conversación que va a presentar dependiendo de los palyer prefs
+        ValidateAndRunConversation();
+
+    }
+
+    /// <summary>
+    /// Evalúa inputs, estado de interacción y prioridades de PlayerPrefs para ejecutar la conversación.
+    /// </summary>
+    public void ValidateAndRunConversation()
+    {
+        var gamepad = Gamepad.current;
+
+        bool pressedE = Input.GetKeyDown(KeyCode.E);
+        bool pressedY = gamepad != null && gamepad.buttonNorth.wasPressedThisFrame;
+
+        // --- 1. GUARD: Sin input o condiciones no cumplidas, salir temprano ---
+        if (_inConversation || (!pressedE && !pressedY) || !_interactBtn)
+            return;
+
+        Debug.Log($"[ConversationInteract] Input detectado — E: {pressedE}, Y: {pressedY}");
+
+        // --- 2. LECTURA DE PLAYERPREFS ---
+        int ukukuM = PlayerPrefs.GetInt("ukukuM", 0);
+        int conv1 = PlayerPrefs.GetInt("conv1", 0);
+
+        Debug.Log($"[PlayerPrefs] ukukuM: {ukukuM} | conv1: {conv1}");
+
+        // --- 3. ÁRBOL DE PRIORIDADES (sin solapamientos) ---
+        string conversationID;
+
+        // Prioridad 1 — Estado final: tienda ya desbloqueada permanentemente.
+        // conv1 == 2 es el estado más avanzado y debe prevalecer sobre todo.
+        if (conv1 == 2)
+        {
+            conversationID = "OPEN_STORE";
+            Debug.Log("[Prioridad 1] Tienda permanente abierta (conv1 == 2)");
+        }
+        // Prioridad 2 — Misión recién completada (ukukuM == 3).
+        // Se evalúa ANTES que conv1 == 1 para no quedar atrapado en INCOMPLETE_MISSION
+        // en la misma sesión en que el jugador entrega los 3 objetos.
+        else if (ukukuM == 3)
+        {
+            conversationID = "MISSION_COMPLETE";
+            PlayerPrefs.SetInt("conv1", 2);
+            Debug.Log("[Prioridad 2] Misión completada (ukukuM == 3)");
+        }
+        // Prioridad 3 — Misión en progreso.
+        // Cubre tanto conv1 == 1 (ya habló con Ukuku) como ukukuM parcial (1 o 2 objetos).
+        // Al unirlos se elimina la redundancia y el posible conflicto entre ambas reglas.
+        else if (conv1 == 1 || (ukukuM > 0 && ukukuM < 3))
+        {
+            conversationID = "INCOMPLETE_MISSION";
+            Debug.Log($"[Prioridad 3] Misión en progreso (conv1: {conv1} | ukukuM: {ukukuM})");
+        }
+        // Prioridad 4 — Estado inicial: ninguna conversación ni objeto previo.
+        else if (ukukuM == 0 && conv1 == 0)
+        {
+            conversationID = "START_MISSION";
+            Debug.Log("[Prioridad 4] Inicio de misión (ukukuM == 0 && conv1 == 0)");
+        }
+        // Fallback — Estado inesperado; se loguea para facilitar debugging.
+        else
+        {
+            Debug.LogWarning($"[ConversationInteract] Estado inesperado — ukukuM: {ukukuM}, conv1: {conv1}. No se inicia diálogo.");
+            return;
+        }
+
+        // --- 4. EJECUCIÓN ---
+        Debug.Log($"[EXECUTION] Enviando conversationID: {conversationID}");
+        _inConversation = true;
+
+        if (dialogueController != null)
+            dialogueController.StartConversation(conversationID);
+        else
+            Debug.LogError("[ConversationInteract] dialogueController no está asignado en el Inspector.");
+
+        StartConversation(); 
     }
 
 
@@ -105,7 +200,7 @@ public class ConversationInteract : MonoBehaviour
         {
             PlayerPrefs.SetInt("conv01", 1);
         }
-        
+
         if (PlayerPrefs.GetInt("ukukuM") == 3)
         {
             PlayerPrefs.SetInt("conv01", 2);
@@ -141,12 +236,15 @@ public class ConversationInteract : MonoBehaviour
 
     public void StopConversation()
     {
+        Debug.Log("[ConversationInteract] StopConversation llamado.");
+        _inConversation = false;
+
         if (shopEnable && !PlayerPrefs.HasKey("TiendaVacia"))
         {
             shop.SetActive(true);
-            canvasUI.SetActive(false);
+            //canvasUI.SetActive(false);
             shopping = true;
-            canvas.SetActive(false);
+            //canvas.SetActive(false);
             shopList.GetChild(0).GetComponent<Button>().Select();
             shopList.GetChild(0).GetComponent<InventoryItem>().OnPress();
             GetComponent<Usable>().enabled = false;
@@ -169,6 +267,7 @@ public class ConversationInteract : MonoBehaviour
         if (interactBtn != null)
         {
             interactBtn.SetActive(t);
+            _interactBtn = t;
         }
     }
 
@@ -176,6 +275,7 @@ public class ConversationInteract : MonoBehaviour
     {
         if (!shopping) return;
 
+        _inConversation = false;
         canvas.SetActive(true);
         shop.SetActive(false);
         canvasUI.SetActive(true);
@@ -189,7 +289,7 @@ public class ConversationInteract : MonoBehaviour
         if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2) data.conversation = "Ukuku02";
         else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if (PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
-        
+
         EnableBtn(true);
     }
 }

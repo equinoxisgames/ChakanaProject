@@ -6,6 +6,7 @@ using Assets.FantasyInventory.Scripts.Data;
 using Assets.FantasyInventory.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization.Settings;
 
 namespace Assets.FantasyInventory.Scripts.Interface.Elements
 {
@@ -17,6 +18,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
         public Text Name;
         public Text Description;
         public Text Price;
+        public Text ShortDescription;
         public Image Icon;
 
         public void Reset()
@@ -62,6 +64,8 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             }
 
             Description.text = string.Join(Environment.NewLine, description.ToArray());
+
+            ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
         }
         
         public static string SplitName(string name)
