@@ -11,6 +11,7 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] GameObject particle;
     [SerializeField] Hoyustus player;
     [SerializeField] GameObject tutoObj;
+    [SerializeField] GameObject tutoCompleted;
     [SerializeField] EnemyGenerator enemyG;
 
     private GameObject keyObj, joyObj;
@@ -41,7 +42,7 @@ public class ElementalAltar : MonoBehaviour
         }
 
         altarName = doorName + keyCode;
-        PlayerPrefs.SetInt(altarName, 0);
+
         if (!PlayerPrefs.HasKey(altarName))
         {
             PlayerPrefs.SetInt(altarName, 0);
@@ -49,6 +50,7 @@ public class ElementalAltar : MonoBehaviour
         else if (PlayerPrefs.GetInt(altarName) == 1)
         {
             isOn = true;
+            particle.SetActive(false);
             gameObject.SetActive(false);
         }
     }
@@ -75,14 +77,17 @@ public class ElementalAltar : MonoBehaviour
             if(keyCode == "01")
             {
                 PlayerPrefs.SetInt("snakeSkill", 1);
+                player.setCargaHabilidades(1);
             }
             if(keyCode == "02")
             {
                 PlayerPrefs.SetInt("condorSkill", 1);
+                player.setCargaHabilidades(0);
             }
             if (keyCode == "03")
             {
                 PlayerPrefs.SetInt("spearSkill", 1);
+                player.setCargaHabilidades(2);
             }
 
             HudManager.Instance.RefreshUI();
@@ -97,8 +102,14 @@ public class ElementalAltar : MonoBehaviour
                 tutoObj.SetActive(false);
                 Time.timeScale = 1;
                 enemyG.StartCombatAuto();
-                gameObject.SetActive(false);
                 isActive = false;
+
+                if (PlayerPrefs.GetInt(doorName) == 3)
+                {
+                    tutoCompleted.SetActive(true);
+                    Destroy(tutoCompleted, 3f);
+                }
+                gameObject.SetActive(false);
             }
 
             if (joystick)

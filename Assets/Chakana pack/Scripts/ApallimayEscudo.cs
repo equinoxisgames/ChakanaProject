@@ -13,7 +13,6 @@ public class ApallimayEscudo : Enemy
     [Header("Configuración Idle & Movimiento")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float cooldownCambioMirada = 3f;
-    [SerializeField] private float tiempoCaminarAtras = 2f;
     private float temporizadorMirada;
     private bool persecucionPausada; // Para el movimiento "cuidadoso"
 
@@ -198,22 +197,8 @@ public class ApallimayEscudo : Enemy
 
         // 3. Recupera el escudo y huye
         anim.SetBool("Playable", true);
-        StartCoroutine(SecuenciaHuida());
-    }
-
-    private IEnumerator SecuenciaHuida()
-    {
-        estadoActual = EstadoEscudo.Huida;
-        anim.SetBool("BackWalk", true);
-        MirarAlJugador(); // Aseguramos que retroceda viendo al jugador
-
-        yield return new WaitForSeconds(tiempoCaminarAtras);
-
-        anim.SetBool("BackWalk", false);
-        estadoActual = EstadoEscudo.Persecucion;
-
-        yield return new WaitForSeconds(cooldownAtaque);
         ataqueDisponible = true;
+        estadoActual = EstadoEscudo.Persecucion;
     }
 
     #endregion
@@ -297,8 +282,6 @@ public class ApallimayEscudo : Enemy
             {
                 if (shieldImpact != null) Destroy(Instantiate(shieldImpact, escudo.transform.position, Quaternion.identity), 1.5f);
 
-                // Pequeño empuje hacia atrás por golpear el escudo (opcional)
-                rb.AddForce(new Vector2(-dirAtaque * 3f, 0), ForceMode2D.Impulse);
                 return;
             }
 
