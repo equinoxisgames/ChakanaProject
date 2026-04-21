@@ -179,7 +179,7 @@ public class EnemyGenerator : MonoBehaviour
         else
             Debug.LogError("[EnemyGenerator] MusicManager.Instance es null");
 
-        if (combatNum == "1")
+        if (treasure == null)
         {
             isMove = true;
             isOnBattle = false;

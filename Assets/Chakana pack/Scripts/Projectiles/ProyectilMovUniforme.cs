@@ -44,7 +44,6 @@ public class ProyectilMovUniforme : MonoBehaviour
             if (collision.gameObject.CompareTag("Player") && !collision.gameObject.GetComponent<Hoyustus>().IsInvulnerable()) {
                 collision.gameObject.GetComponent<Hoyustus>().RecibirDanio(danio);
                 collision.gameObject.GetComponent<Hoyustus>().danioExterno((transform.position.x <= collision.transform.position.x) ? 1 : -1, 2f);
-
             }
             Destroy(gameObject);
         }

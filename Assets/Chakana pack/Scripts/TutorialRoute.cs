@@ -209,8 +209,14 @@ public class TutorialRoute : MonoBehaviour
         }
     }
 
+    public void StartHealTuto()
+    {
+        StartCoroutine(SkillsTuto());
+    }
+
     IEnumerator SkillsTuto()
     {
+        Time.timeScale = 0;
         tutoObj.transform.GetChild(5).gameObject.SetActive(false);
         tutoObj.SetActive(true);
 
