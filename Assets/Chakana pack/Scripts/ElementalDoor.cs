@@ -1,7 +1,9 @@
+using Assets.FantasyInventory.Scripts.Data;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public class ElementalDoor : MonoBehaviour
 {
@@ -50,6 +52,7 @@ public class ElementalDoor : MonoBehaviour
         if (collision.CompareTag("Player") && !isToOpen)
         {
             int e = 3 - PlayerPrefs.GetInt(doorName);
+
             adTxt.text = "Unleash your power to access";
             adTxt.gameObject.SetActive(true);
         }

@@ -1,73 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraTopDown : MonoBehaviour
 {
-    private float vertical, horizontal;
-    private Vector3 destination;
-    private bool isMove;
+    [Header("Referencias")]
+    [SerializeField] private Transform camaraPrincipal;
+    [SerializeField] private GameObject camaraVistazo;
 
-    [SerializeField] private GameObject cinemaC, cinemaC2;
-    [SerializeField] private float velocity;
+    [Header("Configuración")]
+    [SerializeField] private float velocidadCamara = 15f;
+    [SerializeField] private float distanciaMaximaVistazo = 8f;
+    [SerializeField] private float umbralVistazo = 0.2f;
+
+    private bool estaDandoVistazo = false;
+    private Vector3 posicionOrigen;
 
     void Update()
     {
-        vertical = Input.GetAxis("Vertical2");
-        horizontal = Input.GetAxis("Horizontal2");
+        float verticalVistazo = Input.GetAxis("Vertical2");
+        float horizontalVistazo = Input.GetAxis("Horizontal2");
+        float movimientoJugador = Input.GetAxis("Horizontal");
 
-        DoUCamera(vertical, horizontal);
-    }
+        bool quiereMirar = Mathf.Abs(verticalVistazo) > umbralVistazo;
+        bool jugadorQuieto = Mathf.Abs(movimientoJugador) < 0.1f;
+        bool sinVistazoHorizontal = Mathf.Abs(horizontalVistazo) <= 0.2f;
 
-    private void DoUCamera(float a, float b)
-    {
-        if(b <= 0.2 && b >= -0.2 && !isMove)
+        // 1. INICIAR EL VISTAZO
+        // Solo se activa si el jugador está quieto, quiere mirar y la cámara estaba apagada
+        if (quiereMirar && jugadorQuieto && sinVistazoHorizontal && !estaDandoVistazo)
         {
-            if(a >= 0.5)
+            estaDandoVistazo = true;
+            camaraVistazo.SetActive(true);
+            camaraVistazo.transform.position = posicionOrigen;
+            // IMPORTANTE: Al volverse true 'estaDandoVistazo', la posicionOrigen se "congela" 
+            // y deja de actualizarse en el bloque 'else' de abajo.
+        }
+
+        // 2. MIENTRAS EL VISTAZO ESTÉ ACTIVO (Yendo hacia arriba/abajo o regresando)
+        if (estaDandoVistazo)
+        {
+            // Si el jugador decide moverse repentinamente, apagamos el vistazo de inmediato
+            // para que no siga viendo el cielo mientras su personaje corre a ciegas.
+            if (!jugadorQuieto || !sinVistazoHorizontal)
             {
-                if (!cinemaC2.activeSelf)
-                {
-                    cinemaC2.SetActive(true);
-                    cinemaC2.transform.position = cinemaC.transform.position;
-                }
-
-                destination = cinemaC.transform.position;
-                destination.y += 8;
-
-                cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
-
+                ApagarVistazo();
+                return;
             }
-            else if(a <= -0.5)
+
+            Vector3 destino;
+
+            if (quiereMirar)
             {
-                if (!cinemaC2.activeSelf)
-                {
-                    cinemaC2.SetActive(true);
-                    cinemaC2.transform.position = cinemaC.transform.position;
-                }
-
-                destination = cinemaC.transform.position;
-                destination.y -= 8;
-
-                cinemaC2.transform.position = Vector3.MoveTowards(cinemaC2.transform.position, destination, velocity * Time.deltaTime);
+                // Sube o baja progresivamente según cuánto empujes el joystick
+                destino = posicionOrigen + new Vector3(0, verticalVistazo * distanciaMaximaVistazo, 0);
             }
             else
             {
-                if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
-                StartCoroutine(EnableCamera());
-                isMove = true;
+                // Si suelta el joystick, el destino vuelve a ser el centro congelado
+                destino = posicionOrigen;
+            }
+
+            // Movemos la cámara hacia el destino actual
+            camaraVistazo.transform.position = Vector3.MoveTowards(
+                camaraVistazo.transform.position,
+                destino,
+                velocidadCamara * Time.deltaTime
+            );
+
+            // Si el jugador soltó el botón Y la cámara ya regresó a su posición de origen, se apaga.
+            if (!quiereMirar && Vector3.Distance(camaraVistazo.transform.position, posicionOrigen) < 0.01f)
+            {
+                ApagarVistazo();
             }
         }
         else
         {
-            if (cinemaC2.activeSelf) cinemaC2.SetActive(false);
-            StartCoroutine(EnableCamera());
-            isMove = true;
+            // 3. MIENTRAS LA CÁMARA DE VISTAZO ESTÉ APAGADA
+            // Aquí sí mantenemos la 'posicionOrigen' actualizada constantemente 
+            // siguiendo a la cámara principal por si el jugador está caminando por el mapa.
+            posicionOrigen = camaraPrincipal.position;
         }
     }
 
-    IEnumerator EnableCamera()
+    private void ApagarVistazo()
     {
-        yield return new WaitForSeconds(1.75f);
-        isMove = false;
+        estaDandoVistazo = false;
+        if (camaraVistazo.activeSelf)
+        {
+            camaraVistazo.SetActive(false);
+        }
     }
 }
