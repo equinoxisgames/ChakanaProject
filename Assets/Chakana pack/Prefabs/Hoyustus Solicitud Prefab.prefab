@@ -9955,17 +9955,20 @@ MonoBehaviour:
   resistenciaAire: 0.1
   walkSpeed: 12
   isWalking: 0
-  alturaPrimerSalto: 7
-  alturaDobleSalto: 5
+  alturaPrimerSalto: 6
+  alturaDobleSalto: 4
   multiplicadorAire: 0.65
   jumpCutMultiplier: 0.25
   coyoteTime: 0.15
   jumpBufferTime: 0.15
-  defaultGravityScale: 5
-  fallGravityMultiplier: 2.8
-  peakGravityMultiplier: 3.5
+  defaultGravityScale: 4
+  fallGravityMultiplier: 4
+  peakGravityMultiplier: 20
   peakSpeedThreshold: 1.75
-  doubleJumpVFXPrefab: {fileID: 0}
+  jumpImpulseMultiplier: 1.4
+  jumpVFXPrefab: {fileID: 4181101764326029096, guid: 9430365d95bc1aa458a9168bf9c29c74, type: 3}
+  jumpVFXDuration: 0.6
+  doubleJumpVFXPrefab: {fileID: 5862328161722201066, guid: 0fccd39ae46226e4084c40f7f8f2cc0d, type: 3}
   doubleJumpVFXDuration: 1
   isJumping: 0
   isSecondJump: 0

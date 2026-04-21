@@ -58,7 +58,7 @@ public class CameraShakeManager : MonoBehaviour
 
     // --- MÉTODOS DE DISPARO ---
     // (Duración Shake, Fuerza Shake, Duración Hitstop)
-    public void ShakeDanio() => IniciarVibracion(0.2f, 0.45f, 0.1f);
+    public void ShakeDanio() => IniciarVibracion(0.2f, 0.45f, 0.13f);
     public void ShakeMuerteEnemigo() => IniciarVibracion(0.5f, 0.75f, 0.2f);
     public void ShakeSinHitStop() => IniciarVibracion(0.5f, 0.75f);
 
