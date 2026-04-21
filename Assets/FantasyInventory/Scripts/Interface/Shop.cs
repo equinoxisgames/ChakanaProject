@@ -51,12 +51,12 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturpaUma, 1));
+                shop.Add(new Item(ItemId.KunturpaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
-                shop.Add(new Item(ItemId.ValdiviaIlla, 1));
+                shop.Add(new Item(ItemId.MirayIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
@@ -85,12 +85,12 @@ namespace Assets.FantasyInventory.Scripts.Interface
 
             if (PlayerPrefs.GetInt("Boost01") != 1)
             {
-                shop.Add(new Item(ItemId.KunturpaUma, 1));
+                shop.Add(new Item(ItemId.KunturpaIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost02") != 1)
             {
-                shop.Add(new Item(ItemId.ValdiviaIlla, 1));
+                shop.Add(new Item(ItemId.MirayIlla, 1));
             }
 
             if (PlayerPrefs.GetInt("Boost03") != 1)
@@ -137,14 +137,14 @@ namespace Assets.FantasyInventory.Scripts.Interface
                 return;
             }
 
-            if(SelectedItem.ToString() == "KunturpaUma")
+            if(SelectedItem.ToString() == "KunturpaIlla")
             {
                 PlayerPrefs.SetInt("Boost01", 1);
 
                 player.UpdatePU(1);
                 managerPU.ShowVFX(1);
             }
-            else if (SelectedItem.ToString() == "ValdiviaIlla")
+            else if (SelectedItem.ToString() == "MirayIlla")
             {
                 PlayerPrefs.SetInt("Boost02", 1);
 

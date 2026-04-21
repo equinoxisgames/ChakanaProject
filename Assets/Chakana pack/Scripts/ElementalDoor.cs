@@ -15,6 +15,7 @@ public class ElementalDoor : MonoBehaviour
     [SerializeField] GameObject part02;   // Minipartícula 2
     [SerializeField] GameObject part03;   // Minipartícula 3
     [SerializeField] GameObject lightDoor;
+    [SerializeField] AudioClip musicFinal;
 
     [Header("Configuración de Animación")]
     [SerializeField] float particleSpeed = 10f;
@@ -70,6 +71,7 @@ public class ElementalDoor : MonoBehaviour
     IEnumerator OpenDoor()
     {
         // 1. Inicializar minipartículas en la posición del jugador
+        GetComponent<AudioSource>().Play();
         Vector3 startPos = playerTr.position;
         part01.transform.position = startPos;
         part02.transform.position = startPos;
@@ -122,6 +124,7 @@ public class ElementalDoor : MonoBehaviour
         }
 
         lightDoor.SetActive(false);
+        GetComponent<AudioSource>().clip = musicFinal;
         GetComponent<AudioSource>().Play();
         particle.transform.SetParent(orbPos);
         Vector3 targetDoorPos = destination;

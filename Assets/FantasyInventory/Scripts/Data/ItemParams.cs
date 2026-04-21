@@ -13,6 +13,8 @@ namespace Assets.FantasyInventory.Scripts.Data
         public ItemType Type;
         public List<ItemTag> Tags = new List<ItemTag>();
         public List<Property> Properties = new List<Property>();
+        public string ShortDescription = "ShortDescription";
+        public string ShortDescLocalKey = "ShortDescLocalKey";
         public int Price;
     }
 }

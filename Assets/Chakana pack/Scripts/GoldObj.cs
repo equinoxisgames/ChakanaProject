@@ -77,7 +77,7 @@ public class GoldObj : MonoBehaviour
         }
         else if(collision.tag == "Player" && heal)
         {
-            player.setCargaCuracion(35);
+            player.setCargaCuracion(100);
             StartCoroutine(Effect());
         }
     }

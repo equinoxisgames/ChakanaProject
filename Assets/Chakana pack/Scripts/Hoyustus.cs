@@ -169,7 +169,7 @@ public class Hoyustus : CharactersBehaviour
 
     private bool playerDie = false;
     private bool weaponEquip = false;
-    private bool botonSkill01, botonSkill02;
+    private bool enableSkill01, enableSkill02, enableSkill03;
 
     public void isTocandoPared(int value)
     {
@@ -196,10 +196,31 @@ public class Hoyustus : CharactersBehaviour
         return cargaCuracion;
     }
 
+    public void setCargaHabilidades(int e)
+    {
+        switch (e)
+        {
+            case 0:
+                cargaHabilidadCondor = 100;
+                enableSkill01 = true;
+                break;
+            case 1:
+                cargaHabilidadSerpiente = 100;
+                enableSkill02 = true;
+                break;
+            case 2:
+                cargaHabilidadLanza = 100;
+                enableSkill03 = true;
+                break;
+        }
+    }
 
     public void setCargaCuracion(int e)
     {
         cargaCuracion += e;
+
+        GameObject tuto = GameObject.Find("tuto4");
+        if(tuto != null) tuto.GetComponent<TutorialRoute>().StartHealTuto();
     }
 
     public void CurarCompletamente()
@@ -235,9 +256,12 @@ public class Hoyustus : CharactersBehaviour
 
         if (PlayerPrefs.HasKey("Boost02"))
         {
-            maxVida *= 1.5f;
-            
+            maxVida *= 1.5f;        
         }
+
+        enableSkill01 = PlayerPrefs.HasKey("condorSkill");
+        enableSkill02 = PlayerPrefs.HasKey("snakeSkill");
+        enableSkill03 = PlayerPrefs.HasKey("spearSkill");
 
         LoadData();
     }
@@ -374,19 +398,19 @@ public class Hoyustus : CharactersBehaviour
             jump();
         }
 
-        if (!curando && Input.GetAxis("Skill01") == 1 && cargaHabilidadCondor >= maxHabilidad_Curacion && playable)
+        if (!curando && Input.GetAxis("Skill01") == 1 && cargaHabilidadCondor >= maxHabilidad_Curacion && playable && enableSkill01)
         {
             cargaHabilidadCondor = 0f;
             StartCoroutine("habilidadCondor");
             return;
         }
-        if (!curando && Input.GetAxis("Skill02") == 1 && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable)
+        if (!curando && Input.GetAxis("Skill02") == 1 && cargaHabilidadSerpiente >= maxHabilidad_Curacion && playable && enableSkill02)
         {
             cargaHabilidadSerpiente = 0f;
             StartCoroutine("habilidadSerpiente");
             return;
         }
-        if (!curando && !atacando && Input.GetButtonDown("Skill03") && cargaHabilidadLanza >= maxHabilidad_Curacion && playable)
+        if (!curando && !atacando && Input.GetButtonDown("Skill03") && cargaHabilidadLanza >= maxHabilidad_Curacion && playable && enableSkill03)
         {
             cargaHabilidadLanza = 0;
             transform.parent = null;
