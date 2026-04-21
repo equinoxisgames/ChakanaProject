@@ -9955,8 +9955,18 @@ MonoBehaviour:
   resistenciaAire: 0.1
   walkSpeed: 12
   isWalking: 0
-  fuerzaPrimerSalto: 30
-  fuerzaDobleSalto: 25
+  alturaPrimerSalto: 7
+  alturaDobleSalto: 5
+  multiplicadorAire: 0.65
+  jumpCutMultiplier: 0.25
+  coyoteTime: 0.15
+  jumpBufferTime: 0.15
+  defaultGravityScale: 5
+  fallGravityMultiplier: 2.8
+  peakGravityMultiplier: 3.5
+  peakSpeedThreshold: 1.75
+  doubleJumpVFXPrefab: {fileID: 0}
+  doubleJumpVFXDuration: 1
   isJumping: 0
   isSecondJump: 0
   correctorSalto: 1
@@ -9964,7 +9974,6 @@ MonoBehaviour:
   secondJump: 0
   saltoEspecial: 0
   extraSalto: 7
-  coyoteTime: 0.15
   fuerzaCaida: 8
   groundCheckRadius: 0.15
   groundTransform: {fileID: 1103388191273375783}

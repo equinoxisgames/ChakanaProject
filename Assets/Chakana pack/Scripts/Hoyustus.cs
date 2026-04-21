@@ -22,15 +22,19 @@ public class Hoyustus : CharactersBehaviour
     [Tooltip("Reducción de velocidad horizontal mientras saltas (0 = no se mueve, 1 = igual que en suelo).")]
     [SerializeField] private float multiplicadorAire = 0.7f;
     [Tooltip("Multiplicador de velocidad que se aplica al soltar el botón de salto prematuramente (microsaltos).")]
-    [SerializeField] private float jumpCutMultiplier = 0.5f;
+    [SerializeField] private float jumpCutMultiplier = 0.25f;
     [Tooltip("Tiempo de gracia para saltar después de dejar una plataforma.")]
     [SerializeField] private float coyoteTime = 0.15f;
     [Tooltip("Margen de tiempo para registrar un salto antes de tocar el suelo.")]
     [SerializeField] private float jumpBufferTime = 0.15f;
     [Tooltip("Escala de gravedad normal del personaje.")]
-    [SerializeField] private float defaultGravityScale = 3f;
+    [SerializeField] private float defaultGravityScale = 5f;
     [Tooltip("Multiplicador de gravedad aplicado únicamente cuando el personaje está cayendo. Aumentar para caer más rápido.")]
-    [SerializeField] private float fallGravityMultiplier = 2.5f;
+    [SerializeField] private float fallGravityMultiplier = 2.8f;
+    [Tooltip("Multiplicador de gravedad extra aplicado cerca del tope del salto (velocidad Y baja). Da el efecto 'pop' de Hollow Knight.")]
+    [SerializeField] private float peakGravityMultiplier = 4f;
+    [Tooltip("Umbral de velocidad Y (valor absoluto) para considerar que el personaje está en el tope del arco.")]
+    [SerializeField] private float peakSpeedThreshold = 3f;
     [Tooltip("Prefab del efecto visual para el doble salto.")]
     [SerializeField] private GameObject doubleJumpVFXPrefab;
     [Tooltip("Duración en segundos del efecto visual del doble salto.")]
@@ -449,10 +453,12 @@ public class Hoyustus : CharactersBehaviour
 
     private void jump()
     {
-        // MICROSALTO (Jump Cut)
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 5f && isJumping)
+        // MICROSALTO (Jump Cut) — corte agresivo para saltos cortos tipo Hollow Knight
+        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f && isJumping)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+            // Forzar gravedad de caída inmediatamente para que el corte se sienta brusco
+            rb.gravityScale = defaultGravityScale * fallGravityMultiplier;
             isJumping = false;
         }
 
@@ -464,8 +470,10 @@ public class Hoyustus : CharactersBehaviour
             jumpAudio.Play();
             anim.Play("Saltar");
             
+            // Gravedad base para calcular la velocidad (sin multiplicadores de caída)
             float gravity = -Physics2D.gravity.y * defaultGravityScale;
-            float jumpVel = Mathf.Sqrt(2 * gravity * (alturaPrimerSalto * 1.5f));
+            float jumpVel = Mathf.Sqrt(2 * gravity * alturaPrimerSalto);
+            // Forzar velocidad Y limpia para que el impulso se sienta instantáneo
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpVel);
             
             isJumping = true;
@@ -492,7 +500,7 @@ public class Hoyustus : CharactersBehaviour
             }
 
             float gravity = -Physics2D.gravity.y * defaultGravityScale;
-            float jumpVel = Mathf.Sqrt(2 * gravity * (alturaDobleSalto * 1.5f));
+            float jumpVel = Mathf.Sqrt(2 * gravity * alturaDobleSalto);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpVel);
             
             isJumping = true;
@@ -799,8 +807,20 @@ public class Hoyustus : CharactersBehaviour
 
     void Falling()
     {
-        if (rb.linearVelocity.y < 0) rb.gravityScale = defaultGravityScale * fallGravityMultiplier;
-        else rb.gravityScale = defaultGravityScale;
+        if (rb.linearVelocity.y < 0)
+        {
+            // Caída normal: gravedad multiplicada para bajar rápido
+            rb.gravityScale = defaultGravityScale * fallGravityMultiplier;
+        }
+        else if (isJumping && Mathf.Abs(rb.linearVelocity.y) < peakSpeedThreshold)
+        {
+            // Cerca del tope del arco: gravedad extra para el efecto "pop" de Hollow Knight
+            rb.gravityScale = defaultGravityScale * peakGravityMultiplier;
+        }
+        else
+        {
+            rb.gravityScale = defaultGravityScale;
+        }
     }
 
     private void AtaqueLanza()
