@@ -51,9 +51,11 @@ public class ElementalDoor : MonoBehaviour
 
         if (collision.CompareTag("Player") && !isToOpen)
         {
-            int e = 3 - PlayerPrefs.GetInt(doorName);
+            string codigoIdioma = LocalizationSettings.SelectedLocale.Identifier.Code;
 
-            adTxt.text = "Unleash your power to access";
+            if(codigoIdioma == "en") adTxt.text = "Unleash your power to access";
+            else if (codigoIdioma == "es") adTxt.text = "Libera todo tu potencial para acceder";
+
             adTxt.gameObject.SetActive(true);
         }
         else
