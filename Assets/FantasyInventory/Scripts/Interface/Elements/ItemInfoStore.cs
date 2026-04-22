@@ -42,7 +42,8 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 // Se comenta esta parte ya que no se implementara la venta de objetos
                 //Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
 
-                Price.text = $"Buy price: {itemParams.Price}G";
+                var buyPriceLabel = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", "BUY_PRICE_TEXT");
+                Price.text = $"{buyPriceLabel}: {itemParams.Price}";
             }
 
             // Se comenta esta parte ya que no se implementara la venta de objetos
@@ -51,7 +52,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
             //    Price.text = $"Sell price: {itemParams.Price / Shop.SellRatio}G";
             //}
 
-            var description = new List<string> {$"Type: {itemParams.Type}"};
+            var description = new List<string> { $"Type: {itemParams.Type}" };
 
             if (itemParams.Tags.Any())
             {
@@ -67,7 +68,7 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
 
             ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
         }
-        
+
         public static string SplitName(string name)
         {
             return Regex.Replace(Regex.Replace(name, "[A-Z]", " $0"), "([a-z])([1-9])", "$1 $2").Trim();
