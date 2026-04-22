@@ -290,6 +290,6 @@ public class ConversationInteract : MonoBehaviour
         else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if (PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
 
-        EnableBtn(true);
+        EnableBtn(false);
     }
 }

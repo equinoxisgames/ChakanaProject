@@ -85,7 +85,8 @@ namespace Assets.FantasyInventory.Scripts.Interface.Elements
                 // Se comenta esta parte ya que no se implementara la venta de objetos
                 //Price.text = $"Buy price: {itemParams.Price}G{Environment.NewLine}Sell price: {itemParams.Price / Shop.SellRatio}G";
 
-                Price.text = $"Buy price: {itemParams.Price}G";
+                var buyPriceLabel = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", "BUY_PRICE_TEXT");
+                Price.text = $"{buyPriceLabel}: {itemParams.Price}";
                 ShortDescription.text = LocalizationSettings.StringDatabase.GetLocalizedString("ChakanaGameText", itemParams.ShortDescLocalKey);
             }
 
