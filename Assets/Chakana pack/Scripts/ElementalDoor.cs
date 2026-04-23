@@ -58,7 +58,7 @@ public class ElementalDoor : MonoBehaviour
 
             adTxt.gameObject.SetActive(true);
         }
-        else
+        else if (collision.CompareTag("Player") && isToOpen)
         {
             opening = true;
             StartCoroutine(OpenDoor());

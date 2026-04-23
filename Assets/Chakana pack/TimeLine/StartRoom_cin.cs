@@ -49,7 +49,7 @@ public class StartRoom_cin : MonoBehaviour
     private void Update()
     {
         // Si estamos en la parte de los diálogos y el jugador presiona una tecla (ej. Espacio o Click)
-        if (esperandoInput && Input.GetButtonDown("Interact"))
+        if (esperandoInput && Input.GetButtonDown("Submit"))
         {
             AvanzarDialogo();
         }
@@ -99,8 +99,6 @@ public class StartRoom_cin : MonoBehaviour
 
         // Aquí sucede lo que tenías antes: la puerta se activa y Sinchi se prepara
         yield return new WaitForSeconds(0.5f);
-
-        timeline.Play();
 
         player.GetComponent<Animator>().SetBool("Grounded", true);
 
