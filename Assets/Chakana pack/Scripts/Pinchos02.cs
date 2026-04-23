@@ -37,13 +37,13 @@ public class Pinchos02 : MonoBehaviour
         {
             //Instantiate(exVFX, transform.position, Quaternion.identity);
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(Vector2.up * 12, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
         }
         else
         {
             //Instantiate(exVFX, transform.position, Quaternion.identity);
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(Vector2.up * 12, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * 15, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(0.44f);
 
