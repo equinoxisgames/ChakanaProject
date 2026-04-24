@@ -282,9 +282,12 @@ public class ApallimayDaga : Enemy
         }
 
         rb.AddForce(new Vector2(direction * fuerzaImpulsoAtaque, 0f), ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(0.2f);
+
         daga.enabled = true;
 
-        yield return new WaitForSeconds(0.4f); // Duración activa de la daga
+        yield return new WaitForSeconds(0.2f); // Duración activa de la daga
 
         // 3. FINALIZAR ATAQUE
         daga.enabled = false;

@@ -28,7 +28,7 @@ public class EnemyGenerator : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("combat" + combatNum))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         sfxSource = GetComponent<AudioSource>();
@@ -109,10 +109,8 @@ public class EnemyGenerator : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        // Si se destruye este GameObject (cambio de escena) mientras hay un fade activo,
-        // cancela la coroutine y restaura la música de fondo de inmediato
         if (MusicManager.Instance != null)
             MusicManager.Instance.CancelFadeAndRestoreBackground();
     }
