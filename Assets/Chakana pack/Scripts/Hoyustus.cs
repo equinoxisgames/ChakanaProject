@@ -81,7 +81,6 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] AudioClip AudioHurt;
     [SerializeField] AudioClip AudioDashVariant;
     [SerializeField] AudioClip AudioSkill02;
-    [SerializeField] AudioClip AudioSkill03;
 
     [SerializeField] AudioSource AudioStep1;
     [SerializeField] AudioSource AudioStep2;
@@ -571,6 +570,7 @@ public class Hoyustus : CharactersBehaviour
         }
         else
         {
+            rb.linearVelocity = Vector3.zero;
             rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
         }
 
@@ -879,12 +879,12 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator lanzaCooldown(int index)
     {
         atacando = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         atacando = false;
-        playable = true;
         codigoAtaque = 0;
         lanzas[index].SetActive(true);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
+        playable = true;
         lanzas[index].SetActive(false);
         yield return new WaitForSeconds(tiempoCooldownAtaque);
         ataqueAvailable = true;

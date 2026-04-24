@@ -77,6 +77,7 @@ public class CameraTopDown : MonoBehaviour
             // 3. MIENTRAS LA CÁMARA DE VISTAZO ESTÉ APAGADA
             // Aquí sí mantenemos la 'posicionOrigen' actualizada constantemente 
             // siguiendo a la cámara principal por si el jugador está caminando por el mapa.
+            print("deberia funcionar");
             posicionOrigen = camaraPrincipal.position;
         }
     }

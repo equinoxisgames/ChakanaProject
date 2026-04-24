@@ -25,12 +25,12 @@ Transform:
   m_GameObject: {fileID: 159352312275195004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -33.3}
+  m_LocalPosition: {x: 5.7244005, y: -15.320001, z: -42.536278}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6385181727777118293}
-  m_Father: {fileID: 7034325662002922161}
+  m_Father: {fileID: 7034325663681337313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7034325661922732364
 GameObject:
@@ -145,8 +145,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4934318115374638314}
+  m_Children: []
   m_Father: {fileID: 7034325663645344272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7034325662002922163
@@ -233,7 +232,7 @@ Transform:
   m_GameObject: {fileID: 7034325662612928086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.043297, y: -5.567443, z: -9.23628}
+  m_LocalPosition: {x: -4.0635023, y: -3.8308413, z: -9.23628}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,12 +277,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7034325662612928086}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7637a49246c8a644b4af07f30db659d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camaraPrincipal: {fileID: 7034325662612928089}
+  camaraPrincipal: {fileID: 7034325662002922161}
   camaraVistazo: {fileID: 159352312275195004}
   velocidadCamara: 15
   distanciaMaximaVistazo: 8
@@ -321,7 +320,7 @@ Camera:
     height: 1
   near clip plane: 1
   far clip plane: 1000
-  field of view: 125
+  field of view: 115
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -549,6 +548,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7034325662612928089}
+  - {fileID: 4934318115374638314}
   - {fileID: 7034325663645344272}
   - {fileID: 7034325661922732367}
   m_Father: {fileID: 7034325662658434992}

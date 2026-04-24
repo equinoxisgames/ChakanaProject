@@ -211,6 +211,7 @@ public class TutorialRoute : MonoBehaviour
 
     public void StartHealTuto()
     {
+        CameraShakeManager.Instance.ShakeSinHitStop();
         StartCoroutine(SkillsTuto());
     }
 
