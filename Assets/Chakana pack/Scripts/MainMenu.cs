@@ -334,6 +334,10 @@ public class MainMenu : MonoBehaviour
                     UpdateMapSpotPosition(-500f, 78f, 0f);
                     break;
 
+                case "03-Room 4":
+                    UpdateMapSpotPosition(-520f, 170f, 0f); 
+                    break;
+
                 case "06- Room 6":
                     UpdateMapSpotPosition((position.x - 75f) * 1.35f, (position.y + 80f) * 1.1f, 0f);
                     //UpdateMapSpotPosition(44f, 100f, 0f);
