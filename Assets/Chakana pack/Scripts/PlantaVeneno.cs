@@ -21,6 +21,7 @@ public class PlantaVeneno : MonoBehaviour
     {
         anim = transform.GetChild(0).GetComponent<Animator>();
         hoyustus = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        if(hoyustus == null) gameObject.SetActive(false);
         StartCoroutine(inicio());
     }
 
