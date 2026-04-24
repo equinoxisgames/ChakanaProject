@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Playables; // Asegúrate de tener TextMeshPro en tu proyecto
+using UnityEngine.Playables;
 using UnityEngine.Localization.Settings;
 
 public class StartRoom_cin : MonoBehaviour
 {
     [Header("Objetos de Escena")]
     [SerializeField] GameObject player;
-    [SerializeField] GameObject kinde; // El segundo personaje
-    [SerializeField] GameObject tuto; // El segundo personaje
+    [SerializeField] GameObject kinde;
+    [SerializeField] GameObject tuto;
 
     [Header("UI de Diálogo")]
-    [SerializeField] GameObject panelDialogo; // El objeto de la burbuja/panel
-    [SerializeField] TextMeshPro textoDialogo; // El componente de texto
-    [SerializeField] string[] lineasDialogoES; // Escribe los diálogos en el Inspector
-    [SerializeField] string[] lineasDialogoEN; // Escribe los diálogos en el Inspector
+    [SerializeField] GameObject panelDialogo;
+    [SerializeField] TextMeshPro textoDialogo;
+    [SerializeField] string[] lineasDialogoES;
+    [SerializeField] string[] lineasDialogoEN;
+
+    [Header("Configuración de Texto")]
+    [SerializeField] float velocidadTexto = 0.03f; // Tiempo entre cada letra
 
     private Rigidbody2D rb;
     private int indiceDialogo = 0;
@@ -24,13 +27,17 @@ public class StartRoom_cin : MonoBehaviour
     private PlayableDirector timeline;
     private string localizationL;
 
+    // --- Nuevas variables para el Typewriter ---
+    private bool estaEscribiendo = false;
+    private string lineaCompletaActual = "";
+    private Coroutine corrutinaEscritura;
+
     private void Awake()
     {
         rb = player.GetComponent<Rigidbody2D>();
         timeline = GetComponent<PlayableDirector>();
 
         localizationL = LocalizationSettings.SelectedLocale.Identifier.Code;
-        print(localizationL);
 
         if (PlayerPrefs.HasKey("inicio01"))
         {
@@ -38,26 +45,35 @@ public class StartRoom_cin : MonoBehaviour
         }
         else
         {
-            // Bloqueamos al jugador al iniciar
             player.GetComponent<Hoyustus>().enabled = false;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
             StartCoroutine(IniciarSecuencia());
         }
     }
 
     private void Update()
     {
-        // Si estamos en la parte de los diálogos y el jugador presiona una tecla (ej. Espacio o Click)
         if (esperandoInput && Input.GetButtonDown("Submit"))
         {
-            AvanzarDialogo();
+            if (estaEscribiendo)
+            {
+                // Si está escribiendo, interrumpimos la corrutina y autocompletamos la línea
+                if (corrutinaEscritura != null)
+                {
+                    StopCoroutine(corrutinaEscritura);
+                }
+                textoDialogo.text = lineaCompletaActual;
+                estaEscribiendo = false;
+            }
+            else
+            {
+                // Si ya terminó de escribir, pasamos a la siguiente línea
+                AvanzarDialogo();
+            }
         }
     }
 
     IEnumerator IniciarSecuencia()
     {
-        // Pequeña espera inicial antes de que Kinde hable
         yield return new WaitForSeconds(1.0f);
 
         panelDialogo.SetActive(true);
@@ -66,25 +82,52 @@ public class StartRoom_cin : MonoBehaviour
 
     void MostrarLinea()
     {
-        string newLine = "";
-        if (localizationL == "es") newLine = lineasDialogoES[indiceDialogo];
-        else if (localizationL == "en") newLine = lineasDialogoEN[indiceDialogo];
+        // 1. Definimos cuál es el texto completo que debe mostrarse según el idioma
+        if (localizationL == "es")
+            lineaCompletaActual = lineasDialogoES[indiceDialogo];
+        else if (localizationL == "en")
+            lineaCompletaActual = lineasDialogoEN[indiceDialogo];
+        else
+            lineaCompletaActual = lineasDialogoEN[indiceDialogo]; // Fallback por defecto
 
-        textoDialogo.text = newLine;
+        textoDialogo.text = "";
         esperandoInput = true;
+
+        kinde.GetComponent<AudioSource>().Play();
+
+        // 2. Iniciamos el efecto de máquina de escribir
+        if (corrutinaEscritura != null) StopCoroutine(corrutinaEscritura);
+        corrutinaEscritura = StartCoroutine(EscribirLinea());
+    }
+
+    // Corrutina que añade letra por letra
+    IEnumerator EscribirLinea()
+    {
+        estaEscribiendo = true;
+        textoDialogo.text = "";
+
+        // Convertimos el string completo en un arreglo de caracteres y lo iteramos
+        foreach (char letra in lineaCompletaActual.ToCharArray())
+        {
+            textoDialogo.text += letra;
+            yield return new WaitForSeconds(velocidadTexto);
+        }
+
+        // Cuando termina el bucle, significa que la línea se completó naturalmente
+        estaEscribiendo = false;
     }
 
     void AvanzarDialogo()
     {
         indiceDialogo++;
 
+        // Asumimos que los arreglos de ES y EN tienen la misma longitud
         if (indiceDialogo < lineasDialogoES.Length)
         {
             MostrarLinea();
         }
         else
         {
-            // Ya no hay más texto, empezamos la cinemática física
             esperandoInput = false;
             panelDialogo.SetActive(false);
             StartCoroutine(PlayScene());
@@ -97,14 +140,12 @@ public class StartRoom_cin : MonoBehaviour
 
         timeline.Play();
 
-        // Aquí sucede lo que tenías antes: la puerta se activa y Sinchi se prepara
         yield return new WaitForSeconds(0.5f);
 
         player.GetComponent<Animator>().SetBool("Grounded", true);
 
         yield return new WaitForSeconds(1.2f);
 
-        // Liberamos el control del jugador
         tuto.SetActive(true);
         player.GetComponent<Hoyustus>().enabled = true;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
