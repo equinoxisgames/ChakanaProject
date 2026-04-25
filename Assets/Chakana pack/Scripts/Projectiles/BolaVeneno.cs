@@ -6,28 +6,12 @@ using UnityEngine.UIElements;
 
 public class BolaVeneno : MonoBehaviour
 {
-    protected Rigidbody2D rb;
+    [SerializeField] protected Rigidbody2D rb;
     protected float tiempoEliminacion = 5f;
     protected GameObject explosion;
     [SerializeField] private GameObject charco;
-    //[SerializeField] private GameObject explosion;
 
-    EnemyRespawn respawn;
-
-    Transform target;
-    float baseProjectileSpeed = 5f;
-    float maxForceMultiplier = 10f;
-
-    void Start()
-    {
-        rb = this.gameObject.GetComponent<Rigidbody2D>();
-
-        //respawn = GameObject.Find("-----ENEMIES").GetComponent<EnemyRespawn>();
-
-        //if(respawn != null) target = respawn.GetNearEnemy();
-
-        //rb.Sleep();
-    }
+    bool generado = false;
 
     private void Update()
     {
@@ -35,15 +19,15 @@ public class BolaVeneno : MonoBehaviour
         if (tiempoEliminacion <= 0) {
             //HACER LA DIFERENCIACION CON EL LAYER SI TIENE UNA CAPA PLAYER O ENEMY
             //PLAYER
-            if (this.gameObject.layer == 0) {
+            if (gameObject.layer == 0) {
                 Destroy(charco);
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
             //ENEMY
-            else if (this.gameObject.layer == 3) {
+            else if (gameObject.layer == 3) {
                 //EXPLOSION
                 Destroy(charco);
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
         }
     }
@@ -83,12 +67,14 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
-    private IEnumerator GenerarCharco(Vector3 position) {
+    private IEnumerator GenerarCharco(Vector3 position) 
+    {
         //GetComponent<SpriteRenderer>().enabled = false;
+        generado = true;
         transform.GetChild(0).gameObject.SetActive(false);
         rb.linearVelocity= Vector3.zero;
-        rb.isKinematic = true;
-        this.GetComponent<CircleCollider2D>().enabled = false;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        GetComponent<CircleCollider2D>().enabled = false;
         GameObject charcoGenerado = Instantiate(charco, transform.position, Quaternion.identity);
         charcoGenerado.name = "CharcoVenenoPlayer";
         yield return new WaitForSeconds(1.5f);
@@ -99,22 +85,22 @@ public class BolaVeneno : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (generado) return;
+
         //ENEMY
-        if ((collider.gameObject.tag == "Player" || collider.gameObject.layer == 6 || collider.gameObject.layer == 16 || collider.gameObject.layer == 17) && this.gameObject.layer == 3)
+        if ((collider.gameObject.tag == "Player" || collider.gameObject.layer == 6 || collider.gameObject.layer == 16 || collider.gameObject.layer == 17) && gameObject.layer == 3)
         {
             Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(charco);
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
-        else if (this.gameObject.layer == 14 && (collider.gameObject.layer == 6)) {
+        else if (gameObject.layer == 14 && (collider.gameObject.layer == 6)) {
             tiempoEliminacion = 2f;
             //GENERAR CHARCO
             StartCoroutine(GenerarCharco(transform.localPosition));
         }
         else if ((collider.gameObject.layer == 3 || collider.gameObject.layer == 19 || collider.gameObject.layer == 16) && transform.gameObject.layer == 14)
         {
-            //GENERAR BOLA DE VENENO DESCENDENTE
-
             tiempoEliminacion = 2f;
 
             StartCoroutine(GenerarCharco(transform.localPosition));
