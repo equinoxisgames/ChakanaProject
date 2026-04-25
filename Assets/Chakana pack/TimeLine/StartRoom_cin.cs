@@ -18,8 +18,20 @@ public class StartRoom_cin : MonoBehaviour
     [SerializeField] string[] lineasDialogoES;
     [SerializeField] string[] lineasDialogoEN;
 
+    [Header("Audio por Palabra")]
+    [SerializeField] List<AudioClip> clipsPalabra;
+    [SerializeField] AudioSource fuenteAudioPalabra;
+    [SerializeField] float pausaMinPalabra = 0.05f;
+    [SerializeField] float pausaMaxPalabra = 0.12f;
+    [SerializeField] float pitchMin = 0.9f;
+    [SerializeField] float pitchMax = 1.1f;
+
     [Header("Configuración de Texto")]
-    [SerializeField] float velocidadTexto = 0.03f; // Tiempo entre cada letra
+    [SerializeField] float velocidadTexto = 0.03f;
+
+    [Header("Fade del Panel")]
+    [SerializeField] float duracionFadeIn = 0.4f;
+    [SerializeField] float duracionFadeOut = 0.3f;
 
     private Rigidbody2D rb;
     private int indiceDialogo = 0;
@@ -27,10 +39,11 @@ public class StartRoom_cin : MonoBehaviour
     private PlayableDirector timeline;
     private string localizationL;
 
-    // --- Nuevas variables para el Typewriter ---
     private bool estaEscribiendo = false;
     private string lineaCompletaActual = "";
     private Coroutine corrutinaEscritura;
+
+    private CanvasGroup canvasGroupPanel;
 
     private void Awake()
     {
@@ -38,6 +51,14 @@ public class StartRoom_cin : MonoBehaviour
         timeline = GetComponent<PlayableDirector>();
 
         localizationL = LocalizationSettings.SelectedLocale.Identifier.Code;
+
+        canvasGroupPanel = panelDialogo.GetComponent<CanvasGroup>();
+        if (canvasGroupPanel == null)
+            canvasGroupPanel = panelDialogo.AddComponent<CanvasGroup>();
+
+        // Forzamos estado oculto desde el primer frame sin importar la escena
+        canvasGroupPanel.alpha = 0f;
+        panelDialogo.SetActive(false);
 
         if (PlayerPrefs.HasKey("inicio01"))
         {
@@ -56,17 +77,14 @@ public class StartRoom_cin : MonoBehaviour
         {
             if (estaEscribiendo)
             {
-                // Si está escribiendo, interrumpimos la corrutina y autocompletamos la línea
                 if (corrutinaEscritura != null)
-                {
                     StopCoroutine(corrutinaEscritura);
-                }
+
                 textoDialogo.text = lineaCompletaActual;
                 estaEscribiendo = false;
             }
             else
             {
-                // Si ya terminó de escribir, pasamos a la siguiente línea
                 AvanzarDialogo();
             }
         }
@@ -76,52 +94,73 @@ public class StartRoom_cin : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
 
+        // Reseteamos texto y alpha antes de activar para evitar el flash
+        textoDialogo.text = "";
+        canvasGroupPanel.alpha = 0f;
         panelDialogo.SetActive(true);
+
+        yield return StartCoroutine(FadePanel(0f, 1f, duracionFadeIn));
+
         MostrarLinea();
     }
 
     void MostrarLinea()
     {
-        // 1. Definimos cuál es el texto completo que debe mostrarse según el idioma
         if (localizationL == "es")
             lineaCompletaActual = lineasDialogoES[indiceDialogo];
         else if (localizationL == "en")
             lineaCompletaActual = lineasDialogoEN[indiceDialogo];
         else
-            lineaCompletaActual = lineasDialogoEN[indiceDialogo]; // Fallback por defecto
+            lineaCompletaActual = lineasDialogoEN[indiceDialogo];
 
         textoDialogo.text = "";
         esperandoInput = true;
 
-        kinde.GetComponent<AudioSource>().Play();
-
-        // 2. Iniciamos el efecto de máquina de escribir
         if (corrutinaEscritura != null) StopCoroutine(corrutinaEscritura);
         corrutinaEscritura = StartCoroutine(EscribirLinea());
     }
 
-    // Corrutina que añade letra por letra
     IEnumerator EscribirLinea()
     {
         estaEscribiendo = true;
         textoDialogo.text = "";
 
-        // Convertimos el string completo en un arreglo de caracteres y lo iteramos
-        foreach (char letra in lineaCompletaActual.ToCharArray())
+        char[] caracteres = lineaCompletaActual.ToCharArray();
+
+        for (int i = 0; i < caracteres.Length; i++)
         {
+            char letra = caracteres[i];
             textoDialogo.text += letra;
+
             yield return new WaitForSeconds(velocidadTexto);
+
+            bool esFinDePalabra = (letra == ' ') || (i == caracteres.Length - 1);
+
+            if (esFinDePalabra)
+            {
+                ReproducirClipAleatorio();
+                float pausa = Random.Range(pausaMinPalabra, pausaMaxPalabra);
+                yield return new WaitForSeconds(pausa);
+            }
         }
 
-        // Cuando termina el bucle, significa que la línea se completó naturalmente
         estaEscribiendo = false;
+    }
+
+    void ReproducirClipAleatorio()
+    {
+        if (clipsPalabra == null || clipsPalabra.Count == 0) return;
+        if (fuenteAudioPalabra == null) return;
+
+        int idx = Random.Range(0, clipsPalabra.Count);
+        fuenteAudioPalabra.pitch = Random.Range(pitchMin, pitchMax);
+        fuenteAudioPalabra.PlayOneShot(clipsPalabra[idx]);
     }
 
     void AvanzarDialogo()
     {
         indiceDialogo++;
 
-        // Asumimos que los arreglos de ES y EN tienen la misma longitud
         if (indiceDialogo < lineasDialogoES.Length)
         {
             MostrarLinea();
@@ -129,9 +168,15 @@ public class StartRoom_cin : MonoBehaviour
         else
         {
             esperandoInput = false;
-            panelDialogo.SetActive(false);
-            StartCoroutine(PlayScene());
+            StartCoroutine(CerrarPanelYContinuar());
         }
+    }
+
+    IEnumerator CerrarPanelYContinuar()
+    {
+        yield return StartCoroutine(FadePanel(1f, 0f, duracionFadeOut));
+        panelDialogo.SetActive(false);
+        yield return StartCoroutine(PlayScene());
     }
 
     IEnumerator PlayScene()
@@ -160,5 +205,20 @@ public class StartRoom_cin : MonoBehaviour
         player.GetComponent<Hoyustus>().enabled = true;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         gameObject.SetActive(false);
+    }
+
+    IEnumerator FadePanel(float alphaInicio, float alphaFin, float duracion)
+    {
+        float tiempo = 0f;
+        canvasGroupPanel.alpha = alphaInicio;
+
+        while (tiempo < duracion)
+        {
+            tiempo += Time.deltaTime;
+            canvasGroupPanel.alpha = Mathf.Lerp(alphaInicio, alphaFin, tiempo / duracion);
+            yield return null;
+        }
+
+        canvasGroupPanel.alpha = alphaFin;
     }
 }
