@@ -101,10 +101,8 @@ public class ConversationInteract : MonoBehaviour
             }
         }
 
-
-        //Valida la conversación que va a presentar dependiendo de los palyer prefs
+        //Valida la conversación que va a presentar dependiendo de los player prefs
         ValidateAndRunConversation();
-
     }
 
     /// <summary>
@@ -178,9 +176,8 @@ public class ConversationInteract : MonoBehaviour
         else
             Debug.LogError("[ConversationInteract] dialogueController no está asignado en el Inspector.");
 
-        StartConversation(); 
+        StartConversation();
     }
-
 
     public void StartConversation()
     {
@@ -233,7 +230,6 @@ public class ConversationInteract : MonoBehaviour
         }
     }
 
-
     public void StopConversation()
     {
         Debug.Log("[ConversationInteract] StopConversation llamado.");
@@ -245,9 +241,14 @@ public class ConversationInteract : MonoBehaviour
             //canvasUI.SetActive(false);
             shopping = true;
             //canvas.SetActive(false);
-            shopList.GetChild(0).GetComponent<Button>().Select();
-            shopList.GetChild(0).GetComponent<InventoryItem>().OnPress();
             GetComponent<Usable>().enabled = false;
+
+            // FIX: Tanto el Select() como el OnPress() se mueven a la corrutina.
+            // Button.Select() dispara OnSelect → InventoryItem.OnPress() de forma
+            // sincrónica a través del sistema de eventos de Unity, saltándose la espera.
+            // Al diferir ambas llamadas un frame, los componentes Text del shop ya
+            // completaron su OnEnable y las referencias UI son válidas.
+            StartCoroutine(SelectFirstShopItem());
             return;
         }
 
@@ -260,6 +261,49 @@ public class ConversationInteract : MonoBehaviour
         if (PlayerPrefs.GetInt("ukukuM") == 4 && PlayerPrefs.GetInt("conv01") != 2) data.conversation = "Ukuku02";
         else if (PlayerPrefs.GetInt("conv01") == 1) data.conversation = "Ukuku03";
         else if (PlayerPrefs.GetInt("conv01") == 2) data.conversation = "Ukuku04";
+    }
+
+    /// <summary>
+    /// Espera un frame completo para que Unity inicialice los componentes UI del shop
+    /// tras SetActive(true), y luego selecciona y presiona el primer ítem.
+    /// IMPORTANTE: Select() también se ejecuta aquí porque llamarlo en el mismo frame
+    /// que SetActive(true) dispara OnSelect→OnPress sincrónicamente, antes de que los
+    /// componentes Text completen su OnEnable.
+    /// </summary>
+    private IEnumerator SelectFirstShopItem()
+    {
+        // Un solo frame es suficiente para que UGUI complete OnEnable en los Text
+        yield return null;
+
+        if (shopList == null || shopList.childCount == 0)
+        {
+            Debug.LogWarning("[ConversationInteract] SelectFirstShopItem: shopList está vacío o es null.");
+            yield break;
+        }
+
+        var firstChild = shopList.GetChild(0);
+
+        if (firstChild == null)
+        {
+            Debug.LogWarning("[ConversationInteract] SelectFirstShopItem: el primer hijo de shopList es null.");
+            yield break;
+        }
+
+        // Primero Select() para el foco visual del botón
+        var button = firstChild.GetComponent<Button>();
+        if (button != null)
+            button.Select();
+
+        // Luego OnPress() para cargar la info del ítem en el panel
+        var inventoryItem = firstChild.GetComponent<InventoryItem>();
+        if (inventoryItem != null)
+        {
+            inventoryItem.OnPress();
+        }
+        else
+        {
+            Debug.LogWarning("[ConversationInteract] SelectFirstShopItem: no se encontró InventoryItem en el primer hijo.");
+        }
     }
 
     public void EnableBtn(bool t)
