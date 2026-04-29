@@ -76,7 +76,7 @@ public class MainMenu : MonoBehaviour
 
     int flagGameSaved = 0;
 
-    
+
 
     float aumentoBarraSalto = 10;
     float aumentoBarraDash = 15;
@@ -124,7 +124,7 @@ public class MainMenu : MonoBehaviour
         //mouseMovido = true;
         LocateMapScene();
         if (escena != "00- Main Menu 0")
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
 
         canvasUI = GameObject.Find("HUDMenu");
 
@@ -246,7 +246,7 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        
+
 
         Escape();
         //Inventory();
@@ -254,7 +254,7 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    
+
 
     public void OpenDialoguePanel()
     {
@@ -273,7 +273,7 @@ public class MainMenu : MonoBehaviour
             inventoryMenu.transform.GetChild(0).GetComponent<Button>().Select();
             StartCoroutine(ButtonSelect());
         }
-        
+
     }
 
     IEnumerator ButtonSelect()
@@ -335,7 +335,7 @@ public class MainMenu : MonoBehaviour
                     break;
 
                 case "03-Room 4":
-                    UpdateMapSpotPosition(-520f, 170f, 0f); 
+                    UpdateMapSpotPosition(-520f, 170f, 0f);
                     break;
 
                 case "06- Room 6":
@@ -380,7 +380,7 @@ public class MainMenu : MonoBehaviour
                     break;
 
                 case "13-Room 13":
-                    
+
                     UpdateMapSpotPosition(518f, -50f, 0f);
                     break;
 
@@ -485,12 +485,34 @@ public class MainMenu : MonoBehaviour
             }
         }
         else
-        {
+        {   
+            if (Input.GetButtonDown("Dash"))
+            {
+                if (escena != "00- Main Menu 0")
+                {
+                    // Botón B del gamepad: cierra el menú de pausa si está abierto
+                    if (pauseMenu.gameObject.activeSelf || confirmQuitMenu.gameObject.activeSelf)
+                    {
+                        DisableUI(true);
+                        Time.timeScale = 1f;
+                        if (pauseMenu.gameObject.activeSelf)
+                        {
+                            pauseMenu.gameObject.SetActive(false);
+                        }
+                        if (confirmQuitMenu.gameObject.activeSelf)
+                        {
+                            confirmQuitMenu.gameObject.SetActive(false);
+                        }
+                        ActivePlayer(true);
+                    }
+                }
+            }
+            else
             if (Input.GetButtonDown("Fire4"))
             {
                 if (escena != "00- Main Menu 0")
                 {
-                    
+
                 }
                 else
                 {
@@ -502,7 +524,7 @@ public class MainMenu : MonoBehaviour
             }
             else
             {
-                
+
             }
 
 
@@ -521,13 +543,13 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            
+
 
             homeMenu.gameObject.SetActive(true);
             boolHomeMenuActive = true;
             ActivateHomeMenu();
 
-           
+
 
         }
     }
@@ -553,9 +575,9 @@ public class MainMenu : MonoBehaviour
     }
     public void ActivateSettings()
     {
-        
+
         sliderMaster.Select();
-        
+
 
     }
     public void ActivateHomeMenu()
@@ -597,7 +619,7 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator LoadNextScene()
     {
-        
+
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneLoad);
 
@@ -636,7 +658,7 @@ public class MainMenu : MonoBehaviour
             float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
             float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
             int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
-            string code = PlayerPrefs.GetString("SelectedLanguage","en");
+            string code = PlayerPrefs.GetString("SelectedLanguage", "en");
 
 
 
@@ -652,7 +674,7 @@ public class MainMenu : MonoBehaviour
         }
 
 
-        
+
 
 
 
@@ -688,7 +710,7 @@ public class MainMenu : MonoBehaviour
 
         loadPanel.SetActive(true);
 
-        
+
 
 
         //if (!corutinaIniciada)
@@ -831,7 +853,7 @@ public class MainMenu : MonoBehaviour
     {
         loadPanel.SetActive(true);
         StartCoroutine(LoadAsyncScene(16));
-        
+
     }
     public void QuitGame()
     {
@@ -850,11 +872,11 @@ public class MainMenu : MonoBehaviour
     }
     public void LoadSettings()
     {
-        float masterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float masterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
         float musicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float SFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
         int FullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
-        
+
 
         sliderMaster.value = masterAudioKeyValue;
         sliderMusic.value = musicAudioKeyValue;
@@ -867,11 +889,11 @@ public class MainMenu : MonoBehaviour
     public void DeletePLayerPrefs()
     {
 
-        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue",100f);
+        float valorMasterAudioKeyValue = PlayerPrefs.GetFloat("MasterAudioKeyValue", 100f);
         float valorMusicAudioKeyValue = PlayerPrefs.GetFloat("MusicAudioKeyValue", 100f);
         float valorSFXAudioKeyValue = PlayerPrefs.GetFloat("SFXAudioKeyValue", 100f);
         int valorFullScreenKeyValue = PlayerPrefs.GetInt("FullScreenKeyValue", 0);
-        int valorRespawn = PlayerPrefs.GetInt("respawn",17);
+        int valorRespawn = PlayerPrefs.GetInt("respawn", 17);
 
         //PlayerPrefs.DeleteAll();
 
