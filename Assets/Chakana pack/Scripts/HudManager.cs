@@ -25,7 +25,7 @@ public class HudManager : MonoBehaviour
 
     [SerializeField] GameObject manaEffects;
 
-    [Header ("UI_Extras")]
+    [Header("UI_Extras")]
     [SerializeField] List<CanvasGroup> btnKeys = new List<CanvasGroup>();
     [SerializeField] List<CanvasGroup> btnJoys = new List<CanvasGroup>();
 
@@ -102,14 +102,14 @@ public class HudManager : MonoBehaviour
 
     private void UpdateData()
     {
-        if(player.getVida() != life)
+        if (player.getVida() != life)
         {
             life = player.getVida();
 
             lifeBar.targetFillAmount = (life / lifeMax);
         }
 
-        if(player.getGold() != gold)
+        if (player.getGold() != gold)
         {
             gold = player.getGold();
 
@@ -123,7 +123,7 @@ public class HudManager : MonoBehaviour
             manaBar.targetFillAmount = (mana / maxValue);
         }
 
-        if(player.getCargaHabilidadCondor() != condor)
+        if (player.getCargaHabilidadCondor() != condor)
         {
             condor = player.getCargaHabilidadCondor();
 
@@ -156,7 +156,7 @@ public class HudManager : MonoBehaviour
 
             manaEffects.SetActive(true);
         }
-        else if(maxValue > mana && manaB)
+        else if (maxValue > mana && manaB)
         {
             manaB = false;
 
@@ -176,7 +176,7 @@ public class HudManager : MonoBehaviour
             habIcons1[0].SetActive(false);
             habIcons2[0].SetActive(true);
         }
-        else if(maxValue > condor && condorB)
+        else if (maxValue > condor && condorB)
         {
             condorB = false;
 
@@ -197,7 +197,7 @@ public class HudManager : MonoBehaviour
             habIcons1[1].SetActive(false);
             habIcons2[1].SetActive(true);
         }
-        else if(maxValue > snake && snakeB)
+        else if (maxValue > snake && snakeB)
         {
             snakeB = false;
 
@@ -218,7 +218,7 @@ public class HudManager : MonoBehaviour
             habIcons1[2].SetActive(false);
             habIcons2[2].SetActive(true);
         }
-        else if(maxValue > weapon && weaponB)
+        else if (maxValue > weapon && weaponB)
         {
             weaponB = false;
 
@@ -269,7 +269,16 @@ public class HudManager : MonoBehaviour
     {
         if (!isVibration)
         {
-            StartCoroutine(StartVibration(1,1));
+            StartCoroutine(StartVibration(1, 1));
+            isVibration = true;
+        }
+    }
+
+    public void SetVibration(float duracion)
+    {
+        if (!isVibration)
+        {
+            StartCoroutine(StartVibration(duracion, 1));
             isVibration = true;
         }
     }

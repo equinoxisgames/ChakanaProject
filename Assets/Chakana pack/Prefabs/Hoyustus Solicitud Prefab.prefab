@@ -9908,12 +9908,33 @@ MonoBehaviour:
   isDashing: 0
   atacando: 0
   codigoAtaque: 0
-  tiempoCooldownAtaque: 0.1
+  tiempoCooldownAtaque: 0.08
+  tiempoAnimacionAtaque: 0.15
+  tiempoLanzaActiva: 0.12
   ataqueAvailable: 1
   lanzas: []
   valorAtaqueNormal: 50
   valorAtaqueHabilidadCondor: 100
   valorAtaqueHabilidadLanza: 150
+  golpesParaCombo: 3
+  ventanaTiempoCombo: 1
+  multiplicadorDanioCombo: 1.1
+  escalaVFXCombo: 1.1
+  colorVFXCombo: {r: 1, g: 0.4, b: 0, a: 1}
+  duracionHitstop: 0.06
+  duracionSlowMotion: 0.12
+  escalaSlowMotion: 0.15
+  duracionRuedaCombo: 0.5
+  velocidadRuedaCombo: 1800
+  escalaRuedaCombo: 3
+  ruedaComboActiva: 0
+  duracionVibracionCombo: 0.1
+  cambiarAudioCombo: 1
+  audioCombo: {fileID: 8300000, guid: e0599f0e3c6239142869da96ce7212ae, type: 3}
+  girarVFXCombo: 0
+  anguloGiroVFXCombo: -50
+  contadorCombo: 0
+  timerCombo: 0
   cargaHabilidadCondor: 0
   cargaHabilidadSerpiente: 0
   cargaHabilidadLanza: 0

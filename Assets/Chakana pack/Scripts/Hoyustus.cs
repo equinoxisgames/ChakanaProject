@@ -129,11 +129,55 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool atacando = false;
     [SerializeField] private int codigoAtaque = 0;
     [SerializeField] private float tiempoCooldownAtaque = 0.2f;
+    [Tooltip("Duración de la animación de ataque antes de activar la lanza.")]
+    [SerializeField] private float tiempoAnimacionAtaque = 0.2f;
+    [Tooltip("Tiempo que la lanza permanece activa durante el ataque.")]
+    [SerializeField] private float tiempoLanzaActiva = 0.2f;
     [SerializeField] private bool ataqueAvailable = true;
     [SerializeField] private GameObject[] lanzas;
     [SerializeField] private float valorAtaqueNormal = 50;
     [SerializeField] private float valorAtaqueHabilidadCondor = 100;
     [SerializeField] private float valorAtaqueHabilidadLanza = 150;
+
+    [Header("Combo")]
+    [Tooltip("Número de golpes para activar el combo.")]
+    [SerializeField] private int golpesParaCombo = 3;
+    [Tooltip("Tiempo máximo entre golpes para mantener el combo activo.")]
+    [SerializeField] private float ventanaTiempoCombo = 1.5f;
+    [Tooltip("Multiplicador de daño del golpe de combo.")]
+    [SerializeField] private float multiplicadorDanioCombo = 3f;
+    [Tooltip("Escala del VFX en el golpe de combo.")]
+    [SerializeField] private float escalaVFXCombo = 2.5f;
+    [Tooltip("Color del VFX en el golpe de combo.")]
+    [SerializeField] private Color colorVFXCombo = new Color(1f, 0.4f, 0f);
+    [Tooltip("Duración del hitstop (pausa de impacto) en el golpe de combo.")]
+    [SerializeField] private float duracionHitstop = 0.06f;
+    [Tooltip("Duración del slow motion en el golpe de combo.")]
+    [SerializeField] private float duracionSlowMotion = 0.12f;
+    [Tooltip("Escala de tiempo durante el slow motion (0.1 = muy lento).")]
+    [SerializeField] private float escalaSlowMotion = 0.15f;
+    [Tooltip("Duración en segundos de la rueda giratoria del combo.")]
+    [SerializeField] private float duracionRuedaCombo = 0.5f;
+    [Tooltip("Velocidad de rotación de la rueda (grados por segundo).")]
+    [SerializeField] private float velocidadRuedaCombo = 1800f;
+    [Tooltip("Escala de la rueda giratoria del combo.")]
+    [SerializeField] private float escalaRuedaCombo = 3f;
+    [Tooltip("Activa o desactiva la rueda giratoria del combo.")]
+    [SerializeField] private bool ruedaComboActiva = true;
+    [Tooltip("Duración de la vibración del mando al conectar el golpe de combo (segundos).")]
+    [SerializeField] private float duracionVibracionCombo = 0.15f;
+    [Tooltip("Si está activo, reproduce un audio diferente en el último golpe del combo.")]
+    [SerializeField] private bool cambiarAudioCombo = true;
+    [Tooltip("Audio que suena en el último golpe del combo.")]
+    [SerializeField] private AudioClip audioCombo;
+    [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
+    [SerializeField] private bool girarVFXCombo = true;
+    [Tooltip("Ángulo de giro en X del VFX del combo (grados).")]
+    [SerializeField] private float anguloGiroVFXCombo = 10f;
+    [SerializeField] private int contadorCombo = 0;
+    [SerializeField] private float timerCombo = 0f;
+    private bool comboActivo = false;
+    private bool esGolpeComboVFX = false;
     [Space(5)]
 
 
@@ -367,6 +411,17 @@ public class Hoyustus : CharactersBehaviour
     {
         cargaHabilidades();
         TocarPared();
+
+        // Timer del combo: si pasa el tiempo sin atacar, se resetea
+        if (contadorCombo > 0)
+        {
+            timerCombo -= Time.deltaTime;
+            if (timerCombo <= 0f)
+            {
+                contadorCombo = 0;
+                comboActivo = false;
+            }
+        }
 
         if (playable)
         {
@@ -878,16 +933,111 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator lanzaCooldown(int index)
     {
+        // Actualizar contador de combo
+        contadorCombo++;
+        timerCombo = ventanaTiempoCombo;
+        bool esGolpeCombo = (contadorCombo >= golpesParaCombo);
+
+        // Resetear contador inmediatamente si es el último golpe — evita doble combo
+        if (esGolpeCombo)
+        {
+            contadorCombo = 0;
+            timerCombo = 0f;
+            esGolpeComboVFX = true; // flag para PlayAttackVFX
+        }
+
         atacando = true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(tiempoAnimacionAtaque);
         atacando = false;
         codigoAtaque = 0;
+
+        // Aplicar daño de combo ANTES de activar la lanza para que pegue con el valor correcto
+        if (esGolpeCombo)
+        {
+            ataque = valorAtaqueNormal * multiplicadorDanioCombo;
+            comboActivo = true;
+
+            // Audio diferente si está configurado
+            if (cambiarAudioCombo && audioCombo != null)
+                jumpAudio.PlayOneShot(audioCombo);
+        }
+
         lanzas[index].SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        playable = true;
+        yield return new WaitForSeconds(tiempoLanzaActiva);
         lanzas[index].SetActive(false);
+        playable = true;
+
+        if (esGolpeCombo)
+        {
+            StartCoroutine(EfectosVisualCombo());
+            comboActivo = false;
+            ataque = valorAtaqueNormal;
+        }
+
         yield return new WaitForSeconds(tiempoCooldownAtaque);
         ataqueAvailable = true;
+    }
+
+    // VFX del combo — siempre se ejecuta al tercer golpe
+    private IEnumerator EfectosVisualCombo()
+    {
+        if (ruedaComboActiva) StartCoroutine(RuedaCombo());
+        yield break;
+    }
+
+    // Hitstop + slow motion + vibración — solo si el tercer golpe conectó
+    public void NotificarHitCombo()
+    {
+        if (comboActivo)
+        {
+            comboActivo = false; // guardia — evita múltiples llamadas por el mismo combo
+            GameObject.Find("HUDMenu")?.GetComponent<HudManager>()?.SetVibration(duracionVibracionCombo);
+            StartCoroutine(EfectosImpactoCombo());
+        }
+    }
+
+    private IEnumerator EfectosImpactoCombo()
+    {
+        float tiempoEscalaOriginal = Time.timeScale;
+
+        // Hitstop — pausa de impacto
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(duracionHitstop);
+
+        // Slow motion
+        Time.timeScale = escalaSlowMotion;
+        yield return new WaitForSecondsRealtime(duracionSlowMotion);
+
+        // Restaurar tiempo normal
+        Time.timeScale = tiempoEscalaOriginal;
+    }
+
+    private IEnumerator RuedaCombo()
+    {
+        if (AttackVFX == null) yield break;
+
+        // Crear copia del VFX suelta en la escena (no hijo del jugador para que no se mueva con él)
+        GameObject rueda = Instantiate(AttackVFX.gameObject, transform.position, Quaternion.identity);
+        rueda.transform.localScale = new Vector3(-1f * escalaRuedaCombo, escalaRuedaCombo, escalaRuedaCombo);
+
+        // Aplicar giro en X si está activo
+        if (girarVFXCombo)
+            rueda.transform.localRotation = Quaternion.Euler(anguloGiroVFXCombo, 0f, 0f);
+
+        // Aplicar color de combo a la copia
+        var mainModule = rueda.GetComponent<ParticleSystem>().main;
+        mainModule.startColor = colorVFXCombo;
+        rueda.GetComponent<ParticleSystem>().Play();
+
+        float tiempoTranscurrido = 0f;
+        while (tiempoTranscurrido < duracionRuedaCombo)
+        {
+            rueda.transform.Rotate(0f, 0f, velocidadRuedaCombo * Time.deltaTime);
+            tiempoTranscurrido += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(rueda);
     }
 
     private void Dash()
@@ -942,6 +1092,7 @@ public class Hoyustus : CharactersBehaviour
     }
 
     public void cargaLanza() { cargaHabilidadLanza += aumentoBarraAtaque; }
+
     public void danioExterno(int direccion, float fuerza)
     {
         if (!realizandoHabilidadLanza)
@@ -958,5 +1109,37 @@ public class Hoyustus : CharactersBehaviour
         anim.SetBool("Resurect", false);
     }
     public void PlayParticles() { ParticleTestParticleTest.Play(); }
-    public void PlayAttackVFX() { AttackVFX.Play(); Attack2VFX.Play(); }
+    public void PlayAttackVFX()
+    {
+        if (esGolpeComboVFX && AttackVFX != null)
+        {
+            var mainModule = AttackVFX.main;
+            mainModule.startColor = colorVFXCombo;
+            AttackVFX.transform.localScale = new Vector3(-1f * escalaVFXCombo, escalaVFXCombo, escalaVFXCombo);
+
+            // Guardar rotación original y aplicar giro en X si está activo
+            Quaternion rotacionOriginal = AttackVFX.transform.localRotation;
+            if (girarVFXCombo)
+                AttackVFX.transform.localRotation = rotacionOriginal * Quaternion.Euler(anguloGiroVFXCombo, 0f, 0f);
+
+            AttackVFX.Play();
+            Attack2VFX.Play();
+            StartCoroutine(RestaurarVFXCombo(mainModule.duration, rotacionOriginal));
+        }
+        else
+        {
+            AttackVFX.Play();
+            Attack2VFX.Play();
+        }
+    }
+
+    private IEnumerator RestaurarVFXCombo(float delay, Quaternion rotacionOriginal)
+    {
+        yield return new WaitForSeconds(delay);
+        esGolpeComboVFX = false;
+        var mainModule = AttackVFX.main;
+        mainModule.startColor = Color.white;
+        AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
+        AttackVFX.transform.localRotation = rotacionOriginal;
+    }
 }
