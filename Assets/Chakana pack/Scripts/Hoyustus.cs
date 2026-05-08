@@ -185,6 +185,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float timerCombo = 0f;
     private bool comboActivo = false;
     private bool esGolpeComboVFX = false;
+    private int golpeActualVFX = 0;
+    private int idRestauracion = 0;
     [Space(5)]
 
 
@@ -948,6 +950,7 @@ public class Hoyustus : CharactersBehaviour
         contadorCombo++;
         timerCombo = ventanaTiempoCombo;
         bool esGolpeCombo = (contadorCombo >= golpesParaCombo);
+        golpeActualVFX = contadorCombo;
 
         // Resetear contador inmediatamente si es el último golpe — evita doble combo
         if (esGolpeCombo)
@@ -1122,19 +1125,21 @@ public class Hoyustus : CharactersBehaviour
     public void PlayParticles() { ParticleTestParticleTest.Play(); }
     public void PlayAttackVFX()
     {
+        // Cancelar cualquier restauración pendiente incrementando el id
+        idRestauracion++;
+
         // Forzar restauración de alignment y rotación al inicio de cada ataque — por si quedó mal de un combo anterior
         AttackVFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
         if (Attack2VFX != null)
             Attack2VFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
         AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
 
-        if (esGolpeComboVFX && AttackVFX != null)
+        if ((esGolpeComboVFX || golpeActualVFX > 0) && AttackVFX != null)
         {
             var mainModule = AttackVFX.main;
-            mainModule.startColor = colorVFXCombo;
+            if (esGolpeComboVFX)
+                mainModule.startColor = colorVFXCombo;
 
-            // Escala no uniforme para dar sensación de inclinación/perspectiva
-            // girarVFXCombo controla si se aplica la deformación en X
             float escalaX = -1f * escalaVFXCombo;
             float escalaY = escalaVFXCombo * deformacionYVFXCombo;
             float escalaZ = escalaVFXCombo;
@@ -1147,7 +1152,6 @@ public class Hoyustus : CharactersBehaviour
 
             AttackVFX.transform.localScale = new Vector3(escalaX, escalaY, escalaZ);
 
-            // Giro en Z si está activo
             if (girarZVFXCombo)
                 AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, anguloGiroZVFXCombo);
             else
@@ -1155,7 +1159,7 @@ public class Hoyustus : CharactersBehaviour
 
             AttackVFX.Play();
             Attack2VFX.Play();
-            StartCoroutine(RestaurarVFXCombo(mainModule.duration));
+            StartCoroutine(RestaurarVFXCombo(mainModule.duration, idRestauracion));
         }
         else
         {
@@ -1164,9 +1168,11 @@ public class Hoyustus : CharactersBehaviour
         }
     }
 
-    private IEnumerator RestaurarVFXCombo(float delay)
+    private IEnumerator RestaurarVFXCombo(float delay, int id)
     {
         yield return new WaitForSeconds(delay);
+        // Solo restaurar si nadie canceló esta corrutina
+        if (id != idRestauracion) yield break;
         esGolpeComboVFX = false;
         var mainModule = AttackVFX.main;
         mainModule.startColor = Color.white;
