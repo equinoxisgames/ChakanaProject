@@ -97,6 +97,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] ParticleSystem ParticleTestParticleTest = null;
     [SerializeField] ParticleSystem AttackVFX = null;
     [SerializeField] ParticleSystem Attack2VFX = null;
+    private Quaternion attackVFXRotacionOriginal;
 
     [SerializeField] private GameObject menuMuerte;
 
@@ -172,8 +173,14 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private AudioClip audioCombo;
     [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
     [SerializeField] private bool girarVFXCombo = true;
-    [Tooltip("Ángulo de giro en X del VFX del combo (grados).")]
+    [Tooltip("Ángulo de deformación en X del VFX del combo.")]
     [SerializeField] private float anguloGiroVFXCombo = 10f;
+    [Tooltip("Si está activo, el VFX del combo rota en Z.")]
+    [SerializeField] private bool girarZVFXCombo = false;
+    [Tooltip("Ángulo de giro en Z del VFX del combo (grados).")]
+    [SerializeField] private float anguloGiroZVFXCombo = 0f;
+    [Tooltip("Multiplicador de achatado en Y del VFX del combo (menor a 1 = más achatado, mayor a 1 = más estirado).")]
+    [SerializeField] private float deformacionYVFXCombo = 1f;
     [SerializeField] private int contadorCombo = 0;
     [SerializeField] private float timerCombo = 0f;
     private bool comboActivo = false;
@@ -315,6 +322,10 @@ public class Hoyustus : CharactersBehaviour
         enableSkill01 = PlayerPrefs.HasKey("condorSkill");
         enableSkill02 = PlayerPrefs.HasKey("snakeSkill");
         enableSkill03 = PlayerPrefs.HasKey("spearSkill");
+
+        // Guardar rotación original del AttackVFX para restaurarla exactamente
+        if (AttackVFX != null)
+            attackVFXRotacionOriginal = AttackVFX.transform.localRotation;
 
         LoadData();
     }
@@ -1111,20 +1122,40 @@ public class Hoyustus : CharactersBehaviour
     public void PlayParticles() { ParticleTestParticleTest.Play(); }
     public void PlayAttackVFX()
     {
+        // Forzar restauración de alignment y rotación al inicio de cada ataque — por si quedó mal de un combo anterior
+        AttackVFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
+        if (Attack2VFX != null)
+            Attack2VFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
+        AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
+
         if (esGolpeComboVFX && AttackVFX != null)
         {
             var mainModule = AttackVFX.main;
             mainModule.startColor = colorVFXCombo;
-            AttackVFX.transform.localScale = new Vector3(-1f * escalaVFXCombo, escalaVFXCombo, escalaVFXCombo);
 
-            // Guardar rotación original y aplicar giro en X si está activo
-            Quaternion rotacionOriginal = AttackVFX.transform.localRotation;
+            // Escala no uniforme para dar sensación de inclinación/perspectiva
+            // girarVFXCombo controla si se aplica la deformación en X
+            float escalaX = -1f * escalaVFXCombo;
+            float escalaY = escalaVFXCombo * deformacionYVFXCombo;
+            float escalaZ = escalaVFXCombo;
+
             if (girarVFXCombo)
-                AttackVFX.transform.localRotation = rotacionOriginal * Quaternion.Euler(anguloGiroVFXCombo, 0f, 0f);
+            {
+                escalaY = escalaVFXCombo * deformacionYVFXCombo * (1f + anguloGiroVFXCombo / 45f);
+                escalaZ = escalaVFXCombo * (1f - anguloGiroVFXCombo / 90f);
+            }
+
+            AttackVFX.transform.localScale = new Vector3(escalaX, escalaY, escalaZ);
+
+            // Giro en Z si está activo
+            if (girarZVFXCombo)
+                AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, anguloGiroZVFXCombo);
+            else
+                AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
 
             AttackVFX.Play();
             Attack2VFX.Play();
-            StartCoroutine(RestaurarVFXCombo(mainModule.duration, rotacionOriginal));
+            StartCoroutine(RestaurarVFXCombo(mainModule.duration));
         }
         else
         {
@@ -1133,13 +1164,13 @@ public class Hoyustus : CharactersBehaviour
         }
     }
 
-    private IEnumerator RestaurarVFXCombo(float delay, Quaternion rotacionOriginal)
+    private IEnumerator RestaurarVFXCombo(float delay)
     {
         yield return new WaitForSeconds(delay);
         esGolpeComboVFX = false;
         var mainModule = AttackVFX.main;
         mainModule.startColor = Color.white;
         AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
-        AttackVFX.transform.localRotation = rotacionOriginal;
+        AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
     }
 }
