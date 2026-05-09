@@ -145,6 +145,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private int golpesParaCombo = 3;
     [Tooltip("Tiempo máximo entre golpes para mantener el combo activo.")]
     [SerializeField] private float ventanaTiempoCombo = 1.5f;
+    [Tooltip("Pausa adicional después del último golpe del combo antes de poder atacar de nuevo.")]
+    [SerializeField] private float pausaDespuesCombo = 0.4f;
     [Tooltip("Multiplicador de daño del golpe de combo.")]
     [SerializeField] private float multiplicadorDanioCombo = 3f;
     [Tooltip("Escala del VFX en el golpe de combo.")]
@@ -181,6 +183,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float anguloGiroZVFXCombo = 0f;
     [Tooltip("Multiplicador de achatado en Y del VFX del combo (menor a 1 = más achatado, mayor a 1 = más estirado).")]
     [SerializeField] private float deformacionYVFXCombo = 1f;
+    [Tooltip("Si está activo, el golpe 2 del combo se ve en sentido contrario al golpe 1.")]
+    [SerializeField] private bool invertirGolpe2 = true;
     [SerializeField] private int contadorCombo = 0;
     [SerializeField] private float timerCombo = 0f;
     private bool comboActivo = false;
@@ -989,6 +993,9 @@ public class Hoyustus : CharactersBehaviour
         }
 
         yield return new WaitForSeconds(tiempoCooldownAtaque);
+        if (esGolpeCombo) yield return new WaitForSeconds(pausaDespuesCombo);
+        golpeActualVFX = 0;
+        esGolpeComboVFX = false;
         ataqueAvailable = true;
     }
 
@@ -1128,19 +1135,25 @@ public class Hoyustus : CharactersBehaviour
         // Cancelar cualquier restauración pendiente incrementando el id
         idRestauracion++;
 
+        // Leer y resetear flags — así el siguiente golpe empieza limpio
+        bool fueGolpeCombo = esGolpeComboVFX;
+        int fueGolpeActual = golpeActualVFX;
+        esGolpeComboVFX = false;
+        golpeActualVFX = 0;
+
         // Forzar restauración de alignment y rotación al inicio de cada ataque — por si quedó mal de un combo anterior
         AttackVFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
         if (Attack2VFX != null)
             Attack2VFX.GetComponent<ParticleSystemRenderer>().alignment = ParticleSystemRenderSpace.Local;
         AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
 
-        if ((esGolpeComboVFX || golpeActualVFX > 0) && AttackVFX != null)
+        if ((fueGolpeCombo || fueGolpeActual > 0) && AttackVFX != null)
         {
             var mainModule = AttackVFX.main;
-            if (esGolpeComboVFX)
+            if (fueGolpeCombo)
                 mainModule.startColor = colorVFXCombo;
 
-            float escalaX = -1f * escalaVFXCombo;
+            float escalaX = (invertirGolpe2 && fueGolpeActual == 2) ? 1f * escalaVFXCombo : -1f * escalaVFXCombo;
             float escalaY = escalaVFXCombo * deformacionYVFXCombo;
             float escalaZ = escalaVFXCombo;
 
@@ -1171,9 +1184,7 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator RestaurarVFXCombo(float delay, int id)
     {
         yield return new WaitForSeconds(delay);
-        // Solo restaurar si nadie canceló esta corrutina
         if (id != idRestauracion) yield break;
-        esGolpeComboVFX = false;
         var mainModule = AttackVFX.main;
         mainModule.startColor = Color.white;
         AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
