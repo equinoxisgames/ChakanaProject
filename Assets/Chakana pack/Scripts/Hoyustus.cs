@@ -1019,18 +1019,25 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator EfectosImpactoCombo()
     {
-        float tiempoEscalaOriginal = Time.timeScale;
+        // No ejecutar si el jugador está muerto
+        if (vida <= 0) yield break;
 
         // Hitstop — pausa de impacto
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(duracionHitstop);
 
+        // Si el jugador murió durante el hitstop, no restaurar — Muerte() maneja el timeScale
+        if (vida <= 0) yield break;
+
         // Slow motion
         Time.timeScale = escalaSlowMotion;
         yield return new WaitForSecondsRealtime(duracionSlowMotion);
 
-        // Restaurar tiempo normal
-        Time.timeScale = tiempoEscalaOriginal;
+        // Si el jugador murió durante el slow motion, no restaurar
+        if (vida <= 0) yield break;
+
+        // Restaurar tiempo normal — siempre a 1f
+        Time.timeScale = 1f;
     }
 
     private IEnumerator RuedaCombo()
