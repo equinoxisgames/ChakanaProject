@@ -126,6 +126,12 @@ public class CharactersBehaviour : MonoBehaviour
             return;
         }
 
+        // Si la lanza del jugador (layer 14) golpea este personaje, notificar hit de combo
+        if (collider.gameObject.layer == 14)
+        {
+            collider.GetComponentInParent<Hoyustus>()?.NotificarHitCombo();
+        }
+
     }
 
 
