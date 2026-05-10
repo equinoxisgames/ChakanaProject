@@ -165,6 +165,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float velocidadRuedaCombo = 1800f;
     [Tooltip("Escala de la rueda giratoria del combo.")]
     [SerializeField] private float escalaRuedaCombo = 3f;
+    [Tooltip("Color de la rueda giratoria del combo.")]
+    [SerializeField] private Color colorRuedaCombo = new Color(1f, 1f, 0f);
     [Tooltip("Activa o desactiva la rueda giratoria del combo.")]
     [SerializeField] private bool ruedaComboActiva = true;
     [Tooltip("Duración de la vibración del mando al conectar el golpe de combo (segundos).")]
@@ -173,6 +175,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool cambiarAudioCombo = true;
     [Tooltip("Audio que suena en el último golpe del combo.")]
     [SerializeField] private AudioClip audioCombo;
+    [Tooltip("Audio que suena en los golpes 1 y 2 del combo.")]
+    [SerializeField] private AudioClip audioAtaqueNormal;
     [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
     [SerializeField] private bool girarVFXCombo = true;
     [Tooltip("Ángulo de deformación en X del VFX del combo.")]
@@ -183,6 +187,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float anguloGiroZVFXCombo = 0f;
     [Tooltip("Multiplicador de achatado en Y del VFX del combo (menor a 1 = más achatado, mayor a 1 = más estirado).")]
     [SerializeField] private float deformacionYVFXCombo = 1f;
+    [Tooltip("Si está activo, el VFX rota 90 grados para ataques hacia arriba y abajo.")]
+    [SerializeField] private bool vfxDireccionActivo = true;
     [Tooltip("Si está activo, el golpe 2 del combo se ve en sentido contrario al golpe 1.")]
     [SerializeField] private bool invertirGolpe2 = true;
     [SerializeField] private int contadorCombo = 0;
@@ -191,6 +197,7 @@ public class Hoyustus : CharactersBehaviour
     private bool esGolpeComboVFX = false;
     private int golpeActualVFX = 0;
     private int idRestauracion = 0;
+    private int indexAtaqueActual = 0;
     [Space(5)]
 
 
@@ -943,6 +950,7 @@ public class Hoyustus : CharactersBehaviour
                 else if (v < 0 && !Grounded()) { index = 2; codigoAtaque = 6; }
                 else { anim.Play("Lanza Lateral"); codigoAtaque = 4; }
                 ataqueAvailable = false;
+                indexAtaqueActual = index;
                 StartCoroutine(lanzaCooldown(index));
             }
         }
@@ -978,6 +986,10 @@ public class Hoyustus : CharactersBehaviour
             // Audio diferente si está configurado
             if (cambiarAudioCombo && audioCombo != null)
                 jumpAudio.PlayOneShot(audioCombo);
+        }
+        else if (audioAtaqueNormal != null)
+        {
+            jumpAudio.PlayOneShot(audioAtaqueNormal);
         }
 
         lanzas[index].SetActive(true);
@@ -1044,17 +1056,19 @@ public class Hoyustus : CharactersBehaviour
     {
         if (AttackVFX == null) yield break;
 
-        // Crear copia del VFX suelta en la escena (no hijo del jugador para que no se mueva con él)
+        // Crear copia del VFX como hija del jugador para que se mueva con él
         GameObject rueda = Instantiate(AttackVFX.gameObject, transform.position, Quaternion.identity);
+        rueda.transform.SetParent(transform);
+        rueda.transform.localPosition = AttackVFX.transform.localPosition;
         rueda.transform.localScale = new Vector3(-1f * escalaRuedaCombo, escalaRuedaCombo, escalaRuedaCombo);
 
         // Aplicar giro en X si está activo
         if (girarVFXCombo)
             rueda.transform.localRotation = Quaternion.Euler(anguloGiroVFXCombo, 0f, 0f);
 
-        // Aplicar color de combo a la copia
+        // Aplicar color independiente de la rueda
         var mainModule = rueda.GetComponent<ParticleSystem>().main;
-        mainModule.startColor = colorVFXCombo;
+        mainModule.startColor = colorRuedaCombo;
         rueda.GetComponent<ParticleSystem>().Play();
 
         float tiempoTranscurrido = 0f;
@@ -1172,7 +1186,10 @@ public class Hoyustus : CharactersBehaviour
 
             AttackVFX.transform.localScale = new Vector3(escalaX, escalaY, escalaZ);
 
-            if (girarZVFXCombo)
+            // Ataque hacia arriba — rotar 90 grados para que el VFX se vea vertical
+            if (vfxDireccionActivo && indexAtaqueActual == 1)
+                AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
+            else if (girarZVFXCombo)
                 AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, anguloGiroZVFXCombo);
             else
                 AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
