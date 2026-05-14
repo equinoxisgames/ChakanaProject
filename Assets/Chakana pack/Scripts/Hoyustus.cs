@@ -123,6 +123,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private float velocidadDash = 45f;
     [SerializeField] private bool dashAvailable = true;
     [SerializeField] private bool isDashing = false;
+    [SerializeField] private GameObject dashVFX;
     [Space(5)]
 
 
@@ -229,11 +230,6 @@ public class Hoyustus : CharactersBehaviour
     private float maxHabilidad_Curacion = 100f;
 
     private IEnumerator recoil;
-
-    float limitY = 0f;
-
-    [SerializeField] GameObject dashVfx;
-
     [SerializeField] GameObject skillObj01;
     [SerializeField] GameObject skillObj02;
     [SerializeField] GameObject skillObj03;
@@ -394,7 +390,6 @@ public class Hoyustus : CharactersBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        limitY = transform.position.y + 2;
 
         Physics2D.IgnoreLayerCollision(11, 14, true);
         Physics2D.IgnoreLayerCollision(13, 12, true);
@@ -1099,14 +1094,14 @@ public class Hoyustus : CharactersBehaviour
     private IEnumerator dashCooldown()
     {
         if (vida <= 0) yield break;
-        GameObject dashVfxObj = Instantiate(dashVfx, transform.position, Quaternion.identity, transform);
+        dashVFX.SetActive(true);
+        dashVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         int numeroRandom = UnityEngine.Random.Range(1, 101);
         if (numeroRandom >= 50)
         {
-            dashVfxObj.GetComponent<AudioSource>().clip = AudioDashVariant;
-            dashVfxObj.GetComponent<AudioSource>().Play();
+            dashVFX.GetComponent<AudioSource>().clip = AudioDashVariant;
+            dashVFX.GetComponent<AudioSource>().Play();
         }
-        Destroy(dashVfxObj, 0.5f);
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
@@ -1122,6 +1117,7 @@ public class Hoyustus : CharactersBehaviour
         }
         StartCoroutine(movimientoDash());
         yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
+        dashVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
         rb.gravityScale = defaultGravityScale;
         rb.linearVelocity = Vector2.zero;
         isDashing = false;
