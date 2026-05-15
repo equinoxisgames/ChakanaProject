@@ -80,6 +80,7 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] AudioClip AudioJump;
     [SerializeField] AudioClip AudioHurt;
     [SerializeField] AudioClip AudioDashVariant;
+    [SerializeField] AudioClip AudioDashOriginal;
     [SerializeField] AudioClip AudioSkill02;
 
     [SerializeField] AudioSource AudioStep1;
@@ -1097,11 +1098,10 @@ public class Hoyustus : CharactersBehaviour
         dashVFX.SetActive(true);
         dashVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         int numeroRandom = UnityEngine.Random.Range(1, 101);
-        if (numeroRandom >= 50)
-        {
-            dashVFX.GetComponent<AudioSource>().clip = AudioDashVariant;
-            dashVFX.GetComponent<AudioSource>().Play();
-        }
+        if (numeroRandom >= 50) dashVFX.GetComponent<AudioSource>().clip = AudioDashVariant;
+        else dashVFX.GetComponent<AudioSource>().clip = AudioDashOriginal;
+        
+        dashVFX.GetComponent<AudioSource>().Play();
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
