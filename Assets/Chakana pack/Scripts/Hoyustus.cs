@@ -49,6 +49,8 @@ public class Hoyustus : CharactersBehaviour
     private float coyoteTimeCount = 0f;
     private float jumpBufferCount = 0f;
     private bool doubleJumpQueued = false;
+    private float timerSaltoReciente = 0f;
+    private const float ventanaSaltoAtaque = 0.2f;
 
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isSecondJump = false;
@@ -432,6 +434,12 @@ public class Hoyustus : CharactersBehaviour
         cargaHabilidades();
         TocarPared();
 
+        // Forzar reset de rotación del VFX cuando no se está atacando
+        if (!atacando && ataqueAvailable && AttackVFX != null)
+        {
+            attackVFXRotacionOriginal = AttackVFX.transform.localRotation;
+        }
+
         // Timer del combo: si pasa el tiempo sin atacar, se resetea
         if (contadorCombo > 0)
         {
@@ -453,9 +461,14 @@ public class Hoyustus : CharactersBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 jumpBufferCount = jumpBufferTime;
+                timerSaltoReciente = ventanaSaltoAtaque;
                 if (!Grounded() && secondJump) doubleJumpQueued = true;
             }
-            else jumpBufferCount -= Time.deltaTime;
+            else
+            {
+                jumpBufferCount -= Time.deltaTime;
+                timerSaltoReciente -= Time.deltaTime;
+            }
 
             // coyote time y estados de salto
             if (Grounded())
@@ -939,11 +952,10 @@ public class Hoyustus : CharactersBehaviour
             {
                 atacando = true;
                 int index = 0;
-                float h = Input.GetAxis("Horizontal");
-                float v = Input.GetAxis("Vertical");
-                if (v == 0) { anim.Play("Lanza Lateral"); codigoAtaque = 4; }
-                else if (v > 0) { index = 1; codigoAtaque = 5; }
-                else if (v < 0 && !Grounded()) { index = 2; codigoAtaque = 6; }
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
+                if (v < -0.7f) { index = 1; codigoAtaque = 5; }
+                else if (v > 0.7f && !Grounded()) { index = 2; codigoAtaque = 6; }
                 else { anim.Play("Lanza Lateral"); codigoAtaque = 4; }
                 ataqueAvailable = false;
                 indexAtaqueActual = index;
@@ -1186,9 +1198,7 @@ public class Hoyustus : CharactersBehaviour
             AttackVFX.transform.localScale = new Vector3(escalaX, escalaY, escalaZ);
 
             // Ataque hacia arriba — rotar 90 grados para que el VFX se vea vertical
-            if (vfxDireccionActivo && indexAtaqueActual == 1)
-                AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
-            else if (girarZVFXCombo)
+            if (girarZVFXCombo)
                 AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, anguloGiroZVFXCombo);
             else
                 AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
@@ -1213,4 +1223,4 @@ public class Hoyustus : CharactersBehaviour
         AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
         AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
     }
-}
+} 
