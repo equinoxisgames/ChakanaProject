@@ -49,6 +49,8 @@ public class Hoyustus : CharactersBehaviour
     private float coyoteTimeCount = 0f;
     private float jumpBufferCount = 0f;
     private bool doubleJumpQueued = false;
+    private float timerSaltoReciente = 0f;
+    private const float ventanaSaltoAtaque = 0.2f;
 
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isSecondJump = false;
@@ -177,8 +179,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool cambiarAudioCombo = true;
     [Tooltip("Audio que suena en el último golpe del combo.")]
     [SerializeField] private AudioClip audioCombo;
-    [Tooltip("Audio que suena en los golpes 1 y 2 del combo.")]
-    [SerializeField] private AudioClip audioAtaqueNormal;
+    [Tooltip("Audios aleatorios para los golpes 1 y 2 del combo.")]
+    [SerializeField] private AudioClip[] audiosAtaqueNormal;
     [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
     [SerializeField] private bool girarVFXCombo = true;
     [Tooltip("Ángulo de deformación en X del VFX del combo.")]
@@ -432,6 +434,12 @@ public class Hoyustus : CharactersBehaviour
         cargaHabilidades();
         TocarPared();
 
+        // Forzar reset de rotación del VFX cuando no se está atacando
+        if (!atacando && ataqueAvailable && AttackVFX != null)
+        {
+            attackVFXRotacionOriginal = AttackVFX.transform.localRotation;
+        }
+
         // Timer del combo: si pasa el tiempo sin atacar, se resetea
         if (contadorCombo > 0)
         {
@@ -453,9 +461,14 @@ public class Hoyustus : CharactersBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 jumpBufferCount = jumpBufferTime;
+                timerSaltoReciente = ventanaSaltoAtaque;
                 if (!Grounded() && secondJump) doubleJumpQueued = true;
             }
-            else jumpBufferCount -= Time.deltaTime;
+            else
+            {
+                jumpBufferCount -= Time.deltaTime;
+                timerSaltoReciente -= Time.deltaTime;
+            }
 
             // coyote time y estados de salto
             if (Grounded())
@@ -939,11 +952,10 @@ public class Hoyustus : CharactersBehaviour
             {
                 atacando = true;
                 int index = 0;
-                float h = Input.GetAxis("Horizontal");
-                float v = Input.GetAxis("Vertical");
-                if (v == 0) { anim.Play("Lanza Lateral"); codigoAtaque = 4; }
-                else if (v > 0) { index = 1; codigoAtaque = 5; }
-                else if (v < 0 && !Grounded()) { index = 2; codigoAtaque = 6; }
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
+                if (v < -0.7f) { index = 1; codigoAtaque = 5; }
+                else if (v > 0.7f && !Grounded()) { index = 2; codigoAtaque = 6; }
                 else { anim.Play("Lanza Lateral"); codigoAtaque = 4; }
                 ataqueAvailable = false;
                 indexAtaqueActual = index;
@@ -983,9 +995,11 @@ public class Hoyustus : CharactersBehaviour
             if (cambiarAudioCombo && audioCombo != null)
                 jumpAudio.PlayOneShot(audioCombo);
         }
-        else if (audioAtaqueNormal != null)
+        else if (audiosAtaqueNormal != null && audiosAtaqueNormal.Length > 0)
         {
-            jumpAudio.PlayOneShot(audioAtaqueNormal);
+            AudioClip clipAleatorio = audiosAtaqueNormal[UnityEngine.Random.Range(0, audiosAtaqueNormal.Length)];
+            if (clipAleatorio != null)
+                jumpAudio.PlayOneShot(clipAleatorio);
         }
 
         lanzas[index].SetActive(true);
@@ -1004,6 +1018,7 @@ public class Hoyustus : CharactersBehaviour
         if (esGolpeCombo) yield return new WaitForSeconds(pausaDespuesCombo);
         golpeActualVFX = 0;
         esGolpeComboVFX = false;
+        indexAtaqueActual = 0;
         ataqueAvailable = true;
     }
 
@@ -1100,7 +1115,7 @@ public class Hoyustus : CharactersBehaviour
         int numeroRandom = UnityEngine.Random.Range(1, 101);
         if (numeroRandom >= 50) dashVFX.GetComponent<AudioSource>().clip = AudioDashVariant;
         else dashVFX.GetComponent<AudioSource>().clip = AudioDashOriginal;
-        
+
         dashVFX.GetComponent<AudioSource>().Play();
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
@@ -1183,9 +1198,7 @@ public class Hoyustus : CharactersBehaviour
             AttackVFX.transform.localScale = new Vector3(escalaX, escalaY, escalaZ);
 
             // Ataque hacia arriba — rotar 90 grados para que el VFX se vea vertical
-            if (vfxDireccionActivo && indexAtaqueActual == 1)
-                AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
-            else if (girarZVFXCombo)
+            if (girarZVFXCombo)
                 AttackVFX.transform.localRotation = Quaternion.Euler(0f, 0f, anguloGiroZVFXCombo);
             else
                 AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
@@ -1210,4 +1223,4 @@ public class Hoyustus : CharactersBehaviour
         AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
         AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
     }
-}
+} 
