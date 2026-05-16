@@ -177,8 +177,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private bool cambiarAudioCombo = true;
     [Tooltip("Audio que suena en el último golpe del combo.")]
     [SerializeField] private AudioClip audioCombo;
-    [Tooltip("Audio que suena en los golpes 1 y 2 del combo.")]
-    [SerializeField] private AudioClip audioAtaqueNormal;
+    [Tooltip("Audios aleatorios para los golpes 1 y 2 del combo.")]
+    [SerializeField] private AudioClip[] audiosAtaqueNormal;
     [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
     [SerializeField] private bool girarVFXCombo = true;
     [Tooltip("Ángulo de deformación en X del VFX del combo.")]
@@ -983,9 +983,11 @@ public class Hoyustus : CharactersBehaviour
             if (cambiarAudioCombo && audioCombo != null)
                 jumpAudio.PlayOneShot(audioCombo);
         }
-        else if (audioAtaqueNormal != null)
+        else if (audiosAtaqueNormal != null && audiosAtaqueNormal.Length > 0)
         {
-            jumpAudio.PlayOneShot(audioAtaqueNormal);
+            AudioClip clipAleatorio = audiosAtaqueNormal[UnityEngine.Random.Range(0, audiosAtaqueNormal.Length)];
+            if (clipAleatorio != null)
+                jumpAudio.PlayOneShot(clipAleatorio);
         }
 
         lanzas[index].SetActive(true);
@@ -1100,7 +1102,7 @@ public class Hoyustus : CharactersBehaviour
         int numeroRandom = UnityEngine.Random.Range(1, 101);
         if (numeroRandom >= 50) dashVFX.GetComponent<AudioSource>().clip = AudioDashVariant;
         else dashVFX.GetComponent<AudioSource>().clip = AudioDashOriginal;
-        
+
         dashVFX.GetComponent<AudioSource>().Play();
         isDashing = true;
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
