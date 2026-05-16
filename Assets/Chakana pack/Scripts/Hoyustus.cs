@@ -1006,6 +1006,7 @@ public class Hoyustus : CharactersBehaviour
         if (esGolpeCombo) yield return new WaitForSeconds(pausaDespuesCombo);
         golpeActualVFX = 0;
         esGolpeComboVFX = false;
+        indexAtaqueActual = 0;
         ataqueAvailable = true;
     }
 
