@@ -5,6 +5,8 @@ using System;
 
 public class Hoyustus : CharactersBehaviour
 {
+    //Clase que controla el comportamiento de Sinchi 
+
     [Header("Movimiento Base")]
     [Tooltip("Velocidad máxima al caminar por el suelo.")]
     [SerializeField] float walkSpeedGround = 9f;
