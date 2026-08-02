@@ -494,7 +494,7 @@ public class MainMenu : MonoBehaviour
                     if (pauseMenu.gameObject.activeSelf || confirmQuitMenu.gameObject.activeSelf)
                     {
                         DisableUI(true);
-                        Time.timeScale = 1f;
+                        
                         if (pauseMenu.gameObject.activeSelf)
                         {
                             pauseMenu.gameObject.SetActive(false);
@@ -503,8 +503,10 @@ public class MainMenu : MonoBehaviour
                         {
                             confirmQuitMenu.gameObject.SetActive(false);
                         }
-                        ActivePlayer(true);
+                        //ActivePlayer(true);
                     }
+
+                    Debug.Log("Botón B del gamepad: cierra el menú de pausa si está abierto");
                 }
             }
             else

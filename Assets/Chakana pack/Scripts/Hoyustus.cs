@@ -5,6 +5,8 @@ using System;
 
 public class Hoyustus : CharactersBehaviour
 {
+    //Clase que controla el comportamiento de Sinchi 
+
     [Header("Movimiento Base")]
     [Tooltip("Velocidad máxima al caminar por el suelo.")]
     [SerializeField] float walkSpeedGround = 9f;
@@ -181,6 +183,8 @@ public class Hoyustus : CharactersBehaviour
     [SerializeField] private AudioClip audioCombo;
     [Tooltip("Audios aleatorios para los golpes 1 y 2 del combo.")]
     [SerializeField] private AudioClip[] audiosAtaqueNormal;
+    [Tooltip("Volumen (escala) del audio de AudiosAtaqueNormal cuando suena junto al golpe de combo. 1 = volumen normal, valores mayores lo hacen sonar más fuerte.")]
+    [SerializeField] private float volumenAtaqueNormalEnCombo = 1.3f;
     [Tooltip("Si está activo, el VFX del combo tiene un pequeño giro en X.")]
     [SerializeField] private bool girarVFXCombo = true;
     [Tooltip("Ángulo de deformación en X del VFX del combo.")]
@@ -994,6 +998,14 @@ public class Hoyustus : CharactersBehaviour
             // Audio diferente si está configurado
             if (cambiarAudioCombo && audioCombo != null)
                 jumpAudio.PlayOneShot(audioCombo);
+
+            // Reproducir también un audio aleatorio de ataque normal al mismo tiempo
+            if (audiosAtaqueNormal != null && audiosAtaqueNormal.Length > 0)
+            {
+                AudioClip clipAleatorioCombo = audiosAtaqueNormal[UnityEngine.Random.Range(0, audiosAtaqueNormal.Length)];
+                if (clipAleatorioCombo != null)
+                    jumpAudio.PlayOneShot(clipAleatorioCombo, volumenAtaqueNormalEnCombo);
+            }
         }
         else if (audiosAtaqueNormal != null && audiosAtaqueNormal.Length > 0)
         {
@@ -1223,4 +1235,4 @@ public class Hoyustus : CharactersBehaviour
         AttackVFX.transform.localScale = new Vector3(-1f, 1f, 1f);
         AttackVFX.transform.localRotation = attackVFXRotacionOriginal;
     }
-} 
+}

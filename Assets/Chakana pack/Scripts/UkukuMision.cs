@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Assets.FantasyInventory.Scripts.Interface;
+using Assets.FantasyInventory.Scripts.Interface.Elements;
+using Assets.FantasyInventory.Scripts.Enums;
+using Michsky.UI.Dark;
 
 public class UkukuMision : MonoBehaviour
 {
@@ -10,6 +14,9 @@ public class UkukuMision : MonoBehaviour
     [SerializeField] private bool isDestroyed;
     [SerializeField] private GameObject ukukuInv;
     [SerializeField] private Inventory inventory;
+    [SerializeField] private MainPanelManager panelManager;
+    [SerializeField] private string inventoryPanelName;
+    [SerializeField] private RectTransform inventoryGrid;
 
     private bool isActive;
     private bool isUkukuActive;
@@ -47,7 +54,7 @@ public class UkukuMision : MonoBehaviour
 
             if (isDestroyed)
             {
-                if(GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().enabled = false;
+                if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().enabled = false;
                 GetComponent<BoxCollider2D>().enabled = false;
                 transform.GetChild(0).gameObject.SetActive(false);
                 print("holaaa");
@@ -97,23 +104,23 @@ public class UkukuMision : MonoBehaviour
             misionCount++;
         }
 
-        if(misionCount == 3)
+        if (misionCount == 3)
         {
             ukukuInv.transform.GetChild(4).gameObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(2);
-        
+        yield return new WaitForSeconds(0.5f);
+
         if (PlayerPrefs.HasKey("ukukuM" + "02"))
         {
             ukukuInv.transform.GetChild(1).gameObject.SetActive(false);
         }
-        
+
         if (PlayerPrefs.HasKey("ukukuM" + "03"))
         {
             ukukuInv.transform.GetChild(2).gameObject.SetActive(false);
         }
-        
+
         if (PlayerPrefs.HasKey("ukukuM" + "04"))
         {
             ukukuInv.transform.GetChild(3).gameObject.SetActive(false);
@@ -125,6 +132,39 @@ public class UkukuMision : MonoBehaviour
 
             StartCoroutine(UkukuEvent());
         }
+        else
+        {
+            panelManager.OpenPanel(inventoryPanelName);
+            Time.timeScale = 0f;
+            StartCoroutine(SelectFirstInventoryItem());
+        }
+    }
+
+    private IEnumerator SelectFirstInventoryItem()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        if (inventoryGrid == null || inventoryGrid.childCount == 0) yield break;
+
+        ItemId targetId;
+        if (num == "02") targetId = ItemId.AnkasKallampa;
+        else if (num == "03") targetId = ItemId.SupaypaUma;
+        else if (num == "04") targetId = ItemId.Ayahuasca;
+        else yield break;
+
+        for (int i = 0; i < inventoryGrid.childCount; i++)
+        {
+            InventoryItem inventoryItem = inventoryGrid.GetChild(i).GetComponent<InventoryItem>();
+            if (inventoryItem != null && inventoryItem.Item.Id == targetId)
+            {
+                Button button = inventoryGrid.GetChild(i).GetComponent<Button>();
+                if (button != null) button.Select();
+                inventoryItem.OnPress();
+                yield break;
+            }
+        }
+
+        Debug.LogWarning($"[UkukuMision] No se encontró el item '{targetId}' en el grid.");
     }
 
     private IEnumerator UkukuEvent()
@@ -140,7 +180,7 @@ public class UkukuMision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if (collision.tag == "Player")
         {
             isActive = true;
             txt.SetActive(true);
