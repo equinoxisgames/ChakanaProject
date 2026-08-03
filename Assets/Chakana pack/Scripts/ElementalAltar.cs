@@ -13,6 +13,7 @@ public class ElementalAltar : MonoBehaviour
     [SerializeField] GameObject tutoObj;
     [SerializeField] GameObject tutoCompleted;
     [SerializeField] EnemyGenerator enemyG;
+    [SerializeField] Hoyustus playerStat;
 
     private GameObject keyObj, joyObj;
     private bool joystick = false;
@@ -162,5 +163,34 @@ public class ElementalAltar : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
         tutoObj.transform.GetChild(5).gameObject.SetActive(true);
         isActive = true;
+    }
+
+    private void OnDestroy()
+    {
+        if (playerStat.getVida() <= 0)
+        {
+            PlayerPrefs.DeleteKey(altarName);
+
+            if (keyCode == "01")
+            {
+                PlayerPrefs.DeleteKey("snakeSkill");
+            }
+            if (keyCode == "02")
+            {
+                PlayerPrefs.DeleteKey("condorSkill");
+            }
+            if (keyCode == "03")
+            {
+                PlayerPrefs.DeleteKey("spearSkill");
+            }
+
+            int e = PlayerPrefs.GetInt(doorName) - 1;
+            PlayerPrefs.SetInt(doorName, e);
+
+            if(PlayerPrefs.HasKey("snakeSkill") && PlayerPrefs.HasKey("condorSkill") && PlayerPrefs.HasKey("spearSkill"))
+            {
+                PlayerPrefs.DeleteKey("unlookSkills");
+            }
+        }
     }
 }
