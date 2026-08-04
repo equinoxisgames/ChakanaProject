@@ -187,7 +187,7 @@ public class ElementalAltar : MonoBehaviour
             int e = PlayerPrefs.GetInt(doorName) - 1;
             PlayerPrefs.SetInt(doorName, e);
 
-            if(PlayerPrefs.HasKey("snakeSkill") && PlayerPrefs.HasKey("condorSkill") && PlayerPrefs.HasKey("spearSkill"))
+            if(!PlayerPrefs.HasKey("snakeSkill") && !PlayerPrefs.HasKey("condorSkill") && !PlayerPrefs.HasKey("spearSkill"))
             {
                 PlayerPrefs.DeleteKey("unlookSkills");
             }
