@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -308,7 +308,7 @@ public class MainMenu : MonoBehaviour
 
 
 
-            //Debug.Log("La posición de " + player.name + " es: " + position.ToString());
+            //Debug.Log("La posiciï¿½n de " + player.name + " es: " + position.ToString());
 
             switch (escena)
             {
@@ -412,15 +412,15 @@ public class MainMenu : MonoBehaviour
 
 
 
-        // Verifica si se encontró el objeto.
+        // Verifica si se encontrï¿½ el objeto.
         if (objetoAMover != null)
         {
-            // Asegúrate de que el objeto sea de tipo Image.
+            // Asegï¿½rate de que el objeto sea de tipo Image.
             Image imagen = objetoAMover.GetComponent<Image>();
 
             if (imagen != null)
             {
-                // Cambia la posición de la imagen.
+                // Cambia la posiciï¿½n de la imagen.
                 imagen.rectTransform.localPosition = nuevaPosicion;
             }
             else
@@ -430,7 +430,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No se encontró ningún objeto con la etiqueta especificada.");
+            Debug.LogError("No se encontrï¿½ ningï¿½n objeto con la etiqueta especificada.");
         }
 
     }
@@ -480,21 +480,22 @@ public class MainMenu : MonoBehaviour
                 else
                 {
 
-                    Debug.Log("Se ha presionado el botón Escape (start) del gamepad porque mouseMovido es " + mouseMovido);
+                    Debug.Log("Se ha presionado el botï¿½n Escape (start) del gamepad porque mouseMovido es " + mouseMovido);
                 }
             }
         }
         else
-        {   
+        {
             if (Input.GetButtonDown("Dash"))
             {
                 if (escena != "00- Main Menu 0")
                 {
-                    // Botón B del gamepad: cierra el menú de pausa si está abierto
+                    // Botï¿½n B del gamepad: cierra el menï¿½ de pausa si estï¿½ abierto
                     if (pauseMenu.gameObject.activeSelf || confirmQuitMenu.gameObject.activeSelf)
                     {
                         DisableUI(true);
-                        
+                        Time.timeScale = 1f;
+
                         if (pauseMenu.gameObject.activeSelf)
                         {
                             pauseMenu.gameObject.SetActive(false);
@@ -503,10 +504,10 @@ public class MainMenu : MonoBehaviour
                         {
                             confirmQuitMenu.gameObject.SetActive(false);
                         }
-                        //ActivePlayer(true);
+                        ActivePlayer(true);
                     }
 
-                    Debug.Log("Botón B del gamepad: cierra el menú de pausa si está abierto");
+                    Debug.Log("Botï¿½n B del gamepad: cierra el menï¿½ de pausa si estï¿½ abierto");
                 }
             }
             else

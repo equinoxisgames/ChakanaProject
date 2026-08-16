@@ -1107,6 +1107,9 @@ public class Hoyustus : CharactersBehaviour
 
     private void Dash()
     {
+        // Evita ejecutar el dash si el juego está pausado (menú de pausa, inventario, etc.)
+        if (Time.timeScale == 0f) return;
+
         if (Input.GetButtonDown("Dash") && dashAvailable && tocandoPared != 0)
         {
             transform.parent = null;
