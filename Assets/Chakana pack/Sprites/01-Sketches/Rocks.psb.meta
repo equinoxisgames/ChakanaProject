@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
-    streamingMipmaps: 1
+    streamingMipmaps: 0
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -33,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 32
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -47,6 +49,7 @@ ScriptedImporter:
     flipbookRows: 0
     flipbookColumns: 0
     ignorePngGamma: 0
+    cookieMode: 0
     filterMode: 1
     aniso: 1
     mipBias: 0
@@ -67,19 +70,20 @@ ScriptedImporter:
     compressionQualitySet: 0
     textureFormatSet: 0
     applyGammaDecoding: 0
-  spriteImportData:
+  singleSpriteImportData:
   - name: 
     originalName: 
     pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 0
       y: 0
       width: 0
       height: 0
-    spriteID: 
+    spriteID: 7e7a6d319f9eb934995879acd5880fc0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -87,22 +91,23 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
-  mosaicSpriteImportData: []
-  rigSpriteImportData:
+    spritePosition: {x: 0, y: 0}
+  multiSpriteImportData: []
+  layeredSpriteImportData:
   - name: rock1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 4
       width: 169
       height: 167
-    spriteID: 14d25b6a78b15cd478d410f838e905cf
+    spriteID: 4bc212beeacf4cc41a2398d3c2bbb719
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -110,20 +115,21 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -909, y: -767}
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 913, y: 771}
   - name: rock2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 61
       y: 179
       width: 53
       height: 45
-    spriteID: 297355aa8fac6a94aa86465905c980b0
+    spriteID: 3ccf21eb94b473b41939ae9558a61e0e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -131,20 +137,21 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -872, y: -745}
+    uvTransform: {x: 61, y: 179}
+    spritePosition: {x: 933, y: 924}
   - name: rock3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 122
       y: 179
       width: 51
       height: 38
-    spriteID: ae64ceb398dc78a429054e7fa5f1decc
+    spriteID: da59c28d252b0fa4b910464f67b4be06
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -152,20 +159,21 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -726, y: -640}
+    uvTransform: {x: 122, y: 179}
+    spritePosition: {x: 848, y: 819}
   - name: rock4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 179
       width: 49
       height: 55
-    spriteID: 788c68bb5805db048a818b4d550967db
+    spriteID: 84bf8b271c5e15a479639d00c12f94fe
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -173,20 +181,21 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -749, y: -651}
+    uvTransform: {x: 4, y: 179}
+    spritePosition: {x: 753, y: 830}
   - name: rock5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 181
       y: 4
       width: 59
       height: 62
-    spriteID: ed283c6a15c64a94aabf4b919f7919be
+    spriteID: 9515ef92e3e40dc448a129b3cecccbf9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -194,20 +203,21 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -602, y: -903}
+    uvTransform: {x: 181, y: 4}
+    spritePosition: {x: 783, y: 907}
   - name: rock6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 181
       y: 74
       width: 61
       height: 58
-    spriteID: 1da700a72c54a314087069b827b4c429
+    spriteID: 3a605dc857b0fc948ae677489e4e7853
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -215,55 +225,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -687, y: -850}
-  characterData:
-    bones: []
-    parts: []
-    dimension: {x: 0, y: 0}
-    characterGroups: []
-    boneReadOnly: 0
+    uvTransform: {x: 181, y: 74}
+    spritePosition: {x: 868, y: 924}
+  spriteImportData: []
+  rigSpriteImportData: []
   sharedRigSpriteImportData: []
+  mosaicSpriteImportData: []
   sharedRigCharacterData:
     bones: []
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
-  platformSettings:
-  - name: DefaultTexturePlatform
-    overridden: 0
-    maxTextureSize: 16384
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 100
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 1
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
-  - name: Standalone
-    overridden: 0
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
-  - name: Server
-    overridden: 0
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  platformSettings: []
   mosaicLayers: 1
   characterMode: 1
   documentPivot: {x: 0, y: 0}
@@ -273,18 +255,30 @@ ScriptedImporter:
   generatePhysicsShape: 0
   paperDollMode: 0
   keepDupilcateSpriteName: 1
+  generateTileAssets: 0
+  tilePaletteCellLayout: 0
+  tilePaletteHexagonLayout: 0
+  tilePaletteCellSize: {x: 1, y: 1, z: 0}
+  tilePaletteCellSizing: 0
+  transparencySortMode: 0
+  transparencySortAxis: {x: 0, y: 0, z: 1}
+  tileTemplate: {instanceID: 0}
+  padding: 4
+  spriteSizeExpand: 0
   skeletonAssetReferenceID: 
+  pipeline: {instanceID: 0}
+  pipelineVersion: 
   spriteCategoryList:
     categories: []
   spritePackingTag: 
   resliceFromLayer: 0
-  mosaicPSDLayers: []
-  rigPSDLayers:
+  pSDLayerImportSetting: []
+  psdLayers:
   - name: rock1
     spriteName: rock1
     isGroup: 0
     parentIndex: -1
-    spriteID: 14d25b6a78b15cd478d410f838e905cf
+    spriteID: 4bc212beeacf4cc41a2398d3c2bbb719
     layerID: 11
     mosaicPosition: {x: 4, y: 4}
     flatten: 0
@@ -294,7 +288,7 @@ ScriptedImporter:
     spriteName: rock2
     isGroup: 0
     parentIndex: -1
-    spriteID: 297355aa8fac6a94aa86465905c980b0
+    spriteID: 3ccf21eb94b473b41939ae9558a61e0e
     layerID: 12
     mosaicPosition: {x: 61, y: 179}
     flatten: 0
@@ -304,7 +298,7 @@ ScriptedImporter:
     spriteName: rock3
     isGroup: 0
     parentIndex: -1
-    spriteID: ae64ceb398dc78a429054e7fa5f1decc
+    spriteID: da59c28d252b0fa4b910464f67b4be06
     layerID: 13
     mosaicPosition: {x: 122, y: 179}
     flatten: 0
@@ -314,7 +308,7 @@ ScriptedImporter:
     spriteName: rock4
     isGroup: 0
     parentIndex: -1
-    spriteID: 788c68bb5805db048a818b4d550967db
+    spriteID: 84bf8b271c5e15a479639d00c12f94fe
     layerID: 14
     mosaicPosition: {x: 4, y: 179}
     flatten: 0
@@ -324,7 +318,7 @@ ScriptedImporter:
     spriteName: rock5
     isGroup: 0
     parentIndex: -1
-    spriteID: ed283c6a15c64a94aabf4b919f7919be
+    spriteID: 9515ef92e3e40dc448a129b3cecccbf9
     layerID: 15
     mosaicPosition: {x: 181, y: 4}
     flatten: 0
@@ -334,14 +328,18 @@ ScriptedImporter:
     spriteName: rock6
     isGroup: 0
     parentIndex: -1
-    spriteID: 1da700a72c54a314087069b827b4c429
+    spriteID: 3a605dc857b0fc948ae677489e4e7853
     layerID: 16
     mosaicPosition: {x: 181, y: 74}
     flatten: 0
     isImported: 1
     isVisible: 1
+  mosaicPSDLayers: []
+  rigPSDLayers: []
   sharedRigPSDLayers: []
-  pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

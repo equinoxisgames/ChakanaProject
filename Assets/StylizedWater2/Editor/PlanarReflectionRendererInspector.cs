@@ -68,7 +68,7 @@ namespace StylizedWater2
 #if !URP
             UI.DrawNotification("The Universal Render Pipeline package v" + AssetInfo.MIN_URP_VERSION + " or newer is not installed", MessageType.Error);
 #else
-            UI.DrawNotification(UnityEngine.Rendering.XRGraphics.enabled, "Not supported with VR rendering", MessageType.Error);
+            UI.DrawNotification(UnityEngine.Rendering.XRGraphicsAutomatedTests.enabled, "Not supported with VR rendering", MessageType.Error);
             
             UI.DrawNotification(PlanarReflectionRenderer.AllowReflections == false, "Reflections have been globally disabled by an external script", MessageType.Warning);
             

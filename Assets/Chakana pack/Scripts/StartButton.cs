@@ -12,10 +12,4 @@ public class StartButton : MonoBehaviour
         button = GetComponent<Button>();
         button.Select();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

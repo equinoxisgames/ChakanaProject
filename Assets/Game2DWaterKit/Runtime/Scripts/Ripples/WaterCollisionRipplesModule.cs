@@ -274,7 +274,7 @@
                     Vector2 colliderBoundsCenterWaterSpace = _mainModule.TransformPointWorldToLocal(colliderBounds.center);
                     Vector2 colliderBoundsExtents = colliderBounds.extents;
 
-                    float xVelocity = collider.attachedRigidbody.velocity.x;
+                    float xVelocity = collider.attachedRigidbody.linearVelocity.x;
 
                     if ((colliderBoundsCenterWaterSpace.y + colliderBoundsExtents.y) > waterRestPosition)
                     {

@@ -1,0 +1,194 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyGenerator : MonoBehaviour
+{
+    [SerializeField] private string combatNum;
+    [SerializeField] List<GameObject> enemies = new List<GameObject>();
+    [SerializeField] Transform door1, door2;
+    [SerializeField] GameObject invokeFX;
+    [SerializeField] GameObject treasure;
+
+    [SerializeField] AudioClip doorAu;
+    [SerializeField] AudioClip enemyAu;
+    [SerializeField] AudioClip combatAu;
+
+    // AudioSource exclusivo para la música de combate (separado del AudioSource de SFX)
+    [SerializeField] private AudioSource combatMusicSource;
+
+    bool isOn, isMove, isOnBattle, finishSpawn, treasureCollect;
+    private Vector3 destination1, destination2;
+    private Vector3 originalPos1, originalPos2;
+
+    // AudioSource principal usado para SFX de puertas
+    private AudioSource sfxSource;
+
+    private void Awake()
+    {
+        if (PlayerPrefs.HasKey("combat" + combatNum))
+        {
+            gameObject.SetActive(false);
+        }
+
+        sfxSource = GetComponent<AudioSource>();
+    }
+
+    void Start()
+    {
+        destination1 = door1.position;
+        originalPos1 = door1.position;
+
+        destination2 = door2.position;
+        originalPos2 = door2.position;
+
+        if (combatNum == "2")
+        {
+            destination1.y -= 4.7f;
+            destination2.y -= 4.7f;
+        }
+        else
+        {
+            destination1.y -= 5.2f;
+            destination2.y -= 5.2f;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (isMove)
+        {
+            if (isOnBattle)
+            {
+                door1.position = Vector3.MoveTowards(door1.position, destination1, 5 * Time.deltaTime);
+                door2.position = Vector3.MoveTowards(door2.position, destination2, 5 * Time.deltaTime);
+
+                if (transform.position == destination1) isMove = false;
+            }
+            else
+            {
+                door1.position = Vector3.MoveTowards(door1.position, originalPos1, 5 * Time.deltaTime);
+                door2.position = Vector3.MoveTowards(door2.position, originalPos2, 5 * Time.deltaTime);
+
+                if (transform.position == destination1) isMove = false;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (finishSpawn)
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] == null)
+                {
+                    enemies.RemoveAt(i);
+                }
+            }
+
+            if (enemies.Count == 0)
+            {
+                finishSpawn = false;
+                StartCoroutine(StopCombat());
+            }
+        }
+
+        if (treasureCollect && !treasure.GetComponent<SpriteRenderer>().enabled)
+        {
+            isOnBattle = false;
+
+            sfxSource.clip = doorAu;
+            sfxSource.Play();
+
+            isMove = true;
+
+            PlayerPrefs.SetInt("combat" + combatNum, 1);
+
+            treasureCollect = false;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CancelFadeAndRestoreBackground();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            if (!isOn)
+            {
+                StartCombatAuto();
+            }
+        }
+    }
+
+    public void StartCombatAuto()
+    {
+        if (!isOn)
+        {
+            StartCoroutine(StartCombat());
+        }
+    }
+
+    IEnumerator StartCombat()
+    {
+        isOnBattle = true;
+        isMove = true;
+        isOn = true;
+
+        sfxSource.clip = doorAu;
+        sfxSource.Play();
+
+        yield return new WaitForSeconds(1f);
+
+        // Crossfade: música de fondo → música de combate
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CrossfadeToCombat(combatMusicSource, combatAu, targetCombatVolume: 0.7f);
+        else
+            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null. Asegúrate de que existe un GameObject con MusicManager en la escena.");
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            yield return new WaitForSeconds(2f);
+            Destroy(Instantiate(invokeFX, enemies[i].transform.position, Quaternion.identity), 2);
+            yield return new WaitForSeconds(0.2f);
+            enemies[i].SetActive(true);
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        isOn = true;
+        finishSpawn = true;
+    }
+
+    IEnumerator StopCombat()
+    {
+        yield return new WaitForSeconds(1f);
+
+        // Crossfade inverso: música de combate → música de fondo
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.CrossfadeToBackground(combatMusicSource);
+        else
+            Debug.LogError("[EnemyGenerator] MusicManager.Instance es null");
+
+        if (treasure == null)
+        {
+            isMove = true;
+            isOnBattle = false;
+
+            sfxSource.clip = doorAu;
+            sfxSource.Play();
+        }
+        else
+        {
+            treasure.SetActive(true);
+            treasureCollect = true;
+        }
+
+        PlayerPrefs.SetInt("combat" + combatNum, 1);
+    }
+}
